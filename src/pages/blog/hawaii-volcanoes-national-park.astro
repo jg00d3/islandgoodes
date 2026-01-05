@@ -3,9 +3,39 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const title = "Hawaii Volcanoes National Park: Complete Visitor's Guide";
 const description = "Everything you need to know about visiting Hawaii Volcanoes National Park from Hilo. See Kilauea crater, lava tubes, and volcanic landscapes just 45 minutes from Island Goodes.";
+const publishDate = "2025-01-15";
+const category = "Attractions";
+const image = "/images/blog/volcanoes.jpg";
+
+const blogPostSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": title,
+  "description": description,
+  "image": `https://islandgoodes.com${image}`,
+  "datePublished": publishDate,
+  "dateModified": publishDate,
+  "author": {
+    "@type": "Organization",
+    "name": "Island Goodes"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Island Goodes",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://islandgoodes.com/images/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://islandgoodes.com/blog/hawaii-volcanoes-national-park"
+  }
+};
 ---
 
 <BaseLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(blogPostSchema)} />
   <article class="blog-post">
     <header class="post-header">
       <div class="container">

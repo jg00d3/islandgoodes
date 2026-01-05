@@ -1,0 +1,243 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "Spring Blooms: Hawaii's Tropical Flowers in Full Display";
+const description = "March brings spectacular flowering across Hawaii's Big Island. Explore botanical gardens, wild landscapes, and discover the tropical flowers that make Hawaii bloom.";
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="blog-post">
+    <header class="post-header">
+      <div class="container">
+        <span class="category">Nature</span>
+        <h1>{title}</h1>
+        <p class="excerpt">March brings spectacular flowering across the Big Island. Explore botanical gardens and wild landscapes bursting with color.</p>
+        <time datetime="2026-03-01">March 1, 2026</time>
+      </div>
+    </header>
+
+    <div class="post-content">
+      <div class="container">
+        <p class="lead">
+          While Hawaii enjoys flowers year-round thanks to its tropical climate, spring brings an extra burst of color. From wild orchids to towering rainbow eucalyptus, the Big Island's botanical diversity is on full display.
+        </p>
+
+        <h2>Hawaii's Most Iconic Flowers</h2>
+
+        <h3>Plumeria (Frangipani)</h3>
+        <p>
+          The quintessential Hawaiian flower, plumeria trees burst into fragrant bloom in spring. These are the flowers traditionally used in leis. Look for trees in white, yellow, pink, and red throughout neighborhoods and gardens.
+        </p>
+
+        <h3>Hibiscus</h3>
+        <p>
+          Hawaii's state flower comes in hundreds of varieties. The native hibiscus (kokio) is endangered, but cultivated varieties bloom profusely across the island. The Hilo area is particularly known for its hibiscus gardens.
+        </p>
+
+        <h3>Bird of Paradise</h3>
+        <p>
+          These striking orange and blue flowers resemble tropical birds in flight. Originally from South Africa, they've become synonymous with Hawaii and bloom especially well in the warm spring months.
+        </p>
+
+        <h3>Torch Ginger</h3>
+        <p>
+          These dramatic red flowers can reach 20 feet tall. The torch-like blooms appear in spring and summer, often found in the wet rainforest areas around Hilo.
+        </p>
+
+        <h2>Botanical Gardens to Visit</h2>
+
+        <h3>Hawaii Tropical Botanical Garden</h3>
+        <p>
+          Just 15 minutes from Island Goodes, this 40-acre garden in Onomea Bay features over 2,000 species. Spring highlights include:
+        </p>
+        <ul>
+          <li>Blooming heliconias along the boardwalk paths</li>
+          <li>Orchid collections in peak display</li>
+          <li>Waterfall views framed by flowering trees</li>
+          <li>Gingers and bromeliads throughout</li>
+        </ul>
+
+        <h3>World Botanical Gardens</h3>
+        <p>
+          Located along the Hamakua Coast, this 300-acre garden offers rainforest trails, orchid gardens, and views of three-tiered Umauma Falls.
+        </p>
+
+        <h3>Pana'ewa Rainforest Zoo</h3>
+        <p>
+          A free zoo in Hilo with beautiful tropical plantings throughout. The orchid garden is particularly impressive in spring.
+        </p>
+
+        <h3>Akaka Falls State Park</h3>
+        <p>
+          The short loop trail to view the 442-foot waterfall passes through a lush collection of gingers, ferns, and tropical flowers.
+        </p>
+
+        <h2>Wild Flowers to Spot</h2>
+
+        <h3>Along the Roads</h3>
+        <ul>
+          <li><strong>African Tulip Trees:</strong> Orange flowers visible along highways</li>
+          <li><strong>Rainbow Eucalyptus:</strong> Not a flower, but stunning colorful bark</li>
+          <li><strong>Jacaranda:</strong> Purple blooms in upcountry areas</li>
+          <li><strong>Poinciana:</strong> Flame trees with scarlet flowers</li>
+        </ul>
+
+        <h3>In the Rainforest</h3>
+        <ul>
+          <li><strong>Wild Orchids:</strong> Over 3 species are native to Hawaii</li>
+          <li><strong>Ohia Lehua:</strong> Native tree with red pom-pom flowers</li>
+          <li><strong>Native Hibiscus:</strong> Rare but occasionally spotted</li>
+          <li><strong>Fern Varieties:</strong> Including the iconic hapu'u tree fern</li>
+        </ul>
+
+        <h2>Flower-Focused Experiences</h2>
+        <ul>
+          <li><strong>Lei-making workshops:</strong> Learn to string your own lei</li>
+          <li><strong>Garden tours:</strong> Guided walks with expert botanists</li>
+          <li><strong>Orchid nursery visits:</strong> See thousands of varieties</li>
+          <li><strong>Hilo Farmers Market:</strong> Local vendors selling cut flowers and plants</li>
+          <li><strong>Photography tours:</strong> Capture the blooms at their best</li>
+        </ul>
+
+        <h2>Best Photo Spots</h2>
+        <p>
+          For the best flower photography on the Big Island:
+        </p>
+        <ul>
+          <li>Early morning light at botanical gardens (7-9 AM)</li>
+          <li>After rain showers when drops cling to petals</li>
+          <li>Cloudy days provide soft, even lighting</li>
+          <li>Macro lenses reveal incredible detail</li>
+        </ul>
+
+        <h2>Tips for Flower Lovers</h2>
+        <ul>
+          <li><strong>Timing:</strong> Visit gardens early to beat tour groups</li>
+          <li><strong>Rainy side:</strong> East side (Hilo) has more tropical flowers</li>
+          <li><strong>Fragrance:</strong> Mornings offer the strongest scents</li>
+          <li><strong>Don't pick:</strong> Leave flowers for others to enjoy</li>
+        </ul>
+
+        <div class="cta-box">
+          <h3>Experience Hawaii's Natural Beauty</h3>
+          <p>Island Goodes is perfectly located on the Hilo side, where tropical flowers flourish year-round. Wake up to the scent of plumeria and explore nearby botanical gardens.</p>
+          <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary" target="_blank" rel="noopener">Book Your Stay</a>
+        </div>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .post-header {
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/images/blog/tropical-flowers.jpg') center/cover no-repeat;
+    color: #fff;
+    padding: 10rem 2rem 4rem;
+    text-align: center;
+  }
+
+  .post-header .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .category {
+    background: var(--color-secondary);
+    color: #fff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .post-header h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin: 1rem 0;
+    line-height: 1.2;
+  }
+
+  .excerpt {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 1rem;
+  }
+
+  .post-header time {
+    opacity: 0.8;
+  }
+
+  .post-content {
+    padding: 4rem 2rem;
+  }
+
+  .post-content .container {
+    max-width: 750px;
+    margin: 0 auto;
+  }
+
+  .post-content .lead {
+    font-size: 1.2rem;
+    color: var(--color-text-light);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .post-content h2 {
+    color: var(--color-primary-dark);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .post-content h3 {
+    color: var(--color-primary);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .post-content p {
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+
+  .post-content ul, .post-content ol {
+    margin: 1rem 0 1rem 1.5rem;
+    line-height: 1.8;
+  }
+
+  .post-content li {
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-box {
+    background: var(--color-bg-alt);
+    padding: 2rem;
+    border-radius: 8px;
+    margin-top: 3rem;
+    text-align: center;
+  }
+
+  .cta-box h3 {
+    color: var(--color-primary-dark);
+    margin-top: 0;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    margin-top: 1rem;
+  }
+
+  .btn-primary {
+    background: var(--color-secondary);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #c49943;
+    color: #fff;
+  }
+</style>

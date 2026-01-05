@@ -1,0 +1,1141 @@
+---
+// Design Preview Page - Showcases new modern design without affecting live site
+const title = "Design Preview";
+const description = "Preview of the redesigned Island Goodes website";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>{title} | Island Goodes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- NEW HEADER -->
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="/" class="logo">
+        <span class="logo-text">Island <span class="logo-accent">Goodes</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/rooms" class="nav-link">Rooms</a></li>
+        <li><a href="/amenities" class="nav-link">Amenities</a></li>
+        <li><a href="/location" class="nav-link">Location</a></li>
+        <li><a href="/blog" class="nav-link">Blog</a></li>
+        <li><a href="/contact" class="nav-link">Contact</a></li>
+        <li><a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary" target="_blank" rel="noopener">Book Now</a></li>
+      </ul>
+      <button class="mobile-menu-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-background">
+      <img src="/images/hero-ocean-view.jpg" alt="Ocean view from Island Goodes" />
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <span class="hero-badge">Adults-Only Retreat</span>
+      <h1>Island <span>Goodes</span></h1>
+      <p class="hero-tagline">Oceanview accommodation on Hawaii's Big Island. Wake up to paradise every morning.</p>
+      <div class="hero-cta">
+        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary btn-large" target="_blank" rel="noopener">Book Your Stay</a>
+        <a href="/rooms" class="btn btn-secondary btn-large">Explore Rooms</a>
+      </div>
+    </div>
+    <div class="hero-scroll-indicator">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M19 12l-7 7-7-7"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- FEATURES SECTION -->
+  <section class="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-subtitle">Why Choose Us</span>
+        <h2>Experience Island Living</h2>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <h3>Ocean Views</h3>
+          <p>Wake up to stunning views of Hilo Bay from your private lanai</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
+          <h3>Adults Only</h3>
+          <p>Peaceful retreat exclusively for guests 18 and older</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          </div>
+          <h3>Private Rooms</h3>
+          <p>Each room has its own entrance, bathroom, and lanai</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h3>Prime Location</h3>
+          <p>Minutes to Hilo, close to volcanoes and waterfalls</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROOMS PREVIEW -->
+  <section class="rooms-preview">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-subtitle">Accommodations</span>
+        <h2>Our Rooms</h2>
+      </div>
+      <div class="rooms-grid">
+        <a href="/rooms/hilo-bay" class="room-card">
+          <div class="room-card-image">
+            <img src="/images/rooms/hilo-bay/bed.jpg" alt="Hilo Bay Room" loading="lazy" />
+            <span class="room-price">From $225/night</span>
+          </div>
+          <div class="room-card-content">
+            <h3>Hilo Bay Room</h3>
+            <p>Our largest suite with panoramic ocean views</p>
+            <div class="room-tags">
+              <span class="tag">488 sq ft</span>
+              <span class="tag">Ocean View</span>
+              <span class="tag">King Bed</span>
+            </div>
+          </div>
+        </a>
+        <a href="/rooms/orchid" class="room-card">
+          <div class="room-card-image">
+            <img src="/images/rooms/orchid/bed.jpg" alt="Orchid Room" loading="lazy" />
+            <span class="room-price">From $215/night</span>
+          </div>
+          <div class="room-card-content">
+            <h3>Orchid Room</h3>
+            <p>Oceanview suite with full kitchen</p>
+            <div class="room-tags">
+              <span class="tag">Full Kitchen</span>
+              <span class="tag">Ocean View</span>
+            </div>
+          </div>
+        </a>
+        <a href="/rooms/mauna-kea" class="room-card">
+          <div class="room-card-image">
+            <img src="/images/rooms/mauna-kea/bed.jpg" alt="Mauna Kea Room" loading="lazy" />
+            <span class="room-price">From $195/night</span>
+          </div>
+          <div class="room-card-content">
+            <h3>Mauna Kea Room</h3>
+            <p>Mountain views toward Hawaii's tallest peak</p>
+            <div class="room-tags">
+              <span class="tag">Mountain View</span>
+              <span class="tag">Stargazing</span>
+            </div>
+          </div>
+        </a>
+        <a href="/rooms/ginger" class="room-card">
+          <div class="room-card-image">
+            <img src="/images/rooms/ginger/room.jpg" alt="Ginger Room" loading="lazy" />
+            <span class="room-price">From $195/night</span>
+          </div>
+          <div class="room-card-content">
+            <h3>Ginger Room</h3>
+            <p>Ground floor garden retreat</p>
+            <div class="room-tags">
+              <span class="tag">400 sq ft</span>
+              <span class="tag">Garden View</span>
+              <span class="tag">Accessible</span>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="section-cta">
+        <a href="/rooms" class="btn btn-outline">View All Rooms</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-subtitle">Guest Reviews</span>
+        <h2>What Our Guests Say</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <blockquote class="testimonial-quote">
+            "The views are absolutely incredible. We watched whales from our lanai every morning. Garvin and Laura are wonderful hosts!"
+          </blockquote>
+          <div class="testimonial-author">
+            <div class="author-avatar">JM</div>
+            <div class="author-info">
+              <span class="author-name">Jennifer M.</span>
+              <span class="author-location">California</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <blockquote class="testimonial-quote">
+            "Perfect location for exploring the Big Island. The room was spotless and the bed was the most comfortable we've ever slept in."
+          </blockquote>
+          <div class="testimonial-author">
+            <div class="author-avatar">RS</div>
+            <div class="author-info">
+              <span class="author-name">Robert S.</span>
+              <span class="author-location">Texas</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <blockquote class="testimonial-quote">
+            "This place is a hidden gem. Peaceful, beautiful, and exactly what we needed for our anniversary trip."
+          </blockquote>
+          <div class="testimonial-author">
+            <div class="author-avatar">KL</div>
+            <div class="author-info">
+              <span class="author-name">Karen L.</span>
+              <span class="author-location">Oregon</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="cta-section">
+    <div class="cta-background">
+      <img src="/images/property/pool.jpg" alt="Pool at Island Goodes" />
+    </div>
+    <div class="cta-overlay"></div>
+    <div class="cta-content">
+      <h2>Ready for Paradise?</h2>
+      <p>Book direct for the best rates and personal service</p>
+      <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary btn-large" target="_blank" rel="noopener">Check Availability</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <span class="logo-text footer-logo">Island <span class="logo-accent">Goodes</span></span>
+        <p>Adults-only oceanview accommodation on Hawaii's Big Island</p>
+        <div class="footer-contact">
+          <a href="tel:+18089642291">808-964-2291</a>
+          <span>27-2365 Hawaii Belt Rd, Papaikou, HI 96781</span>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="/rooms">Our Rooms</a></li>
+          <li><a href="/amenities">Amenities</a></li>
+          <li><a href="/location">Location</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="/blog/hawaii-volcanoes-national-park">Volcanoes National Park</a></li>
+          <li><a href="/blog/hamakua-coast-waterfalls">Hamakua Waterfalls</a></li>
+          <li><a href="/blog/mauna-kea-stargazing">Mauna Kea</a></li>
+          <li><a href="/blog">All Blog Posts</a></li>
+        </ul>
+      </div>
+      <div class="footer-cta">
+        <h4>Book Direct</h4>
+        <p>Best rates guaranteed when you book directly with us</p>
+        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary" target="_blank" rel="noopener">Book Now</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Island Goodes. All rights reserved. Adults 18+ only.</p>
+    </div>
+  </footer>
+
+  <!-- PREVIEW NOTICE -->
+  <div class="preview-notice">
+    <span>Design Preview</span>
+    <a href="/" class="btn btn-small">View Current Site</a>
+  </div>
+
+<style>
+  /* ============================================
+     NEW DESIGN SYSTEM - Island Goodes 2.0
+     ============================================ */
+
+  :root {
+    /* Primary - Refined Ocean Teal */
+    --color-primary: #1B6B5A;
+    --color-primary-light: #238B76;
+    --color-primary-dark: #0F4A3E;
+    --color-primary-subtle: rgba(27, 107, 90, 0.08);
+
+    /* Secondary - Warm Champagne Gold */
+    --color-secondary: #C5A572;
+    --color-secondary-light: #D4B88A;
+    --color-secondary-dark: #A68B5B;
+
+    /* Neutrals */
+    --color-text: #2D3436;
+    --color-text-light: #636E72;
+    --color-text-muted: #9CA3AF;
+
+    /* Backgrounds */
+    --color-bg: #FFFFFF;
+    --color-bg-warm: #FDFBF8;
+    --color-bg-alt: #F7F5F2;
+    --color-bg-dark: #1A1A1A;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #1B6B5A 0%, #0F4A3E 100%);
+    --gradient-gold: linear-gradient(135deg, #D4B88A 0%, #A68B5B 100%);
+
+    /* Typography */
+    --font-heading: 'Playfair Display', Georgia, serif;
+    --font-body: 'Inter', -apple-system, sans-serif;
+
+    /* Spacing */
+    --section-padding: clamp(4rem, 10vw, 7rem);
+    --container-max: 1280px;
+
+    /* Transitions */
+    --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--color-text);
+    line-height: 1.6;
+    background: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* ============================================
+     HEADER
+     ============================================ */
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: var(--transition-base);
+  }
+
+  .nav-container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+  }
+
+  .logo-text {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+  }
+
+  .logo-accent {
+    color: var(--color-secondary);
+  }
+
+  .nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .nav-link {
+    font-weight: 500;
+    font-size: 0.9375rem;
+    color: var(--color-text);
+    position: relative;
+    padding-bottom: 4px;
+    transition: var(--transition-fast);
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--color-secondary);
+    transition: var(--transition-base);
+  }
+
+  .nav-link:hover {
+    color: var(--color-primary);
+  }
+
+  .nav-link:hover::after {
+    width: 100%;
+  }
+
+  .mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+
+  .mobile-menu-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--color-primary);
+    border-radius: 2px;
+    transition: var(--transition-base);
+  }
+
+  /* ============================================
+     BUTTONS
+     ============================================ */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: var(--transition-base);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn:hover::before {
+    left: 100%;
+  }
+
+  .btn-primary {
+    background: var(--gradient-gold);
+    color: #1A1A1A;
+    box-shadow: 0 4px 15px rgba(197, 165, 114, 0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(197, 165, 114, 0.4);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: #fff;
+    border: 2px solid rgba(255,255,255,0.8);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: #fff;
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+  }
+
+  .btn-outline:hover {
+    background: var(--color-primary);
+    color: #fff;
+  }
+
+  .btn-large {
+    padding: 1rem 2.25rem;
+    font-size: 1rem;
+  }
+
+  .btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+  }
+
+  /* ============================================
+     HERO
+     ============================================ */
+  .hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-background {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .hero-background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: heroZoom 20s ease-in-out infinite alternate;
+  }
+
+  @keyframes heroZoom {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.5) 70%, rgba(0,0,0,0.7) 100%),
+      radial-gradient(ellipse at center bottom, rgba(27,107,90,0.2) 0%, transparent 60%);
+  }
+
+  .hero-content {
+    text-align: center;
+    color: #fff;
+    max-width: 900px;
+    padding: 2rem;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    padding: 0.5rem 1.25rem;
+    border-radius: 50px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 10vw, 6rem);
+    font-weight: 400;
+    margin-bottom: 1rem;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+  }
+
+  .hero h1 span {
+    color: var(--color-secondary-light);
+  }
+
+  .hero-tagline {
+    font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+    font-weight: 400;
+    opacity: 0.95;
+    margin-bottom: 2.5rem;
+    max-width: 550px;
+    margin-inline: auto;
+    line-height: 1.6;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hero-scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.7);
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(10px); }
+  }
+
+  /* ============================================
+     SECTIONS
+     ============================================ */
+  .container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .section-subtitle {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-header h2 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--color-text);
+  }
+
+  .section-cta {
+    text-align: center;
+    margin-top: 3rem;
+  }
+
+  /* ============================================
+     FEATURES
+     ============================================ */
+  .features {
+    padding: var(--section-padding) 0;
+    background: var(--color-bg-warm);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+
+  .feature-card {
+    text-align: center;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    transition: var(--transition-base);
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  }
+
+  .feature-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-primary-subtle);
+    border-radius: 16px;
+    color: var(--color-primary);
+  }
+
+  .feature-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+  }
+
+  .feature-card p {
+    color: var(--color-text-light);
+    font-size: 0.9375rem;
+  }
+
+  /* ============================================
+     ROOMS
+     ============================================ */
+  .rooms-preview {
+    padding: var(--section-padding) 0;
+  }
+
+  .rooms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+
+  .room-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    transition: var(--transition-base);
+    border: 1px solid rgba(0,0,0,0.04);
+  }
+
+  .room-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.1);
+  }
+
+  .room-card-image {
+    position: relative;
+    aspect-ratio: 16/11;
+    overflow: hidden;
+  }
+
+  .room-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-slow);
+  }
+
+  .room-card:hover .room-card-image img {
+    transform: scale(1.08);
+  }
+
+  .room-price {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(10px);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .room-card-content {
+    padding: 1.5rem;
+  }
+
+  .room-card-content h3 {
+    font-size: 1.375rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+  }
+
+  .room-card-content p {
+    color: var(--color-text-light);
+    margin-bottom: 1rem;
+    font-size: 0.9375rem;
+  }
+
+  .room-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    background: var(--color-bg-alt);
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-light);
+  }
+
+  /* ============================================
+     TESTIMONIALS
+     ============================================ */
+  .testimonials {
+    padding: var(--section-padding) 0;
+    background: var(--color-bg-alt);
+  }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+  }
+
+  .testimonial-card {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+  }
+
+  .testimonial-stars {
+    color: var(--color-secondary);
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    letter-spacing: 2px;
+  }
+
+  .testimonial-quote {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--color-text);
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-left: 1.5rem;
+    border-left: 3px solid var(--color-secondary);
+  }
+
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .author-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  .author-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .author-name {
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .author-location {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+  }
+
+  /* ============================================
+     CTA SECTION
+     ============================================ */
+  .cta-section {
+    position: relative;
+    padding: var(--section-padding) 2rem;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .cta-background {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .cta-background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cta-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--gradient-primary);
+    opacity: 0.9;
+  }
+
+  .cta-content {
+    text-align: center;
+    color: #fff;
+  }
+
+  .cta-content h2 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 0.75rem;
+  }
+
+  .cta-content p {
+    font-size: 1.125rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+  }
+
+  /* ============================================
+     FOOTER
+     ============================================ */
+  .site-footer {
+    background: var(--color-bg-dark);
+    color: #fff;
+    padding: 4rem 2rem 1.5rem;
+  }
+
+  .footer-container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 3rem;
+  }
+
+  .footer-logo {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .footer-brand p {
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 1.5rem;
+    max-width: 280px;
+  }
+
+  .footer-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+  }
+
+  .footer-contact a {
+    color: var(--color-secondary-light);
+    transition: var(--transition-fast);
+  }
+
+  .footer-contact a:hover {
+    color: var(--color-secondary);
+  }
+
+  .footer-contact span {
+    color: rgba(255,255,255,0.6);
+  }
+
+  .footer-links h4,
+  .footer-cta h4 {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+    margin-bottom: 1.25rem;
+  }
+
+  .footer-links ul {
+    list-style: none;
+  }
+
+  .footer-links li {
+    margin-bottom: 0.75rem;
+  }
+
+  .footer-links a {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.9375rem;
+    transition: var(--transition-fast);
+  }
+
+  .footer-links a:hover {
+    color: #fff;
+  }
+
+  .footer-cta p {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.9375rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .footer-bottom {
+    max-width: var(--container-max);
+    margin: 3rem auto 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    text-align: center;
+    font-size: 0.875rem;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* ============================================
+     PREVIEW NOTICE
+     ============================================ */
+  .preview-notice {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--color-primary);
+    color: #fff;
+    padding: 0.75rem 1.25rem;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    z-index: 9999;
+  }
+
+  .preview-notice .btn-small {
+    background: #fff;
+    color: var(--color-primary);
+  }
+
+  /* ============================================
+     RESPONSIVE
+     ============================================ */
+  @media (max-width: 1024px) {
+    .footer-container {
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .mobile-menu-toggle {
+      display: flex;
+    }
+
+    .nav-links {
+      display: none;
+      position: fixed;
+      inset: 0;
+      top: 70px;
+      background: #fff;
+      flex-direction: column;
+      padding: 2rem;
+      gap: 0;
+    }
+
+    .nav-links.active {
+      display: flex;
+    }
+
+    .nav-links li {
+      width: 100%;
+    }
+
+    .nav-links a {
+      display: block;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--color-bg-alt);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 12vw, 4rem);
+    }
+
+    .footer-container {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+
+    .footer-brand p,
+    .footer-contact {
+      margin-inline: auto;
+    }
+
+    .preview-notice {
+      bottom: 1rem;
+      right: 1rem;
+      left: 1rem;
+      justify-content: center;
+    }
+  }
+</style>
+
+<script>
+  // Mobile menu toggle
+  document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+    this.classList.toggle('active');
+    document.querySelector('.nav-links')?.classList.toggle('active');
+  });
+</script>
+</body>
+</html>

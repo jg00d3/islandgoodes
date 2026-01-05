@@ -17,7 +17,15 @@
       "Bash(git push:*)",
       "WebFetch(domain:gentle-centaur-98d6af.netlify.app)",
       "Bash(curl:*)",
-      "WebFetch(domain:my.matterport.com)"
+      "WebFetch(domain:my.matterport.com)",
+      "WebFetch(domain:www.reservationkey.com)",
+      "Bash(head -15 echo \"\" echo \"=== POOL & HOT TUB ===\")",
+      "Bash(ls:*)",
+      "Bash(git fetch:*)",
+      "Bash(GIT_TRACE=1 git push:*)",
+      "WebFetch(domain:unsplash.com)",
+      "allow all",
+      "Bash(git reset:*)"
     ]
   }
 }

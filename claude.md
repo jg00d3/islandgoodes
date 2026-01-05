@@ -1,81 +1,92 @@
-# Island Goodes Website - Claude Code Project
+# CLAUDE.md
 
-## Version
-**Current Version:** 1.0.0
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Live Site
-https://gentle-centaur-98d6af.netlify.app/
+## Project Overview
 
-## Session Logs
-- [Session Log - January 4, 2026](SESSION_LOG_2026-01-04.md)
+Island Goodes is a static marketing website for an adults-only (18+) oceanview accommodation near Hilo, Hawaii. Built with Astro 5.x and deployed to Netlify.
 
----
+**Key Business Rules:**
+- Adults only property - no children under 18 permitted
+- No breakfast service (removed "B&B" references)
+- Four rooms: Hilo Bay, Mauna Kea, Ginger, Orchid
 
-## Changelog
+## Commands
 
-All changes made to the Island Goodes website, sorted by date/time.
-
-### 2026-01-05
-
-| Time (PST) | Commit | Description |
-|------------|--------|-------------|
-| 09:18 | 7b324cb | Add proper stock images for all 9 blog posts (Unsplash) |
-| 00:36 | f876c21 | Add 5 new blog posts backdated throughout 2025 |
-| 00:27 | 51cea17 | Add images to blog cards instead of green gradient placeholder |
-| 00:25 | ff6d134 | Fix room page layout - smaller hero, constrained image size |
-
-### 2026-01-04
-
-| Time (PST) | Commit | Description |
-|------------|--------|-------------|
-| 21:18:35 | e736be1 | Show full-size images without cropping - removed object-fit:cover to display complete photos |
-| 20:01:02 | 948966e | Fix room images on Our Rooms page to show beds instead of other room areas |
-| 19:15:32 | 9ba16e2 | Add individual room detail pages with photo galleries for Hilo Bay, Mauna Kea, Ginger, and Orchid rooms |
-| 19:01:12 | dbd1c45 | Add real property photos - room photos, property amenities, heroes |
-| 17:45:15 | 70045de | Remove B&B/breakfast references, emphasize Adults Only (18+) throughout site |
-| 17:39:20 | b248b0b | Add placeholder images and fix Matterport 3D tour link |
-| 17:25:44 | bd56bc0 | Add all site pages: Rooms, Amenities, Location, Contact, Blog (4 posts), 404 |
-| 17:06:36 | 93a1cb0 | Initial commit: SEO-optimized Astro website with BaseLayout and homepage |
-
----
-
-## Quick Reference
-
-### Repository
-- GitHub: https://github.com/jg00d3/islandgoodes
-
-### Hosting
-- Platform: Netlify
-- Auto-deploy: Enabled (pushes to master trigger builds)
-
-### Key URLs
-- Live Site: https://gentle-centaur-98d6af.netlify.app/
-- Booking: https://v2.reservationkey.com/3655/reserve/c
-- Matterport Tour: https://my.matterport.com/show/?m=zrMG54r6RUx
-
-### Commands
 ```bash
-# Development
-npm run dev
-
-# Build
-npm run build
-
-# Deploy (automatic on push to master)
-git add . && git commit -m "message" && git push
+npm run dev      # Start dev server at localhost:4321
+npm run build    # Build static site to dist/
+npm run preview  # Preview production build locally
 ```
 
----
+Deploy: Push to master branch triggers automatic Netlify deployment.
 
-## Important Notes
+## Architecture
 
-1. **Adults Only Property** - All guests must be 18+, no children permitted
-2. **No Breakfast** - Property no longer offers breakfast service
-3. **Photo Sources** - Real photos stored in `CLAUDES PICTURES` folder (not committed to repo)
-4. **DNS Pending** - Domain still points to GoDaddy, Netlify subdomain active
+### File Structure
+```
+src/
+├── layouts/
+│   └── BaseLayout.astro    # Main layout with header, footer, SEO, schema.org
+├── pages/
+│   ├── index.astro         # Homepage
+│   ├── rooms.astro         # Room listing page
+│   ├── rooms/              # Individual room detail pages
+│   │   ├── hilo-bay.astro
+│   │   ├── mauna-kea.astro
+│   │   ├── ginger.astro
+│   │   └── orchid.astro
+│   ├── blog/
+│   │   ├── index.astro     # Blog listing (posts defined in frontmatter array)
+│   │   └── [post].astro    # Individual blog post pages
+│   └── [other pages].astro
+public/
+└── images/
+    ├── rooms/[room-name]/  # Room photos (room.jpg, bed.jpg, lanai.jpg, etc.)
+    ├── blog/               # Blog post featured images
+    └── property/           # Amenity photos (pool.jpg, hot-tub.jpg, etc.)
+```
 
----
+### BaseLayout
 
-## Contact
-- Property Phone: 808-964-2291
-- Address: 27-2365 Hawaii Belt Rd, Papaikou, HI 96781
+All pages use `BaseLayout.astro` which provides:
+- SEO meta tags (title, description, Open Graph, Twitter Cards)
+- Schema.org structured data (LodgingBusiness)
+- Global CSS variables and styles
+- Fixed header with navigation
+- Footer with contact info and links
+- Mobile menu toggle script
+
+Props: `title` (required), `description` (required), `image` (optional), `canonicalURL` (optional)
+
+### Styling Pattern
+
+Each page uses scoped `<style>` blocks. Global CSS variables defined in BaseLayout:
+- `--color-primary: #1a5f4a` (green)
+- `--color-secondary: #d4a853` (gold)
+- `--font-heading: 'Playfair Display'`
+- `--font-body: 'Open Sans'`
+
+### Blog System
+
+Blog posts are individual .astro files. The blog index maintains a posts array with metadata:
+```javascript
+const posts = [
+  { slug, title, excerpt, date, category, image },
+  // ...
+];
+```
+
+## External Services
+
+- **Booking:** ReservationKey - https://v2.reservationkey.com/3655/reserve/c
+- **3D Tour:** Matterport - https://my.matterport.com/show/?m=zrMG54r6RUx
+- **Hosting:** Netlify (auto-deploy from master)
+- **Domain:** islandgoodes.com (DNS pending migration from GoDaddy)
+
+## Room Photo Guidelines
+
+Source photos in `CLAUDES PICTURES/` folder (not committed). When adding room images:
+- Avoid folders named "NO USE PICTURES" or "NOT TO USE"
+- Main room image should show the bed
+- Standard photos: room.jpg, bed.jpg, lanai.jpg, bathroom.jpg, coffee.jpg
