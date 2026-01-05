@@ -1,0 +1,246 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "Best Snorkeling Spots on the Big Island";
+const description = "Discover the Big Island's top snorkeling locations near Hilo. From Richardson Beach to Kapoho tide pools, find crystal-clear waters and colorful marine life.";
+const date = "2025-07-10";
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="blog-post">
+    <header class="post-header">
+      <nav class="breadcrumb">
+        <a href="/">Home</a> / <a href="/blog">Blog</a> / Snorkeling Guide
+      </nav>
+      <h1>{title}</h1>
+      <div class="post-meta">
+        <time datetime={date}>July 10, 2025</time>
+        <span class="category">Activities</span>
+      </div>
+    </header>
+
+    <div class="post-content">
+      <p class="lead">
+        The Big Island offers some of Hawaii's best snorkeling, with calm bays, vibrant coral
+        reefs, and abundant marine life. From the Hilo side's protected coves to the Kona
+        coast's crystal-clear waters, here's our guide to the island's top snorkeling destinations.
+      </p>
+
+      <h2>Hilo Side Snorkeling (East)</h2>
+
+      <h3>Richardson Ocean Park</h3>
+      <p>
+        Just 10 minutes from Island Goodes, Richardson Beach is our top recommendation for
+        Hilo-side snorkeling:
+      </p>
+      <ul>
+        <li>Protected bay with calm, clear water</li>
+        <li>Abundant sea turtles (honu) feeding on limu (seaweed)</li>
+        <li>Colorful tropical fish and occasional octopus sightings</li>
+        <li>Facilities include restrooms, showers, and lifeguards</li>
+        <li>Best conditions: mornings before the wind picks up</li>
+      </ul>
+
+      <h3>Carlsmith Beach Park (Four Mile)</h3>
+      <p>
+        A local favorite featuring natural spring-fed pools:
+      </p>
+      <ul>
+        <li>Mixture of fresh and salt water creates unique environment</li>
+        <li>Calm, protected waters—great for beginners</li>
+        <li>Sea turtles frequent this area</li>
+        <li>Less crowded than Richardson</li>
+      </ul>
+
+      <h2>Puna District</h2>
+
+      <h3>Kapoho Tide Pools (Wai'opae)</h3>
+      <p>
+        <em>Note: The original Kapoho tide pools were covered by the 2018 lava flow, but
+        nearby areas still offer excellent snorkeling opportunities.</em>
+      </p>
+
+      <h3>Ahalanui Beach Park</h3>
+      <p>
+        A unique volcanically-heated pond perfect for families:
+      </p>
+      <ul>
+        <li>Warm, calm water (around 90°F)</li>
+        <li>Protected from ocean waves</li>
+        <li>Some fish enter through the ocean connection</li>
+        <li>Great for children and nervous swimmers</li>
+      </ul>
+
+      <h2>Kona Side Snorkeling (West)</h2>
+      <p>
+        The Kona coast, about 2.5 hours from Island Goodes, offers world-class snorkeling
+        in some of Hawaii's clearest waters.
+      </p>
+
+      <h3>Kealakekua Bay</h3>
+      <p>
+        Often rated Hawaii's #1 snorkeling destination:
+      </p>
+      <ul>
+        <li>Marine sanctuary with pristine coral reefs</li>
+        <li>Spinner dolphins frequent the bay in mornings</li>
+        <li>Best accessed by kayak, boat tour, or the steep hiking trail</li>
+        <li>Historical significance: Captain Cook monument</li>
+      </ul>
+
+      <h3>Two Step (Honaunau Bay)</h3>
+      <p>
+        Named for the natural lava "steps" into the water:
+      </p>
+      <ul>
+        <li>Easy entry into deep, clear water</li>
+        <li>Excellent coral formations close to shore</li>
+        <li>Sea turtles, tropical fish, and occasionally manta rays</li>
+        <li>Near Pu'uhonua o Honaunau (City of Refuge)</li>
+      </ul>
+
+      <h2>Snorkeling Tips</h2>
+      <ul>
+        <li><strong>Reef-safe sunscreen:</strong> Hawaii law requires reef-safe sunscreen—look for mineral-based options</li>
+        <li><strong>Morning is best:</strong> Calmer water and better visibility before afternoon winds</li>
+        <li><strong>Check conditions:</strong> We can advise on current water conditions each day</li>
+        <li><strong>Don't touch:</strong> Never touch coral or chase marine life</li>
+        <li><strong>Gear:</strong> Bring your own or rent in Hilo—quality matters for comfort</li>
+        <li><strong>Buddy system:</strong> Always snorkel with a partner</li>
+      </ul>
+
+      <h2>What You'll See</h2>
+      <p>
+        Hawaii's reefs are home to amazing marine life:
+      </p>
+      <ul>
+        <li>Hawaiian Green Sea Turtles (honu)</li>
+        <li>Yellow Tang, Moorish Idols, and Humuhumunukunukuapua'a (state fish)</li>
+        <li>Moray eels hiding in coral crevices</li>
+        <li>Occasional octopus, rays, and reef sharks</li>
+        <li>Spinner dolphins (especially in Kona waters)</li>
+      </ul>
+
+      <div class="cta-box">
+        <h3>Explore Hawaii's Underwater World</h3>
+        <p>Book your stay at Island Goodes and ask us about the best snorkeling conditions during your visit.</p>
+        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary" target="_blank" rel="noopener">Check Availability</a>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .blog-post {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+  }
+
+  .post-header {
+    text-align: center;
+    padding: 8rem 0 3rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    color: var(--color-text-light);
+  }
+
+  .breadcrumb a {
+    color: var(--color-primary);
+  }
+
+  .post-header h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    color: var(--color-primary-dark);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .post-meta {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+  }
+
+  .category {
+    background: var(--color-secondary);
+    color: #fff;
+    padding: 0.2rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+  }
+
+  .post-content {
+    line-height: 1.8;
+  }
+
+  .post-content .lead {
+    font-size: 1.15rem;
+    color: var(--color-text-light);
+    margin-bottom: 2rem;
+  }
+
+  .post-content h2 {
+    color: var(--color-primary-dark);
+    margin: 2.5rem 0 1rem;
+    font-size: 1.5rem;
+  }
+
+  .post-content h3 {
+    color: var(--color-primary);
+    margin: 1.5rem 0 0.75rem;
+    font-size: 1.2rem;
+  }
+
+  .post-content p {
+    margin-bottom: 1rem;
+  }
+
+  .post-content ul {
+    margin: 1rem 0 1.5rem 1.5rem;
+  }
+
+  .post-content li {
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-box {
+    background: var(--color-bg-alt);
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 3rem;
+  }
+
+  .cta-box h3 {
+    color: var(--color-primary-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-box p {
+    margin-bottom: 1rem;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .btn-primary {
+    background: var(--color-secondary);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #c49943;
+  }
+</style>

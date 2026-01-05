@@ -1,0 +1,207 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "Black Sand Beaches: A Guide to Hawaii's Unique Shorelines";
+const description = "Discover the Big Island's stunning black sand beaches, formed from volcanic lava. Visit Punalu'u, Kehena, and other unique beaches near Hilo.";
+const date = "2025-03-20";
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="blog-post">
+    <header class="post-header">
+      <nav class="breadcrumb">
+        <a href="/">Home</a> / <a href="/blog">Blog</a> / Black Sand Beaches
+      </nav>
+      <h1>{title}</h1>
+      <div class="post-meta">
+        <time datetime={date}>March 20, 2025</time>
+        <span class="category">Nature</span>
+      </div>
+    </header>
+
+    <div class="post-content">
+      <p class="lead">
+        The Big Island of Hawaii is home to some of the world's most unique beaches—shorelines
+        made entirely of jet-black sand formed from volcanic lava meeting the sea. These stunning
+        natural wonders are must-visit destinations during your stay at Island Goodes.
+      </p>
+
+      <h2>How Black Sand Beaches Form</h2>
+      <p>
+        When hot lava flows into the ocean, it shatters upon contact with the cool water, creating
+        tiny fragments of volcanic glass and basalt. Over time, wave action breaks these fragments
+        down into fine black sand. The Big Island's active volcanic history means we have more
+        black sand beaches than anywhere else in Hawaii.
+      </p>
+
+      <h2>Punalu'u Black Sand Beach</h2>
+      <p>
+        Located about 60 miles south of Island Goodes, Punalu'u is the most famous black sand beach
+        on the Big Island. This stunning beach is known for:
+      </p>
+      <ul>
+        <li><strong>Hawaiian Green Sea Turtles:</strong> Honu (sea turtles) frequently rest on the warm black sand</li>
+        <li><strong>Dramatic Scenery:</strong> Coconut palms line the shore against jet-black sand</li>
+        <li><strong>Easy Access:</strong> Paved parking, restrooms, and picnic facilities available</li>
+        <li><strong>Swimming:</strong> Generally safe for wading, though currents can be strong</li>
+      </ul>
+      <p>
+        <em>Important:</em> Please maintain at least 10 feet distance from sea turtles—it's both
+        respectful and required by law.
+      </p>
+
+      <h2>Kehena Beach</h2>
+      <p>
+        This secluded black sand beach in lower Puna (about 30 minutes from Island Goodes) offers
+        a more adventurous experience. Known locally as a clothing-optional beach, Kehena features:
+      </p>
+      <ul>
+        <li>Dramatic cliff setting with palm trees</li>
+        <li>Regular dolphin sightings offshore</li>
+        <li>Strong waves—best for experienced swimmers only</li>
+        <li>Sunday drum circles and local community gatherings</li>
+      </ul>
+      <p>
+        Access requires descending a steep trail, so wear appropriate footwear.
+      </p>
+
+      <h2>Pololu Valley Beach</h2>
+      <p>
+        On the northern tip of the island, Pololu Valley rewards hikers with a remote black sand
+        beach at the bottom of a scenic valley. The 15-minute hike down offers spectacular views,
+        and the beach is often deserted on weekdays.
+      </p>
+
+      <h2>Tips for Visiting Black Sand Beaches</h2>
+      <ul>
+        <li><strong>Footwear:</strong> Black sand absorbs heat—it can be very hot in direct sun</li>
+        <li><strong>Photography:</strong> The contrast of black sand against blue water is stunning</li>
+        <li><strong>Respect:</strong> Never take sand home—it's culturally disrespectful and illegal</li>
+        <li><strong>Safety:</strong> Always check conditions before swimming; some beaches have strong currents</li>
+        <li><strong>Timing:</strong> Early morning or late afternoon offers cooler sand and better light</li>
+      </ul>
+
+      <h2>Planning Your Beach Day</h2>
+      <p>
+        We're happy to help you plan your black sand beach adventure. Ask us about current
+        conditions, the best routes, and what to pack. After a day exploring the island's
+        unique shorelines, return to Island Goodes to relax by our pool and share your photos!
+      </p>
+
+      <div class="cta-box">
+        <h3>Ready to Explore?</h3>
+        <p>Book your stay at Island Goodes and discover Hawaii's black sand beaches.</p>
+        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary" target="_blank" rel="noopener">Check Availability</a>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .blog-post {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+  }
+
+  .post-header {
+    text-align: center;
+    padding: 8rem 0 3rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    color: var(--color-text-light);
+  }
+
+  .breadcrumb a {
+    color: var(--color-primary);
+  }
+
+  .post-header h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    color: var(--color-primary-dark);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .post-meta {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+  }
+
+  .category {
+    background: var(--color-secondary);
+    color: #fff;
+    padding: 0.2rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+  }
+
+  .post-content {
+    line-height: 1.8;
+  }
+
+  .post-content .lead {
+    font-size: 1.15rem;
+    color: var(--color-text-light);
+    margin-bottom: 2rem;
+  }
+
+  .post-content h2 {
+    color: var(--color-primary-dark);
+    margin: 2.5rem 0 1rem;
+    font-size: 1.5rem;
+  }
+
+  .post-content p {
+    margin-bottom: 1rem;
+  }
+
+  .post-content ul {
+    margin: 1rem 0 1.5rem 1.5rem;
+  }
+
+  .post-content li {
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-box {
+    background: var(--color-bg-alt);
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 3rem;
+  }
+
+  .cta-box h3 {
+    color: var(--color-primary-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-box p {
+    margin-bottom: 1rem;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .btn-primary {
+    background: var(--color-secondary);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #c49943;
+  }
+</style>

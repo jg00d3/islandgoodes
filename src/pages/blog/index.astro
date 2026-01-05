@@ -4,7 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 const title = "Big Island Travel Blog";
 const description = "Travel tips, guides, and insider knowledge for visiting Hilo and the Big Island of Hawaii. Discover volcanoes, waterfalls, beaches, and local favorites.";
 
-// Blog posts - will be expanded over time
+// Blog posts - sorted by date descending
 const posts = [
   {
     slug: "hawaii-volcanoes-national-park",
@@ -37,8 +37,48 @@ const posts = [
     date: "2025-01-01",
     category: "Activities",
     image: "/images/blog/mauna-kea.jpg"
+  },
+  {
+    slug: "whale-watching-hawaii",
+    title: "Whale Watching Season in Hawaii: Your Complete Guide",
+    excerpt: "Humpback whales visit Hawaii from December through April. Learn the best spots, tours, and tips for whale watching on the Big Island.",
+    date: "2025-11-20",
+    category: "Nature",
+    image: "/images/blog/whale-watching.jpg"
+  },
+  {
+    slug: "kona-coffee-tours",
+    title: "Kona Coffee Farm Tours: Experience Hawaii's Famous Brew",
+    excerpt: "Visit Kona coffee farms and learn about Hawaii's world-famous coffee. Tours, tastings, and history behind the Big Island's beloved crop.",
+    date: "2025-09-05",
+    category: "Activities",
+    image: "/images/blog/coffee-farm.jpg"
+  },
+  {
+    slug: "snorkeling-big-island",
+    title: "Best Snorkeling Spots on the Big Island",
+    excerpt: "Discover the Big Island's top snorkeling locations from Richardson Beach to Kealakekua Bay. Crystal-clear waters and colorful marine life await.",
+    date: "2025-07-10",
+    category: "Activities",
+    image: "/images/blog/snorkeling.jpg"
+  },
+  {
+    slug: "hilo-farmers-market",
+    title: "Hilo Farmers Market: Your Complete Guide",
+    excerpt: "Everything you need to know about visiting Hawaii's best farmers market. Fresh tropical fruits, local crafts, and authentic Hawaiian culture.",
+    date: "2025-05-15",
+    category: "Local Guide",
+    image: "/images/blog/farmers-market.jpg"
+  },
+  {
+    slug: "black-sand-beaches",
+    title: "Black Sand Beaches: A Guide to Hawaii's Unique Shorelines",
+    excerpt: "Discover the Big Island's stunning black sand beaches formed from volcanic lava. Visit Punalu'u, Kehena, and other unique beaches.",
+    date: "2025-03-20",
+    category: "Nature",
+    image: "/images/blog/black-sand-beach.jpg"
   }
-];
+].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 ---
 
 <BaseLayout title={title} description={description}>
@@ -166,6 +206,7 @@ const posts = [
     height: 180px;
     position: relative;
     overflow: hidden;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
   }
 
   .blog-image img {
@@ -177,6 +218,10 @@ const posts = [
 
   .blog-card:hover .blog-image img {
     transform: scale(1.05);
+  }
+
+  .blog-image img[src=""], .blog-image img:not([src]) {
+    display: none;
   }
 
   .category {
