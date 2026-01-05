@@ -13,7 +13,7 @@ const {
   canonicalURL = Astro.url.href
 } = Astro.props;
 
-const siteName = "Island Goodes B&B";
+const siteName = "Island Goodes";
 const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
 ---
 
@@ -57,9 +57,9 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
   <!-- Structured Data -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@type": "BedAndBreakfast",
-    "name": "Island Goodes B&B",
-    "description": "Adult-only oceanview bed and breakfast near Hilo, Hawaii. Private rooms with stunning views of Hilo Bay and Mauna Kea.",
+    "@type": "LodgingBusiness",
+    "name": "Island Goodes",
+    "description": "Adults-only oceanview accommodation near Hilo, Hawaii. Private rooms with stunning views of Hilo Bay and Mauna Kea. No children under 18.",
     "url": "https://www.islandgoodes.com",
     "telephone": "+1-808-964-2291",
     "address": {
@@ -82,7 +82,7 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
       { "@type": "LocationFeatureSpecification", "name": "Free Parking", "value": true },
       { "@type": "LocationFeatureSpecification", "name": "Hot Tub", "value": true },
       { "@type": "LocationFeatureSpecification", "name": "Ocean View", "value": true },
-      { "@type": "LocationFeatureSpecification", "name": "Breakfast Included", "value": true }
+      { "@type": "LocationFeatureSpecification", "name": "Adults Only (18+)", "value": true }
     ],
     "starRating": {
       "@type": "Rating",
@@ -123,8 +123,8 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
   <footer class="site-footer">
     <div class="footer-container">
       <div class="footer-section">
-        <h3>Island Goodes B&B</h3>
-        <p>Adult-only oceanview bed & breakfast near Hilo, Hawaii</p>
+        <h3>Island Goodes</h3>
+        <p>Adults-only oceanview accommodation near Hilo, Hawaii. No children under 18.</p>
         <p>
           <a href="tel:+18089642291">808-964-2291</a><br />
           27-2365 Hawaii Belt Rd<br />
@@ -158,7 +158,7 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; {new Date().getFullYear()} Island Goodes B&B. All rights reserved.</p>
+      <p>&copy; {new Date().getFullYear()} Island Goodes. All rights reserved.</p>
     </div>
   </footer>
 
