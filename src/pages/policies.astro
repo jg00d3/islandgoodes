@@ -1,0 +1,195 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = "Policies | Island Goodes";
+const description = "Booking policies, cancellation terms, tax information, and house rules for Island Goodes adults-only accommodation in Hilo, Hawaii.";
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="page-hero">
+    <div class="hero-content">
+      <h1>Policies</h1>
+      <p>Important information for your stay</p>
+    </div>
+  </section>
+
+  <section class="policies-section">
+    <div class="container">
+
+      <div class="policy-card">
+        <h2>Reservation & Payment</h2>
+        <ul>
+          <li>The total amount must be paid to reserve your stay</li>
+          <li>We accept Visa and MasterCard</li>
+          <li>Room rates may vary on special dates without notice</li>
+        </ul>
+      </div>
+
+      <div class="policy-card highlight">
+        <h2>Special Non-Refundable Rate</h2>
+        <p>All rooms are booked at our Special Non-Refundable Rate.</p>
+        <p><strong>If you have to cancel, there are no refunds. However, we will give you a 1 year voucher to rebook.</strong></p>
+      </div>
+
+      <div class="policy-card">
+        <h2>Minimum Stay</h2>
+        <p>A <strong>minimum 2-night stay</strong> is required for all rooms.</p>
+      </div>
+
+      <div class="policy-card">
+        <h2>Tax Information</h2>
+        <p>All room rates are subject to Hawaii State Tax of <strong>17.97%</strong>, which includes:</p>
+        <ul>
+          <li>Transient Accommodation Tax (TAT): 13.25%</li>
+          <li>General Excise Tax (GET): 4.72%</li>
+        </ul>
+      </div>
+
+      <div class="policy-card">
+        <h2>Occupancy</h2>
+        <ul>
+          <li>Maximum occupancy: <strong>2 persons per room</strong></li>
+        </ul>
+      </div>
+
+      <div class="policy-card highlight">
+        <h2>Adults Only - Children Restricted</h2>
+        <p><strong>No child accepted under 18 years of age.</strong></p>
+        <p>Island Goodes is an adults-only accommodation designed for guests seeking a peaceful, relaxing environment.</p>
+      </div>
+
+      <div class="policy-card">
+        <h2>Check-In / Check-Out</h2>
+        <ul>
+          <li>Check-in: 3:00 PM</li>
+          <li>Check-out: 11:00 AM</li>
+          <li>Early check-in or late check-out may be available upon request</li>
+        </ul>
+      </div>
+
+      <div class="policy-card">
+        <h2>Seasonal Discounts</h2>
+        <p><strong>SPECIAL SEASONAL DISCOUNTS - Save from 20% up to 55%</strong></p>
+        <p>Discount codes available for longer stays (excluding special dates). Contact us for current promotions.</p>
+      </div>
+
+      <div class="policy-card">
+        <h2>House Rules</h2>
+        <ul>
+          <li>No smoking on the property</li>
+          <li>Quiet hours: 10:00 PM - 8:00 AM</li>
+          <li>Please respect other guests' privacy</li>
+          <li>No parties or events</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <h2>Ready to Book?</h2>
+      <p>Check availability and reserve your room today</p>
+      <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary btn-large" target="_blank" rel="noopener">Book Now</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/property/exterior.jpg') center/cover no-repeat;
+    min-height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    padding: 8rem 2rem 4rem;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .policies-section {
+    padding: 4rem 0;
+  }
+
+  .policy-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+
+  .policy-card.highlight {
+    background: var(--color-bg-alt);
+    border-left: 4px solid var(--color-secondary);
+  }
+
+  .policy-card h2 {
+    color: var(--color-primary-dark);
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+
+  .policy-card ul {
+    margin-left: 1.5rem;
+  }
+
+  .policy-card li {
+    margin-bottom: 0.5rem;
+  }
+
+  .policy-card p {
+    margin-bottom: 0.75rem;
+  }
+
+  .cta-section {
+    text-align: center;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: #fff;
+    padding: 4rem 2rem;
+  }
+
+  .cta-section h2 {
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-section p {
+    margin-bottom: 1.5rem;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .btn-primary {
+    background: var(--color-secondary);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #c49943;
+    color: #fff;
+  }
+
+  .btn-large {
+    padding: 1rem 3rem;
+    font-size: 1.1rem;
+  }
+</style>

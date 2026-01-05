@@ -5,11 +5,12 @@ const title = "Ginger Room - Garden View Suite";
 const description = "400 sq ft ground floor room surrounded by tropical gardens. Sleep Number bed, private lanai, private bathroom. Named for the fragrant ginger plants. Adults-only accommodation near Hilo, Hawaii.";
 
 const images = [
+  { src: "/images/rooms/ginger/bed.jpg", alt: "Sleep Number bed in Ginger Room" },
   { src: "/images/rooms/ginger/room.jpg", alt: "Ginger Room overview" },
   { src: "/images/rooms/ginger/sitting-area.jpg", alt: "Comfortable sitting area" },
   { src: "/images/rooms/ginger/bathroom.jpg", alt: "Private bathroom" },
   { src: "/images/rooms/ginger/closet.jpg", alt: "Spacious closet" },
-  { src: "/images/rooms/ginger/coffee.jpg", alt: "Coffee and tea center" },
+  { src: "/images/rooms/ginger/coffee.jpg", alt: "Coffee station" },
 ];
 ---
 
@@ -28,7 +29,7 @@ const images = [
     <div class="container">
       <div class="overview-grid">
         <div class="main-image">
-          <img src="/images/rooms/ginger/room.jpg" alt="Ginger Room" id="featured-image" />
+          <img src="/images/rooms/ginger/bed.jpg" alt="Sleep Number bed in Ginger Room" id="featured-image" />
         </div>
         <div class="thumbnail-grid">
           {images.map((img, i) => (
@@ -61,9 +62,9 @@ const images = [
             includes grab bars for added safety and convenience.
           </p>
           <p>
-            Your own private entrance ensures complete privacy during your stay. The room includes
-            a mini refrigerator, coffee maker with locally roasted Hawaiian coffee, and a dedicated
-            tea and coffee center for your convenience.
+            Your own private entrance ensures complete privacy during your stay. The kitchenette includes
+            a mid-size refrigerator/freezer, microwave, and coffee maker for your convenience.
+            Other appliances upon request.
           </p>
 
           <div class="highlights">
@@ -99,10 +100,11 @@ const images = [
               <li>Private lanai</li>
               <li>Sleep Number bed</li>
               <li>Sitting area</li>
-              <li>Mini refrigerator</li>
+              <li>Mid-size refrigerator/freezer</li>
+              <li>Microwave</li>
               <li>Coffee maker</li>
-              <li>Free WiFi</li>
-              <li>Flat screen TV</li>
+              <li>Free High Speed WiFi</li>
+              <li>32" HD TV</li>
               <li>Air conditioning</li>
             </ul>
           </div>
@@ -126,19 +128,19 @@ const images = [
       <h2>Explore Our Other Rooms</h2>
       <div class="rooms-nav">
         <a href="/rooms/hilo-bay" class="room-nav-card">
-          <img src="/images/rooms/hilo-bay/room.jpg" alt="Hilo Bay Room" loading="lazy" />
+          <img src="/images/rooms/hilo-bay/bed.jpg" alt="Hilo Bay Room" loading="lazy" />
           <h3>Hilo Bay Room</h3>
           <p>Our premier oceanview suite</p>
         </a>
         <a href="/rooms/mauna-kea" class="room-nav-card">
-          <img src="/images/rooms/mauna-kea/room.jpg" alt="Mauna Kea Room" loading="lazy" />
+          <img src="/images/rooms/mauna-kea/bed.jpg" alt="Mauna Kea Room" loading="lazy" />
           <h3>Mauna Kea Room</h3>
           <p>Mountain views toward Hawaii's tallest peak</p>
         </a>
         <a href="/rooms/orchid" class="room-nav-card">
-          <img src="/images/rooms/orchid/room.jpg" alt="Orchid Room" loading="lazy" />
+          <img src="/images/rooms/orchid/bed.jpg" alt="Orchid Room" loading="lazy" />
           <h3>Orchid Room</h3>
-          <p>Elegant oceanview suite with kitchen</p>
+          <p>Elegant oceanview suite with kitchenette</p>
         </a>
       </div>
     </div>

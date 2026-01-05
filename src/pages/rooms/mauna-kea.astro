@@ -5,12 +5,12 @@ const title = "Mauna Kea Room - Mountain View Suite";
 const description = "Spacious room with views toward Mauna Kea, Hawaii's tallest peak. Sleep Number bed, private lanai, private bathroom. Perfect for stargazing. Adults-only accommodation near Hilo.";
 
 const images = [
-  { src: "/images/rooms/mauna-kea/room.jpg", alt: "Mauna Kea Room overview" },
   { src: "/images/rooms/mauna-kea/bed.jpg", alt: "Sleep Number bed in Mauna Kea Room" },
+  { src: "/images/rooms/mauna-kea/room.jpg", alt: "Mauna Kea Room overview" },
   { src: "/images/rooms/mauna-kea/lanai.jpg", alt: "Private lanai with mountain views" },
   { src: "/images/rooms/mauna-kea/bathroom.jpg", alt: "Private bathroom" },
   { src: "/images/rooms/mauna-kea/table.jpg", alt: "Table and seating area" },
-  { src: "/images/rooms/mauna-kea/coffee.jpg", alt: "Coffee counter with Hawaiian coffee" },
+  { src: "/images/rooms/mauna-kea/coffee.jpg", alt: "Coffee station" },
   { src: "/images/rooms/mauna-kea/closet.jpg", alt: "Spacious closet" },
 ];
 ---
@@ -30,7 +30,7 @@ const images = [
     <div class="container">
       <div class="overview-grid">
         <div class="main-image">
-          <img src="/images/rooms/mauna-kea/room.jpg" alt="Mauna Kea Room" id="featured-image" />
+          <img src="/images/rooms/mauna-kea/bed.jpg" alt="Sleep Number bed in Mauna Kea Room" id="featured-image" />
         </div>
         <div class="thumbnail-grid">
           {images.map((img, i) => (
@@ -64,8 +64,8 @@ const images = [
           </p>
           <p>
             With its own private entrance and bathroom, you'll enjoy complete privacy during your stay.
-            The room includes a mini refrigerator and coffee maker with locally roasted Hawaiian coffee,
-            perfect for those early morning volcano or stargazing trips.
+            The kitchenette includes a mid-size refrigerator/freezer, microwave, and coffee maker,
+            perfect for those early morning volcano or stargazing trips. Other appliances upon request.
           </p>
 
           <div class="highlights">
@@ -75,7 +75,7 @@ const images = [
               <li><strong>Stargazing Base:</strong> Perfect launching point for Mauna Kea observatory visits</li>
               <li><strong>Peaceful Setting:</strong> Quiet location surrounded by tropical gardens</li>
               <li><strong>Privacy:</strong> Private entrance, bathroom, and outdoor lanai</li>
-              <li><strong>Comfort:</strong> Sleep Number adjustable bed for personalized comfort</li>
+              <li><strong>Accessibility:</strong> Ground floor with no steps and bathroom grab bars</li>
             </ul>
           </div>
         </div>
@@ -93,15 +93,18 @@ const images = [
             <h3>Room Amenities</h3>
             <ul class="amenities-list">
               <li>Mountain view</li>
+              <li>Ground floor (no steps)</li>
               <li>Private entrance</li>
               <li>Private bathroom</li>
+              <li>Bathroom grab bars</li>
               <li>Private lanai</li>
               <li>Sleep Number bed</li>
               <li>Premium linens</li>
-              <li>Mini refrigerator</li>
+              <li>Mid-size refrigerator/freezer</li>
+              <li>Microwave</li>
               <li>Coffee maker</li>
-              <li>Free WiFi</li>
-              <li>Flat screen TV</li>
+              <li>Free High Speed WiFi</li>
+              <li>32" HD TV</li>
               <li>Air conditioning</li>
               <li>Ceiling fan</li>
             </ul>
@@ -126,19 +129,19 @@ const images = [
       <h2>Explore Our Other Rooms</h2>
       <div class="rooms-nav">
         <a href="/rooms/hilo-bay" class="room-nav-card">
-          <img src="/images/rooms/hilo-bay/room.jpg" alt="Hilo Bay Room" loading="lazy" />
+          <img src="/images/rooms/hilo-bay/bed.jpg" alt="Hilo Bay Room" loading="lazy" />
           <h3>Hilo Bay Room</h3>
           <p>Our premier oceanview suite</p>
         </a>
         <a href="/rooms/ginger" class="room-nav-card">
-          <img src="/images/rooms/ginger/room.jpg" alt="Ginger Room" loading="lazy" />
+          <img src="/images/rooms/ginger/bed.jpg" alt="Ginger Room" loading="lazy" />
           <h3>Ginger Room</h3>
           <p>A peaceful garden retreat</p>
         </a>
         <a href="/rooms/orchid" class="room-nav-card">
-          <img src="/images/rooms/orchid/room.jpg" alt="Orchid Room" loading="lazy" />
+          <img src="/images/rooms/orchid/bed.jpg" alt="Orchid Room" loading="lazy" />
           <h3>Orchid Room</h3>
-          <p>Elegant oceanview suite with kitchen</p>
+          <p>Elegant oceanview suite with kitchenette</p>
         </a>
       </div>
     </div>

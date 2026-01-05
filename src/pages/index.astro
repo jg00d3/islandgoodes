@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const title = "Adults-Only Oceanview Accommodation in Hilo, Hawaii";
+const title = "Island Goodes - Hawaiian Accommodation for Adults Only | Hilo, Hawaii";
 const description = "Island Goodes is an adults-only accommodation near Hilo with stunning ocean views and private rooms. No children under 18. Easy access to Volcanoes National Park. Book direct for best rates.";
 ---
 
@@ -9,26 +9,29 @@ const description = "Island Goodes is an adults-only accommodation near Hilo wit
   <!-- Hero Section -->
   <section class="hero">
     <div class="hero-content">
-      <h1>Island Goodes: Adults-Only Oceanview Accommodation in Hilo, Hawaii</h1>
-      <p class="hero-tagline">Wake up to stunning views of Hilo Bay and Mauna Kea</p>
-      <p class="hero-description">Your peaceful retreat for exploring the Big Island's east side. <strong>Adults only—no children under 18.</strong></p>
-      <div class="hero-cta">
-        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary" target="_blank" rel="noopener">Book Your Stay</a>
-        <a href="/rooms" class="btn btn-secondary">View Rooms</a>
+      <h1>ISLAND GOODES</h1>
+      <p class="hero-subtitle">Hawaiian Accommodation for Adults Only</p>
+      <div class="discount-banner">
+        <p class="discount-title">SPECIAL SEASONAL DISCOUNTS</p>
+        <p class="discount-offer">Save from 20% up to 55%</p>
       </div>
+      <div class="hero-cta">
+        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary btn-large" target="_blank" rel="noopener">BOOK NOW!</a>
+      </div>
+      <p class="hero-phone"><a href="tel:+18089642291">808-964-2291</a></p>
     </div>
   </section>
 
-  <!-- Introduction -->
+  <!-- Welcome Section -->
   <section class="intro">
     <div class="container">
-      <h2>Your Home Base for Big Island Adventures</h2>
+      <h2>Welcome to Your Tropical Home Away from Home!</h2>
       <p class="lead">
-        Nestled on a hillside just 5 minutes from downtown Hilo and 12 minutes from Hilo Airport,
-        Island Goodes offers the perfect blend of tranquility and convenience. Our <strong>adults-only
-        accommodation (no children under 18)</strong> provides a peaceful escape with breathtaking ocean views and easy
-        access to Hawaii Volcanoes National Park, Rainbow Falls, and the scenic Hamakua Coast.
+        Better than a hotel stay in Hawaii, try Island Goodes. Our <strong>adults-only
+        accommodation</strong> provides a peaceful escape with breathtaking ocean views.
+        An Adult Only Accommodation - Peaceful - Relax - Enjoy.
       </p>
+      <p class="adults-notice"><strong>No child accepted under 18 years of age.</strong></p>
     </div>
   </section>
 
@@ -119,7 +122,7 @@ const description = "Island Goodes is an adults-only accommodation near Hilo wit
         </article>
         <article class="room-card">
           <a href="/rooms/ginger" class="room-image">
-            <img src="/images/rooms/ginger/room.jpg" alt="Bed in Ginger Room at Island Goodes" loading="lazy" />
+            <img src="/images/rooms/ginger/bed.jpg" alt="Bed in Ginger Room at Island Goodes" loading="lazy" />
           </a>
           <div class="room-content">
             <h3>Ginger Room</h3>
@@ -138,11 +141,11 @@ const description = "Island Goodes is an adults-only accommodation near Hilo wit
           </a>
           <div class="room-content">
             <h3>Orchid Room</h3>
-            <p>Elegant oceanview suite with full kitchen. Perfect for extended stays with fresh local ingredients.</p>
+            <p>645 sq ft elegant oceanview suite with kitchenette. Our largest room, perfect for extended stays.</p>
             <ul class="room-features">
               <li>Ocean View</li>
-              <li>Full Kitchen</li>
-              <li>Private Lanai</li>
+              <li>645 sq ft</li>
+              <li>Kitchenette</li>
             </ul>
             <a href="/rooms/orchid" class="btn btn-outline">View Details</a>
           </div>
@@ -215,7 +218,7 @@ const description = "Island Goodes is an adults-only accommodation near Hilo wit
 <style>
   .hero {
     min-height: 90vh;
-    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/images/hero.jpg') center/cover no-repeat;
+    background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('/images/property/exterior.jpg') center/cover no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -229,21 +232,59 @@ const description = "Island Goodes is an adults-only accommodation near Hilo wit
   }
 
   .hero h1 {
-    font-size: clamp(2.5rem, 6vw, 4rem);
-    margin-bottom: 1rem;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+    font-size: clamp(2.5rem, 7vw, 4.5rem);
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+    letter-spacing: 2px;
   }
 
-  .hero-tagline {
-    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-    margin-bottom: 1rem;
-    font-weight: 500;
-  }
-
-  .hero-description {
-    font-size: 1.1rem;
+  .hero-subtitle {
+    font-size: clamp(1.2rem, 3vw, 1.75rem);
     margin-bottom: 2rem;
+    font-weight: 400;
     opacity: 0.95;
+  }
+
+  .discount-banner {
+    background: rgba(212, 168, 83, 0.9);
+    padding: 1.5rem 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    display: inline-block;
+  }
+
+  .discount-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 0.25rem;
+  }
+
+  .discount-offer {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 700;
+  }
+
+  .hero-phone {
+    margin-top: 1.5rem;
+    font-size: 1.25rem;
+  }
+
+  .hero-phone a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .hero-phone a:hover {
+    color: var(--color-secondary);
+  }
+
+  .adults-notice {
+    text-align: center;
+    color: var(--color-primary);
+    font-size: 1.1rem;
+    margin-top: 1rem;
   }
 
   .hero-cta {
