@@ -15,6 +15,15 @@ https://gentle-centaur-98d6af.netlify.app/
 
 All changes made to the Island Goodes website, sorted by date/time.
 
+### 2026-01-05
+
+| Time (PST) | Commit | Description |
+|------------|--------|-------------|
+| 09:18 | 7b324cb | Add proper stock images for all 9 blog posts (Unsplash) |
+| 00:36 | f876c21 | Add 5 new blog posts backdated throughout 2025 |
+| 00:27 | 51cea17 | Add images to blog cards instead of green gradient placeholder |
+| 00:25 | ff6d134 | Fix room page layout - smaller hero, constrained image size |
+
 ### 2026-01-04
 
 | Time (PST) | Commit | Description |
