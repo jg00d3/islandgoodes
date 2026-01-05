@@ -4,61 +4,53 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 const title = "Big Island Travel Blog";
 const description = "Travel tips, guides, and insider knowledge for visiting Hilo and the Big Island of Hawaii. Discover volcanoes, waterfalls, beaches, and local favorites.";
 
-// Blog posts - all posts including future scheduled ones
+// Blog posts - 9 posts over the last 9 months
 const allPosts = [
   {
     slug: "hawaii-volcanoes-national-park",
     title: "Hawaii Volcanoes National Park: Complete Visitor's Guide",
     excerpt: "Everything you need to know about visiting one of the world's most unique national parks, just 45 minutes from Island Goodes.",
-    date: "2025-01-15",
+    date: "2026-01-01",
     category: "Attractions",
     image: "/images/blog/volcanoes.jpg"
-  },
-  {
-    slug: "hamakua-coast-waterfalls",
-    title: "The Best Waterfalls on the Hamakua Coast",
-    excerpt: "From Rainbow Falls to Akaka Falls, discover the stunning waterfalls along one of Hawaii's most scenic drives.",
-    date: "2025-01-10",
-    category: "Nature",
-    image: "/images/blog/waterfalls.jpg"
-  },
-  {
-    slug: "downtown-hilo-guide",
-    title: "A Local's Guide to Downtown Hilo",
-    excerpt: "Farmers markets, historic buildings, local restaurants, and hidden gems in Hawaii's most authentic town.",
-    date: "2025-01-05",
-    category: "Local Guide",
-    image: "/images/blog/hilo-town.jpg"
-  },
-  {
-    slug: "mauna-kea-stargazing",
-    title: "Stargazing on Mauna Kea: What to Know Before You Go",
-    excerpt: "Tips for experiencing world-class stargazing at 13,800 feet, from the best times to visit to what to bring.",
-    date: "2025-01-01",
-    category: "Activities",
-    image: "/images/blog/mauna-kea.jpg"
   },
   {
     slug: "whale-watching-hawaii",
     title: "Whale Watching Season in Hawaii: Your Complete Guide",
     excerpt: "Humpback whales visit Hawaii from December through April. Learn the best spots, tours, and tips for whale watching on the Big Island.",
-    date: "2025-11-20",
+    date: "2025-12-01",
     category: "Nature",
     image: "/images/blog/whale-watching.jpg"
+  },
+  {
+    slug: "mauna-kea-stargazing",
+    title: "Stargazing on Mauna Kea: What to Know Before You Go",
+    excerpt: "Tips for experiencing world-class stargazing at 13,800 feet, from the best times to visit to what to bring.",
+    date: "2025-11-01",
+    category: "Activities",
+    image: "/images/blog/mauna-kea.jpg"
   },
   {
     slug: "kona-coffee-tours",
     title: "Kona Coffee Farm Tours: Experience Hawaii's Famous Brew",
     excerpt: "Visit Kona coffee farms and learn about Hawaii's world-famous coffee. Tours, tastings, and history behind the Big Island's beloved crop.",
-    date: "2025-09-05",
+    date: "2025-10-01",
     category: "Activities",
     image: "/images/blog/coffee-farm.jpg"
+  },
+  {
+    slug: "black-sand-beaches",
+    title: "Black Sand Beaches: A Guide to Hawaii's Unique Shorelines",
+    excerpt: "Discover the Big Island's stunning black sand beaches formed from volcanic lava. Visit Punalu'u, Kehena, and other unique beaches.",
+    date: "2025-09-01",
+    category: "Nature",
+    image: "/images/blog/black-sand-beach.jpg"
   },
   {
     slug: "snorkeling-big-island",
     title: "Best Snorkeling Spots on the Big Island",
     excerpt: "Discover the Big Island's top snorkeling locations from Richardson Beach to Kealakekua Bay. Crystal-clear waters and colorful marine life await.",
-    date: "2025-07-10",
+    date: "2025-08-01",
     category: "Activities",
     image: "/images/blog/snorkeling.jpg"
   },
@@ -66,114 +58,25 @@ const allPosts = [
     slug: "hilo-farmers-market",
     title: "Hilo Farmers Market: Your Complete Guide",
     excerpt: "Everything you need to know about visiting Hawaii's best farmers market. Fresh tropical fruits, local crafts, and authentic Hawaiian culture.",
-    date: "2025-05-15",
+    date: "2025-07-01",
     category: "Local Guide",
     image: "/images/blog/farmers-market.jpg"
   },
   {
-    slug: "black-sand-beaches",
-    title: "Black Sand Beaches: A Guide to Hawaii's Unique Shorelines",
-    excerpt: "Discover the Big Island's stunning black sand beaches formed from volcanic lava. Visit Punalu'u, Kehena, and other unique beaches.",
-    date: "2025-03-20",
+    slug: "hamakua-coast-waterfalls",
+    title: "The Best Waterfalls on the Hamakua Coast",
+    excerpt: "From Rainbow Falls to Akaka Falls, discover the stunning waterfalls along one of Hawaii's most scenic drives.",
+    date: "2025-06-01",
     category: "Nature",
-    image: "/images/blog/black-sand-beach.jpg"
-  },
-  // === SCHEDULED POSTS (will appear automatically on their publish date) ===
-  {
-    slug: "romantic-getaways-big-island",
-    title: "Romantic Getaways: Big Island Edition",
-    excerpt: "Plan the perfect romantic escape on Hawaii's Big Island. From sunset dinners to secluded beaches, discover couples' experiences you'll never forget.",
-    date: "2026-02-01",
-    category: "Activities",
-    image: "/images/blog/romantic-getaway.jpg"
+    image: "/images/blog/waterfalls.jpg"
   },
   {
-    slug: "spring-flowers-hawaii",
-    title: "Spring Blooms: Hawaii's Tropical Flowers in Full Display",
-    excerpt: "March brings spectacular flowering across the Big Island. Explore botanical gardens and wild landscapes bursting with color.",
-    date: "2026-03-01",
-    category: "Nature",
-    image: "/images/blog/tropical-flowers.jpg"
-  },
-  {
-    slug: "hiking-trails-big-island",
-    title: "Top 10 Hiking Trails on the Big Island",
-    excerpt: "From coastal walks to rainforest treks, discover the best hiking trails for every skill level on Hawaii's biggest island.",
-    date: "2026-04-01",
-    category: "Activities",
-    image: "/images/blog/hiking-trails.jpg"
-  },
-  {
-    slug: "manta-ray-night-dive",
-    title: "Swimming with Manta Rays: A Bucket List Experience",
-    excerpt: "The Big Island offers one of the world's best manta ray night experiences. Here's everything you need to know before you go.",
-    date: "2026-05-01",
-    category: "Activities",
-    image: "/images/blog/manta-rays.jpg"
-  },
-  {
-    slug: "traditional-hawaiian-food",
-    title: "Traditional Hawaiian Food: A Culinary Journey",
-    excerpt: "From poi to poke, kalua pig to laulau—explore authentic Hawaiian cuisine and where to find the best local food on the Big Island.",
-    date: "2026-06-01",
+    slug: "downtown-hilo-guide",
+    title: "A Local's Guide to Downtown Hilo",
+    excerpt: "Farmers markets, historic buildings, local restaurants, and hidden gems in Hawaii's most authentic town.",
+    date: "2025-05-01",
     category: "Local Guide",
-    image: "/images/blog/hawaiian-food.jpg"
-  },
-  {
-    slug: "sea-turtle-guide",
-    title: "Where to See Sea Turtles on the Big Island",
-    excerpt: "Hawaiian green sea turtles (honu) are a beloved part of island life. Learn where to spot them and how to respectfully observe these gentle creatures.",
-    date: "2026-07-01",
-    category: "Nature",
-    image: "/images/blog/sea-turtles.jpg"
-  },
-  {
-    slug: "lava-viewing-guide",
-    title: "Lava Viewing on the Big Island: Current Conditions & Tips",
-    excerpt: "The Big Island is the only place in the US where you can see active lava. Get the latest viewing information and safety tips.",
-    date: "2026-08-01",
-    category: "Attractions",
-    image: "/images/blog/lava-viewing.jpg"
-  },
-  {
-    slug: "hidden-beaches-big-island",
-    title: "Hidden Beaches: Secret Spots Only Locals Know",
-    excerpt: "Skip the crowds and discover the Big Island's lesser-known beaches. From green sand to hidden coves, find your own slice of paradise.",
-    date: "2026-09-01",
-    category: "Nature",
-    image: "/images/blog/hidden-beaches.jpg"
-  },
-  {
-    slug: "ukulele-music-culture",
-    title: "Hawaiian Music & Ukulele: Island Sounds and Where to Hear Them",
-    excerpt: "Discover the rich musical heritage of Hawaii. From slack-key guitar to contemporary Hawaiian music, find live performances on the Big Island.",
-    date: "2026-10-01",
-    category: "Local Guide",
-    image: "/images/blog/ukulele-music.jpg"
-  },
-  {
-    slug: "rainforest-adventures",
-    title: "Big Island Rainforest Adventures: Waterfalls, Ziplines & More",
-    excerpt: "Explore the lush rainforests of the Hamakua Coast and Hilo side. Zipline tours, waterfall hikes, and tropical gardens await.",
-    date: "2026-11-01",
-    category: "Activities",
-    image: "/images/blog/rainforest.jpg"
-  },
-  {
-    slug: "holiday-events-hawaii",
-    title: "Holiday Season in Hawaii: Festive Events & Traditions",
-    excerpt: "Experience the magic of Christmas and New Year's Hawaiian-style. Boat parades, luaus, and unique island traditions make the holidays special.",
-    date: "2026-12-01",
-    category: "Local Guide",
-    image: "/images/blog/holiday-hawaii.jpg"
-  },
-  {
-    slug: "new-year-sunrise-mauna-kea",
-    title: "Ring in the New Year: Sunrise from Mauna Kea Summit",
-    excerpt: "Start your year above the clouds. Watch the first sunrise of 2027 from nearly 14,000 feet on Hawaii's tallest peak.",
-    date: "2027-01-01",
-    category: "Activities",
-    image: "/images/blog/new-year-sunrise.jpg"
+    image: "/images/blog/hilo-town.jpg"
   }
 ];
 
