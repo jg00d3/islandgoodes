@@ -1,0 +1,483 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "Hilo Bay Room - Oceanview Suite";
+const description = "Our largest room at 488 sq ft with stunning panoramic views of Hilo Bay. Ground floor, private lanai, Sleep Number bed, private bathroom. Adults-only accommodation near Hilo, Hawaii.";
+
+const images = [
+  { src: "/images/rooms/hilo-bay/room.jpg", alt: "Hilo Bay Room overview with ocean view" },
+  { src: "/images/rooms/hilo-bay/bed.jpg", alt: "Sleep Number king bed in Hilo Bay Room" },
+  { src: "/images/rooms/hilo-bay/lanai.jpg", alt: "Private lanai with ocean views" },
+  { src: "/images/rooms/hilo-bay/bathroom.jpg", alt: "Private bathroom with ocean view" },
+  { src: "/images/rooms/hilo-bay/table.jpg", alt: "Dining table and seating area" },
+  { src: "/images/rooms/hilo-bay/coffee.jpg", alt: "Coffee counter with Hawaiian coffee" },
+  { src: "/images/rooms/hilo-bay/recliner.jpg", alt: "Comfortable recliner for relaxing" },
+];
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="room-hero">
+    <div class="hero-content">
+      <nav class="breadcrumb">
+        <a href="/">Home</a> / <a href="/rooms">Rooms</a> / Hilo Bay Room
+      </nav>
+      <h1>Hilo Bay Room</h1>
+      <p class="tagline">Our Premier Oceanview Suite</p>
+    </div>
+  </section>
+
+  <section class="room-overview">
+    <div class="container">
+      <div class="overview-grid">
+        <div class="main-image">
+          <img src="/images/rooms/hilo-bay/room.jpg" alt="Hilo Bay Room with ocean view" id="featured-image" />
+        </div>
+        <div class="thumbnail-grid">
+          {images.map((img, i) => (
+            <button class="thumbnail" data-src={img.src} data-alt={img.alt}>
+              <img src={img.src} alt={img.alt} loading="lazy" />
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="room-details">
+    <div class="container">
+      <div class="details-grid">
+        <div class="description">
+          <h2>About This Room</h2>
+          <p class="lead">
+            The Hilo Bay Room is our largest and most popular accommodation, offering 488 square feet of
+            comfortable living space with the most stunning ocean views on the property.
+          </p>
+          <p>
+            Located on the ground floor with no steps to climb, this suite is perfect for guests who prefer
+            easy access. Step out onto your private lanai and watch the sun rise over Hilo Bay, spot whales
+            breaching during winter months, or simply relax with a cup of locally roasted Hawaiian coffee.
+          </p>
+          <p>
+            The room features a luxurious Sleep Number adjustable bed that lets you customize your comfort
+            level for the perfect night's sleep. The private bathroom also offers ocean views—a rare treat
+            that makes even getting ready in the morning feel like a vacation.
+          </p>
+          <p>
+            With its own private entrance, you'll enjoy complete privacy during your stay. The room includes
+            a mini refrigerator, microwave, and coffee maker, giving you the flexibility to enjoy breakfast
+            on your lanai or a midnight snack whenever you like.
+          </p>
+
+          <div class="highlights">
+            <h3>Room Highlights</h3>
+            <ul>
+              <li><strong>Best Views:</strong> Panoramic ocean views of Hilo Bay from both the room and bathroom</li>
+              <li><strong>Whale Watching:</strong> Watch humpback whales breach from your private lanai (Dec-Apr)</li>
+              <li><strong>Accessibility:</strong> Ground floor location with no steps</li>
+              <li><strong>Space:</strong> Our largest room at 488 square feet</li>
+              <li><strong>Privacy:</strong> Private entrance, bathroom, and outdoor lanai</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="amenities-sidebar">
+          <div class="price-card">
+            <h3>Book This Room</h3>
+            <p class="price">From <strong>$225</strong>/night</p>
+            <p class="price-note">Plus 17.97% tax</p>
+            <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary btn-block" target="_blank" rel="noopener">Check Availability</a>
+            <p class="call-option">Or call: <a href="tel:+18089642291">808-964-2291</a></p>
+          </div>
+
+          <div class="amenities-card">
+            <h3>Room Amenities</h3>
+            <ul class="amenities-list">
+              <li>488 square feet</li>
+              <li>Panoramic ocean view</li>
+              <li>Ground floor (no steps)</li>
+              <li>Private entrance</li>
+              <li>Private bathroom with view</li>
+              <li>Private lanai</li>
+              <li>Sleep Number king bed</li>
+              <li>Premium linens</li>
+              <li>Mini refrigerator</li>
+              <li>Microwave</li>
+              <li>Coffee maker</li>
+              <li>Free WiFi</li>
+              <li>Flat screen TV</li>
+              <li>Air conditioning</li>
+              <li>Ceiling fan</li>
+            </ul>
+          </div>
+
+          <div class="policies-card">
+            <h3>Policies</h3>
+            <ul>
+              <li><strong>Adults Only:</strong> 18+ only, no children</li>
+              <li><strong>Check-in:</strong> 3:00 PM</li>
+              <li><strong>Check-out:</strong> 11:00 AM</li>
+              <li><strong>Minimum Stay:</strong> 2 nights</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="other-rooms">
+    <div class="container">
+      <h2>Explore Our Other Rooms</h2>
+      <div class="rooms-nav">
+        <a href="/rooms/mauna-kea" class="room-nav-card">
+          <img src="/images/rooms/mauna-kea/room.jpg" alt="Mauna Kea Room" loading="lazy" />
+          <h3>Mauna Kea Room</h3>
+          <p>Mountain views toward Hawaii's tallest peak</p>
+        </a>
+        <a href="/rooms/ginger" class="room-nav-card">
+          <img src="/images/rooms/ginger/room.jpg" alt="Ginger Room" loading="lazy" />
+          <h3>Ginger Room</h3>
+          <p>A peaceful garden retreat</p>
+        </a>
+        <a href="/rooms/orchid" class="room-nav-card">
+          <img src="/images/rooms/orchid/room.jpg" alt="Orchid Room" loading="lazy" />
+          <h3>Orchid Room</h3>
+          <p>Elegant oceanview suite with kitchen</p>
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    const featuredImage = document.getElementById('featured-image') as HTMLImageElement;
+
+    thumbnails.forEach(thumb => {
+      thumb.addEventListener('click', () => {
+        const src = thumb.getAttribute('data-src');
+        const alt = thumb.getAttribute('data-alt');
+        if (featuredImage && src && alt) {
+          featuredImage.src = src;
+          featuredImage.alt = alt;
+        }
+        thumbnails.forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
+      });
+    });
+
+    // Set first thumbnail as active
+    if (thumbnails.length > 0) {
+      thumbnails[0].classList.add('active');
+    }
+  });
+</script>
+
+<style>
+  .room-hero {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/rooms/hilo-bay/lanai.jpg') center/cover no-repeat;
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    padding: 8rem 2rem 4rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+  }
+
+  .breadcrumb a {
+    color: #fff;
+  }
+
+  .room-hero h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .tagline {
+    font-size: 1.25rem;
+    color: var(--color-secondary);
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .room-overview {
+    padding: 4rem 0;
+  }
+
+  .overview-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .main-image img {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .thumbnail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 0.5rem;
+  }
+
+  .thumbnail {
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    border-radius: 4px;
+    overflow: hidden;
+    opacity: 0.7;
+    transition: opacity 0.3s, transform 0.3s;
+  }
+
+  .thumbnail:hover, .thumbnail.active {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+
+  .thumbnail.active {
+    box-shadow: 0 0 0 3px var(--color-secondary);
+  }
+
+  .thumbnail img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+  }
+
+  .room-details {
+    padding: 4rem 0;
+    background: var(--color-bg-alt);
+  }
+
+  .details-grid {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .description h2 {
+    color: var(--color-primary-dark);
+    margin-bottom: 1rem;
+  }
+
+  .description .lead {
+    font-size: 1.15rem;
+    color: var(--color-text-light);
+    margin-bottom: 1.5rem;
+  }
+
+  .description p {
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+
+  .highlights {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 2rem;
+  }
+
+  .highlights h3 {
+    color: var(--color-primary-dark);
+    margin-bottom: 1rem;
+  }
+
+  .highlights ul {
+    list-style: none;
+  }
+
+  .highlights li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-bg-alt);
+  }
+
+  .highlights li:last-child {
+    border-bottom: none;
+  }
+
+  .amenities-sidebar > div {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+  }
+
+  .price-card {
+    text-align: center;
+  }
+
+  .price-card h3 {
+    color: var(--color-primary-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .price {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .price strong {
+    color: var(--color-primary);
+  }
+
+  .price-note {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    margin-bottom: 1rem;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .btn-primary {
+    background: var(--color-secondary);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #c49943;
+  }
+
+  .btn-block {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+
+  .call-option {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .call-option a {
+    color: var(--color-primary);
+  }
+
+  .amenities-card h3, .policies-card h3 {
+    color: var(--color-primary-dark);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+
+  .amenities-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .amenities-list li {
+    font-size: 0.9rem;
+    padding: 0.25rem 0;
+    color: var(--color-text-light);
+  }
+
+  .policies-card ul {
+    list-style: none;
+  }
+
+  .policies-card li {
+    padding: 0.35rem 0;
+    font-size: 0.9rem;
+  }
+
+  .other-rooms {
+    padding: 4rem 0;
+  }
+
+  .other-rooms h2 {
+    text-align: center;
+    color: var(--color-primary-dark);
+    margin-bottom: 2rem;
+  }
+
+  .rooms-nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .room-nav-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+  }
+
+  .room-nav-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .room-nav-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+  }
+
+  .room-nav-card h3 {
+    color: var(--color-primary-dark);
+    padding: 1rem 1rem 0.25rem;
+    margin: 0;
+  }
+
+  .room-nav-card p {
+    color: var(--color-text-light);
+    padding: 0 1rem 1rem;
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 900px) {
+    .details-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .amenities-sidebar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .amenities-sidebar > div {
+      margin-bottom: 0;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .main-image img {
+      height: 300px;
+    }
+
+    .thumbnail img {
+      height: 60px;
+    }
+
+    .amenities-list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
