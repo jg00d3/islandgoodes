@@ -1,0 +1,373 @@
+---
+import PreviewLayout from '../../../layouts/PreviewLayout.astro';
+
+const title = "Big Island Food & Dining | Island Goodes Destination Guide";
+const description = "Discover the best restaurants, food trucks, and local eats on Hawaii's Big Island. Fresh poke, plate lunches, and authentic Hawaiian cuisine near Hilo.";
+
+const restaurants = [
+  {
+    name: "Hilo Bay Cafe",
+    type: "Fine Dining",
+    cuisine: "Japanese-Hawaiian Fusion",
+    description: "Upscale waterfront dining with stunning Hilo Bay views. Features a sushi bar, craft cocktails, and locally-sourced ingredients. Perfect for a romantic dinner.",
+    mustTry: "Fresh sushi, craft cocktails with bay views",
+    priceRange: "$$$"
+  },
+  {
+    name: "Moon & Turtle",
+    type: "Farm-to-Table",
+    cuisine: "Creative Local",
+    description: "Intimate restaurant in a restored building. Chef-driven menu changes frequently based on local availability. Highly rated - make reservations!",
+    mustTry: "Tasting menu, house-made pastas",
+    priceRange: "$$$"
+  },
+  {
+    name: "Ponds",
+    type: "Fine Dining",
+    cuisine: "Hawaiian/Seafood",
+    description: "Historic local favorite with scenic koi ponds and live music. Known for having the best waiters in town and a welcoming atmosphere.",
+    mustTry: "Fresh fish, pupu platters",
+    priceRange: "$$$"
+  },
+  {
+    name: "Hawaiian Style Cafe",
+    type: "Local Favorite",
+    cuisine: "Hawaiian Plate Lunch",
+    description: "Legendary for generous portions of authentic local Hawaiian food. Come hungry - takeaway recommended if you can't finish!",
+    mustTry: "Loco moco, kalua pork plate",
+    priceRange: "$"
+  },
+  {
+    name: "Cafe 100",
+    type: "Local Institution",
+    cuisine: "Hawaiian Plate Lunch",
+    description: "The birthplace of loco moco (they trademarked it!). This casual drive-in has been serving locals since 1946 with 30+ loco moco varieties.",
+    mustTry: "Original loco moco, Super Loco",
+    priceRange: "$"
+  },
+  {
+    name: "Cafe Pesto",
+    type: "Casual Dining",
+    cuisine: "Italian-Hawaiian Fusion",
+    description: "Wood-fired pizzas and fresh pastas in a beautiful historic building. Lunch offers better value than dinner.",
+    mustTry: "Wood-fired pizza, fresh pasta",
+    priceRange: "$$"
+  },
+  {
+    name: "Seaside Restaurant",
+    type: "Local Secret",
+    cuisine: "Seafood",
+    description: "Family-owned for generations. Unassuming exterior but incredible fresh fish. A true local gem that visitors often miss.",
+    mustTry: "Fresh catch of the day",
+    priceRange: "$$"
+  },
+  {
+    name: "Miyo's",
+    type: "Japanese",
+    cuisine: "Japanese Home-Style",
+    description: "Excellent locally-sourced Japanese food in a relaxed atmosphere. A favorite among Hilo residents for authentic flavors.",
+    mustTry: "Bento boxes, fresh sashimi",
+    priceRange: "$$"
+  }
+];
+
+const pokeSpots = [
+  {
+    name: "Suisan Fish Market",
+    description: "Right on Hilo Bay, serving fresh poke since 1907. Unmatched variety - the real deal.",
+    tip: "Get there early! Best options sell out by noon.",
+    priceRange: "$"
+  },
+  {
+    name: "Poke Market",
+    description: "Gourmet hole-in-the-wall spot. Try the All-Star Bowl with spicy ahi and yuzu salmon.",
+    tip: "Window ordering only, just 2 sidewalk tables.",
+    priceRange: "$"
+  },
+  {
+    name: "Poke To Your Taste",
+    description: "Local secret for traditional Hawaiian poke at its finest. Opens 5:30am weekdays!",
+    tip: "Often sold out by noon. Closed weekends.",
+    priceRange: "$"
+  },
+  {
+    name: "KTA Super Stores",
+    description: "Don't sleep on supermarket poke - surprisingly high quality and affordable. Many locals swear by it.",
+    tip: "Multiple locations around Hilo.",
+    priceRange: "$"
+  }
+];
+
+const localFoods = [
+  { name: "Poke", description: "Fresh raw fish (usually ahi tuna) marinated in soy sauce, sesame, and seasonings. A Hawaiian staple!", where: "Suisan Fish Market, Poke Market" },
+  { name: "Loco Moco", description: "Rice topped with hamburger patty, fried egg, and brown gravy - invented right here in Hilo!", where: "Cafe 100 (birthplace), Hawaiian Style Cafe" },
+  { name: "Malasadas", description: "Portuguese donuts rolled in sugar - get them fresh and warm! Fat Tuesday is Malasada Day in Hawaii.", where: "Tex Drive-In (Honoka'a), Punalu'u Bakeshop" },
+  { name: "Shave Ice", description: "Finely shaved (not shaved!) ice with tropical syrups. Add ice cream, azuki beans, or mochi.", where: "Kula Shave Ice (Hilo), various stands" },
+  { name: "Plate Lunch", description: "The Hawaiian workman's lunch: protein, two scoops rice, macaroni salad. Generous portions!", where: "Hawaiian Style Cafe, Cafe 100" },
+  { name: "Mochi", description: "Japanese rice cake dessert. Two Ladies Kitchen's strawberry mochi is legendary in Hilo.", where: "Two Ladies Kitchen (Hilo)" },
+  { name: "Macadamia Nuts", description: "Buttery, crunchy nuts - plain, chocolate-covered, or in cookies. Free tastings at farms!", where: "Hamakua Macadamia Nut Company" },
+  { name: "Lilikoi", description: "Passionfruit used in desserts, drinks, and glazes. Tangy-sweet tropical flavor.", where: "Farmers markets" }
+];
+
+const foodTrucks = [
+  { name: "Litchon Food Truck", location: "Hilo", specialty: "BBQ ribs, Filipino fusion, garlic shrimp plates with papaya salad" },
+  { name: "Island Style Grindz", location: "Various", specialty: "Best fish on island - the owner often catches it himself!" },
+  { name: "Manuela Malasada", location: "Hilo area", specialty: "Fresh malasadas made to order" },
+  { name: "Highway 130 Corridor", location: "Kea'au to Pahoa", specialty: "Thai, poke, tacos, local grinds, burgers, lumpia - growing food truck scene" }
+];
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="page-hero">
+    <div class="page-hero-bg">
+      <img src="/images/blog/farmers-market.jpg" alt="Fresh produce at Hilo Farmers Market" />
+    </div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <nav class="breadcrumb">
+        <a href="/preview">Home</a> / <a href="/preview/guide">Guide</a> / Food & Dining
+      </nav>
+      <h1>Big Island Food & Dining</h1>
+      <p class="tagline">Fresh flavors & local favorites</p>
+    </div>
+  </section>
+
+  <section class="intro-section">
+    <div class="container">
+      <p class="lead">
+        The Big Island's food scene is a delicious blend of Hawaiian traditions, Asian influences, and fresh local ingredients.
+        From world-famous poke to humble plate lunches, here's where to find the best eats near Island Goodes.
+      </p>
+    </div>
+  </section>
+
+  <section class="market-section">
+    <div class="container">
+      <div class="market-card">
+        <div class="market-image">
+          <img src="/images/blog/farmers-market.jpg" alt="Hilo Farmers Market" />
+        </div>
+        <div class="market-content">
+          <span class="featured-badge">Must Visit</span>
+          <h2>Hilo Farmers Market</h2>
+          <p>
+            One of Hawaii's best farmers markets. On Wednesdays and Saturdays, over 200 vendors sell fresh tropical fruits,
+            prepared foods, local crafts, and more. It's the heart of Hilo's food scene.
+          </p>
+          <div class="market-details">
+            <div class="detail">
+              <strong>Full Market:</strong> Wed & Sat, 6 AM - 4 PM
+            </div>
+            <div class="detail">
+              <strong>Daily Market:</strong> Every day, 7 AM - 3 PM
+            </div>
+            <div class="detail">
+              <strong>Location:</strong> 5 minutes from Island Goodes
+            </div>
+          </div>
+          <a href="/preview/blog/hilo-farmers-market" class="btn btn-primary">Read Our Full Guide</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="restaurants-section">
+    <div class="container">
+      <div class="section-header center">
+        <span class="section-subtitle">Our Picks</span>
+        <h2>Where to Eat</h2>
+      </div>
+      <div class="restaurants-grid">
+        {restaurants.map(restaurant => (
+          <div class="restaurant-card">
+            <div class="restaurant-header">
+              <span class="restaurant-type">{restaurant.type}</span>
+              <span class="price-range">{restaurant.priceRange}</span>
+            </div>
+            <h3>{restaurant.name}</h3>
+            <span class="cuisine">{restaurant.cuisine}</span>
+            <p>{restaurant.description}</p>
+            <div class="must-try">
+              <strong>Must Try:</strong> {restaurant.mustTry}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="poke-section">
+    <div class="container">
+      <div class="section-header center">
+        <span class="section-subtitle">Fresh Catch</span>
+        <h2>Where to Get the Best Poke</h2>
+        <p class="section-intro">Poke (POH-keh) is Hawaii's beloved raw fish dish. Here's where locals go for the freshest bowls.</p>
+      </div>
+      <div class="poke-grid">
+        {pokeSpots.map(spot => (
+          <div class="poke-card">
+            <h3>{spot.name}</h3>
+            <p>{spot.description}</p>
+            <div class="poke-tip">
+              <strong>Tip:</strong> {spot.tip}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="food-trucks-section">
+    <div class="container">
+      <div class="section-header center">
+        <span class="section-subtitle">On the Go</span>
+        <h2>Food Trucks & Casual Eats</h2>
+      </div>
+      <div class="trucks-grid">
+        {foodTrucks.map(truck => (
+          <div class="truck-card">
+            <span class="truck-location">{truck.location}</span>
+            <h3>{truck.name}</h3>
+            <p>{truck.specialty}</p>
+          </div>
+        ))}
+      </div>
+      <p class="trucks-note">Note: Many food trucks have irregular hours. Check social media or ask locals for current schedules.</p>
+    </div>
+  </section>
+
+  <section class="local-foods-section">
+    <div class="container">
+      <div class="section-header center">
+        <span class="section-subtitle">Don't Leave Without Trying</span>
+        <h2>Local Specialties</h2>
+      </div>
+      <div class="foods-grid">
+        {localFoods.map(food => (
+          <div class="food-card">
+            <h3>{food.name}</h3>
+            <p>{food.description}</p>
+            <span class="food-where"><strong>Where:</strong> {food.where}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="tips-section">
+    <div class="container">
+      <div class="tips-card">
+        <h2>Dining Tips from Your Hosts</h2>
+        <ul class="tips-list">
+          <li><strong>Lunch is king:</strong> Many of the best local spots are lunch-only. Plan your meals accordingly!</li>
+          <li><strong>Go early:</strong> Popular poke spots sell out. Hit Suisan by noon for the best selection.</li>
+          <li><strong>Stock up:</strong> Buy tropical fruits at the farmers market to enjoy on your lanai.</li>
+          <li><strong>Try everything:</strong> Don't be afraid of unfamiliar dishes - that's half the fun!</li>
+          <li><strong>Cash helps:</strong> Some small spots and market vendors are cash-only.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Stay at Island Goodes</h2>
+        <p>5 minutes from Hilo's best restaurants</p>
+        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-secondary btn-large" target="_blank" rel="noopener">Book Your Stay</a>
+      </div>
+    </div>
+  </section>
+</PreviewLayout>
+
+<style>
+  .page-hero { position: relative; min-height: 50vh; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; padding: 10rem 2rem 4rem; }
+  .page-hero-bg { position: absolute; inset: 0; z-index: -2; }
+  .page-hero-bg img { width: 100%; height: 100%; object-fit: cover; }
+  .page-hero-overlay { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%); }
+  .page-hero-content { max-width: 800px; }
+  .page-hero h1 { font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 0.5rem; }
+  .tagline { font-size: 1.25rem; opacity: 0.9; }
+
+  .intro-section { padding: 4rem 0 2rem; text-align: center; }
+  .lead { font-size: 1.25rem; color: var(--color-text-light); line-height: 1.9; max-width: 800px; margin: 0 auto; }
+
+  .market-section { padding: 2rem 0 var(--section-padding); }
+  .market-card { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 35px rgba(0,0,0,0.1); }
+  .market-image img { width: 100%; height: 100%; min-height: 400px; object-fit: cover; }
+  .market-content { padding: 3rem; }
+  .featured-badge { display: inline-block; background: var(--color-secondary); color: #1a1a1a; padding: 0.375rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 1rem; }
+  .market-content h2 { color: var(--color-text); font-size: 2rem; margin-bottom: 1rem; }
+  .market-content > p { color: var(--color-text-light); line-height: 1.8; margin-bottom: 1.5rem; }
+  .market-details { margin-bottom: 1.5rem; }
+  .market-details .detail { padding: 0.5rem 0; color: var(--color-text-light); border-bottom: 1px solid #eee; }
+  .market-details .detail strong { color: var(--color-primary); }
+
+  .restaurants-section { padding: var(--section-padding) 0; background: var(--color-bg-alt); }
+  .section-header { margin-bottom: 2.5rem; }
+  .section-header.center { text-align: center; }
+  .section-subtitle { display: inline-block; color: var(--color-primary); font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+  .section-header h2 { font-size: 2rem; color: var(--color-text); }
+
+  .restaurants-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .restaurant-card { background: #fff; padding: 1.75rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: var(--transition-base); }
+  .restaurant-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.1); }
+  .restaurant-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+  .restaurant-type { font-size: 0.75rem; color: var(--color-primary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .price-range { font-weight: 700; color: var(--color-secondary-dark); }
+  .restaurant-card h3 { color: var(--color-text); margin-bottom: 0.25rem; font-size: 1.25rem; }
+  .cuisine { display: block; font-size: 0.875rem; color: var(--color-text-light); margin-bottom: 0.75rem; }
+  .restaurant-card p { font-size: 0.9375rem; color: var(--color-text-light); line-height: 1.6; margin-bottom: 1rem; }
+  .must-try { font-size: 0.875rem; color: var(--color-text-light); padding-top: 1rem; border-top: 1px solid #eee; }
+  .must-try strong { color: var(--color-primary); }
+
+  .poke-section { padding: var(--section-padding) 0; background: linear-gradient(135deg, var(--color-primary) 0%, #0F4A3E 100%); color: #fff; }
+  .poke-section .section-subtitle { color: var(--color-secondary-light); }
+  .poke-section .section-header h2 { color: #fff; }
+  .section-intro { color: rgba(255,255,255,0.9); max-width: 600px; margin: 1rem auto 0; }
+  .poke-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 2rem; }
+  .poke-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); }
+  .poke-card h3 { color: #fff; font-size: 1.125rem; margin-bottom: 0.5rem; }
+  .poke-card > p { color: rgba(255,255,255,0.9); font-size: 0.9375rem; line-height: 1.6; margin-bottom: 1rem; }
+  .poke-tip { font-size: 0.875rem; color: rgba(255,255,255,0.8); padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.1); }
+  .poke-tip strong { color: var(--color-secondary-light); }
+
+  .food-trucks-section { padding: var(--section-padding) 0; background: var(--color-bg-alt); }
+  .trucks-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+  .truck-card { background: #fff; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+  .truck-location { display: inline-block; background: var(--color-primary); color: #fff; padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; margin-bottom: 0.75rem; }
+  .truck-card h3 { color: var(--color-text); font-size: 1.125rem; margin-bottom: 0.5rem; }
+  .truck-card p { font-size: 0.9375rem; color: var(--color-text-light); line-height: 1.6; }
+  .trucks-note { text-align: center; margin-top: 1.5rem; font-size: 0.875rem; color: var(--color-text-light); font-style: italic; }
+
+  .local-foods-section { padding: var(--section-padding) 0; }
+  .foods-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+  .food-card { background: linear-gradient(135deg, var(--color-bg-alt) 0%, rgba(197, 165, 114, 0.1) 100%); padding: 1.5rem; border-radius: 12px; }
+  .food-card h3 { color: var(--color-text); margin-bottom: 0.5rem; font-size: 1.125rem; }
+  .food-card p { font-size: 0.9375rem; color: var(--color-text-light); line-height: 1.6; margin-bottom: 0.75rem; }
+  .food-where { display: block; font-size: 0.8125rem; color: var(--color-primary); }
+
+  .tips-section { padding: 0 0 var(--section-padding); }
+  .tips-card { background: #fff; padding: 3rem; border-radius: 20px; box-shadow: 0 4px 25px rgba(0,0,0,0.06); max-width: 800px; margin: 0 auto; }
+  .tips-card h2 { color: var(--color-text); margin-bottom: 1.5rem; text-align: center; }
+  .tips-list { list-style: none; }
+  .tips-list li { padding: 1rem 0; border-bottom: 1px solid #eee; color: var(--color-text-light); line-height: 1.7; }
+  .tips-list li:last-child { border-bottom: none; }
+  .tips-list strong { color: var(--color-primary); }
+
+  .cta-section { background: var(--gradient-primary); padding: 5rem 2rem; text-align: center; }
+  .cta-content { max-width: 600px; margin: 0 auto; }
+  .cta-section h2 { color: #fff; font-size: 2.25rem; margin-bottom: 0.75rem; }
+  .cta-section p { color: rgba(255,255,255,0.9); font-size: 1.125rem; margin-bottom: 2rem; }
+
+  @media (max-width: 1024px) {
+    .restaurants-grid { grid-template-columns: repeat(2, 1fr); }
+    .poke-grid, .trucks-grid, .foods-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 768px) {
+    .market-card { grid-template-columns: 1fr; }
+    .market-image img { min-height: 250px; }
+    .restaurants-grid, .foods-grid, .poke-grid, .trucks-grid { grid-template-columns: 1fr; }
+  }
+</style>

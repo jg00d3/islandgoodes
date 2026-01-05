@@ -1,0 +1,481 @@
+---
+import PreviewLayout from '../../layouts/PreviewLayout.astro';
+
+const title = "Property & Amenities | Island Goodes";
+const description = "Explore Island Goodes property amenities including pool, hot tub, BBQ area, and tropical gardens. Adults-only accommodation near Hilo, Hawaii.";
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="page-hero">
+    <div class="page-hero-bg">
+      <img src="/images/hero.jpg" alt="Island Goodes property" />
+    </div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <nav class="breadcrumb">
+        <a href="/preview">Home</a> / Property
+      </nav>
+      <h1>Our Property</h1>
+      <p class="tagline">Your tropical home away from home</p>
+    </div>
+  </section>
+
+  <section class="intro-section">
+    <div class="container">
+      <p class="lead">
+        Welcome to your tropical home away from home! Better than a hotel stay in Hawaii, try Island Goodes.
+        Our property offers an adults-only retreat with stunning views, peaceful surroundings, and all the amenities
+        you need for a relaxing Hawaiian vacation.
+      </p>
+    </div>
+  </section>
+
+  <section class="amenities-section">
+    <div class="container">
+      <div class="section-header center">
+        <span class="section-subtitle">Relax & Unwind</span>
+        <h2>Property Amenities</h2>
+      </div>
+
+      <div class="amenities-grid">
+        <div class="amenity-card">
+          <div class="amenity-image">
+            <img src="/images/property/pool.jpg" alt="Swimming pool at Island Goodes" loading="lazy" />
+          </div>
+          <div class="amenity-content">
+            <h3>Swimming Pool</h3>
+            <p>Enjoy our refreshing pool surrounded by tropical landscaping. Perfect for cooling off after a day of exploring.</p>
+          </div>
+        </div>
+
+        <div class="amenity-card">
+          <div class="amenity-image">
+            <img src="/images/property/hot-tub.jpg" alt="Hot tub at Island Goodes" loading="lazy" />
+          </div>
+          <div class="amenity-content">
+            <h3>Hot Tub</h3>
+            <p>Relax in our hot tub under the stars. The perfect way to unwind after hiking volcanoes or chasing waterfalls.</p>
+          </div>
+        </div>
+
+        <div class="amenity-card">
+          <div class="amenity-image">
+            <img src="/images/property/pool.jpg" alt="Pool area at Island Goodes" loading="lazy" />
+          </div>
+          <div class="amenity-content">
+            <h3>BBQ Grill</h3>
+            <p>Grill your own meals on our BBQ. Pick up fresh fish from the Hilo market and enjoy dinner on your lanai.</p>
+          </div>
+        </div>
+
+        <div class="amenity-card">
+          <div class="amenity-image">
+            <img src="/images/rooms/hilo-bay/lanai.jpg" alt="View from lanai at Island Goodes" loading="lazy" />
+          </div>
+          <div class="amenity-content">
+            <h3>Tropical Gardens</h3>
+            <p>Stroll through our lush tropical gardens featuring native Hawaiian plants, flowers, and fruit trees.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features-section">
+    <div class="container">
+      <div class="section-header center">
+        <span class="section-subtitle">Comfort & Convenience</span>
+        <h2>All Rooms Include</h2>
+      </div>
+      <div class="features-grid">
+        <div class="feature">
+          <div class="feature-icon">🚪</div>
+          <h3>Private Entrance</h3>
+          <p>Your own private entrance for maximum privacy and convenience</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🚿</div>
+          <h3>Private Bathroom</h3>
+          <p>En-suite bathroom with shower, fresh towels, and toiletries</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🌴</div>
+          <h3>Private Lanai</h3>
+          <p>Outdoor seating area to enjoy the views and tropical breezes</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🛏️</div>
+          <h3>Sleep Number Bed</h3>
+          <p>Adjustable comfort so you get the perfect night's sleep</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">📶</div>
+          <h3>Free High Speed WiFi</h3>
+          <p>Stay connected throughout your stay</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">📺</div>
+          <h3>32" HD TV</h3>
+          <p>Access apps by using your own account</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🍳</div>
+          <h3>Kitchenette</h3>
+          <p>Mid-size refrigerator/freezer, microwave, and coffee maker</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">❄️</div>
+          <h3>Air Conditioning</h3>
+          <p>Climate control for your comfort</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🌀</div>
+          <h3>Ceiling Fan</h3>
+          <p>Enjoy the tropical breeze</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🚗</div>
+          <h3>Free Parking</h3>
+          <p>Complimentary parking for your rental car</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">☕</div>
+          <h3>Strong Coffee</h3>
+          <p>Coffee maker and supplies in your room</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">♿</div>
+          <h3>Accessibility</h3>
+          <p>Ground floor with no steps and bathroom grab bars</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="location-section">
+    <div class="container">
+      <div class="section-header center">
+        <span class="section-subtitle">Explore the Big Island</span>
+        <h2>Perfect Location</h2>
+      </div>
+      <div class="location-grid">
+        <div class="location-info">
+          <div class="distance-list">
+            <div class="distance-item">
+              <span class="time">5 min</span>
+              <span class="destination">to downtown Hilo</span>
+            </div>
+            <div class="distance-item">
+              <span class="time">12 min</span>
+              <span class="destination">to Hilo International Airport</span>
+            </div>
+            <div class="distance-item">
+              <span class="time">15 min</span>
+              <span class="destination">to Rainbow Falls</span>
+            </div>
+            <div class="distance-item">
+              <span class="time">20 min</span>
+              <span class="destination">to Akaka Falls</span>
+            </div>
+            <div class="distance-item">
+              <span class="time">45 min</span>
+              <span class="destination">to Hawaii Volcanoes National Park</span>
+            </div>
+            <div class="distance-item">
+              <span class="time">1 hr</span>
+              <span class="destination">to Mauna Kea Visitor Center</span>
+            </div>
+          </div>
+          <div class="address-card">
+            <strong>Island Goodes</strong><br>
+            27-2365 Hawaii Belt Rd<br>
+            Papaikou, HI 96781<br>
+            <a href="tel:+18089642291">808-964-2291</a>
+          </div>
+        </div>
+        <div class="location-map">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3784.1!2d-155.0939!3d19.8075!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTnCsDQ4JzI3LjAiTiAxNTXCsDA1JzM4LjAiVw!5e0!3m2!1sen!2sus!4v1234567890"
+            width="100%"
+            height="350"
+            style="border:0; border-radius: 16px;"
+            allowfullscreen=""
+            loading="lazy">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Book Your Stay</h2>
+        <p>Experience the peace and beauty of Island Goodes</p>
+        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-secondary btn-large" target="_blank" rel="noopener">Check Availability</a>
+      </div>
+    </div>
+  </section>
+</PreviewLayout>
+
+<style>
+  .page-hero {
+    position: relative;
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    padding: 10rem 2rem 4rem;
+  }
+
+  .page-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .page-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .page-hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%);
+  }
+
+  .page-hero-content {
+    max-width: 800px;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .tagline {
+    font-size: 1.25rem;
+    opacity: 0.9;
+  }
+
+  .section-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .section-header.center {
+    text-align: center;
+  }
+
+  .section-subtitle {
+    display: inline-block;
+    color: var(--color-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-header h2 {
+    font-size: 2rem;
+    color: var(--color-text);
+  }
+
+  .intro-section {
+    padding: 5rem 0 2rem;
+    text-align: center;
+  }
+
+  .lead {
+    font-size: 1.25rem;
+    color: var(--color-text-light);
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.9;
+  }
+
+  .amenities-section {
+    padding: 3rem 0 var(--section-padding);
+  }
+
+  .amenities-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .amenity-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+    transition: var(--transition-base);
+  }
+
+  .amenity-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+  }
+
+  .amenity-image img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+  }
+
+  .amenity-content {
+    padding: 1.75rem;
+  }
+
+  .amenity-content h3 {
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+  }
+
+  .amenity-content p {
+    color: var(--color-text-light);
+    line-height: 1.7;
+  }
+
+  .features-section {
+    padding: var(--section-padding) 0;
+    background: var(--color-bg-alt);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .feature {
+    background: #fff;
+    padding: 1.75rem;
+    border-radius: 12px;
+    text-align: center;
+    transition: var(--transition-base);
+  }
+
+  .feature:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  }
+
+  .feature-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .feature h3 {
+    color: var(--color-primary);
+    font-size: 0.9375rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .feature p {
+    font-size: 0.8125rem;
+    color: var(--color-text-light);
+    line-height: 1.6;
+  }
+
+  .location-section {
+    padding: var(--section-padding) 0;
+  }
+
+  .location-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .distance-list {
+    margin-bottom: 2rem;
+  }
+
+  .distance-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .distance-item .time {
+    font-weight: 700;
+    color: var(--color-primary);
+    min-width: 60px;
+    font-size: 1rem;
+  }
+
+  .distance-item .destination {
+    color: var(--color-text-light);
+  }
+
+  .address-card {
+    background: var(--color-bg-alt);
+    padding: 1.5rem;
+    border-radius: 12px;
+    line-height: 1.8;
+  }
+
+  .address-card a {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .cta-section {
+    background: var(--gradient-primary);
+    padding: 5rem 2rem;
+    text-align: center;
+  }
+
+  .cta-content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .cta-section h2 {
+    color: #fff;
+    font-size: 2.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .cta-section p {
+    color: rgba(255,255,255,0.9);
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+  }
+
+  @media (max-width: 1024px) {
+    .features-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .amenities-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .features-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .location-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

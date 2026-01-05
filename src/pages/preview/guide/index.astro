@@ -1,0 +1,595 @@
+---
+import PreviewLayout from '../../../layouts/PreviewLayout.astro';
+
+const title = "Big Island Destination Guide | Island Goodes";
+const description = "Your comprehensive guide to the Big Island of Hawaii. Explore attractions, activities, beaches, restaurants, and hidden gems near Hilo.";
+
+const categories = [
+  {
+    title: "Attractions",
+    slug: "attractions",
+    icon: "🌋",
+    description: "Volcanoes, gardens, museums & historic sites",
+    highlights: ["Hawaii Volcanoes National Park", "Rainbow Falls", "Akaka Falls", "Liliuokalani Gardens"]
+  },
+  {
+    title: "Activities",
+    slug: "activities",
+    icon: "🤿",
+    description: "Adventures & experiences across the island",
+    highlights: ["Stargazing on Mauna Kea", "Snorkeling", "Zip-lining", "Coffee Farm Tours"]
+  },
+  {
+    title: "Beaches & Nature",
+    slug: "beaches",
+    icon: "🏖️",
+    description: "Black sand beaches, swimming holes & natural wonders",
+    highlights: ["Black Sand Beaches", "Green Sand Beach", "Swimming Holes", "Sea Turtles"]
+  },
+  {
+    title: "Food & Dining",
+    slug: "food",
+    icon: "🍍",
+    description: "Local restaurants, food trucks & culinary experiences",
+    highlights: ["Hilo Farmers Market", "Local Plate Lunch", "Fresh Poke", "Kona Coffee"]
+  },
+  {
+    title: "Day Trips",
+    slug: "day-trips",
+    icon: "🚗",
+    description: "Curated itineraries from Island Goodes",
+    highlights: ["Volcano Day", "Waterfall Route", "Kona Adventure", "North Shore Tour"]
+  },
+  {
+    title: "Events & Culture",
+    slug: "events",
+    icon: "🎭",
+    description: "Festivals, cultural experiences & local traditions",
+    highlights: ["Merrie Monarch Festival", "Local Markets", "Hawaiian Music", "Cultural Sites"]
+  }
+];
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="page-hero">
+    <div class="page-hero-bg">
+      <img src="/images/hero.jpg" alt="Big Island Hawaii" />
+    </div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <nav class="breadcrumb">
+        <a href="/preview">Home</a> / Destination Guide
+      </nav>
+      <span class="hero-badge">Insider Knowledge</span>
+      <h1>Big Island Destination Guide</h1>
+      <p class="tagline">Your local experts guide to Hawaii's most diverse island</p>
+    </div>
+  </section>
+
+  <section class="intro-section">
+    <div class="container">
+      <div class="intro-content">
+        <p class="lead">
+          As longtime Big Island residents, we've explored every corner of this incredible island.
+          Our destination guide shares the places, experiences, and hidden gems that make the Hilo
+          side of the Big Island truly special.
+        </p>
+        <div class="intro-stats">
+          <div class="stat">
+            <span class="stat-number">45+</span>
+            <span class="stat-label">Attractions covered</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">30+</span>
+            <span class="stat-label">Restaurant picks</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">20+</span>
+            <span class="stat-label">Hidden gems</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="categories-section">
+    <div class="container">
+      <div class="section-header center">
+        <span class="section-subtitle">Explore by Category</span>
+        <h2>What Would You Like to Discover?</h2>
+      </div>
+
+      <div class="categories-grid">
+        {categories.map(cat => (
+          <a href={`/preview/guide/${cat.slug}`} class="category-card">
+            <div class="category-icon">{cat.icon}</div>
+            <h3>{cat.title}</h3>
+            <p>{cat.description}</p>
+            <ul class="category-highlights">
+              {cat.highlights.map(h => <li>{h}</li>)}
+            </ul>
+            <span class="explore-link">Explore {cat.title} →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="featured-section">
+    <div class="container">
+      <div class="section-header center">
+        <span class="section-subtitle">Don't Miss</span>
+        <h2>Must-Do Experiences</h2>
+      </div>
+
+      <div class="featured-grid">
+        <div class="featured-card large">
+          <img src="/images/blog/volcanoes.jpg" alt="Hawaii Volcanoes National Park" />
+          <div class="featured-content">
+            <span class="featured-tag">Top Attraction</span>
+            <h3>Hawaii Volcanoes National Park</h3>
+            <p>Witness active volcanic activity and walk through landscapes found nowhere else on Earth. Just 45 minutes from Island Goodes.</p>
+            <a href="/preview/guide/attractions" class="btn btn-small">Learn More</a>
+          </div>
+        </div>
+
+        <div class="featured-card">
+          <img src="/images/blog/mauna-kea.jpg" alt="Mauna Kea Stargazing" />
+          <div class="featured-content">
+            <span class="featured-tag">Unique Experience</span>
+            <h3>Mauna Kea Stargazing</h3>
+            <p>World-class stargazing at nearly 14,000 feet.</p>
+            <a href="/preview/guide/activities" class="btn btn-small">Learn More</a>
+          </div>
+        </div>
+
+        <div class="featured-card">
+          <img src="/images/blog/waterfalls.jpg" alt="Waterfall Adventures" />
+          <div class="featured-content">
+            <span class="featured-tag">Natural Beauty</span>
+            <h3>Waterfall Adventures</h3>
+            <p>Dozens of waterfalls dot the lush Hamakua Coast.</p>
+            <a href="/preview/guide/attractions" class="btn btn-small">Learn More</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tips-section">
+    <div class="container">
+      <div class="tips-grid">
+        <div class="tips-content">
+          <span class="section-subtitle">Local Knowledge</span>
+          <h2>Planning Tips from Your Hosts</h2>
+          <ul class="tips-list">
+            <li>
+              <strong>Best Time to Visit:</strong> The Hilo side is beautiful year-round.
+              Winter (Dec-Apr) offers whale watching, while summer has the best weather.
+            </li>
+            <li>
+              <strong>Getting Around:</strong> A rental car is essential. The island is
+              about 100 miles across—plan for scenic drives!
+            </li>
+            <li>
+              <strong>Pack Layers:</strong> Temperatures vary dramatically from sea level
+              to Mauna Kea's summit. Bring a jacket even in summer.
+            </li>
+            <li>
+              <strong>Go Early:</strong> Popular attractions like Rainbow Falls and
+              Akaka Falls are best visited in the morning before crowds arrive.
+            </li>
+          </ul>
+        </div>
+        <div class="tips-image">
+          <img src="/images/property/pool.jpg" alt="Relaxing at Island Goodes" />
+          <div class="tips-overlay">
+            <p>"We're happy to help plan your daily adventures. Just ask!"</p>
+            <span>— Laura & Garvin, Your Hosts</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Ready to Explore?</h2>
+        <p>Book your stay at Island Goodes and let us help you discover the best of the Big Island</p>
+        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-secondary btn-large" target="_blank" rel="noopener">Book Your Stay</a>
+      </div>
+    </div>
+  </section>
+</PreviewLayout>
+
+<style>
+  .page-hero {
+    position: relative;
+    min-height: 55vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    padding: 10rem 2rem 4rem;
+  }
+
+  .page-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .page-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .page-hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%);
+  }
+
+  .page-hero-content {
+    max-width: 800px;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: var(--color-secondary);
+    color: #1a1a1a;
+    padding: 0.375rem 1rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .tagline {
+    font-size: 1.25rem;
+    opacity: 0.9;
+  }
+
+  .intro-section {
+    padding: 5rem 0;
+    background: var(--color-bg-alt);
+  }
+
+  .intro-content {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .lead {
+    font-size: 1.25rem;
+    color: var(--color-text-light);
+    line-height: 1.9;
+    margin-bottom: 3rem;
+  }
+
+  .intro-stats {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    font-family: var(--font-heading);
+  }
+
+  .stat-label {
+    font-size: 0.9375rem;
+    color: var(--color-text-light);
+  }
+
+  .categories-section {
+    padding: var(--section-padding) 0;
+  }
+
+  .section-header {
+    margin-bottom: 3rem;
+  }
+
+  .section-header.center {
+    text-align: center;
+  }
+
+  .section-subtitle {
+    display: inline-block;
+    color: var(--color-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-header h2 {
+    font-size: 2.25rem;
+    color: var(--color-text);
+  }
+
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .category-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    text-decoration: none;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.06);
+    transition: var(--transition-base);
+    border: 1px solid transparent;
+  }
+
+  .category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+    border-color: var(--color-primary);
+  }
+
+  .category-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .category-card h3 {
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+    font-size: 1.375rem;
+  }
+
+  .category-card p {
+    color: var(--color-text-light);
+    font-size: 0.9375rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .category-highlights {
+    list-style: none;
+    margin-bottom: 1.5rem;
+  }
+
+  .category-highlights li {
+    font-size: 0.8125rem;
+    color: var(--color-text-light);
+    padding: 0.25rem 0;
+  }
+
+  .category-highlights li::before {
+    content: "•";
+    color: var(--color-secondary);
+    margin-right: 0.5rem;
+  }
+
+  .explore-link {
+    color: var(--color-primary);
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+
+  .featured-section {
+    padding: var(--section-padding) 0;
+    background: var(--color-bg-alt);
+  }
+
+  .featured-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .featured-card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #000;
+  }
+
+  .featured-card.large {
+    grid-row: span 2;
+  }
+
+  .featured-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+    transition: var(--transition-base);
+  }
+
+  .featured-card:hover img {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+
+  .featured-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2rem;
+    background: linear-gradient(transparent, rgba(0,0,0,0.9));
+    color: #fff;
+  }
+
+  .featured-tag {
+    display: inline-block;
+    background: var(--color-secondary);
+    color: #1a1a1a;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  .featured-content h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .featured-content p {
+    font-size: 0.9375rem;
+    opacity: 0.9;
+    margin-bottom: 1rem;
+  }
+
+  .btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid #fff;
+    color: #fff;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: var(--transition-base);
+  }
+
+  .btn-small:hover {
+    background: #fff;
+    color: #1a1a1a;
+  }
+
+  .tips-section {
+    padding: var(--section-padding) 0;
+  }
+
+  .tips-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .tips-content h2 {
+    color: var(--color-text);
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+  }
+
+  .tips-list {
+    list-style: none;
+  }
+
+  .tips-list li {
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+    color: var(--color-text-light);
+    line-height: 1.7;
+  }
+
+  .tips-list li strong {
+    color: var(--color-text);
+  }
+
+  .tips-image {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .tips-image img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+  }
+
+  .tips-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    padding: 2rem;
+    color: #fff;
+  }
+
+  .tips-overlay p {
+    font-style: italic;
+    margin-bottom: 0.5rem;
+  }
+
+  .tips-overlay span {
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+
+  .cta-section {
+    background: var(--gradient-primary);
+    padding: 5rem 2rem;
+    text-align: center;
+  }
+
+  .cta-content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .cta-section h2 {
+    color: #fff;
+    font-size: 2.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .cta-section p {
+    color: rgba(255,255,255,0.9);
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+  }
+
+  @media (max-width: 1024px) {
+    .categories-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .featured-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+    }
+
+    .featured-card.large {
+      grid-row: span 1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .categories-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .intro-stats {
+      gap: 2rem;
+    }
+
+    .tips-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>

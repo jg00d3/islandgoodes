@@ -1,0 +1,171 @@
+---
+import PreviewLayout from '../../../layouts/PreviewLayout.astro';
+
+const title = "Uncle Robert's Wednesday Night Market: The Real Puna Experience | Island Goodes";
+const description = "Experience authentic Hawaiian culture at Uncle Robert's Wednesday Night Market in Kalapana. Live music, awa bar, local food, and the spirit of Puna.";
+const publishDate = "2025-11-20";
+---
+
+<PreviewLayout title={title} description={description}>
+  <article class="blog-post">
+    <header class="post-header">
+      <div class="post-header-bg">
+        <img src="/images/blog/farmers-market.jpg" alt="Uncle Robert's Night Market" />
+      </div>
+      <div class="post-header-overlay"></div>
+      <div class="post-header-content">
+        <nav class="breadcrumb">
+          <a href="/preview">Home</a> / <a href="/preview/blog">Blog</a> / Uncle Robert's Night Market
+        </nav>
+        <span class="post-category">Events & Culture</span>
+        <h1>Uncle Robert's Wednesday Night Market</h1>
+        <p class="post-tagline">The Real Puna Experience</p>
+        <div class="post-meta">
+          <time datetime={publishDate}>November 20, 2025</time>
+          <span class="read-time">5 min read</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="post-content">
+      <div class="container narrow">
+        <p class="lead">
+          If you want to experience authentic Hawaiian culture—not the tourist version—there's
+          no better place than Uncle Robert's Wednesday Night Market in Kalapana. It's a weekly
+          celebration of Puna spirit: live music, traditional awa (kava), local food, and a
+          community that welcomes visitors with genuine aloha.
+        </p>
+
+        <div class="info-box">
+          <h3>Quick Facts</h3>
+          <ul>
+            <li><strong>When:</strong> Every Wednesday, 4pm-10pm</li>
+            <li><strong>Where:</strong> Kalapana, Puna District</li>
+            <li><strong>From Island Goodes:</strong> 45 minutes via Highway 130</li>
+            <li><strong>Admission:</strong> $10 (cash only)</li>
+            <li><strong>Parking:</strong> Free, arrive early for best spots</li>
+          </ul>
+        </div>
+
+        <h2>What to Expect</h2>
+        <p>
+          Uncle Robert's isn't just a market—it's a party. The centerpiece is the awa bar,
+          where you can try the traditional Polynesian drink made from kava root. It's relaxing,
+          earthy, and completely legal. Sitting at the awa bar, you'll meet locals, hear stories,
+          and feel the genuine warmth of Hawaiian hospitality.
+        </p>
+
+        <p>
+          The Kalapana Awa Band provides live music every week, playing Hawaiian and reggae-influenced
+          tunes that keep the atmosphere mellow and happy. Bring a blanket or low chair to sit on
+          the grass and soak it all in.
+        </p>
+
+        <h2>The Food</h2>
+        <p>
+          Multiple food vendors offer everything from Hawaiian plate lunches to Thai food, tacos,
+          fresh fruit smoothies, and desserts. Quality is consistently good—these are local
+          cooks who take pride in their food. Cash only at most vendors.
+        </p>
+
+        <div class="highlight-box">
+          <h4>Must-Try at Uncle Robert's:</h4>
+          <ul>
+            <li>Shell of awa (kava) at the bar—start with one!</li>
+            <li>Fresh coconut water from whole coconuts</li>
+            <li>Kalua pork plate lunch</li>
+            <li>Lilikoi (passionfruit) anything</li>
+          </ul>
+        </div>
+
+        <h2>The Craft Fair</h2>
+        <p>
+          Local artisans sell handmade goods: jewelry made from local materials, tie-dye clothing,
+          woodwork, art, and Hawaiian crafts. Prices are reasonable, and you're buying directly
+          from the makers. It's the opposite of tourist-trap shopping.
+        </p>
+
+        <h2>Tips for Your Visit</h2>
+        <ul class="checklist">
+          <li><strong>Bring cash</strong> - Most vendors and the awa bar are cash-only</li>
+          <li><strong>Arrive by 5pm</strong> - Best parking and less crowded early on</li>
+          <li><strong>Bring a blanket or low chair</strong> - Seating is on the grass</li>
+          <li><strong>Wear comfortable clothes</strong> - It's casual and laid-back</li>
+          <li><strong>Don't drive if you drink awa</strong> - It can affect coordination</li>
+          <li><strong>Respect the space</strong> - This is a community gathering, not just a tourist attraction</li>
+        </ul>
+
+        <h2>The Drive to Kalapana</h2>
+        <p>
+          The drive from Island Goodes takes about 45 minutes via Highway 130 through the Puna
+          district. It's a scenic route through papaya farms and tropical forest. The road is
+          well-maintained but winding in places—take your time.
+        </p>
+
+        <p>
+          You'll pass through Pahoa, a funky little town worth exploring if you have time before
+          the market. The area around Kalapana was covered by lava flows from Kilauea in 1990,
+          and again in 2018—you'll see the stark lava fields as you approach.
+        </p>
+
+        <h2>Saturday Market Alternative</h2>
+        <p>
+          If Wednesday doesn't work for your schedule, Uncle Robert's also hosts a Saturday
+          morning market (8am-noon). It's smaller and more low-key—fresh produce, local food,
+          crafts—but lacks the live music and awa bar atmosphere of Wednesday night.
+        </p>
+
+        <div class="cta-box">
+          <h3>Experience Puna from Island Goodes</h3>
+          <p>
+            Stay with us and explore the authentic side of the Big Island. Uncle Robert's is
+            just one of many unique experiences within easy reach of your room.
+          </p>
+          <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary" target="_blank" rel="noopener">Book Your Stay</a>
+        </div>
+      </div>
+    </div>
+  </article>
+</PreviewLayout>
+
+<style>
+  .post-header { position: relative; min-height: 50vh; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; padding: 10rem 2rem 4rem; }
+  .post-header-bg { position: absolute; inset: 0; z-index: -2; }
+  .post-header-bg img { width: 100%; height: 100%; object-fit: cover; }
+  .post-header-overlay { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%); }
+  .post-header-content { max-width: 800px; }
+  .post-category { display: inline-block; background: var(--color-secondary); color: #1a1a1a; padding: 0.375rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 1rem; }
+  .post-header h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 0.5rem; }
+  .post-tagline { font-size: 1.25rem; opacity: 0.9; margin-bottom: 1rem; }
+  .post-meta { display: flex; gap: 1.5rem; justify-content: center; opacity: 0.9; font-size: 0.9375rem; }
+
+  .post-content { padding: var(--section-padding) 0; }
+  .container.narrow { max-width: 750px; margin: 0 auto; padding: 0 2rem; }
+  .lead { font-size: 1.25rem; color: var(--color-text-light); line-height: 1.8; margin-bottom: 2rem; }
+
+  .post-content h2 { color: var(--color-text); font-size: 1.75rem; margin: 2.5rem 0 1rem; }
+  .post-content p { color: var(--color-text-light); line-height: 1.8; margin-bottom: 1.5rem; }
+
+  .info-box { background: var(--gradient-primary); padding: 2rem; border-radius: 16px; color: #fff; margin: 2rem 0; }
+  .info-box h3 { margin-bottom: 1rem; }
+  .info-box ul { list-style: none; margin: 0; }
+  .info-box li { padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .info-box li:last-child { border-bottom: none; }
+  .info-box strong { color: var(--color-secondary-light); }
+
+  .highlight-box { background: var(--color-bg-alt); padding: 1.5rem; border-radius: 12px; margin: 2rem 0; }
+  .highlight-box h4 { color: var(--color-text); margin-bottom: 0.75rem; }
+  .highlight-box ul { list-style: none; margin: 0; }
+  .highlight-box li { padding: 0.375rem 0; padding-left: 1.25rem; position: relative; color: var(--color-text-light); }
+  .highlight-box li::before { content: "•"; position: absolute; left: 0; color: var(--color-secondary); }
+
+  .checklist { list-style: none; margin: 1.5rem 0; }
+  .checklist li { padding: 0.75rem 0; padding-left: 1.75rem; position: relative; color: var(--color-text-light); border-bottom: 1px solid #eee; }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li::before { content: "✓"; position: absolute; left: 0; color: var(--color-primary); font-weight: 600; }
+  .checklist strong { color: var(--color-text); }
+
+  .cta-box { background: var(--gradient-primary); padding: 2.5rem; border-radius: 16px; text-align: center; color: #fff; margin-top: 3rem; }
+  .cta-box h3 { margin-bottom: 0.75rem; }
+  .cta-box p { opacity: 0.9; margin-bottom: 1.5rem; }
+</style>

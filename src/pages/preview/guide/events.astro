@@ -1,0 +1,328 @@
+---
+import PreviewLayout from '../../../layouts/PreviewLayout.astro';
+
+const title = "Big Island Events & Culture | Island Goodes Destination Guide";
+const description = "Discover festivals, cultural events, and local experiences on Hawaii's Big Island. From Merrie Monarch to farmers markets.";
+
+const annualEvents = [
+  {
+    name: "Merrie Monarch Festival",
+    timing: "April 5-11, 2026",
+    location: "Edith Kanaka'ole Stadium, Hilo",
+    description: "The world's largest and most prestigious hula competition! Miss Aloha Hula (April 9), Group Kahiko (April 10), Group 'Auana & Awards (April 11). Week-long cultural celebration.",
+    highlights: ["Hula competitions (3 nights)", "Ho'ike Night Exhibition (Wed)", "Arts & crafts fair", "Merrie Monarch Parade (Sat morning)"],
+    tip: "Book accommodation 6-12 months in advance! Tickets: Mail requests postmarked Dec 1+, max 2 per person, money orders only.",
+    mustSee: true
+  },
+  {
+    name: "Ironman World Championship",
+    timing: "October",
+    location: "Kona",
+    description: "The world's most famous triathlon brings elite athletes to the Big Island. Even if you're not competing, the energy is incredible.",
+    highlights: ["Elite athlete watching", "Finish line drama", "Kona village atmosphere", "Expo activities"],
+    tip: "Stay in Hilo (1.5 hrs away) to avoid Kona crowds and prices, then day-trip to watch.",
+    mustSee: false
+  },
+  {
+    name: "Kona Coffee Cultural Festival",
+    timing: "November (10 days)",
+    location: "Kona Coffee Belt",
+    description: "Celebrate Hawaii's famous Kona coffee with farm tours, tastings, competitions, and cultural events throughout the Kona coffee belt.",
+    highlights: ["Coffee farm tours", "Cupping competitions", "Art shows", "Coffee picking contests"],
+    tip: "A great time to visit coffee farms and get special festival pricing on beans.",
+    mustSee: false
+  },
+  {
+    name: "Waimea Cherry Blossom Festival",
+    timing: "February",
+    location: "Waimea (Kamuela)",
+    description: "Celebrate the blooming of cherry trees at Church Row Park. Japanese cultural demonstrations, food, and community celebration.",
+    highlights: ["Cherry blossom viewing", "Japanese cultural performances", "Local food vendors", "Family activities"],
+    tip: "Combine with a day trip to explore historic Waimea town.",
+    mustSee: false
+  },
+  {
+    name: "King Kamehameha Day",
+    timing: "June 11",
+    location: "Island-wide",
+    description: "State holiday honoring King Kamehameha I with parades, lei draping ceremonies, and celebrations throughout the islands.",
+    highlights: ["Ho'olaule'a (celebration)", "Lei draping at statues", "Parades", "Cultural performances"],
+    tip: "The original Kamehameha statue is in Kohala - worth the trip to see it draped in lei.",
+    mustSee: true
+  },
+  {
+    name: "Big Island Hawaiian Music Festival",
+    timing: "July",
+    location: "Hilo",
+    description: "Free outdoor concert featuring Hawaii's top musicians. Held at the historic Palace Theater and outdoor venues in downtown Hilo.",
+    highlights: ["Live Hawaiian music", "Local musicians", "Downtown Hilo atmosphere", "Free admission"],
+    tip: "Bring a blanket and enjoy the free performances. Great food vendors too!",
+    mustSee: false
+  }
+];
+
+const weeklyEvents = [
+  {
+    name: "Hilo Farmers Market",
+    when: "Daily 7am-4pm | BIG days: Wed & Sat 6am-4pm",
+    location: "Mamo St & Kamehameha Ave, Downtown Hilo",
+    description: "Over 200 vendors on big market days! Fresh tropical fruit, orchids, prepared foods, local crafts. Open every day except Christmas. 'From Dawn til its Gone!'",
+    featured: true
+  },
+  {
+    name: "Uncle Robert's Wednesday Night Market",
+    when: "Every Wednesday 4pm-10pm",
+    location: "Kalapana (45 min from Hilo via Hwy 130)",
+    description: "A true local experience! Live music by Kalapana Awa Band, traditional awa (kava) bar, food vendors, craft fair. $10 admission, cash only. Arrive early for parking!",
+    featured: true
+  },
+  {
+    name: "Uncle Robert's Saturday Market",
+    when: "Saturday 8am-12pm",
+    location: "Kalapana",
+    description: "Daytime version of the famous night market. Fresh produce, local food, crafts in a more relaxed atmosphere.",
+    featured: false
+  },
+  {
+    name: "Makuu Farmers Market",
+    when: "Sunday 8am-2pm",
+    location: "Puna District (20 min from Hilo)",
+    description: "Authentic local market with more alternative vibe than Hilo. Great for organic produce, local honey, and meeting Puna residents.",
+    featured: false
+  },
+  {
+    name: "Holualoa First Friday Art Night",
+    when: "1st Friday monthly, 5:30-8:30pm",
+    location: "Holualoa Village (Kona side)",
+    description: "Art galleries open late, live music, food vendors, and boutique shopping in this charming upcountry village.",
+    featured: false
+  }
+];
+
+const culturalExperiences = [
+  {
+    name: "Hawaiian Luau",
+    description: "Experience a traditional Hawaiian feast with music, hula, and island cuisine. Several options available on both sides of the island.",
+    where: "Various locations (Kona side has more options)",
+    tip: "Book in advance, especially during peak season."
+  },
+  {
+    name: "Hula Performances",
+    description: "Watch authentic hula at free performances throughout the island. Check local event calendars for schedules.",
+    where: "Hilo, resort areas, cultural centers",
+    tip: "Merrie Monarch (April) is the ultimate hula experience."
+  },
+  {
+    name: "Lei Making Classes",
+    description: "Learn the art of Hawaiian lei making from local practitioners. A wonderful hands-on cultural experience.",
+    where: "Various cultural centers and shops",
+    tip: "Makes a meaningful souvenir to take home."
+  },
+  {
+    name: "Ukulele Lessons",
+    description: "Take a ukulele lesson and learn to play Hawaii's signature instrument. Many shops offer beginner sessions.",
+    where: "Music shops in Hilo and Kona",
+    tip: "Buy a ukulele to take home and keep practicing!"
+  }
+];
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="page-hero">
+    <div class="page-hero-bg">
+      <img src="/images/blog/farmers-market.jpg" alt="Hawaiian cultural celebration" />
+    </div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <nav class="breadcrumb">
+        <a href="/preview">Home</a> / <a href="/preview/guide">Guide</a> / Events & Culture
+      </nav>
+      <h1>Events & Culture</h1>
+      <p class="tagline">Festivals, markets & Hawaiian traditions</p>
+    </div>
+  </section>
+
+  <section class="intro-section">
+    <div class="container">
+      <p class="lead">
+        The Big Island's rich cultural heritage comes alive through its many festivals and events.
+        From world-famous hula competitions to weekly farmers markets, there's always something happening.
+      </p>
+    </div>
+  </section>
+
+  <section class="annual-section">
+    <div class="container">
+      <div class="section-header center">
+        <span class="section-subtitle">Mark Your Calendar</span>
+        <h2>Annual Events & Festivals</h2>
+      </div>
+      <div class="events-grid">
+        {annualEvents.map(event => (
+          <div class={`event-card ${event.mustSee ? 'featured' : ''}`}>
+            {event.mustSee && <span class="must-see-badge">Must See</span>}
+            <div class="event-timing">
+              <span class="timing">{event.timing}</span>
+              <span class="location">{event.location}</span>
+            </div>
+            <h3>{event.name}</h3>
+            <p>{event.description}</p>
+            <div class="event-highlights">
+              {event.highlights.map(h => <span class="highlight-tag">{h}</span>)}
+            </div>
+            <div class="event-tip">
+              <strong>Tip:</strong> {event.tip}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="weekly-section">
+    <div class="container">
+      <div class="section-header center">
+        <span class="section-subtitle">Every Week</span>
+        <h2>Farmers Markets & Regular Events</h2>
+      </div>
+      <div class="weekly-grid">
+        {weeklyEvents.map(event => (
+          <div class={`weekly-card ${event.featured ? 'featured' : ''}`}>
+            {event.featured && <span class="featured-badge">Don't Miss</span>}
+            <h3>{event.name}</h3>
+            <div class="weekly-details">
+              <span class="when">{event.when}</span>
+              <span class="where">{event.location}</span>
+            </div>
+            <p>{event.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="culture-section">
+    <div class="container">
+      <div class="section-header center">
+        <span class="section-subtitle">Immerse Yourself</span>
+        <h2>Cultural Experiences</h2>
+      </div>
+      <div class="culture-grid">
+        {culturalExperiences.map(exp => (
+          <div class="culture-card">
+            <h3>{exp.name}</h3>
+            <p>{exp.description}</p>
+            <div class="culture-details">
+              <div class="detail">
+                <strong>Where:</strong> {exp.where}
+              </div>
+              <div class="detail">
+                <strong>Tip:</strong> {exp.tip}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="tips-section">
+    <div class="container">
+      <div class="tips-card">
+        <h2>Cultural Etiquette Tips</h2>
+        <ul class="tips-list">
+          <li><strong>Respect sacred sites:</strong> Heiau (temples) and other cultural sites should be treated with reverence. Don't climb on structures or remove anything.</li>
+          <li><strong>Ask before entering:</strong> Some beaches and areas are on private Hawaiian homestead land. Look for signs and be respectful.</li>
+          <li><strong>Learn basic Hawaiian:</strong> Locals appreciate visitors who try. "Mahalo" (thank you), "Aloha" (hello/love), "E komo mai" (welcome).</li>
+          <li><strong>Remove shoes:</strong> It's customary to remove shoes before entering homes. Look for shoes at the door.</li>
+          <li><strong>Support local:</strong> Buy from local artisans and farmers. It means a lot to the community.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Stay at Island Goodes</h2>
+        <p>Your home base for exploring Big Island culture</p>
+        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-secondary btn-large" target="_blank" rel="noopener">Book Your Stay</a>
+      </div>
+    </div>
+  </section>
+</PreviewLayout>
+
+<style>
+  .page-hero { position: relative; min-height: 50vh; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; padding: 10rem 2rem 4rem; }
+  .page-hero-bg { position: absolute; inset: 0; z-index: -2; }
+  .page-hero-bg img { width: 100%; height: 100%; object-fit: cover; }
+  .page-hero-overlay { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%); }
+  .page-hero-content { max-width: 800px; }
+  .page-hero h1 { font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 0.5rem; }
+  .tagline { font-size: 1.25rem; opacity: 0.9; }
+
+  .intro-section { padding: 4rem 0 2rem; text-align: center; }
+  .lead { font-size: 1.25rem; color: var(--color-text-light); line-height: 1.9; max-width: 800px; margin: 0 auto; }
+
+  .section-header { margin-bottom: 2.5rem; }
+  .section-header.center { text-align: center; }
+  .section-subtitle { display: inline-block; color: var(--color-primary); font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+  .section-header h2 { font-size: 2rem; color: var(--color-text); }
+
+  .annual-section { padding: var(--section-padding) 0; }
+  .events-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  .event-card { background: #fff; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); position: relative; transition: var(--transition-base); }
+  .event-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.1); }
+  .event-card.featured { border: 2px solid var(--color-secondary); }
+  .must-see-badge { position: absolute; top: 1rem; right: 1rem; background: var(--color-secondary); color: #1a1a1a; padding: 0.375rem 0.875rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+
+  .event-timing { display: flex; gap: 1rem; margin-bottom: 0.75rem; }
+  .timing { background: var(--color-primary); color: #fff; padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; }
+  .location { color: var(--color-text-light); font-size: 0.875rem; }
+
+  .event-card h3 { color: var(--color-text); font-size: 1.25rem; margin-bottom: 0.75rem; }
+  .event-card > p { font-size: 0.9375rem; color: var(--color-text-light); line-height: 1.7; margin-bottom: 1rem; }
+
+  .event-highlights { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+  .highlight-tag { background: var(--color-bg-alt); padding: 0.25rem 0.625rem; border-radius: 50px; font-size: 0.75rem; color: var(--color-text-light); }
+
+  .event-tip { background: linear-gradient(135deg, var(--color-bg-alt) 0%, rgba(197, 165, 114, 0.1) 100%); padding: 0.875rem; border-radius: 10px; font-size: 0.875rem; color: var(--color-text-light); }
+  .event-tip strong { color: var(--color-secondary-dark); }
+
+  .weekly-section { padding: var(--section-padding) 0; background: var(--color-bg-alt); }
+  .weekly-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  .weekly-card { background: #fff; padding: 1.5rem; border-radius: 12px; position: relative; }
+  .weekly-card.featured { border: 2px solid var(--color-secondary); }
+  .weekly-card .featured-badge { position: absolute; top: -0.5rem; right: 1rem; background: var(--color-secondary); color: #1a1a1a; padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+  .weekly-card h3 { color: var(--color-text); font-size: 1.125rem; margin-bottom: 0.5rem; }
+  .weekly-details { display: flex; flex-direction: column; gap: 0.25rem; margin-bottom: 0.75rem; }
+  .when { color: var(--color-primary); font-weight: 600; font-size: 0.875rem; }
+  .where { color: var(--color-text-light); font-size: 0.875rem; }
+  .weekly-card p { font-size: 0.9375rem; color: var(--color-text-light); line-height: 1.6; }
+
+  .culture-section { padding: var(--section-padding) 0; }
+  .culture-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  .culture-card { background: linear-gradient(135deg, #fff 0%, var(--color-bg-alt) 100%); padding: 2rem; border-radius: 16px; border: 1px solid rgba(0,0,0,0.04); }
+  .culture-card h3 { color: var(--color-text); font-size: 1.25rem; margin-bottom: 0.75rem; }
+  .culture-card > p { font-size: 0.9375rem; color: var(--color-text-light); line-height: 1.7; margin-bottom: 1rem; }
+  .culture-details { border-top: 1px solid #eee; padding-top: 1rem; }
+  .culture-details .detail { font-size: 0.875rem; color: var(--color-text-light); margin-bottom: 0.5rem; }
+  .culture-details strong { color: var(--color-text); }
+
+  .tips-section { padding: 0 0 var(--section-padding); }
+  .tips-card { background: linear-gradient(135deg, var(--color-primary) 0%, #0F4A3E 100%); color: #fff; padding: 3rem; border-radius: 20px; max-width: 800px; margin: 0 auto; }
+  .tips-card h2 { text-align: center; margin-bottom: 1.5rem; }
+  .tips-list { list-style: none; }
+  .tips-list li { padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); line-height: 1.7; }
+  .tips-list li:last-child { border-bottom: none; }
+  .tips-list strong { color: var(--color-secondary-light); }
+
+  .cta-section { background: var(--color-bg-alt); padding: 5rem 2rem; text-align: center; }
+  .cta-content { max-width: 600px; margin: 0 auto; }
+  .cta-section h2 { color: var(--color-text); font-size: 2.25rem; margin-bottom: 0.75rem; }
+  .cta-section p { color: var(--color-text-light); font-size: 1.125rem; margin-bottom: 2rem; }
+
+  @media (max-width: 768px) {
+    .events-grid, .weekly-grid, .culture-grid { grid-template-columns: 1fr; }
+  }
+</style>

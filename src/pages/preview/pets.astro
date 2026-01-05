@@ -1,0 +1,314 @@
+---
+import PreviewLayout from '../../layouts/PreviewLayout.astro';
+
+const title = "Our Pets - Property Inhabitants | Island Goodes";
+const description = "Meet the friendly animal residents at Island Goodes. Our property pets add to the tropical Hawaiian charm of your stay.";
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="page-hero">
+    <div class="page-hero-bg">
+      <img src="/images/rooms/hilo-bay/lanai.jpg" alt="View from Island Goodes" />
+    </div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <nav class="breadcrumb">
+        <a href="/preview">Home</a> / Property Inhabitants
+      </nav>
+      <h1>Property Inhabitants</h1>
+      <p class="tagline">Meet our friendly animal residents</p>
+    </div>
+  </section>
+
+  <section class="pets-section">
+    <div class="container">
+      <p class="intro">
+        Island Goodes is home to some friendly animal residents who help make our property feel like a true Hawaiian retreat.
+        While they live on the property, they respect guest privacy and add to the tropical charm of your stay.
+      </p>
+
+      <div class="pets-grid">
+        <div class="pet-card">
+          <div class="pet-image">
+            <img src="/images/property/pool.jpg" alt="Island Goodes property" loading="lazy" />
+            <div class="pet-badge">Resident Friends</div>
+          </div>
+          <div class="pet-info">
+            <div class="pet-icon">🐱</div>
+            <h2>Our Friendly Cats</h2>
+            <p>
+              You may spot our resident cats lounging in sunny spots around the property.
+              They're friendly but independent, and love to greet guests from a distance.
+              They help keep the property free of geckos and other small critters.
+            </p>
+          </div>
+        </div>
+
+        <div class="pet-card reverse">
+          <div class="pet-image">
+            <img src="/images/rooms/hilo-bay/lanai.jpg" alt="View from lanai" loading="lazy" />
+            <div class="pet-badge">Morning Chorus</div>
+          </div>
+          <div class="pet-info">
+            <div class="pet-icon">🐦</div>
+            <h2>Tropical Birds</h2>
+            <p>
+              Wake up to the songs of tropical birds in our gardens. Hawaii is home to
+              many unique bird species, and our lush landscaping attracts a variety of
+              colorful visitors throughout the day.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="note-box">
+        <div class="note-icon">📋</div>
+        <div class="note-content">
+          <h3>A Note About Guest Pets</h3>
+          <p>
+            While we have animal residents on the property, we are unable to accommodate guest pets
+            at this time. <strong>Service animals are welcome</strong> with advance notice.
+          </p>
+          <p>
+            If you have any concerns about animal allergies, please <a href="/preview/contact">contact us</a> before booking.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Book Your Stay</h2>
+        <p>Experience the peaceful, tropical atmosphere of Island Goodes</p>
+        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-secondary btn-large" target="_blank" rel="noopener">Check Availability</a>
+      </div>
+    </div>
+  </section>
+</PreviewLayout>
+
+<style>
+  .page-hero {
+    position: relative;
+    min-height: 45vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    padding: 10rem 2rem 4rem;
+  }
+
+  .page-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .page-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .page-hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%);
+  }
+
+  .page-hero-content {
+    max-width: 800px;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .tagline {
+    font-size: 1.25rem;
+    opacity: 0.9;
+  }
+
+  .pets-section {
+    padding: var(--section-padding) 0;
+  }
+
+  .intro {
+    text-align: center;
+    font-size: 1.25rem;
+    color: var(--color-text-light);
+    margin-bottom: 4rem;
+    line-height: 1.9;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .pets-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    margin-bottom: 4rem;
+  }
+
+  .pet-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    align-items: stretch;
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 35px rgba(0,0,0,0.1);
+  }
+
+  .pet-card.reverse {
+    direction: rtl;
+  }
+
+  .pet-card.reverse > * {
+    direction: ltr;
+  }
+
+  .pet-image {
+    position: relative;
+    height: 100%;
+  }
+
+  .pet-image img {
+    width: 100%;
+    height: 100%;
+    min-height: 350px;
+    object-fit: cover;
+  }
+
+  .pet-badge {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    background: var(--color-secondary);
+    color: #1a1a1a;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .pet-card.reverse .pet-badge {
+    left: auto;
+    right: 1.5rem;
+  }
+
+  .pet-info {
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .pet-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .pet-info h2 {
+    color: var(--color-text);
+    margin-bottom: 1rem;
+    font-size: 1.75rem;
+  }
+
+  .pet-info p {
+    line-height: 1.9;
+    color: var(--color-text-light);
+    font-size: 1.0625rem;
+  }
+
+  .note-box {
+    display: flex;
+    gap: 1.5rem;
+    background: linear-gradient(135deg, var(--color-bg-alt) 0%, rgba(197, 165, 114, 0.1) 100%);
+    padding: 2.5rem;
+    border-radius: 16px;
+    border-left: 4px solid var(--color-secondary);
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .note-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+
+  .note-content h3 {
+    color: var(--color-text);
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+  }
+
+  .note-content p {
+    margin-bottom: 0.75rem;
+    line-height: 1.7;
+    color: var(--color-text-light);
+  }
+
+  .note-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .note-content a {
+    color: var(--color-primary);
+    font-weight: 500;
+  }
+
+  .cta-section {
+    background: var(--gradient-primary);
+    padding: 5rem 2rem;
+    text-align: center;
+  }
+
+  .cta-content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .cta-section h2 {
+    color: #fff;
+    font-size: 2.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .cta-section p {
+    color: rgba(255,255,255,0.9);
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .pet-card {
+      grid-template-columns: 1fr;
+    }
+
+    .pet-card.reverse {
+      direction: ltr;
+    }
+
+    .pet-image img {
+      min-height: 250px;
+    }
+
+    .pet-info {
+      padding: 2rem;
+    }
+
+    .note-box {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+</style>

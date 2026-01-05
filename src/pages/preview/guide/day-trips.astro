@@ -1,0 +1,292 @@
+---
+import PreviewLayout from '../../../layouts/PreviewLayout.astro';
+
+const title = "Big Island Day Trips | Island Goodes Destination Guide";
+const description = "Plan perfect day trips from Hilo, Hawaii. Explore volcanoes, waterfalls, Kona coffee farms, and hidden gems across the Big Island.";
+
+const dayTrips = [
+  {
+    name: "Hawaii Volcanoes National Park",
+    duration: "Full Day (6-8 hours)",
+    distance: "45 min drive from Island Goodes",
+    description: "Experience one of the world's most active volcanic areas. Walk through lava tubes, hike crater trails, and witness the raw power of creation at Kilauea.",
+    highlights: [
+      "Kilauea Iki Crater hike (4 miles)",
+      "Thurston Lava Tube walk",
+      "Chain of Craters Road scenic drive",
+      "Jaggar Museum & Overlook",
+      "Steam Vents & Sulfur Banks"
+    ],
+    tips: [
+      "Start early - arrive by 8 AM to beat crowds",
+      "Pack layers - summit is 4,000 feet and cooler",
+      "Bring plenty of water and snacks",
+      "Evening visits offer different views if crater is glowing"
+    ],
+    bestFor: ["Nature lovers", "Photographers", "Hikers"]
+  },
+  {
+    name: "Hamakua Coast Waterfall Tour",
+    duration: "Half Day (4-5 hours)",
+    distance: "Starts 10 min from Island Goodes",
+    description: "Drive the scenic Hamakua Heritage Corridor past lush rainforest, historic towns, and some of Hawaii's most spectacular waterfalls.",
+    highlights: [
+      "Rainbow Falls (start point)",
+      "Pe'epe'e Falls & Boiling Pots",
+      "Akaka Falls (442 ft)",
+      "Umauma Falls (3-tiered)",
+      "Charming Honoka'a town"
+    ],
+    tips: [
+      "Go in the morning for best waterfall lighting",
+      "Stop at Tex Drive In for malasadas",
+      "Wear comfortable walking shoes",
+      "Continue to Waipio Valley Lookout if time permits"
+    ],
+    bestFor: ["Scenic drives", "Photography", "Easy walks"]
+  },
+  {
+    name: "Kona Coffee Country",
+    duration: "Full Day (6-8 hours)",
+    distance: "1.5 hours to Kona side",
+    description: "Cross the island to explore the famous Kona coffee belt. Tour farms, sample world-renowned brews, and enjoy the sunny Kona coast.",
+    highlights: [
+      "Greenwell Farms coffee tour",
+      "Mountain Thunder Coffee Plantation",
+      "Kealakekua Bay snorkeling",
+      "Captain Cook monument viewpoint",
+      "Historic Kailua Village"
+    ],
+    tips: [
+      "Book farm tours in advance",
+      "Buy beans direct - fresher and often cheaper",
+      "Pack snorkel gear for Kealakekua Bay",
+      "Have lunch at a local spot in Kailua-Kona"
+    ],
+    bestFor: ["Coffee lovers", "Foodies", "Snorkelers"]
+  },
+  {
+    name: "Waipio Valley Adventure",
+    duration: "Half Day (4-5 hours)",
+    distance: "50 min from Island Goodes",
+    description: "Visit the sacred Valley of the Kings with its 2,000-foot cliffs and Hawaii's tallest waterfall. The lookout alone is worth the trip.",
+    highlights: [
+      "Waipio Valley Lookout (stunning views)",
+      "Hi'ilawe Falls (1,450 ft - visible from lookout)",
+      "Valley floor hike (strenuous, 4WD needed)",
+      "Honoka'a town for lunch",
+      "Hawaiian Vanilla Company nearby"
+    ],
+    tips: [
+      "The lookout is easily accessible - no hike required",
+      "DO NOT attempt valley road without 4WD",
+      "Guided tours available for valley floor",
+      "Pair with Hamakua Coast for full day"
+    ],
+    bestFor: ["Scenic views", "History buffs", "Adventure seekers"]
+  },
+  {
+    name: "Mauna Kea Summit & Stargazing",
+    duration: "Half Day/Evening (4-5 hours)",
+    distance: "1 hour to Visitor Station",
+    description: "Ascend to nearly 14,000 feet for world-class stargazing above 40% of Earth's atmosphere. Free astronomy programs nightly.",
+    highlights: [
+      "Sunset above the clouds",
+      "Visitor Information Station (9,200 ft)",
+      "Free stargazing program (6-10 PM)",
+      "Observatory views (summit, 13,796 ft)",
+      "Lake Waiau hike"
+    ],
+    tips: [
+      "Arrive early to acclimatize at Visitor Station",
+      "Dress VERY warmly - temps can drop below freezing",
+      "Don't visit if you have respiratory/heart issues",
+      "4WD required for summit, not for Visitor Station"
+    ],
+    bestFor: ["Stargazers", "Photographers", "Unique experiences"]
+  },
+  {
+    name: "South Point & Green Sand Beach",
+    duration: "Full Day (7-8 hours)",
+    distance: "2 hours to South Point",
+    description: "Journey to the southernmost point in the United States and hike to one of only four green sand beaches in the world.",
+    highlights: [
+      "Ka Lae (South Point) - southernmost USA",
+      "Cliff jumping spot (for the brave!)",
+      "Papakolea Green Sand Beach (2.5 mi hike)",
+      "Punalu'u Black Sand Beach",
+      "Sea turtles basking on beach"
+    ],
+    tips: [
+      "Bring LOTS of water for green sand hike",
+      "Start hike early - no shade on trail",
+      "Can hire local shuttle to green sand beach",
+      "Don't touch or approach sea turtles"
+    ],
+    bestFor: ["Adventure seekers", "Beach lovers", "Unique experiences"]
+  }
+];
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="page-hero">
+    <div class="page-hero-bg">
+      <img src="/images/hero.jpg" alt="Scenic Big Island landscape" />
+    </div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <nav class="breadcrumb">
+        <a href="/preview">Home</a> / <a href="/preview/guide">Guide</a> / Day Trips
+      </nav>
+      <h1>Big Island Day Trips</h1>
+      <p class="tagline">Epic adventures from your Island Goodes basecamp</p>
+    </div>
+  </section>
+
+  <section class="intro-section">
+    <div class="container">
+      <p class="lead">
+        Island Goodes' location near Hilo makes it the perfect base for exploring the Big Island.
+        From active volcanoes to hidden waterfalls, here are our favorite day trips - all returning you
+        to your comfortable room by evening.
+      </p>
+    </div>
+  </section>
+
+  <section class="trips-section">
+    <div class="container">
+      {dayTrips.map((trip, index) => (
+        <div class="trip-card">
+          <div class="trip-header">
+            <div class="trip-number">{String(index + 1).padStart(2, '0')}</div>
+            <div class="trip-meta">
+              <span class="duration">{trip.duration}</span>
+              <span class="distance">{trip.distance}</span>
+            </div>
+          </div>
+          <h2>{trip.name}</h2>
+          <p class="trip-description">{trip.description}</p>
+
+          <div class="trip-details">
+            <div class="highlights-column">
+              <h3>Highlights</h3>
+              <ul class="highlights-list">
+                {trip.highlights.map(h => <li>{h}</li>)}
+              </ul>
+            </div>
+            <div class="tips-column">
+              <h3>Tips from Your Hosts</h3>
+              <ul class="tips-list">
+                {trip.tips.map(t => <li>{t}</li>)}
+              </ul>
+            </div>
+          </div>
+
+          <div class="best-for">
+            <strong>Best For:</strong>
+            {trip.bestFor.map(b => <span class="tag">{b}</span>)}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="planning-section">
+    <div class="container">
+      <div class="planning-card">
+        <h2>Day Trip Planning Tips</h2>
+        <div class="planning-grid">
+          <div class="planning-item">
+            <span class="planning-icon">🚗</span>
+            <h3>Rent a Car</h3>
+            <p>A rental car is essential. Book early as cars can sell out, especially during peak season.</p>
+          </div>
+          <div class="planning-item">
+            <span class="planning-icon">🌤️</span>
+            <h3>Start Early</h3>
+            <p>Beat the crowds and afternoon weather by starting your adventures in the early morning.</p>
+          </div>
+          <div class="planning-item">
+            <span class="planning-icon">🎒</span>
+            <h3>Pack Smart</h3>
+            <p>Bring water, snacks, sunscreen, and layers. Island weather varies dramatically by elevation.</p>
+          </div>
+          <div class="planning-item">
+            <span class="planning-icon">⛽</span>
+            <h3>Gas Up</h3>
+            <p>Fill up in Hilo before heading out. Gas stations can be sparse on some routes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Your Adventure Awaits</h2>
+        <p>Return to Island Goodes after your day trips for a relaxing evening</p>
+        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-secondary btn-large" target="_blank" rel="noopener">Book Your Stay</a>
+      </div>
+    </div>
+  </section>
+</PreviewLayout>
+
+<style>
+  .page-hero { position: relative; min-height: 50vh; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; padding: 10rem 2rem 4rem; }
+  .page-hero-bg { position: absolute; inset: 0; z-index: -2; }
+  .page-hero-bg img { width: 100%; height: 100%; object-fit: cover; }
+  .page-hero-overlay { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%); }
+  .page-hero-content { max-width: 800px; }
+  .page-hero h1 { font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 0.5rem; }
+  .tagline { font-size: 1.25rem; opacity: 0.9; }
+
+  .intro-section { padding: 4rem 0 2rem; text-align: center; }
+  .lead { font-size: 1.25rem; color: var(--color-text-light); line-height: 1.9; max-width: 800px; margin: 0 auto; }
+
+  .trips-section { padding: 2rem 0 var(--section-padding); }
+
+  .trip-card { background: #fff; border-radius: 20px; padding: 2.5rem; margin-bottom: 2rem; box-shadow: 0 4px 25px rgba(0,0,0,0.06); }
+
+  .trip-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem; }
+  .trip-number { font-size: 3rem; font-weight: 700; color: var(--color-bg-alt); line-height: 1; font-family: var(--font-heading); }
+  .trip-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 0.25rem; }
+  .duration { background: var(--color-primary); color: #fff; padding: 0.375rem 1rem; border-radius: 50px; font-size: 0.8125rem; font-weight: 600; }
+  .distance { font-size: 0.875rem; color: var(--color-text-light); }
+
+  .trip-card h2 { color: var(--color-text); font-size: 1.75rem; margin-bottom: 1rem; }
+  .trip-description { font-size: 1.0625rem; color: var(--color-text-light); line-height: 1.8; margin-bottom: 1.5rem; }
+
+  .trip-details { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 1.5rem; }
+  .highlights-column h3, .tips-column h3 { font-size: 1rem; color: var(--color-text); margin-bottom: 0.75rem; }
+  .highlights-list, .tips-list { list-style: none; }
+  .highlights-list li, .tips-list li { padding: 0.5rem 0; padding-left: 1.5rem; position: relative; font-size: 0.9375rem; color: var(--color-text-light); border-bottom: 1px solid #f0f0f0; }
+  .highlights-list li:last-child, .tips-list li:last-child { border-bottom: none; }
+  .highlights-list li::before { content: "✓"; position: absolute; left: 0; color: var(--color-primary); font-weight: 600; }
+  .tips-list li::before { content: "→"; position: absolute; left: 0; color: var(--color-secondary); }
+
+  .best-for { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; padding-top: 1rem; border-top: 1px solid #eee; }
+  .best-for strong { color: var(--color-text); font-size: 0.875rem; }
+  .tag { background: var(--color-bg-alt); padding: 0.375rem 0.875rem; border-radius: 50px; font-size: 0.8125rem; color: var(--color-text-light); }
+
+  .planning-section { padding: 0 0 var(--section-padding); }
+  .planning-card { background: linear-gradient(135deg, var(--color-primary) 0%, #0F4A3E 100%); padding: 3rem; border-radius: 20px; color: #fff; }
+  .planning-card h2 { text-align: center; margin-bottom: 2rem; }
+  .planning-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+  .planning-item { text-align: center; }
+  .planning-icon { font-size: 2rem; margin-bottom: 0.75rem; display: block; }
+  .planning-item h3 { font-size: 1rem; margin-bottom: 0.5rem; }
+  .planning-item p { font-size: 0.875rem; opacity: 0.9; line-height: 1.6; }
+
+  .cta-section { background: var(--color-bg-alt); padding: 5rem 2rem; text-align: center; }
+  .cta-content { max-width: 600px; margin: 0 auto; }
+  .cta-section h2 { color: var(--color-text); font-size: 2.25rem; margin-bottom: 0.75rem; }
+  .cta-section p { color: var(--color-text-light); font-size: 1.125rem; margin-bottom: 2rem; }
+
+  @media (max-width: 768px) {
+    .trip-details { grid-template-columns: 1fr; }
+    .trip-header { flex-direction: column; align-items: flex-start; }
+    .trip-meta { align-items: flex-start; }
+    .planning-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>

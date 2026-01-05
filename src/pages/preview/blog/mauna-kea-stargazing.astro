@@ -1,0 +1,132 @@
+---
+import PreviewLayout from '../../../layouts/PreviewLayout.astro';
+
+const title = "Stargazing on Mauna Kea: What to Know Before You Go";
+const description = "Tips for experiencing world-class stargazing at 13,800 feet, from the best times to visit to what to bring.";
+---
+
+<PreviewLayout title={title} description={description}>
+  <article class="blog-post">
+    <header class="post-header">
+      <div class="post-header-bg">
+        <img src="/images/blog/mauna-kea.jpg" alt="Stargazing on Mauna Kea" />
+      </div>
+      <div class="post-header-overlay"></div>
+      <div class="post-header-content">
+        <nav class="breadcrumb">
+          <a href="/preview">Home</a> / <a href="/preview/blog">Blog</a> / Mauna Kea Stargazing
+        </nav>
+        <span class="category">Activities</span>
+        <h1>{title}</h1>
+        <p class="excerpt">Tips for experiencing world-class stargazing at 13,800 feet, from the best times to visit to what to bring.</p>
+        <time datetime="2025-11-01">November 1, 2025</time>
+      </div>
+    </header>
+
+    <div class="post-content">
+      <div class="container">
+        <p class="lead">
+          Mauna Kea's summit is home to some of the world's most advanced astronomical observatories—and for good reason. At nearly 14,000 feet above sea level, above 40% of Earth's atmosphere, the views of the night sky are absolutely breathtaking. A stargazing trip to Mauna Kea is an unforgettable Big Island experience.
+        </p>
+
+        <h2>Getting There from Island Goodes</h2>
+        <p>
+          The drive from Island Goodes to the Mauna Kea Visitor Information Station (VIS) takes about 1 hour. Take Saddle Road (Highway 200) across the island to the clearly marked Mauna Kea Access Road.
+        </p>
+        <p>
+          <strong>Important:</strong> The road to the summit is steep and unpaved. Only 4WD vehicles are permitted above the Visitor Information Station. Most rental car contracts prohibit driving to the summit, so consider a guided tour for the full experience.
+        </p>
+
+        <h2>Stargazing Options</h2>
+
+        <h3>Visitor Information Station (9,200 ft)</h3>
+        <p>
+          The VIS offers free stargazing programs every evening from 6-10 PM (weather permitting). Volunteers set up telescopes and guide you through the night sky. This is an excellent free option and doesn't require 4WD.
+        </p>
+
+        <h3>Summit (13,796 ft)</h3>
+        <p>
+          The summit offers even more spectacular views and less light interference. However, you'll need 4WD or a tour. The observatories themselves aren't open to the public for stargazing, but the views from the summit area are incredible.
+        </p>
+
+        <h3>Guided Tours</h3>
+        <p>
+          Many tour companies offer sunset and stargazing trips to Mauna Kea. Tours typically include transportation, warm parkas, hot chocolate, and expert guides with telescopes. Prices range from $200-300 per person.
+        </p>
+
+        <h2>What You'll See</h2>
+        <ul>
+          <li>The Milky Way in stunning clarity</li>
+          <li>Planets, nebulae, and distant galaxies</li>
+          <li>Thousands of stars invisible from lower elevations</li>
+          <li>Spectacular sunset above the clouds</li>
+        </ul>
+
+        <h2>Essential Tips</h2>
+
+        <h3>Altitude Preparation</h3>
+        <ul>
+          <li>Don't go if you have heart or respiratory conditions</li>
+          <li>Stop at the VIS for at least 30 minutes to acclimatize before going higher</li>
+          <li>Drink plenty of water</li>
+          <li>Avoid alcohol the day before and day of your visit</li>
+          <li>Don't scuba dive within 24 hours of visiting</li>
+        </ul>
+
+        <h3>What to Bring</h3>
+        <ul>
+          <li><strong>Warm clothes:</strong> Temperatures can drop below freezing, even in summer</li>
+          <li>Layers, hat, and gloves</li>
+          <li>Snacks and water</li>
+          <li>Flashlight with red filter (to preserve night vision)</li>
+          <li>Camera with tripod for astrophotography</li>
+        </ul>
+
+        <h3>Best Times to Visit</h3>
+        <p>
+          New moon nights offer the darkest skies. Check the lunar calendar before planning your trip. Winter months (December-February) offer some of the clearest skies, though weather can be unpredictable.
+        </p>
+
+        <h2>After Your Adventure</h2>
+        <p>
+          After stargazing on Mauna Kea, return to Island Goodes for a well-deserved rest. Our Mauna Kea Room was named in honor of this magnificent mountain—the views from your lanai look toward the peak you just visited.
+        </p>
+
+        <div class="cta-box">
+          <h3>Stay at Island Goodes</h3>
+          <p>Book the Mauna Kea Room for the perfect before-and-after stargazing experience. Rest up during the day, then head to the summit for an unforgettable night under the stars.</p>
+          <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary btn-large" target="_blank" rel="noopener">Book Your Stay</a>
+        </div>
+
+        <div class="back-link">
+          <a href="/preview/blog">← Back to Blog</a>
+        </div>
+      </div>
+    </div>
+  </article>
+</PreviewLayout>
+
+<style>
+  .post-header { position: relative; min-height: 55vh; display: flex; align-items: center; justify-content: center; color: #fff; padding: 10rem 2rem 4rem; text-align: center; }
+  .post-header-bg { position: absolute; inset: 0; z-index: -2; }
+  .post-header-bg img { width: 100%; height: 100%; object-fit: cover; }
+  .post-header-overlay { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%); }
+  .post-header-content { max-width: 800px; }
+  .category { display: inline-block; background: var(--color-secondary); color: #1a1a1a; padding: 0.375rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+  .post-header h1 { font-size: clamp(2rem, 5vw, 3rem); margin: 1rem 0; line-height: 1.2; }
+  .excerpt { font-size: 1.125rem; opacity: 0.9; margin-bottom: 1rem; line-height: 1.7; }
+  .post-header time { opacity: 0.8; font-size: 0.9375rem; }
+  .post-content { padding: var(--section-padding) 2rem; }
+  .post-content .container { max-width: 750px; margin: 0 auto; }
+  .post-content .lead { font-size: 1.25rem; color: var(--color-text-light); line-height: 1.8; margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px solid #eee; }
+  .post-content h2 { color: var(--color-text); margin-top: 3rem; margin-bottom: 1.25rem; font-size: 1.75rem; }
+  .post-content h3 { color: var(--color-primary); margin-top: 2rem; margin-bottom: 0.75rem; font-size: 1.25rem; }
+  .post-content p { line-height: 1.9; margin-bottom: 1.25rem; color: var(--color-text-light); }
+  .post-content ul { margin: 1.5rem 0 1.5rem 1.5rem; line-height: 1.9; }
+  .post-content li { margin-bottom: 0.75rem; color: var(--color-text-light); }
+  .cta-box { background: linear-gradient(135deg, var(--color-bg-alt) 0%, rgba(27, 107, 90, 0.08) 100%); padding: 2.5rem; border-radius: 16px; margin-top: 3rem; text-align: center; border: 1px solid rgba(27, 107, 90, 0.1); }
+  .cta-box h3 { color: var(--color-text); margin-top: 0; font-size: 1.5rem; }
+  .cta-box p { color: var(--color-text-light); margin-bottom: 1.5rem; }
+  .back-link { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #eee; }
+  .back-link a { color: var(--color-primary); font-weight: 600; font-size: 0.9375rem; }
+</style>

@@ -1,0 +1,153 @@
+---
+import PreviewLayout from '../../../layouts/PreviewLayout.astro';
+
+const title = "A Local's Guide to Downtown Hilo";
+const description = "Farmers markets, historic buildings, local restaurants, and hidden gems in Hawaii's most authentic town.";
+---
+
+<PreviewLayout title={title} description={description}>
+  <article class="blog-post">
+    <header class="post-header">
+      <div class="post-header-bg">
+        <img src="/images/blog/hilo-town.jpg" alt="Downtown Hilo" />
+      </div>
+      <div class="post-header-overlay"></div>
+      <div class="post-header-content">
+        <nav class="breadcrumb">
+          <a href="/preview">Home</a> / <a href="/preview/blog">Blog</a> / Downtown Hilo Guide
+        </nav>
+        <span class="category">Local Guide</span>
+        <h1>{title}</h1>
+        <p class="excerpt">Farmers markets, historic buildings, local restaurants, and hidden gems in Hawaii's most authentic town.</p>
+        <time datetime="2025-05-01">May 1, 2025</time>
+      </div>
+    </header>
+
+    <div class="post-content">
+      <div class="container">
+        <p class="lead">
+          While many visitors flock to the resort-heavy Kona side, Downtown Hilo offers something increasingly rare in Hawaii: an authentic, working town with deep roots and genuine aloha spirit. Just 5 minutes from Island Goodes, Hilo rewards visitors who take time to explore its historic streets, local shops, and incredible food scene.
+        </p>
+
+        <h2>A Brief History</h2>
+        <p>
+          Hilo was once Hawaii's largest city and the center of the sugar industry. Though tsunamis in 1946 and 1960 devastated the waterfront, the town rebuilt with character. Today, its historic buildings, diverse community, and laid-back atmosphere make it unlike anywhere else in Hawaii.
+        </p>
+
+        <h2>Must-Visit Spots</h2>
+
+        <h3>Hilo Farmers Market</h3>
+        <p>
+          The crown jewel of downtown. On Wednesdays and Saturdays, over 200 vendors sell fresh tropical fruits, local crafts, and prepared foods. Even on other days, the smaller market is worth a visit. (See our full <a href="/preview/blog/hilo-farmers-market">Hilo Farmers Market guide</a>.)
+        </p>
+
+        <h3>Bayfront</h3>
+        <p>
+          Walk along Kamehameha Avenue past the Bayfront soccer fields and enjoy views of Hilo Bay with Mauna Kea in the background. Early morning offers the best light for photos.
+        </p>
+
+        <h3>Pacific Tsunami Museum</h3>
+        <p>
+          Located in a beautiful restored bank building, this museum tells the story of the tsunamis that shaped Hilo. The exhibits include firsthand survivor accounts and fascinating historical photos.
+        </p>
+
+        <h3>Lyman Museum</h3>
+        <p>
+          Explore Hawaiian history and natural science in one of Hawaii's oldest museums. The adjacent 1839 Mission House offers a glimpse into early missionary life in Hawaii.
+        </p>
+
+        <h2>Where to Eat</h2>
+
+        <h3>Breakfast & Brunch</h3>
+        <ul>
+          <li><strong>Ken's House of Pancakes:</strong> A Hilo institution, open 24 hours</li>
+          <li><strong>Hawaiian Style Cafe:</strong> Enormous local-style breakfasts</li>
+          <li><strong>Short N Sweet Bakery:</strong> Fresh malasadas and pastries</li>
+        </ul>
+
+        <h3>Lunch</h3>
+        <ul>
+          <li><strong>Poke Market at Suisan:</strong> Fresh poke bowls at the fish market</li>
+          <li><strong>Cafe 100:</strong> Birthplace of the loco moco</li>
+          <li><strong>Moon & Turtle:</strong> Creative local cuisine in a restored building</li>
+        </ul>
+
+        <h3>Dinner</h3>
+        <ul>
+          <li><strong>Hilo Bay Cafe:</strong> Upscale local ingredients, harbor views</li>
+          <li><strong>Pineapples:</strong> Island fusion in a fun atmosphere</li>
+          <li><strong>Jackie Rey's Ohana Grill:</strong> Seafood and steaks</li>
+        </ul>
+
+        <h2>Shopping</h2>
+        <ul>
+          <li><strong>Basically Books:</strong> Hawaii's best bookstore for local titles and maps</li>
+          <li><strong>Dragon Mama:</strong> Eclectic gifts and handmade textiles</li>
+          <li><strong>Big Island Candies:</strong> Famous shortbread cookies (free samples!)</li>
+          <li><strong>Sig Zane Designs:</strong> Iconic Hawaiian print clothing</li>
+        </ul>
+
+        <h2>Hidden Gems</h2>
+
+        <h3>Coconut Island (Moku Ola)</h3>
+        <p>
+          A short bridge from Liliuokalani Gardens leads to this small island with swimming areas and great views back toward Hilo and Mauna Kea.
+        </p>
+
+        <h3>Liliuokalani Gardens</h3>
+        <p>
+          The largest authentic Japanese garden outside of Japan. Pagodas, bridges, koi ponds, and carefully manicured landscapes make this a peaceful escape.
+        </p>
+
+        <h3>Palace Theater</h3>
+        <p>
+          This beautifully restored 1925 theater hosts films, concerts, and community events. Check their schedule for screenings during your stay.
+        </p>
+
+        <h2>Practical Tips</h2>
+        <ul>
+          <li><strong>Parking:</strong> Street parking is free and usually available except during market days</li>
+          <li><strong>Weather:</strong> Hilo is the rainy side—bring an umbrella or be prepared for brief showers</li>
+          <li><strong>Cash:</strong> Some small shops and market vendors are cash-only</li>
+          <li><strong>Timing:</strong> Many shops close early (around 5 PM); restaurants stay open later</li>
+        </ul>
+
+        <div class="cta-box">
+          <h3>Stay at Island Goodes</h3>
+          <p>Just 5 minutes from downtown Hilo, Island Goodes puts you close to all the town's attractions while offering peaceful oceanview accommodations when you're ready to relax.</p>
+          <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary btn-large" target="_blank" rel="noopener">Book Your Stay</a>
+        </div>
+
+        <div class="back-link">
+          <a href="/preview/blog">← Back to Blog</a>
+        </div>
+      </div>
+    </div>
+  </article>
+</PreviewLayout>
+
+<style>
+  .post-header { position: relative; min-height: 55vh; display: flex; align-items: center; justify-content: center; color: #fff; padding: 10rem 2rem 4rem; text-align: center; }
+  .post-header-bg { position: absolute; inset: 0; z-index: -2; }
+  .post-header-bg img { width: 100%; height: 100%; object-fit: cover; }
+  .post-header-overlay { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%); }
+  .post-header-content { max-width: 800px; }
+  .category { display: inline-block; background: var(--color-secondary); color: #1a1a1a; padding: 0.375rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+  .post-header h1 { font-size: clamp(2rem, 5vw, 3rem); margin: 1rem 0; line-height: 1.2; }
+  .excerpt { font-size: 1.125rem; opacity: 0.9; margin-bottom: 1rem; line-height: 1.7; }
+  .post-header time { opacity: 0.8; font-size: 0.9375rem; }
+  .post-content { padding: var(--section-padding) 2rem; }
+  .post-content .container { max-width: 750px; margin: 0 auto; }
+  .post-content .lead { font-size: 1.25rem; color: var(--color-text-light); line-height: 1.8; margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px solid #eee; }
+  .post-content h2 { color: var(--color-text); margin-top: 3rem; margin-bottom: 1.25rem; font-size: 1.75rem; }
+  .post-content h3 { color: var(--color-primary); margin-top: 2rem; margin-bottom: 0.75rem; font-size: 1.25rem; }
+  .post-content p { line-height: 1.9; margin-bottom: 1.25rem; color: var(--color-text-light); }
+  .post-content ul { margin: 1.5rem 0 1.5rem 1.5rem; line-height: 1.9; }
+  .post-content li { margin-bottom: 0.75rem; color: var(--color-text-light); }
+  .post-content a { color: var(--color-primary); font-weight: 500; }
+  .cta-box { background: linear-gradient(135deg, var(--color-bg-alt) 0%, rgba(27, 107, 90, 0.08) 100%); padding: 2.5rem; border-radius: 16px; margin-top: 3rem; text-align: center; border: 1px solid rgba(27, 107, 90, 0.1); }
+  .cta-box h3 { color: var(--color-text); margin-top: 0; font-size: 1.5rem; }
+  .cta-box p { color: var(--color-text-light); margin-bottom: 1.5rem; }
+  .back-link { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #eee; }
+  .back-link a { color: var(--color-primary); font-weight: 600; font-size: 0.9375rem; }
+</style>

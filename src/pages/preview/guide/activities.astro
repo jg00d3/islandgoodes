@@ -1,0 +1,234 @@
+---
+import PreviewLayout from '../../../layouts/PreviewLayout.astro';
+
+const title = "Big Island Activities | Island Goodes Destination Guide";
+const description = "Discover the best activities on Hawaii's Big Island. Snorkeling, stargazing, zip-lining, coffee tours, and unique Hawaiian experiences.";
+
+const activities = [
+  {
+    name: "Mauna Kea Stargazing",
+    category: "Adventure",
+    description: "World-class stargazing at nearly 14,000 feet, above 40% of Earth's atmosphere. Free nightly stargazing programs at the Visitor Information Station (9,200 ft) from 6-10pm.",
+    tips: ["Arrive early to acclimatize at Visitor Station", "Dress VERY warmly - temps drop below freezing", "Don't go with respiratory/heart issues", "4WD needed for summit, not for Visitor Station"],
+    bestTime: "New moon nights for darkest skies",
+    image: "/images/blog/mauna-kea.jpg"
+  },
+  {
+    name: "Snorkeling",
+    category: "Water Sports",
+    description: "Richardson Ocean Park is Hilo's best-protected snorkeling spot. For world-class snorkeling, day-trip to Kealakekua Bay or Two-Step (Honaunau) on the Kona side.",
+    tips: ["Go early morning before winds pick up (around noon)", "Stay 10ft from sea turtles ($1,000+ fines)", "Kona side has better visibility", "Bring your own gear or rent locally"],
+    bestTime: "Year-round, early mornings",
+    image: "/images/blog/snorkeling.jpg"
+  },
+  {
+    name: "Manta Ray Night Dive",
+    category: "Adventure",
+    description: "Called 'the best night dive in the world.' Kona has ~250 manta rays with a 96% sighting rate at Manta Village. Watch rays somersault while feeding on plankton!",
+    tips: ["Book in advance - very popular", "Snorkeling option available (no experience needed)", "Diving requires certification + 25 logged dives", "1.5-2 hours from Hilo to Kona operators"],
+    bestTime: "Year-round, nightly tours",
+    operators: ["Big Island Divers", "Manta Ray Dives of Hawaii", "Jack's Diving Locker"],
+    image: "/images/hero-ocean-view.jpg"
+  },
+  {
+    name: "Zip-Lining",
+    category: "Adventure",
+    description: "Hawaii Zipline Tours near Akaka Falls was voted #1 in Hawaii - soar over 250-ft Kolekole Waterfall! The Umauma Experience features 9 lines over 14 waterfalls.",
+    tips: ["Weight limits typically 70-260 lbs", "Closed-toe shoes required", "Book in advance during peak season", "Bring sunscreen - most lines are exposed"],
+    bestTime: "Morning before afternoon showers",
+    operators: ["Hawaii Zipline Tours (near Akaka Falls)", "Umauma Experience (14 waterfalls)", "Kohala Zipline (canopy tour)"],
+    image: "/images/hero.jpg"
+  },
+  {
+    name: "Kona Coffee Farm Tours",
+    category: "Cultural",
+    description: "Visit the famous Kona coffee belt (1.5 hrs from Hilo). Greenwell Farms was voted Hawaii's Best Farm Tour 2021-2025. Many offer free tours and tastings!",
+    tips: ["Book tours in advance", "Buy beans direct - fresher and often cheaper", "Best seasons: Feb-Mar (blossoms), Aug-Jan (harvest)", "Go before noon for best weather"],
+    bestTime: "Year-round, mornings",
+    operators: ["Greenwell Farms (free tours)", "Kona Joe Coffee", "Mountain Thunder", "Heavenly Hawaiian"],
+    image: "/images/blog/coffee-farm.jpg"
+  },
+  {
+    name: "Kayaking & SUP",
+    category: "Water Sports",
+    description: "Explore Hilo Bay by kayak or stand-up paddleboard. Calm morning waters are perfect for beginners. Watch for sea turtles, dolphins, and occasional whales!",
+    tips: ["Rent from shops near Hilo Bay", "Go early for flattest water", "Bring reef-safe sunscreen", "Stay 10ft from marine life"],
+    bestTime: "Early morning",
+    image: "/images/rooms/hilo-bay/lanai.jpg"
+  },
+  {
+    name: "Whale Watching",
+    category: "Wildlife",
+    description: "Humpback whales visit Hawaii December-April to breed and nurse. Peak season is January-March. Boat tours offer close encounters, or watch from shore with binoculars.",
+    tips: ["Book tours in advance during peak season", "Binoculars helpful for shore viewing", "Our Hilo Bay Room offers occasional sightings!", "East side has fewer tour operators - Kona has more options"],
+    bestTime: "December - April (peak: Jan-Mar)",
+    image: "/images/blog/whale-watching.jpg"
+  },
+  {
+    name: "Helicopter Tours",
+    category: "Adventure",
+    description: "See the Big Island's dramatic landscapes from above - active volcanoes, remote waterfalls, and coastline inaccessible any other way. Truly unforgettable!",
+    tips: ["Doors-off tours offer best photos", "Morning flights have clearer skies", "Book window seats in advance", "Some tours land at remote sites"],
+    bestTime: "Morning for clearest conditions",
+    image: "/images/blog/volcanoes.jpg"
+  },
+  {
+    name: "Hawaii Volcanoes National Park",
+    category: "Must-Do",
+    description: "Just 45 minutes from Island Goodes! Walk through lava tubes, hike across crater floors, and witness volcanic landscapes found nowhere else on Earth.",
+    tips: ["$30/vehicle (7-day pass)", "Kilauea Iki Trail voted best hike on Big Island", "Pack layers - summit is 4,000 ft and cooler", "Visitor Center closed until 2026 - use KMC welcome center"],
+    bestTime: "Early morning or sunset",
+    image: "/images/blog/volcanoes.jpg"
+  }
+];
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="page-hero">
+    <div class="page-hero-bg">
+      <img src="/images/blog/mauna-kea.jpg" alt="Stargazing on Mauna Kea" />
+    </div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <nav class="breadcrumb">
+        <a href="/preview">Home</a> / <a href="/preview/guide">Guide</a> / Activities
+      </nav>
+      <h1>Big Island Activities</h1>
+      <p class="tagline">Adventures & experiences across the island</p>
+    </div>
+  </section>
+
+  <section class="intro-section">
+    <div class="container">
+      <p class="lead">
+        From stargazing atop Mauna Kea to snorkeling with sea turtles, the Big Island offers incredible adventures
+        for every interest. Here are our favorite activities, all accessible from Island Goodes.
+      </p>
+    </div>
+  </section>
+
+  <section class="activities-section">
+    <div class="container">
+      <div class="activities-grid">
+        {activities.map(activity => (
+          <div class="activity-card">
+            <div class="activity-image">
+              <img src={activity.image} alt={activity.name} loading="lazy" />
+              <span class="category-badge">{activity.category}</span>
+            </div>
+            <div class="activity-content">
+              <h2>{activity.name}</h2>
+              <p>{activity.description}</p>
+              <div class="activity-meta">
+                <div class="best-time">
+                  <strong>Best Time:</strong> {activity.bestTime}
+                </div>
+                <div class="tips">
+                  <strong>Tips:</strong>
+                  <ul>
+                    {activity.tips.map(tip => <li>{tip}</li>)}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="more-section">
+    <div class="container">
+      <div class="section-header center">
+        <span class="section-subtitle">Explore More</span>
+        <h2>Other Guide Categories</h2>
+      </div>
+      <div class="more-grid">
+        <a href="/preview/guide/attractions" class="more-card">
+          <span class="more-icon">🌋</span>
+          <h3>Attractions</h3>
+          <p>Volcanoes & waterfalls</p>
+        </a>
+        <a href="/preview/guide/beaches" class="more-card">
+          <span class="more-icon">🏖️</span>
+          <h3>Beaches</h3>
+          <p>Sand & swimming spots</p>
+        </a>
+        <a href="/preview/guide/food" class="more-card">
+          <span class="more-icon">🍍</span>
+          <h3>Food & Dining</h3>
+          <p>Local restaurants & markets</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Stay at Island Goodes</h2>
+        <p>Your perfect base for Big Island adventures</p>
+        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-secondary btn-large" target="_blank" rel="noopener">Book Your Stay</a>
+      </div>
+    </div>
+  </section>
+</PreviewLayout>
+
+<style>
+  .page-hero { position: relative; min-height: 50vh; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; padding: 10rem 2rem 4rem; }
+  .page-hero-bg { position: absolute; inset: 0; z-index: -2; }
+  .page-hero-bg img { width: 100%; height: 100%; object-fit: cover; }
+  .page-hero-overlay { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%); }
+  .page-hero-content { max-width: 800px; }
+  .page-hero h1 { font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 0.5rem; }
+  .tagline { font-size: 1.25rem; opacity: 0.9; }
+
+  .intro-section { padding: 4rem 0 2rem; text-align: center; }
+  .lead { font-size: 1.25rem; color: var(--color-text-light); line-height: 1.9; max-width: 800px; margin: 0 auto; }
+
+  .activities-section { padding: 2rem 0 var(--section-padding); }
+
+  .activities-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+
+  .activity-card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 25px rgba(0,0,0,0.06); transition: var(--transition-base); }
+  .activity-card:hover { transform: translateY(-5px); box-shadow: 0 12px 35px rgba(0,0,0,0.12); }
+
+  .activity-image { position: relative; height: 200px; }
+  .activity-image img { width: 100%; height: 100%; object-fit: cover; }
+  .category-badge { position: absolute; top: 1rem; left: 1rem; background: var(--color-secondary); color: #1a1a1a; padding: 0.375rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+
+  .activity-content { padding: 1.5rem; }
+  .activity-content h2 { color: var(--color-text); font-size: 1.375rem; margin-bottom: 0.75rem; }
+  .activity-content > p { color: var(--color-text-light); line-height: 1.7; margin-bottom: 1.25rem; }
+
+  .activity-meta { border-top: 1px solid #eee; padding-top: 1rem; }
+  .best-time { margin-bottom: 0.75rem; font-size: 0.9375rem; color: var(--color-text-light); }
+  .best-time strong { color: var(--color-primary); }
+  .tips strong { display: block; color: var(--color-text); font-size: 0.9375rem; margin-bottom: 0.5rem; }
+  .tips ul { list-style: none; }
+  .tips li { font-size: 0.875rem; color: var(--color-text-light); padding: 0.25rem 0; padding-left: 1rem; position: relative; }
+  .tips li::before { content: "•"; color: var(--color-secondary); position: absolute; left: 0; }
+
+  .more-section { padding: var(--section-padding) 0; background: var(--color-bg-alt); }
+  .section-header { margin-bottom: 2rem; }
+  .section-header.center { text-align: center; }
+  .section-subtitle { display: inline-block; color: var(--color-primary); font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+  .section-header h2 { font-size: 2rem; color: var(--color-text); }
+
+  .more-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; max-width: 900px; margin: 0 auto; }
+  .more-card { background: #fff; padding: 2rem; border-radius: 16px; text-align: center; text-decoration: none; transition: var(--transition-base); }
+  .more-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+  .more-icon { font-size: 2rem; margin-bottom: 1rem; display: block; }
+  .more-card h3 { color: var(--color-text); margin-bottom: 0.25rem; }
+  .more-card p { color: var(--color-text-light); font-size: 0.875rem; }
+
+  .cta-section { background: var(--gradient-primary); padding: 5rem 2rem; text-align: center; }
+  .cta-content { max-width: 600px; margin: 0 auto; }
+  .cta-section h2 { color: #fff; font-size: 2.25rem; margin-bottom: 0.75rem; }
+  .cta-section p { color: rgba(255,255,255,0.9); font-size: 1.125rem; margin-bottom: 2rem; }
+
+  @media (max-width: 768px) {
+    .activities-grid { grid-template-columns: 1fr; }
+    .more-grid { grid-template-columns: 1fr; }
+  }
+</style>

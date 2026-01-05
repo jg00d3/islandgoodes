@@ -1,0 +1,341 @@
+---
+import PreviewLayout from '../../layouts/PreviewLayout.astro';
+
+const title = "Photo Gallery | Island Goodes";
+const description = "Browse photos of Island Goodes rooms, ocean views, pool, and property. Adults-only accommodation near Hilo, Hawaii.";
+
+// Gallery images organized by category
+const galleryImages = [
+  // Property
+  { src: "/images/property/pool.jpg", alt: "Swimming pool at Island Goodes", category: "Property" },
+  { src: "/images/property/hot-tub.jpg", alt: "Hot tub at Island Goodes", category: "Property" },
+  { src: "/images/rooms/hilo-bay/lanai.jpg", alt: "Ocean view from lanai", category: "Views" },
+  // Hilo Bay Room
+  { src: "/images/rooms/hilo-bay/bed.jpg", alt: "Hilo Bay Room - Sleep Number bed", category: "Hilo Bay Room" },
+  { src: "/images/rooms/hilo-bay/bathroom.jpg", alt: "Hilo Bay Room - Bathroom", category: "Hilo Bay Room" },
+  { src: "/images/rooms/hilo-bay/coffee.jpg", alt: "Hilo Bay Room - Coffee station", category: "Hilo Bay Room" },
+  // Mauna Kea Room
+  { src: "/images/rooms/mauna-kea/bed.jpg", alt: "Mauna Kea Room - Sleep Number bed", category: "Mauna Kea Room" },
+  { src: "/images/rooms/mauna-kea/bathroom.jpg", alt: "Mauna Kea Room - Bathroom", category: "Mauna Kea Room" },
+  { src: "/images/rooms/mauna-kea/lanai.jpg", alt: "Mauna Kea Room - Lanai", category: "Mauna Kea Room" },
+  // Ginger Room
+  { src: "/images/rooms/ginger/room.jpg", alt: "Ginger Room - Sleep Number bed", category: "Ginger Room" },
+  { src: "/images/rooms/ginger/bathroom.jpg", alt: "Ginger Room - Bathroom", category: "Ginger Room" },
+  { src: "/images/rooms/ginger/coffee.jpg", alt: "Ginger Room - Coffee station", category: "Ginger Room" },
+  // Orchid Room
+  { src: "/images/rooms/orchid/bed.jpg", alt: "Orchid Room - Sleep Number bed", category: "Orchid Room" },
+  { src: "/images/rooms/orchid/bathroom.jpg", alt: "Orchid Room - Bathroom", category: "Orchid Room" },
+  { src: "/images/rooms/orchid/lanai.jpg", alt: "Orchid Room - Lanai", category: "Orchid Room" },
+];
+
+const categories = [...new Set(galleryImages.map(img => img.category))];
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="page-hero">
+    <div class="page-hero-bg">
+      <img src="/images/hero.jpg" alt="Island Goodes property" />
+    </div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <nav class="breadcrumb">
+        <a href="/preview">Home</a> / Gallery
+      </nav>
+      <h1>Photo Gallery</h1>
+      <p class="tagline">Take a virtual tour of Island Goodes</p>
+    </div>
+  </section>
+
+  <section class="gallery-section">
+    <div class="container">
+      <div class="gallery-intro">
+        <p>Browse photos of our rooms, amenities, and stunning views. For a complete interactive tour, try our <a href="https://my.matterport.com/show/?m=zrMG54r6RUx" target="_blank" rel="noopener">3D Room Tour</a>.</p>
+      </div>
+
+      <div class="filter-tabs">
+        <button class="filter-btn active" data-filter="all">All</button>
+        {categories.map((category) => (
+          <button class="filter-btn" data-filter={category}>{category}</button>
+        ))}
+      </div>
+
+      <div class="gallery-grid">
+        {galleryImages.map((image) => (
+          <div class="gallery-item" data-category={image.category}>
+            <img src={image.src} alt={image.alt} loading="lazy" />
+            <div class="gallery-overlay">
+              <span class="category">{image.category}</span>
+              <span class="view-icon">🔍</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="virtual-tour">
+        <div class="tour-content">
+          <div class="tour-icon">🏠</div>
+          <h2>3D Virtual Tour</h2>
+          <p>Experience Island Goodes like you're really here with our interactive Matterport 3D tour. Walk through our rooms and property from anywhere in the world.</p>
+          <a href="https://my.matterport.com/show/?m=zrMG54r6RUx" target="_blank" rel="noopener" class="btn btn-primary btn-large">Launch 3D Tour</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Ready to Visit?</h2>
+        <p>Book your stay and experience Island Goodes in person</p>
+        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-secondary btn-large" target="_blank" rel="noopener">Book Now</a>
+      </div>
+    </div>
+  </section>
+</PreviewLayout>
+
+<style>
+  .page-hero {
+    position: relative;
+    min-height: 45vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    padding: 10rem 2rem 4rem;
+  }
+
+  .page-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .page-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .page-hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%);
+  }
+
+  .page-hero-content {
+    max-width: 800px;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .tagline {
+    font-size: 1.25rem;
+    opacity: 0.9;
+  }
+
+  .gallery-section {
+    padding: var(--section-padding) 0;
+  }
+
+  .gallery-intro {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.125rem;
+    color: var(--color-text-light);
+  }
+
+  .gallery-intro a {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .filter-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .filter-btn {
+    padding: 0.625rem 1.25rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 50px;
+    background: #fff;
+    color: var(--color-text-light);
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: var(--transition-base);
+  }
+
+  .filter-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .filter-btn.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+  }
+
+  .gallery-item {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    cursor: pointer;
+  }
+
+  .gallery-item.hidden {
+    display: none;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .gallery-item:hover img {
+    transform: scale(1.08);
+  }
+
+  .gallery-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(transparent 50%, rgba(0,0,0,0.7));
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .gallery-item:hover .gallery-overlay {
+    opacity: 1;
+  }
+
+  .gallery-overlay .category {
+    color: #fff;
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  .gallery-overlay .view-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .gallery-item:hover .view-icon {
+    opacity: 1;
+  }
+
+  .virtual-tour {
+    background: linear-gradient(135deg, var(--color-bg-alt) 0%, rgba(27, 107, 90, 0.08) 100%);
+    padding: 3.5rem;
+    border-radius: 20px;
+    text-align: center;
+  }
+
+  .tour-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .virtual-tour h2 {
+    color: var(--color-text);
+    margin-bottom: 1rem;
+    font-size: 1.75rem;
+  }
+
+  .virtual-tour p {
+    margin-bottom: 2rem;
+    color: var(--color-text-light);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.7;
+  }
+
+  .cta-section {
+    background: var(--gradient-primary);
+    padding: 5rem 2rem;
+    text-align: center;
+  }
+
+  .cta-content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .cta-section h2 {
+    color: #fff;
+    font-size: 2.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .cta-section p {
+    color: rgba(255,255,255,0.9);
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .filter-tabs {
+      gap: 0.5rem;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      font-size: 0.8125rem;
+    }
+
+    .virtual-tour {
+      padding: 2rem;
+    }
+  }
+</style>
+
+<script>
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const galleryItems = document.querySelectorAll('.gallery-item');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.getAttribute('data-filter');
+
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      galleryItems.forEach(item => {
+        const category = item.getAttribute('data-category');
+        if (filter === 'all' || category === filter) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>

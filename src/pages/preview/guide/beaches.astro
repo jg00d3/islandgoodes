@@ -1,0 +1,285 @@
+---
+import PreviewLayout from '../../../layouts/PreviewLayout.astro';
+
+const title = "Big Island Beaches & Swimming | Island Goodes Destination Guide";
+const description = "Discover the best beaches on Hawaii's Big Island. Black sand beaches, swimming spots, tide pools, and sea turtle viewing areas near Hilo.";
+
+const beaches = [
+  {
+    name: "Punalu'u Black Sand Beach",
+    type: "Black Sand",
+    distance: "1.5 hours from Island Goodes",
+    description: "Hawaii's most famous black sand beach with jet-black basalt sand. Green and endangered Hawksbill turtles regularly bask on the warm sand - best viewing 11am-6pm.",
+    highlights: ["Sea turtles (daily!)", "Coconut palms", "Dramatic black sand", "Lifeguard 8:30am-5pm"],
+    tip: "Stay 10+ feet from turtles - fines range from $1,000-$10,500. Never touch or feed them!",
+    swimmable: false,
+    turtleViewing: true
+  },
+  {
+    name: "Richardson Ocean Park",
+    type: "Snorkeling",
+    distance: "5 miles from Island Goodes",
+    description: "Hilo's best-protected snorkeling spot with a calm cove. Mix of black and green sand (from olivine minerals). Sea turtles are very common here!",
+    highlights: ["Sea turtles (common)", "Calm waters", "Tide pools", "Eastern sunrise views"],
+    tip: "Go early morning before winds pick up around noon. Left side has the best snorkeling.",
+    swimmable: true,
+    turtleViewing: true
+  },
+  {
+    name: "Carlsmith Beach Park (Four Mile)",
+    type: "Family Beach",
+    distance: "4 miles from Island Goodes",
+    description: "Multiple volcanic rock pools create magical swimming spots. Outer reef protection makes it calm even when other beaches are rough. Sea turtles frequently visit!",
+    highlights: ["Protected lagoon", "Multiple pools", "Sea turtles", "Family-friendly"],
+    tip: "Best at low tide. The water is spring-fed - refreshingly cool on hot days.",
+    swimmable: true,
+    turtleViewing: true
+  },
+  {
+    name: "Onekahakaha Beach Park",
+    type: "Family Beach",
+    distance: "2 miles from Island Goodes",
+    description: "Safest swimming on the Hilo coast! Man-made breakwater creates a shallow pool perfect for children. Lifeguards on weekends/holidays 9:30am-4:45pm.",
+    highlights: ["Protected cove", "Lifeguards", "Shallow for kids", "Restrooms & picnic areas"],
+    tip: "Perfect for young children. Sandy area is on the left side of the park.",
+    swimmable: true,
+    turtleViewing: false
+  },
+  {
+    name: "Kehena Beach",
+    type: "Black Sand",
+    distance: "45 minutes from Island Goodes",
+    description: "Softest black sand on the island. Wild dolphins often swim close to shore in the mornings. Note: This is a clothing-optional beach popular with locals.",
+    highlights: ["Wild dolphins", "Soft black sand", "Local vibe", "Sunrise views"],
+    tip: "Strong currents - experienced swimmers only. Steep trail down requires fitness.",
+    swimmable: "Experienced only",
+    turtleViewing: false
+  },
+  {
+    name: "Honoli'i Beach Park",
+    type: "Surfing",
+    distance: "2 miles from Island Goodes",
+    description: "Hilo's premier surfing beach. Watch skilled local surfers catch waves. Calm area at river/ocean junction can be good for kids when conditions are right.",
+    highlights: ["Great surfing", "Local surfers", "Scenic black sand", "River mouth"],
+    tip: "Not for swimming due to currents. Perfect spot to watch surfers and take photos!",
+    swimmable: false,
+    turtleViewing: false
+  },
+  {
+    name: "Papakōlea Green Sand Beach",
+    type: "Green Sand",
+    distance: "2+ hours from Island Goodes",
+    description: "One of only FOUR green sand beaches in the entire world! Green color from olivine crystals in the volcanic cinder cone. 5.5-mile round trip hike.",
+    highlights: ["World-rare green sand", "Stunning scenery", "Adventure hike (2-2.5 hrs)"],
+    tip: "Bring LOTS of water - no shade on trail. Local shuttles ($20-30) available but hiking is the legal option.",
+    swimmable: "Dangerous currents",
+    turtleViewing: false
+  },
+  {
+    name: "Pololu Valley Beach",
+    type: "Black Sand",
+    distance: "1.5 hours from Island Goodes",
+    description: "Dramatic black sand beach at the end of the Kohala coast. Breathtaking valley views with 2,000-foot cliffs. 25-minute steep hike down.",
+    highlights: ["Dramatic cliffs", "Lush valley", "Photography paradise", "Adventure hike"],
+    tip: "The lookout alone is worth the drive! Beach is for photos, not swimming (dangerous currents).",
+    swimmable: false,
+    turtleViewing: false
+  },
+  {
+    name: "Kua Bay (Manini'owali)",
+    type: "White Sand",
+    distance: "1.5 hours from Island Goodes",
+    description: "Stunning white sand beach on the Kona side. Crystal-clear turquoise water - like a postcard! Worth the drive for a proper sandy beach day.",
+    highlights: ["White sand", "Clear turquoise water", "Great snorkeling", "Sunset views"],
+    tip: "Crowded on weekends. Arrive early for parking. No vendors - bring everything you need.",
+    swimmable: true,
+    turtleViewing: false
+  }
+];
+
+const turtleGuidelines = [
+  "Stay at least 10 feet away - it's the law",
+  "Never touch, chase, harass, or feed sea turtles",
+  "Best viewing times: Noon-5pm when turtles bask in the sun",
+  "Most active season: May-October (mating/nesting)",
+  "Fines for harassment: $1,000-$10,500"
+];
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="page-hero">
+    <div class="page-hero-bg">
+      <img src="/images/blog/black-sand-beach.jpg" alt="Black sand beach on the Big Island" />
+    </div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <nav class="breadcrumb">
+        <a href="/preview">Home</a> / <a href="/preview/guide">Guide</a> / Beaches
+      </nav>
+      <h1>Big Island Beaches</h1>
+      <p class="tagline">Black sand, green sand & swimming spots</p>
+    </div>
+  </section>
+
+  <section class="intro-section">
+    <div class="container">
+      <p class="lead">
+        The Big Island's beaches are unlike anywhere else in the world. From jet-black volcanic sand to rare green olivine beaches,
+        you'll find diverse shorelines within easy reach of Island Goodes. Here are our favorites for swimming, snorkeling, and exploring.
+      </p>
+    </div>
+  </section>
+
+  <section class="beaches-section">
+    <div class="container">
+      {beaches.map((beach, index) => (
+        <div class={`beach-card ${index % 2 === 1 ? 'reverse' : ''}`}>
+          <div class="beach-image">
+            <span class="beach-type">{beach.type}</span>
+            <div class="swim-status" data-swimmable={beach.swimmable.toString()}>
+              {beach.swimmable === true ? '✓ Swimmable' : beach.swimmable === false ? '✗ Not for swimming' : '⚠ ' + beach.swimmable}
+            </div>
+          </div>
+          <div class="beach-content">
+            <span class="distance">{beach.distance}</span>
+            <h2>{beach.name}</h2>
+            <p>{beach.description}</p>
+            <div class="highlights">
+              {beach.highlights.map(h => <span class="highlight-tag">{h}</span>)}
+            </div>
+            <div class="tip">
+              <strong>Local Tip:</strong> {beach.tip}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="turtle-section">
+    <div class="container">
+      <div class="turtle-card">
+        <div class="turtle-icon">🐢</div>
+        <h2>Sea Turtle Viewing Guidelines</h2>
+        <p class="turtle-intro">The Big Island is home to green sea turtles (honu) and endangered Hawksbill turtles. Here's how to enjoy them responsibly:</p>
+        <ul class="turtle-rules">
+          {turtleGuidelines.map(rule => <li>{rule}</li>)}
+        </ul>
+        <div class="turtle-spots">
+          <strong>Best Turtle Viewing Spots Near Hilo:</strong>
+          <span>Richardson Ocean Park • Carlsmith Beach • Punalu'u Black Sand Beach</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="safety-section">
+    <div class="container">
+      <div class="safety-card">
+        <h2>Beach Safety Tips</h2>
+        <div class="safety-grid">
+          <div class="safety-item">
+            <span class="safety-icon">🌊</span>
+            <h3>Check Conditions</h3>
+            <p>Ocean conditions change quickly. When in doubt, don't go out.</p>
+          </div>
+          <div class="safety-item">
+            <span class="safety-icon">🐢</span>
+            <h3>Respect Wildlife</h3>
+            <p>Keep 10+ feet from sea turtles and seals. Never touch or feed them.</p>
+          </div>
+          <div class="safety-item">
+            <span class="safety-icon">☀️</span>
+            <h3>Sun Protection</h3>
+            <p>Use reef-safe sunscreen. The Hawaiian sun is intense!</p>
+          </div>
+          <div class="safety-item">
+            <span class="safety-icon">🚫</span>
+            <h3>No Lifeguards</h3>
+            <p>Many beaches have no lifeguards. Swim with a buddy.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Stay at Island Goodes</h2>
+        <p>Minutes from Hilo's best beaches</p>
+        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-secondary btn-large" target="_blank" rel="noopener">Book Your Stay</a>
+      </div>
+    </div>
+  </section>
+</PreviewLayout>
+
+<style>
+  .page-hero { position: relative; min-height: 50vh; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; padding: 10rem 2rem 4rem; }
+  .page-hero-bg { position: absolute; inset: 0; z-index: -2; background: linear-gradient(135deg, #1a1a1a 0%, #333 100%); }
+  .page-hero-bg img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+  .page-hero-overlay { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%); }
+  .page-hero-content { max-width: 800px; }
+  .page-hero h1 { font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 0.5rem; }
+  .tagline { font-size: 1.25rem; opacity: 0.9; }
+
+  .intro-section { padding: 4rem 0 2rem; text-align: center; }
+  .lead { font-size: 1.25rem; color: var(--color-text-light); line-height: 1.9; max-width: 800px; margin: 0 auto; }
+
+  .beaches-section { padding: 2rem 0 var(--section-padding); }
+
+  .beach-card { display: grid; grid-template-columns: 300px 1fr; gap: 2rem; align-items: center; margin-bottom: 3rem; padding-bottom: 3rem; border-bottom: 1px solid #eee; }
+  .beach-card:last-child { border-bottom: none; }
+  .beach-card.reverse { grid-template-columns: 1fr 300px; }
+  .beach-card.reverse .beach-image { order: 2; }
+
+  .beach-image { position: relative; background: linear-gradient(135deg, #1a1a1a 0%, #444 100%); border-radius: 16px; height: 200px; display: flex; align-items: center; justify-content: center; }
+  .beach-type { position: absolute; top: 1rem; left: 1rem; background: var(--color-secondary); color: #1a1a1a; padding: 0.375rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+  .swim-status { position: absolute; bottom: 1rem; left: 1rem; padding: 0.375rem 0.875rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; background: rgba(0,0,0,0.7); color: #fff; }
+  .swim-status[data-swimmable="true"] { background: rgba(27, 107, 90, 0.9); }
+  .swim-status[data-swimmable="false"] { background: rgba(180, 60, 60, 0.9); }
+
+  .beach-content .distance { display: inline-block; color: var(--color-primary); font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .beach-content h2 { color: var(--color-text); font-size: 1.5rem; margin-bottom: 0.75rem; }
+  .beach-content > p { color: var(--color-text-light); line-height: 1.8; margin-bottom: 1rem; }
+
+  .highlights { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+  .highlight-tag { background: var(--color-bg-alt); padding: 0.375rem 0.875rem; border-radius: 50px; font-size: 0.8125rem; color: var(--color-text-light); }
+
+  .tip { background: linear-gradient(135deg, var(--color-bg-alt) 0%, rgba(27, 107, 90, 0.08) 100%); padding: 1rem; border-radius: 12px; font-size: 0.9375rem; color: var(--color-text-light); }
+  .tip strong { color: var(--color-primary); }
+
+  .turtle-section { padding: var(--section-padding) 0; }
+  .turtle-card { background: linear-gradient(135deg, var(--color-primary) 0%, #0F4A3E 100%); padding: 3rem; border-radius: 20px; color: #fff; text-align: center; max-width: 800px; margin: 0 auto; }
+  .turtle-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .turtle-card h2 { margin-bottom: 1rem; }
+  .turtle-intro { opacity: 0.9; margin-bottom: 1.5rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+  .turtle-rules { list-style: none; text-align: left; max-width: 500px; margin: 0 auto 1.5rem; }
+  .turtle-rules li { padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-left: 1.5rem; position: relative; }
+  .turtle-rules li:last-child { border-bottom: none; }
+  .turtle-rules li::before { content: "✓"; position: absolute; left: 0; color: var(--color-secondary-light); font-weight: 600; }
+  .turtle-spots { background: rgba(255,255,255,0.1); padding: 1rem 1.5rem; border-radius: 12px; margin-top: 1rem; }
+  .turtle-spots strong { display: block; margin-bottom: 0.5rem; color: var(--color-secondary-light); }
+  .turtle-spots span { opacity: 0.9; font-size: 0.9375rem; }
+
+  .safety-section { padding: var(--section-padding) 0; background: var(--color-bg-alt); }
+  .safety-card { background: #fff; padding: 3rem; border-radius: 20px; max-width: 900px; margin: 0 auto; }
+  .safety-card h2 { text-align: center; color: var(--color-text); margin-bottom: 2rem; }
+  .safety-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+  .safety-item { text-align: center; }
+  .safety-icon { font-size: 2rem; margin-bottom: 0.75rem; display: block; }
+  .safety-item h3 { color: var(--color-text); font-size: 1rem; margin-bottom: 0.5rem; }
+  .safety-item p { font-size: 0.875rem; color: var(--color-text-light); }
+
+  .cta-section { background: var(--gradient-primary); padding: 5rem 2rem; text-align: center; }
+  .cta-content { max-width: 600px; margin: 0 auto; }
+  .cta-section h2 { color: #fff; font-size: 2.25rem; margin-bottom: 0.75rem; }
+  .cta-section p { color: rgba(255,255,255,0.9); font-size: 1.125rem; margin-bottom: 2rem; }
+
+  @media (max-width: 768px) {
+    .beach-card { grid-template-columns: 1fr; }
+    .beach-card.reverse { grid-template-columns: 1fr; }
+    .beach-card.reverse .beach-image { order: 0; }
+    .safety-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
