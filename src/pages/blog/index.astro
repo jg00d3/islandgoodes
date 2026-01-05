@@ -11,28 +11,32 @@ const posts = [
     title: "Hawaii Volcanoes National Park: Complete Visitor's Guide",
     excerpt: "Everything you need to know about visiting one of the world's most unique national parks, just 45 minutes from Island Goodes.",
     date: "2025-01-15",
-    category: "Attractions"
+    category: "Attractions",
+    image: "/images/blog/volcanoes.jpg"
   },
   {
     slug: "hamakua-coast-waterfalls",
     title: "The Best Waterfalls on the Hamakua Coast",
     excerpt: "From Rainbow Falls to Akaka Falls, discover the stunning waterfalls along one of Hawaii's most scenic drives.",
     date: "2025-01-10",
-    category: "Nature"
+    category: "Nature",
+    image: "/images/blog/waterfalls.jpg"
   },
   {
     slug: "downtown-hilo-guide",
     title: "A Local's Guide to Downtown Hilo",
     excerpt: "Farmers markets, historic buildings, local restaurants, and hidden gems in Hawaii's most authentic town.",
     date: "2025-01-05",
-    category: "Local Guide"
+    category: "Local Guide",
+    image: "/images/blog/hilo-town.jpg"
   },
   {
     slug: "mauna-kea-stargazing",
     title: "Stargazing on Mauna Kea: What to Know Before You Go",
     excerpt: "Tips for experiencing world-class stargazing at 13,800 feet, from the best times to visit to what to bring.",
     date: "2025-01-01",
-    category: "Activities"
+    category: "Activities",
+    image: "/images/blog/mauna-kea.jpg"
   }
 ];
 ---
@@ -55,9 +59,10 @@ const posts = [
       <div class="blog-grid">
         {posts.map(post => (
           <article class="blog-card">
-            <div class="blog-image">
+            <a href={`/blog/${post.slug}`} class="blog-image">
+              <img src={post.image} alt={post.title} loading="lazy" />
               <span class="category">{post.category}</span>
-            </div>
+            </a>
             <div class="blog-content">
               <time datetime={post.date}>{new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</time>
               <h2><a href={`/blog/${post.slug}`}>{post.title}</a></h2>
@@ -157,9 +162,21 @@ const posts = [
   }
 
   .blog-image {
+    display: block;
     height: 180px;
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
     position: relative;
+    overflow: hidden;
+  }
+
+  .blog-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+  }
+
+  .blog-card:hover .blog-image img {
+    transform: scale(1.05);
   }
 
   .category {
