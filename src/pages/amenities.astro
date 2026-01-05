@@ -1,0 +1,298 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = "Amenities";
+const description = "Island Goodes B&B amenities include gourmet breakfast, hot tub, free WiFi, free parking, Sleep Number beds, private lanais with ocean views, and more. Near Hilo, Hawaii.";
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="page-hero">
+    <div class="hero-content">
+      <h1>Amenities</h1>
+      <p>Everything you need for a comfortable, relaxing stay</p>
+    </div>
+  </section>
+
+  <section class="amenities-section">
+    <div class="container">
+      <div class="amenity-category">
+        <h2>Room Amenities</h2>
+        <div class="amenities-grid">
+          <div class="amenity-card">
+            <h3>Sleep Number Beds</h3>
+            <p>Adjustable comfort beds in every room so you can find your perfect sleep setting.</p>
+          </div>
+          <div class="amenity-card">
+            <h3>Premium Linens</h3>
+            <p>High thread count sheets and plush towels for a luxurious experience.</p>
+          </div>
+          <div class="amenity-card">
+            <h3>Private Bathroom</h3>
+            <p>Each room has its own private en-suite bathroom - no shared facilities.</p>
+          </div>
+          <div class="amenity-card">
+            <h3>Private Lanai</h3>
+            <p>Your own outdoor space to enjoy morning coffee or evening relaxation.</p>
+          </div>
+          <div class="amenity-card">
+            <h3>Air Conditioning</h3>
+            <p>Individual climate control in each room for your comfort.</p>
+          </div>
+          <div class="amenity-card">
+            <h3>Flat Screen TV</h3>
+            <p>Satellite TV with a wide selection of channels.</p>
+          </div>
+          <div class="amenity-card">
+            <h3>Mini Refrigerator</h3>
+            <p>Keep your drinks and snacks cold right in your room.</p>
+          </div>
+          <div class="amenity-card">
+            <h3>Coffee Maker</h3>
+            <p>In-room coffee maker with locally roasted Hawaiian coffee.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="amenity-category">
+        <h2>Property Amenities</h2>
+        <div class="amenities-grid">
+          <div class="amenity-card featured">
+            <h3>Gourmet Breakfast</h3>
+            <p>Start each day with a delicious breakfast featuring fresh local fruits, delivered directly to your room. No crowded breakfast rooms - just peaceful dining on your private lanai.</p>
+          </div>
+          <div class="amenity-card featured">
+            <h3>Hot Tub / Spa</h3>
+            <p>Relax in our outdoor hot tub surrounded by tropical gardens. Perfect for unwinding after a day of exploring the Big Island.</p>
+          </div>
+          <div class="amenity-card">
+            <h3>Free WiFi</h3>
+            <p>Complimentary high-speed wireless internet throughout the property.</p>
+          </div>
+          <div class="amenity-card">
+            <h3>Free Parking</h3>
+            <p>Complimentary on-site parking for all guests.</p>
+          </div>
+          <div class="amenity-card">
+            <h3>BBQ Grill</h3>
+            <p>Outdoor barbecue grill available for guest use.</p>
+          </div>
+          <div class="amenity-card">
+            <h3>Tropical Gardens</h3>
+            <p>Stroll through our beautiful gardens featuring orchids, ginger, and native Hawaiian plants.</p>
+          </div>
+          <div class="amenity-card">
+            <h3>Ocean Views</h3>
+            <p>Stunning panoramic views of Hilo Bay and the Pacific Ocean from multiple vantage points.</p>
+          </div>
+          <div class="amenity-card">
+            <h3>Gated Property</h3>
+            <p>Secured by double automatic entry gates for your privacy and security.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="amenity-category">
+        <h2>Services</h2>
+        <div class="amenities-grid">
+          <div class="amenity-card">
+            <h3>Local Knowledge</h3>
+            <p>Your hosts Laura and Garvin know the island inside and out. Get personalized recommendations for restaurants, activities, and hidden gems.</p>
+          </div>
+          <div class="amenity-card">
+            <h3>Activity Planning</h3>
+            <p>We can help you plan day trips to Volcanoes National Park, Mauna Kea, waterfalls, and more.</p>
+          </div>
+          <div class="amenity-card">
+            <h3>Flexible Check-in</h3>
+            <p>We do our best to accommodate early check-in and late check-out when available.</p>
+          </div>
+          <div class="amenity-card">
+            <h3>Personal Service</h3>
+            <p>As a small B&B, we provide attentive, personalized service that large hotels simply can't match.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="virtual-tour">
+    <div class="container">
+      <h2>Take a Virtual Tour</h2>
+      <p>Explore our property from anywhere in the world with our 3D Matterport tour.</p>
+      <a href="https://my.matterport.com/show/?m=example" class="btn btn-outline" target="_blank" rel="noopener">View 3D Tour</a>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <h2>Experience Island Goodes</h2>
+      <p>Book your stay and enjoy all these amenities and more</p>
+      <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary btn-large" target="_blank" rel="noopener">Check Availability</a>
+      <p class="cta-phone">Or call us: <a href="tel:+18089642291">808-964-2291</a></p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/amenities-hero.jpg') center/cover no-repeat;
+    min-height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    padding: 8rem 2rem 4rem;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .amenities-section {
+    padding: 4rem 0;
+  }
+
+  .amenity-category {
+    margin-bottom: 4rem;
+  }
+
+  .amenity-category:last-child {
+    margin-bottom: 0;
+  }
+
+  .amenity-category h2 {
+    text-align: center;
+    color: var(--color-primary-dark);
+    margin-bottom: 2rem;
+    font-size: 1.75rem;
+  }
+
+  .amenities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .amenity-card {
+    background: var(--color-bg-alt);
+    padding: 1.5rem;
+    border-radius: 8px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .amenity-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+
+  .amenity-card.featured {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: #fff;
+    grid-column: span 2;
+  }
+
+  .amenity-card.featured h3 {
+    color: var(--color-secondary);
+  }
+
+  .amenity-card h3 {
+    color: var(--color-primary-dark);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  .amenity-card p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .virtual-tour {
+    background: var(--color-bg-alt);
+    padding: 4rem 0;
+    text-align: center;
+  }
+
+  .virtual-tour h2 {
+    color: var(--color-primary-dark);
+    margin-bottom: 1rem;
+  }
+
+  .virtual-tour p {
+    margin-bottom: 1.5rem;
+    color: var(--color-text-light);
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .btn-primary {
+    background: var(--color-secondary);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #c49943;
+    color: #fff;
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+  }
+
+  .btn-outline:hover {
+    background: var(--color-primary);
+    color: #fff;
+  }
+
+  .btn-large {
+    padding: 1rem 3rem;
+    font-size: 1.1rem;
+  }
+
+  .cta-section {
+    text-align: center;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: #fff;
+    padding: 4rem 2rem;
+  }
+
+  .cta-section h2 {
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-section p {
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-phone {
+    margin-top: 1rem;
+  }
+
+  .cta-phone a {
+    color: var(--color-secondary);
+    font-size: 1.25rem;
+  }
+
+  @media (max-width: 600px) {
+    .amenity-card.featured {
+      grid-column: span 1;
+    }
+  }
+</style>

@@ -1,0 +1,220 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "The Best Waterfalls on the Hamakua Coast";
+const description = "Discover stunning waterfalls along Hawaii's Hamakua Coast including Rainbow Falls, Akaka Falls, and hidden gems. Scenic drives and hiking near Hilo, Big Island.";
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="blog-post">
+    <header class="post-header">
+      <div class="container">
+        <span class="category">Nature</span>
+        <h1>{title}</h1>
+        <p class="excerpt">From Rainbow Falls to Akaka Falls, discover the stunning waterfalls along one of Hawaii's most scenic drives.</p>
+        <time datetime="2025-01-10">January 10, 2025</time>
+      </div>
+    </header>
+
+    <div class="post-content">
+      <div class="container">
+        <p class="lead">
+          The Hamakua Coast is one of the most beautiful stretches of coastline in all of Hawaii. Carved by centuries of rainfall and erosion, this lush region north of Hilo is home to dozens of spectacular waterfalls, many of them easily accessible from the road.
+        </p>
+
+        <h2>Rainbow Falls (Waianuenue)</h2>
+        <p>
+          <strong>Distance from Island Goodes:</strong> 10 minutes<br />
+          <strong>Difficulty:</strong> Easy (viewing platform)
+        </p>
+        <p>
+          Rainbow Falls is Hilo's most famous waterfall, and for good reason. This 80-foot cascade plunges into a natural pool surrounded by wild ginger and tropical foliage. Visit in the morning when the sun hits the mist just right, creating the rainbows that give the falls their name.
+        </p>
+        <p>
+          According to Hawaiian legend, the cave behind the falls is home to Hina, the goddess of the moon. The Hawaiian name "Waianuenue" literally means "rainbow water."
+        </p>
+
+        <h2>Akaka Falls State Park</h2>
+        <p>
+          <strong>Distance from Island Goodes:</strong> 20 minutes<br />
+          <strong>Difficulty:</strong> Easy (0.4-mile loop trail)
+        </p>
+        <p>
+          At 442 feet, Akaka Falls is one of the tallest and most photographed waterfalls in Hawaii. The short loop trail also passes Kahuna Falls (100 feet) and winds through a lush rainforest filled with bamboo, ferns, and tropical flowers.
+        </p>
+        <p>
+          <strong>Pro tip:</strong> Arrive early to avoid tour bus crowds. The parking lot fills up by mid-morning.
+        </p>
+
+        <h2>Pe'epe'e Falls and Boiling Pots</h2>
+        <p>
+          <strong>Distance from Island Goodes:</strong> 12 minutes<br />
+          <strong>Difficulty:</strong> Easy (viewing area)
+        </p>
+        <p>
+          Just upstream from Rainbow Falls, Pe'epe'e Falls cascades into a series of circular pools that appear to "boil" when the water level is high. This is a local favorite spot with great photo opportunities.
+        </p>
+        <p>
+          <em>Safety note:</em> Swimming is dangerous here due to flash flood risks. Enjoy from the viewing area only.
+        </p>
+
+        <h2>Umauma Falls</h2>
+        <p>
+          <strong>Distance from Island Goodes:</strong> 15 minutes<br />
+          <strong>Difficulty:</strong> Easy to moderate
+        </p>
+        <p>
+          This stunning three-tiered waterfall is located on private property at the World Botanical Gardens. Admission includes access to multiple viewing platforms and beautiful gardens. Zipline tours over the falls are also available for the adventurous.
+        </p>
+
+        <h2>Hi'ilawe Falls</h2>
+        <p>
+          <strong>Distance from Island Goodes:</strong> 45 minutes<br />
+          <strong>Difficulty:</strong> Viewpoint only (private land)
+        </p>
+        <p>
+          At 1,450 feet, Hi'ilawe is one of the tallest waterfalls in Hawaii. Located in the stunning Waipio Valley, it's best viewed from the valley lookout. The falls are on private land, so hiking to the base is not permitted without a guide.
+        </p>
+
+        <h2>Scenic Drive Tips</h2>
+        <p>
+          The Hamakua Heritage Corridor (Highway 19) is the main route along the coast. For a more scenic option, take the old Mamalahoa Highway, which winds through small towns and offers more intimate views of the coastline.
+        </p>
+
+        <h3>Suggested Itinerary</h3>
+        <ol>
+          <li>Start with Rainbow Falls early morning (for rainbows)</li>
+          <li>Continue to Akaka Falls State Park</li>
+          <li>Lunch in Honomu town (try Mr. Ed's Bakery)</li>
+          <li>Visit World Botanical Gardens/Umauma Falls</li>
+          <li>End at Waipio Valley Lookout</li>
+        </ol>
+
+        <h2>Best Time to Visit</h2>
+        <p>
+          Waterfalls are most impressive during and after rainy periods. The Hilo side gets more rain than Kona, so you'll almost always find flowing falls. Morning light is best for photography at most locations.
+        </p>
+
+        <div class="cta-box">
+          <h3>Your Waterfall Adventure Awaits</h3>
+          <p>Island Goodes is perfectly located for exploring the Hamakua Coast's waterfalls. Start each day with our gourmet breakfast, then set out on your waterfall adventure.</p>
+          <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary" target="_blank" rel="noopener">Book Your Stay</a>
+        </div>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .post-header {
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/images/blog/waterfalls.jpg') center/cover no-repeat;
+    color: #fff;
+    padding: 10rem 2rem 4rem;
+    text-align: center;
+  }
+
+  .post-header .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .category {
+    background: var(--color-secondary);
+    color: #fff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .post-header h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin: 1rem 0;
+    line-height: 1.2;
+  }
+
+  .excerpt {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 1rem;
+  }
+
+  .post-header time {
+    opacity: 0.8;
+  }
+
+  .post-content {
+    padding: 4rem 2rem;
+  }
+
+  .post-content .container {
+    max-width: 750px;
+    margin: 0 auto;
+  }
+
+  .post-content .lead {
+    font-size: 1.2rem;
+    color: var(--color-text-light);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .post-content h2 {
+    color: var(--color-primary-dark);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .post-content h3 {
+    color: var(--color-primary);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .post-content p {
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+
+  .post-content ul, .post-content ol {
+    margin: 1rem 0 1rem 1.5rem;
+    line-height: 1.8;
+  }
+
+  .post-content li {
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-box {
+    background: var(--color-bg-alt);
+    padding: 2rem;
+    border-radius: 8px;
+    margin-top: 3rem;
+    text-align: center;
+  }
+
+  .cta-box h3 {
+    color: var(--color-primary-dark);
+    margin-top: 0;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    margin-top: 1rem;
+  }
+
+  .btn-primary {
+    background: var(--color-secondary);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #c49943;
+    color: #fff;
+  }
+</style>

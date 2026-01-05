@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = "Page Not Found";
+const description = "The page you're looking for doesn't exist. Return to Island Goodes B&B homepage.";
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="error-page">
+    <div class="container">
+      <h1>404</h1>
+      <p class="error-message">Oops! This page seems to have drifted away like a message in a bottle.</p>
+      <p>The page you're looking for doesn't exist or has been moved.</p>
+      <div class="error-actions">
+        <a href="/" class="btn btn-primary">Return Home</a>
+        <a href="/rooms" class="btn btn-outline">View Our Rooms</a>
+      </div>
+      <div class="helpful-links">
+        <h2>You might be looking for:</h2>
+        <ul>
+          <li><a href="/rooms">Our Rooms & Suites</a></li>
+          <li><a href="/amenities">Amenities</a></li>
+          <li><a href="/location">Location & Directions</a></li>
+          <li><a href="/contact">Contact Us</a></li>
+          <li><a href="https://v2.reservationkey.com/3655/reserve/c" target="_blank" rel="noopener">Book a Room</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .error-page {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+  }
+
+  .container {
+    max-width: 600px;
+  }
+
+  h1 {
+    font-size: 8rem;
+    color: var(--color-primary);
+    margin-bottom: 0;
+    line-height: 1;
+  }
+
+  .error-message {
+    font-size: 1.5rem;
+    color: var(--color-primary-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .error-page > .container > p {
+    color: var(--color-text-light);
+    margin-bottom: 2rem;
+  }
+
+  .error-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .btn-primary {
+    background: var(--color-secondary);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #c49943;
+    color: #fff;
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+  }
+
+  .btn-outline:hover {
+    background: var(--color-primary);
+    color: #fff;
+  }
+
+  .helpful-links {
+    background: var(--color-bg-alt);
+    padding: 2rem;
+    border-radius: 8px;
+  }
+
+  .helpful-links h2 {
+    font-size: 1.1rem;
+    color: var(--color-primary-dark);
+    margin-bottom: 1rem;
+  }
+
+  .helpful-links ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .helpful-links a {
+    color: var(--color-primary);
+  }
+
+  .helpful-links a:hover {
+    color: var(--color-secondary);
+  }
+</style>

@@ -1,0 +1,326 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = "Contact Us";
+const description = "Contact Island Goodes B&B in Hilo, Hawaii. Call 808-964-2291 or book online. Located at 27-2365 Hawaii Belt Rd, Papaikou, HI 96781.";
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="page-hero">
+    <div class="hero-content">
+      <h1>Contact Us</h1>
+      <p>We'd love to hear from you</p>
+    </div>
+  </section>
+
+  <section class="contact-section">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h2>Get in Touch</h2>
+
+          <div class="contact-method">
+            <h3>Phone</h3>
+            <p><a href="tel:+18089642291">808-964-2291</a></p>
+            <p class="note">Best way to reach us for quick questions</p>
+          </div>
+
+          <div class="contact-method">
+            <h3>Book Online</h3>
+            <p><a href="https://v2.reservationkey.com/3655/reserve/c" target="_blank" rel="noopener">Check availability and book your stay</a></p>
+            <p class="note">Instant confirmation, secure booking</p>
+          </div>
+
+          <div class="contact-method">
+            <h3>Address</h3>
+            <p>
+              Island Goodes B&B<br />
+              27-2365 Hawaii Belt Rd<br />
+              Papaikou, HI 96781
+            </p>
+            <p><a href="https://maps.google.com/?q=27-2365+Hawaii+Belt+Rd+Papaikou+HI+96781" target="_blank" rel="noopener">Get Directions</a></p>
+          </div>
+
+          <div class="contact-method">
+            <h3>Hours</h3>
+            <p>Office: 9:00 AM - 5:00 PM daily</p>
+            <p>Check-in: 3:00 PM</p>
+            <p>Check-out: 11:00 AM</p>
+          </div>
+        </div>
+
+        <div class="contact-form-container">
+          <h2>Send a Message</h2>
+          <form class="contact-form" action="https://formspree.io/f/your-form-id" method="POST">
+            <div class="form-group">
+              <label for="name">Name *</label>
+              <input type="text" id="name" name="name" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" name="phone" />
+            </div>
+            <div class="form-group">
+              <label for="dates">Desired Dates</label>
+              <input type="text" id="dates" name="dates" placeholder="e.g., March 15-20, 2025" />
+            </div>
+            <div class="form-group">
+              <label for="message">Message *</label>
+              <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Message</button>
+          </form>
+          <p class="form-note">* Required fields. We typically respond within 24 hours.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq-section">
+    <div class="container">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-grid">
+        <details class="faq-item">
+          <summary>Is Island Goodes really adults only?</summary>
+          <p>Yes, we are an adult-only property. All guests must be 18 years or older. This allows us to maintain a peaceful, quiet atmosphere for relaxation.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What is included in the rate?</summary>
+          <p>Your rate includes accommodations, daily gourmet breakfast delivered to your room, free WiFi, free parking, and use of the hot tub and BBQ grill.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Is there a minimum stay requirement?</summary>
+          <p>Yes, we require a minimum 2-night stay. Extended stay discounts are available for longer visits.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How far is Island Goodes from the airport?</summary>
+          <p>We are just 12 minutes (7 miles) from Hilo International Airport (ITO). Head north on Highway 19 and look for our sign on the mauka (mountain) side.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Can you help us plan activities?</summary>
+          <p>Absolutely! Your hosts Laura and Garvin have lived on the Big Island for years and love sharing their knowledge of the best restaurants, beaches, hikes, and hidden gems.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What's your cancellation policy?</summary>
+          <p>Please check our booking page for current cancellation policies, as they may vary by rate type and season.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <h2>Ready to Book?</h2>
+      <p>Reserve your room online for instant confirmation</p>
+      <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary btn-large" target="_blank" rel="noopener">Check Availability</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/contact-hero.jpg') center/cover no-repeat;
+    min-height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    padding: 8rem 2rem 4rem;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .contact-section {
+    padding: 4rem 0;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+
+  .contact-info h2,
+  .contact-form-container h2 {
+    color: var(--color-primary-dark);
+    margin-bottom: 2rem;
+  }
+
+  .contact-method {
+    margin-bottom: 2rem;
+  }
+
+  .contact-method h3 {
+    color: var(--color-primary);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .contact-method a {
+    font-size: 1.1rem;
+  }
+
+  .contact-method .note {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    margin-top: 0.25rem;
+  }
+
+  .contact-form {
+    background: var(--color-bg-alt);
+    padding: 2rem;
+    border-radius: 8px;
+  }
+
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--color-text);
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .form-note {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    margin-top: 1rem;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+
+  .btn-primary {
+    background: var(--color-secondary);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #c49943;
+    color: #fff;
+  }
+
+  .btn-large {
+    padding: 1rem 3rem;
+    font-size: 1.1rem;
+  }
+
+  .faq-section {
+    background: var(--color-bg-alt);
+    padding: 4rem 0;
+  }
+
+  .faq-section h2 {
+    text-align: center;
+    color: var(--color-primary-dark);
+    margin-bottom: 2rem;
+  }
+
+  .faq-grid {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    background: #fff;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .faq-item summary {
+    padding: 1.25rem;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item summary::after {
+    content: "+";
+    font-size: 1.5rem;
+    color: var(--color-secondary);
+  }
+
+  .faq-item[open] summary::after {
+    content: "−";
+  }
+
+  .faq-item p {
+    padding: 0 1.25rem 1.25rem;
+    color: var(--color-text-light);
+    line-height: 1.6;
+  }
+
+  .cta-section {
+    text-align: center;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: #fff;
+    padding: 4rem 2rem;
+  }
+
+  .cta-section h2 {
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-section p {
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+  }
+</style>

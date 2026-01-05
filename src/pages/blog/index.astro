@@ -1,0 +1,294 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "Big Island Travel Blog";
+const description = "Travel tips, guides, and insider knowledge for visiting Hilo and the Big Island of Hawaii. Discover volcanoes, waterfalls, beaches, and local favorites.";
+
+// Blog posts - will be expanded over time
+const posts = [
+  {
+    slug: "hawaii-volcanoes-national-park",
+    title: "Hawaii Volcanoes National Park: Complete Visitor's Guide",
+    excerpt: "Everything you need to know about visiting one of the world's most unique national parks, just 45 minutes from Island Goodes.",
+    date: "2025-01-15",
+    category: "Attractions"
+  },
+  {
+    slug: "hamakua-coast-waterfalls",
+    title: "The Best Waterfalls on the Hamakua Coast",
+    excerpt: "From Rainbow Falls to Akaka Falls, discover the stunning waterfalls along one of Hawaii's most scenic drives.",
+    date: "2025-01-10",
+    category: "Nature"
+  },
+  {
+    slug: "downtown-hilo-guide",
+    title: "A Local's Guide to Downtown Hilo",
+    excerpt: "Farmers markets, historic buildings, local restaurants, and hidden gems in Hawaii's most authentic town.",
+    date: "2025-01-05",
+    category: "Local Guide"
+  },
+  {
+    slug: "mauna-kea-stargazing",
+    title: "Stargazing on Mauna Kea: What to Know Before You Go",
+    excerpt: "Tips for experiencing world-class stargazing at 13,800 feet, from the best times to visit to what to bring.",
+    date: "2025-01-01",
+    category: "Activities"
+  }
+];
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="page-hero">
+    <div class="hero-content">
+      <h1>Big Island Travel Blog</h1>
+      <p>Insider tips and guides from your hosts at Island Goodes</p>
+    </div>
+  </section>
+
+  <section class="blog-section">
+    <div class="container">
+      <p class="blog-intro">
+        We've lived on the Big Island for years and love sharing our knowledge with guests.
+        Browse our guides below to help plan your perfect Hawaiian adventure.
+      </p>
+
+      <div class="blog-grid">
+        {posts.map(post => (
+          <article class="blog-card">
+            <div class="blog-image">
+              <span class="category">{post.category}</span>
+            </div>
+            <div class="blog-content">
+              <time datetime={post.date}>{new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</time>
+              <h2><a href={`/blog/${post.slug}`}>{post.title}</a></h2>
+              <p>{post.excerpt}</p>
+              <a href={`/blog/${post.slug}`} class="read-more">Read More →</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="topics">
+    <div class="container">
+      <h2>Explore by Topic</h2>
+      <div class="topics-grid">
+        <a href="/blog?category=attractions" class="topic-card">
+          <h3>Attractions</h3>
+          <p>Volcanoes, gardens, museums</p>
+        </a>
+        <a href="/blog?category=nature" class="topic-card">
+          <h3>Nature</h3>
+          <p>Waterfalls, beaches, hiking</p>
+        </a>
+        <a href="/blog?category=activities" class="topic-card">
+          <h3>Activities</h3>
+          <p>Stargazing, snorkeling, tours</p>
+        </a>
+        <a href="/blog?category=local-guide" class="topic-card">
+          <h3>Local Guide</h3>
+          <p>Food, markets, culture</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <h2>Plan Your Stay</h2>
+      <p>Book your room at Island Goodes and let us help you plan the perfect Big Island adventure</p>
+      <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary btn-large" target="_blank" rel="noopener">Check Availability</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/blog-hero.jpg') center/cover no-repeat;
+    min-height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    padding: 8rem 2rem 4rem;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .blog-section {
+    padding: 4rem 0;
+  }
+
+  .blog-intro {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 3rem;
+    font-size: 1.1rem;
+    color: var(--color-text-light);
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .blog-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+  }
+
+  .blog-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .blog-image {
+    height: 180px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    position: relative;
+  }
+
+  .category {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    background: var(--color-secondary);
+    color: #fff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .blog-content {
+    padding: 1.5rem;
+  }
+
+  .blog-content time {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+  }
+
+  .blog-content h2 {
+    font-size: 1.25rem;
+    margin: 0.5rem 0;
+    line-height: 1.3;
+  }
+
+  .blog-content h2 a {
+    color: var(--color-primary-dark);
+    text-decoration: none;
+  }
+
+  .blog-content h2 a:hover {
+    color: var(--color-primary);
+  }
+
+  .blog-content p {
+    font-size: 0.95rem;
+    color: var(--color-text-light);
+    margin-bottom: 1rem;
+  }
+
+  .read-more {
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  .topics {
+    background: var(--color-bg-alt);
+    padding: 4rem 0;
+  }
+
+  .topics h2 {
+    text-align: center;
+    color: var(--color-primary-dark);
+    margin-bottom: 2rem;
+  }
+
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .topic-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .topic-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+
+  .topic-card h3 {
+    color: var(--color-primary-dark);
+    margin-bottom: 0.25rem;
+  }
+
+  .topic-card p {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .btn-primary {
+    background: var(--color-secondary);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #c49943;
+    color: #fff;
+  }
+
+  .btn-large {
+    padding: 1rem 3rem;
+    font-size: 1.1rem;
+  }
+
+  .cta-section {
+    text-align: center;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: #fff;
+    padding: 4rem 2rem;
+  }
+
+  .cta-section h2 {
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-section p {
+    margin-bottom: 1.5rem;
+  }
+</style>

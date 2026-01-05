@@ -1,0 +1,212 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "Hawaii Volcanoes National Park: Complete Visitor's Guide";
+const description = "Everything you need to know about visiting Hawaii Volcanoes National Park from Hilo. See Kilauea crater, lava tubes, and volcanic landscapes just 45 minutes from Island Goodes B&B.";
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="blog-post">
+    <header class="post-header">
+      <div class="container">
+        <span class="category">Attractions</span>
+        <h1>{title}</h1>
+        <p class="excerpt">Everything you need to know about visiting one of the world's most unique national parks, just 45 minutes from Island Goodes.</p>
+        <time datetime="2025-01-15">January 15, 2025</time>
+      </div>
+    </header>
+
+    <div class="post-content">
+      <div class="container">
+        <p class="lead">
+          Hawaii Volcanoes National Park is one of the most extraordinary places on Earth. Home to two active volcanoes—Kilauea and Mauna Loa—the park offers visitors a chance to witness the raw power of volcanic activity and walk through landscapes found nowhere else on the planet.
+        </p>
+
+        <h2>Getting There from Island Goodes</h2>
+        <p>
+          The park is an easy 45-minute drive from Island Goodes B&B. Head south on Highway 11 through Hilo, passing through the towns of Keaau and Mountain View. The main park entrance is well-marked on your right.
+        </p>
+        <p>
+          <strong>Pro tip:</strong> Leave early in the morning to beat the crowds and catch the best light for photography. The park is least crowded on weekday mornings.
+        </p>
+
+        <h2>Must-See Attractions</h2>
+
+        <h3>Kilauea Crater</h3>
+        <p>
+          The heart of the park is the Kilauea Caldera, a massive volcanic crater that's been continuously active for centuries. The views from the Jaggar Museum overlook (currently being rebuilt) and the Crater Rim Trail are spectacular. On clear nights, you may see the glow of lava reflected in the steam rising from the crater.
+        </p>
+
+        <h3>Thurston Lava Tube (Nahuku)</h3>
+        <p>
+          Walk through a 500-year-old lava tube surrounded by lush rainforest. This 15-minute walk is one of the park's most popular attractions. The tube is lit, but bring a flashlight to explore the darker extended section.
+        </p>
+
+        <h3>Chain of Craters Road</h3>
+        <p>
+          This 19-mile scenic drive descends 3,700 feet from the crater rim to the coast, passing numerous craters and old lava flows. The road ends where a 2003 lava flow crossed it, providing a dramatic view of how new land is created.
+        </p>
+
+        <h3>Devastation Trail</h3>
+        <p>
+          A half-mile paved walk through a forest devastated by the 1959 Kilauea Iki eruption. The skeletal remains of ohia trees stand as a stark reminder of volcanic power, though new growth shows nature's resilience.
+        </p>
+
+        <h2>Best Hikes in the Park</h2>
+        <ul>
+          <li><strong>Kilauea Iki Trail (4 miles):</strong> Descend into a crater and walk across its still-steaming floor. One of Hawaii's best hikes.</li>
+          <li><strong>Crater Rim Trail:</strong> Various sections offer different perspectives of the caldera.</li>
+          <li><strong>Pu'u Loa Petroglyphs (1.4 miles):</strong> See over 23,000 ancient Hawaiian rock carvings.</li>
+        </ul>
+
+        <h2>Practical Information</h2>
+
+        <h3>Entrance Fee</h3>
+        <p>$30 per vehicle, valid for 7 days. Annual passes available. Free admission on select days throughout the year.</p>
+
+        <h3>Hours</h3>
+        <p>The park is open 24 hours a day, year-round. The Visitor Center is open 9 AM - 5 PM daily.</p>
+
+        <h3>What to Bring</h3>
+        <ul>
+          <li>Layers—temperature drops as you gain elevation</li>
+          <li>Rain jacket (this is the rainy side of the island)</li>
+          <li>Sturdy walking shoes</li>
+          <li>Water and snacks</li>
+          <li>Flashlight for lava tubes</li>
+          <li>Camera</li>
+        </ul>
+
+        <h3>Safety Tips</h3>
+        <p>
+          Stay on marked trails and behind barriers. Volcanic fumes (vog) can be hazardous, especially for those with respiratory conditions. Check current conditions at the Visitor Center.
+        </p>
+
+        <h2>Make It a Day Trip</h2>
+        <p>
+          Combine your park visit with a stop at the Volcano Winery (just outside the park entrance) or lunch in Volcano Village. On your way back to Island Goodes, consider stopping at Rainbow Falls in Hilo.
+        </p>
+
+        <div class="cta-box">
+          <h3>Stay at Island Goodes</h3>
+          <p>Our B&B is the perfect home base for exploring Hawaii Volcanoes National Park. After a day of hiking, relax in our hot tub and enjoy your morning breakfast before your next adventure.</p>
+          <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary" target="_blank" rel="noopener">Book Your Stay</a>
+        </div>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .post-header {
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/images/blog/volcanoes.jpg') center/cover no-repeat;
+    color: #fff;
+    padding: 10rem 2rem 4rem;
+    text-align: center;
+  }
+
+  .post-header .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .category {
+    background: var(--color-secondary);
+    color: #fff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .post-header h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin: 1rem 0;
+    line-height: 1.2;
+  }
+
+  .excerpt {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 1rem;
+  }
+
+  .post-header time {
+    opacity: 0.8;
+  }
+
+  .post-content {
+    padding: 4rem 2rem;
+  }
+
+  .post-content .container {
+    max-width: 750px;
+    margin: 0 auto;
+  }
+
+  .post-content .lead {
+    font-size: 1.2rem;
+    color: var(--color-text-light);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .post-content h2 {
+    color: var(--color-primary-dark);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .post-content h3 {
+    color: var(--color-primary);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .post-content p {
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+
+  .post-content ul {
+    margin: 1rem 0 1rem 1.5rem;
+    line-height: 1.8;
+  }
+
+  .post-content li {
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-box {
+    background: var(--color-bg-alt);
+    padding: 2rem;
+    border-radius: 8px;
+    margin-top: 3rem;
+    text-align: center;
+  }
+
+  .cta-box h3 {
+    color: var(--color-primary-dark);
+    margin-top: 0;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    margin-top: 1rem;
+  }
+
+  .btn-primary {
+    background: var(--color-secondary);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #c49943;
+    color: #fff;
+  }
+</style>
