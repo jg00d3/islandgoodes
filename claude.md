@@ -31,20 +31,21 @@ src/
 ├── pages/
 │   ├── index.astro         # Homepage
 │   ├── rooms.astro         # Room listing page
-│   ├── rooms/              # Individual room detail pages
-│   │   ├── hilo-bay.astro
-│   │   ├── mauna-kea.astro
-│   │   ├── ginger.astro
-│   │   └── orchid.astro
+│   ├── rooms/              # Individual room detail pages (hilo-bay, mauna-kea, ginger, orchid)
 │   ├── blog/
-│   │   ├── index.astro     # Blog listing (posts defined in frontmatter array)
-│   │   └── [post].astro    # Individual blog post pages
-│   └── [other pages].astro
+│   │   ├── index.astro     # Blog listing (posts array defined here)
+│   │   └── [topic].astro   # Individual blog posts as separate files
+│   ├── contact.astro       # Contact form
+│   ├── policies.astro      # Booking policies
+│   ├── reviews.astro       # Guest reviews
+│   ├── property.astro      # Property & amenities info
+│   ├── gallery.astro       # Photo slideshow
+│   └── pets.astro          # Property pets info
 public/
 └── images/
-    ├── rooms/[room-name]/  # Room photos (room.jpg, bed.jpg, lanai.jpg, etc.)
+    ├── rooms/[room-name]/  # Room photos (room.jpg, lanai.jpg, etc.)
     ├── blog/               # Blog post featured images
-    └── property/           # Amenity photos (pool.jpg, hot-tub.jpg, etc.)
+    └── property/           # Amenity photos (pool.jpg, hot-tub.jpg, hosts.jpg, etc.)
 ```
 
 ### BaseLayout
@@ -69,13 +70,14 @@ Each page uses scoped `<style>` blocks. Global CSS variables defined in BaseLayo
 
 ### Blog System
 
-Blog posts are individual .astro files. The blog index maintains a posts array with metadata:
+Blog posts are individual .astro files in `src/pages/blog/`. The blog index (`index.astro`) maintains an `allPosts` array that references these files:
 ```javascript
-const posts = [
-  { slug, title, excerpt, date, category, image },
+const allPosts = [
+  { slug: "hawaii-volcanoes-national-park", title: "...", excerpt: "...", date: "2026-01-01", category: "...", image: "..." },
   // ...
 ];
 ```
+When adding/removing blog posts, update both the individual .astro file AND the `allPosts` array in `index.astro`.
 
 ## External Services
 
@@ -89,4 +91,12 @@ const posts = [
 Source photos in `CLAUDES PICTURES/` folder (not committed). When adding room images:
 - Avoid folders named "NO USE PICTURES" or "NOT TO USE"
 - Main room image should show the bed
-- Standard photos: room.jpg, bed.jpg, lanai.jpg, bathroom.jpg, coffee.jpg
+- Standard photos: room.jpg, lanai.jpg, bathroom.jpg, coffee.jpg
+
+## Navigation Structure
+
+- **Top nav:** Home, Rooms, Contact Us, Book Now, Policies, Blog
+- **Footer Quick Links:** Same as top nav
+- **Footer More Info:** Slide Show, 3D Room Tour, Reviews, Property, Our Pets
+
+Navigation is managed in `BaseLayout.astro` (lines ~107-165).
