@@ -1,0 +1,357 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  canonicalURL?: string;
+}
+
+const {
+  title,
+  description,
+  image = '/images/island-goodes-ocean-view.jpg',
+  canonicalURL = Astro.url.href
+} = Astro.props;
+
+const siteName = "Island Goodes B&B";
+const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="generator" content={Astro.generator} />
+
+  <!-- Primary Meta Tags -->
+  <title>{fullTitle}</title>
+  <meta name="title" content={fullTitle} />
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalURL} />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL(image, Astro.site)} />
+  <meta property="og:site_name" content={siteName} />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content={canonicalURL} />
+  <meta property="twitter:title" content={fullTitle} />
+  <meta property="twitter:description" content={description} />
+  <meta property="twitter:image" content={new URL(image, Astro.site)} />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BedAndBreakfast",
+    "name": "Island Goodes B&B",
+    "description": "Adult-only oceanview bed and breakfast near Hilo, Hawaii. Private rooms with stunning views of Hilo Bay and Mauna Kea.",
+    "url": "https://www.islandgoodes.com",
+    "telephone": "+1-808-964-2291",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "27-2365 Hawaii Belt Rd",
+      "addressLocality": "Papaikou",
+      "addressRegion": "HI",
+      "postalCode": "96781",
+      "addressCountry": "US"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 19.8075,
+      "longitude": -155.0939
+    },
+    "image": "https://www.islandgoodes.com/images/island-goodes-ocean-view.jpg",
+    "priceRange": "$$",
+    "amenityFeature": [
+      { "@type": "LocationFeatureSpecification", "name": "Free WiFi", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Free Parking", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Hot Tub", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Ocean View", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Breakfast Included", "value": true }
+    ],
+    "starRating": {
+      "@type": "Rating",
+      "ratingValue": "4"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.5",
+      "reviewCount": "245"
+    }
+  })} />
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="/" class="logo">Island Goodes</a>
+      <button class="mobile-menu-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/rooms">Rooms</a></li>
+        <li><a href="/amenities">Amenities</a></li>
+        <li><a href="/location">Location</a></li>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="https://v2.reservationkey.com/3655/reserve/c" class="btn-book" target="_blank" rel="noopener">Book Now</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <slot />
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h3>Island Goodes B&B</h3>
+        <p>Adult-only oceanview bed & breakfast near Hilo, Hawaii</p>
+        <p>
+          <a href="tel:+18089642291">808-964-2291</a><br />
+          27-2365 Hawaii Belt Rd<br />
+          Papaikou, HI 96781
+        </p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="/rooms">Our Rooms</a></li>
+          <li><a href="/amenities">Amenities</a></li>
+          <li><a href="/location">Location & Directions</a></li>
+          <li><a href="/blog">Travel Blog</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Explore Hilo</h3>
+        <ul>
+          <li><a href="/blog/hawaii-volcanoes-national-park">Volcanoes National Park</a></li>
+          <li><a href="/blog/hamakua-coast-waterfalls">Hamakua Waterfalls</a></li>
+          <li><a href="/blog/downtown-hilo-guide">Downtown Hilo</a></li>
+          <li><a href="/blog/mauna-kea-stargazing">Mauna Kea</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Reviews</h3>
+        <ul>
+          <li><a href="https://www.tripadvisor.com/Hotel_Review-g60605-d635399-Reviews-Island_Goode_s-Papaikou_Island_of_Hawaii_Hawaii.html" target="_blank" rel="noopener">TripAdvisor</a></li>
+          <li><a href="https://www.google.com/travel/search" target="_blank" rel="noopener">Google Reviews</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; {new Date().getFullYear()} Island Goodes B&B. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <style is:global>
+    :root {
+      --color-primary: #1a5f4a;
+      --color-primary-dark: #134436;
+      --color-secondary: #d4a853;
+      --color-text: #333;
+      --color-text-light: #666;
+      --color-bg: #fff;
+      --color-bg-alt: #f8f6f3;
+      --font-heading: 'Playfair Display', Georgia, serif;
+      --font-body: 'Open Sans', -apple-system, sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--color-text);
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-heading);
+      line-height: 1.2;
+    }
+
+    a {
+      color: var(--color-primary);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--color-primary-dark);
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .btn-book {
+      background: var(--color-secondary);
+      color: #fff !important;
+      padding: 0.5rem 1.25rem;
+      border-radius: 4px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .btn-book:hover {
+      background: #c49943;
+    }
+
+    .mobile-menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .mobile-menu-toggle span {
+      display: block;
+      width: 25px;
+      height: 2px;
+      background: var(--color-primary);
+    }
+
+    .site-footer {
+      background: var(--color-primary-dark);
+      color: #fff;
+      padding: 3rem 2rem 1rem;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+
+    .footer-section h3 {
+      color: var(--color-secondary);
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+
+    .footer-section ul {
+      list-style: none;
+    }
+
+    .footer-section li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-section a {
+      color: #ddd;
+    }
+
+    .footer-section a:hover {
+      color: var(--color-secondary);
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 2rem auto 0;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      text-align: center;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-menu-toggle {
+        display: flex;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #fff;
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+    }
+  </style>
+
+  <script>
+    document.querySelector('.mobile-menu-toggle')?.addEventListener('click', () => {
+      document.querySelector('.nav-links')?.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>

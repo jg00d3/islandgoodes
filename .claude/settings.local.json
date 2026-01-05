@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:www.islandgoodes.com)",
+      "WebFetch(domain:www.tripadvisor.com)",
+      "Bash(gh auth status:*)",
+      "Bash(gh auth switch:*)",
+      "Bash(gh repo create:*)",
+      "Bash(node --version:*)",
+      "Bash(npm --version:*)",
+      "Bash(npm create:*)",
+      "Bash(npm install)",
+      "Bash(npm run build:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}
