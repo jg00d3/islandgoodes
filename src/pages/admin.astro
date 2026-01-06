@@ -1,0 +1,431 @@
+---
+import PreviewLayout from '../layouts/PreviewLayout.astro';
+
+const title = "Admin Dashboard | Island Goodes";
+const description = "Analytics and site management for Island Goodes.";
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="admin-hero">
+    <div class="container">
+      <h1>Analytics Dashboard</h1>
+      <p>View your website statistics and visitor data</p>
+    </div>
+  </section>
+
+  <section class="admin-content">
+    <div class="container">
+      <!-- Setup Status -->
+      <div class="setup-card" id="setupStatus">
+        <div class="status-icon pending">!</div>
+        <div class="status-content">
+          <h3>Google Analytics Setup Required</h3>
+          <p>Complete the setup below to start tracking visitors</p>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="dashboard-grid">
+        <a href="https://analytics.google.com" target="_blank" rel="noopener" class="dashboard-card main-card">
+          <div class="card-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 20V10M12 20V4M6 20v-6"/>
+            </svg>
+          </div>
+          <h3>Open Google Analytics</h3>
+          <p>View real-time visitors, traffic sources, geographic data, and more</p>
+          <span class="card-cta">Go to Dashboard →</span>
+        </a>
+
+        <div class="dashboard-card stats-card">
+          <h4>What You Can See</h4>
+          <ul>
+            <li>Real-time visitors on your site</li>
+            <li>World map showing visitor locations</li>
+            <li>How visitors found you (Google, social, direct)</li>
+            <li>Most popular pages</li>
+            <li>Device types (mobile, desktop, tablet)</li>
+            <li>Time spent on site</li>
+            <li>Bounce rate and engagement</li>
+          </ul>
+        </div>
+
+        <div class="dashboard-card reports-card">
+          <h4>Useful Reports</h4>
+          <div class="report-links">
+            <a href="https://analytics.google.com/analytics/web/#/report/visitors-geo" target="_blank" rel="noopener">
+              Geographic Map
+            </a>
+            <a href="https://analytics.google.com/analytics/web/#/report/trafficsources-overview" target="_blank" rel="noopener">
+              Traffic Sources
+            </a>
+            <a href="https://analytics.google.com/analytics/web/#/report/content-pages" target="_blank" rel="noopener">
+              Top Pages
+            </a>
+            <a href="https://analytics.google.com/analytics/web/#/realtime" target="_blank" rel="noopener">
+              Real-Time View
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Setup Instructions -->
+      <div class="setup-section">
+        <h2>Setup Instructions</h2>
+        <div class="setup-steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h4>Create Google Analytics Account</h4>
+              <p>Go to <a href="https://analytics.google.com" target="_blank" rel="noopener">analytics.google.com</a> and sign in with your Google account. Click "Start measuring" to create a new account.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h4>Create a Property</h4>
+              <p>Name your account "Island Goodes" and create a property for your website. Enter your website URL: <strong>www.islandgoodes.com</strong></p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h4>Get Your Measurement ID</h4>
+              <p>After setup, you'll receive a Measurement ID that looks like <code>G-XXXXXXXXXX</code>. Copy this ID.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h4>Update Your Website Code</h4>
+              <p>Replace <code>G-XXXXXXXXXX</code> in <code>src/layouts/PreviewLayout.astro</code> with your actual Measurement ID. There are 4 places to update (search for "G-XXXXXXXXXX").</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+              <h4>Deploy & Verify</h4>
+              <p>After deploying, visit your site, accept cookies, then check Google Analytics Real-Time view to confirm tracking is working.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cookie Consent Status -->
+      <div class="consent-section">
+        <h2>Cookie Consent Status</h2>
+        <p>Your current consent status: <strong id="consentStatus">Checking...</strong></p>
+        <button id="resetConsent" class="btn btn-outline">Reset Cookie Consent</button>
+        <p class="help-text">This will show the cookie banner again on your next page load</p>
+      </div>
+    </div>
+  </section>
+</PreviewLayout>
+
+<style>
+  .admin-hero {
+    padding: 10rem 2rem 3rem;
+    background: var(--gradient-primary);
+    color: #fff;
+    text-align: center;
+  }
+
+  .admin-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .admin-hero p {
+    opacity: 0.9;
+  }
+
+  .admin-content {
+    padding: 3rem 0 5rem;
+  }
+
+  .setup-card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
+    background: #FEF3C7;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+  }
+
+  .status-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  .status-icon.pending {
+    background: #F59E0B;
+    color: #fff;
+  }
+
+  .status-icon.active {
+    background: #10B981;
+    color: #fff;
+  }
+
+  .status-content h3 {
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .status-content p {
+    color: var(--color-text-light);
+    font-size: 0.9375rem;
+  }
+
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .dashboard-card {
+    padding: 2rem;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .dashboard-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  }
+
+  .main-card {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: var(--gradient-primary);
+    color: #fff;
+  }
+
+  .main-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .card-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .main-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .main-card p {
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+  }
+
+  .card-cta {
+    color: var(--color-secondary-light);
+    font-weight: 600;
+  }
+
+  .stats-card h4,
+  .reports-card h4 {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--color-primary);
+  }
+
+  .stats-card ul {
+    list-style: none;
+  }
+
+  .stats-card li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-bg-alt);
+    font-size: 0.9375rem;
+    color: var(--color-text-light);
+  }
+
+  .stats-card li::before {
+    content: "✓";
+    color: var(--color-primary);
+    margin-right: 0.5rem;
+  }
+
+  .report-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .report-links a {
+    display: block;
+    padding: 0.75rem 1rem;
+    background: var(--color-bg-alt);
+    border-radius: 8px;
+    color: var(--color-text);
+    font-size: 0.9375rem;
+    transition: all 0.2s ease;
+  }
+
+  .report-links a:hover {
+    background: var(--color-primary);
+    color: #fff;
+  }
+
+  .setup-section {
+    background: var(--color-bg-alt);
+    padding: 2.5rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+  }
+
+  .setup-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .setup-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .step {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+
+  .step-number {
+    width: 40px;
+    height: 40px;
+    background: var(--color-primary);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .step-content h4 {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .step-content p {
+    color: var(--color-text-light);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  .step-content a {
+    color: var(--color-primary);
+    font-weight: 500;
+  }
+
+  .step-content code {
+    background: rgba(27, 107, 90, 0.1);
+    padding: 0.125rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    color: var(--color-primary-dark);
+  }
+
+  .consent-section {
+    text-align: center;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  .consent-section h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .consent-section p {
+    margin-bottom: 1rem;
+    color: var(--color-text-light);
+  }
+
+  #consentStatus {
+    color: var(--color-primary);
+  }
+
+  .help-text {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    margin-top: 0.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .dashboard-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .setup-card {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .step {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  }
+</style>
+
+<script>
+  // Check and display consent status
+  const status = localStorage.getItem('cookieConsent');
+  const statusEl = document.getElementById('consentStatus');
+
+  if (statusEl) {
+    if (status === 'accepted') {
+      statusEl.textContent = 'Accepted (Analytics Active)';
+      statusEl.style.color = '#10B981';
+    } else if (status === 'declined') {
+      statusEl.textContent = 'Declined (Analytics Disabled)';
+      statusEl.style.color = '#EF4444';
+    } else {
+      statusEl.textContent = 'Not Set (Banner will appear)';
+    }
+  }
+
+  // Reset consent button
+  document.getElementById('resetConsent')?.addEventListener('click', function() {
+    localStorage.removeItem('cookieConsent');
+    if (statusEl) {
+      statusEl.textContent = 'Reset! Refresh the page to see the banner';
+      statusEl.style.color = '#F59E0B';
+    }
+  });
+</script>
