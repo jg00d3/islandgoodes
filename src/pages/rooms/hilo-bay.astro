@@ -2,13 +2,13 @@
 import PreviewLayout from '../../layouts/PreviewLayout.astro';
 
 const title = "Hilo Bay Room - Oceanview Suite";
-const description = "Our largest room at 488 sq ft with stunning panoramic views of Hilo Bay. Ground floor, private lanai, Sleep Number bed, private bathroom. Adults-only accommodation near Hilo, Hawaii.";
+const description = "A large and very popular room at 488 sq ft with stunning panoramic views of Hilo Bay. Ground floor, private lanai, Sleep Number King Bed, private bathroom. Adults-only accommodation near Hilo, Hawaii.";
 
 const images = [
   { src: "/images/rooms/hilo-bay/bed.jpg", alt: "Sleep Number king bed in Hilo Bay Room" },
   { src: "/images/rooms/hilo-bay/room.jpg", alt: "Hilo Bay Room overview with ocean view" },
   { src: "/images/rooms/hilo-bay/lanai.jpg", alt: "Private lanai with ocean views" },
-  { src: "/images/rooms/hilo-bay/bathroom.jpg", alt: "Private bathroom with ocean view" },
+  { src: "/images/rooms/hilo-bay/bathroom.jpg", alt: "Private bathroom" },
   { src: "/images/rooms/hilo-bay/table.jpg", alt: "Dining table and seating area" },
   { src: "/images/rooms/hilo-bay/coffee.jpg", alt: "Coffee station" },
   { src: "/images/rooms/hilo-bay/recliner.jpg", alt: "Comfortable recliner for relaxing" },
@@ -19,17 +19,35 @@ const amenities = [
   "Panoramic ocean view",
   "Ground floor (no steps)",
   "Private entrance",
-  "Private bathroom with view",
+  "Private bathroom",
   "Private lanai",
-  "Sleep Number king bed",
+  "Sleep Number King Bed",
   "Premium linens",
   "Free WiFi",
-  "Mini refrigerator/freezer",
+  "Mid-size refrigerator/freezer",
   "Microwave",
-  "Coffee maker",
+  "Coffee maker with our own house blend of strong coffee",
+  "Coffee press",
+  "Electric hot water kettle",
+  "Toaster",
+  "Silverware, plates, cups, wine glasses, wine decorker",
+  "Other appliances upon request",
   "Air conditioning",
-  "Ceiling fan",
+  "Two adjustable ceiling fans",
+  "Floor fan",
+  "32\" HDTV - access apps by using your own account",
   "Bathroom grab bars"
+];
+
+const bathroomAmenities = [
+  "Shower only",
+  "Fresh hand and full-size towels",
+  "Hair dryer",
+  "Soap",
+  "Body wash",
+  "Shampoo",
+  "Conditioner",
+  "Beach towels"
 ];
 ---
 
@@ -79,7 +97,7 @@ const amenities = [
             </div>
             <div class="info-item">
               <span class="info-label">Bed</span>
-              <span class="info-value">King</span>
+              <span class="info-value">Sleep Number King</span>
             </div>
             <div class="info-item">
               <span class="info-label">Floor</span>
@@ -101,18 +119,17 @@ const amenities = [
           <div class="description">
             <h2>About This Room</h2>
             <p>
-              The Hilo Bay Room is our largest and most popular accommodation, offering 488 square feet of
-              comfortable living space with the most stunning ocean views on the property.
+              The Hilo Bay Room is a large room and very popular with guests, offering 488 square feet of
+              comfortable living space with stunning ocean views on the property.
             </p>
             <p>
               Located on the ground floor with no steps to climb, this suite is perfect for guests who prefer
               easy access. Step out onto your private lanai and watch the sun rise over Hilo Bay, spot whales
-              breaching during winter months, or simply relax with a cup of Kona coffee.
+              breaching during winter months, or simply relax with a cup of our own house blend of strong coffee.
             </p>
             <p>
-              The room features a luxurious Sleep Number adjustable bed that lets you customize your comfort
-              level for the perfect night's sleep. The private bathroom also offers ocean views—a rare treat
-              that makes even getting ready in the morning feel like a vacation.
+              The room features a luxurious Sleep Number King Bed that lets you customize your comfort
+              level for the perfect night's sleep.
             </p>
           </div>
 
@@ -123,7 +140,7 @@ const amenities = [
                 <span class="highlight-icon">🌊</span>
                 <div>
                   <strong>Best Views</strong>
-                  <p>Panoramic ocean views of Hilo Bay from both the room and bathroom</p>
+                  <p>Panoramic ocean views of Hilo Bay from the room and lanai</p>
                 </div>
               </div>
               <div class="highlight-item">
@@ -137,13 +154,13 @@ const amenities = [
                 <span class="highlight-icon">📐</span>
                 <div>
                   <strong>Spacious</strong>
-                  <p>Our largest room at 488 square feet</p>
+                  <p>A large room at 488 square feet</p>
                 </div>
               </div>
               <div class="highlight-item">
-                <span class="highlight-icon">♿</span>
+                <span class="highlight-icon">🧭</span>
                 <div>
-                  <strong>Accessible</strong>
+                  <strong>Easy to Get Around</strong>
                   <p>Ground floor with no steps and bathroom grab bars</p>
                 </div>
               </div>
@@ -151,9 +168,18 @@ const amenities = [
           </div>
 
           <div class="amenities">
-            <h3>All Amenities</h3>
+            <h3>Room Amenities</h3>
             <ul class="amenities-grid">
               {amenities.map((amenity) => (
+                <li>{amenity}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="amenities bathroom-amenities">
+            <h3>Bathroom Amenities</h3>
+            <ul class="amenities-grid">
+              {bathroomAmenities.map((amenity) => (
                 <li>{amenity}</li>
               ))}
             </ul>
@@ -175,7 +201,7 @@ const amenities = [
           <img src="/images/rooms/orchid/bed.jpg" alt="Orchid Room" loading="lazy" />
           <div class="room-card-content">
             <h3>Orchid Room</h3>
-            <p>645 sq ft with full kitchen</p>
+            <p>645 sq ft with kitchenette</p>
           </div>
         </a>
         <a href="/rooms/mauna-kea" class="room-card">

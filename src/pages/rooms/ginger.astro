@@ -19,14 +19,33 @@ const amenities = [
   "Private entrance",
   "Private bathroom",
   "Private lanai",
-  "Sleep Number bed",
+  "Sleep Number King Bed",
   "Premium linens",
   "Free WiFi",
-  "Mini refrigerator",
+  "Mid-size refrigerator/freezer",
   "Microwave",
-  "Coffee maker",
+  "Coffee maker with our own house blend of strong coffee",
+  "Coffee press",
+  "Electric hot water kettle",
+  "Toaster",
+  "Silverware, plates, cups, wine glasses, wine decorker",
+  "Other appliances upon request",
   "Air conditioning",
-  "Ceiling fan"
+  "Two adjustable ceiling fans",
+  "Floor fan",
+  "32\" HDTV - access apps by using your own account",
+  "Bathroom grab bars"
+];
+
+const bathroomAmenities = [
+  "Shower only",
+  "Fresh hand and full-size towels",
+  "Hair dryer",
+  "Soap",
+  "Body wash",
+  "Shampoo",
+  "Conditioner",
+  "Beach towels"
 ];
 ---
 
@@ -40,7 +59,7 @@ const amenities = [
       <nav class="breadcrumb">
         <a href="/">Home</a> / <a href="/rooms">Rooms</a> / Ginger Room
       </nav>
-      <span class="room-badge">Accessible</span>
+      <span class="room-badge">Easy to Get Around</span>
       <h1>Ginger Room</h1>
       <p class="tagline">A Peaceful Garden Retreat</p>
     </div>
@@ -74,7 +93,7 @@ const amenities = [
             </div>
             <div class="info-item">
               <span class="info-label">Bed</span>
-              <span class="info-value">King</span>
+              <span class="info-value">Sleep Number King</span>
             </div>
             <div class="info-item">
               <span class="info-label">Floor</span>
@@ -106,7 +125,7 @@ const amenities = [
               morning coffee on your private lanai surrounded by greenery.
             </p>
             <p>
-              Like all our rooms, the Ginger Room features a luxurious Sleep Number adjustable bed, private
+              Like all our rooms, the Ginger Room features a luxurious Sleep Number King Bed, private
               bathroom, and all the amenities you need for a relaxing Hawaiian getaway.
             </p>
           </div>
@@ -122,10 +141,10 @@ const amenities = [
                 </div>
               </div>
               <div class="highlight-item">
-                <span class="highlight-icon">♿</span>
+                <span class="highlight-icon">🧭</span>
                 <div>
-                  <strong>Accessible</strong>
-                  <p>Ground floor with no steps - easy access for all guests</p>
+                  <strong>Easy to Get Around</strong>
+                  <p>Ground floor with no steps and bathroom grab bars</p>
                 </div>
               </div>
               <div class="highlight-item">
@@ -146,9 +165,18 @@ const amenities = [
           </div>
 
           <div class="amenities">
-            <h3>All Amenities</h3>
+            <h3>Room Amenities</h3>
             <ul class="amenities-grid">
               {amenities.map((amenity) => (
+                <li>{amenity}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="amenities bathroom-amenities">
+            <h3>Bathroom Amenities</h3>
+            <ul class="amenities-grid">
+              {bathroomAmenities.map((amenity) => (
                 <li>{amenity}</li>
               ))}
             </ul>
@@ -176,7 +204,7 @@ const amenities = [
           <img src="/images/rooms/orchid/bed.jpg" alt="Orchid Room" loading="lazy" />
           <div class="room-card-content">
             <h3>Orchid Room</h3>
-            <p>645 sq ft with full kitchen</p>
+            <p>645 sq ft with kitchenette</p>
           </div>
         </a>
         <a href="/rooms/mauna-kea" class="room-card">

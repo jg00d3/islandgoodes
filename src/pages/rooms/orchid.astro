@@ -1,33 +1,50 @@
 ---
 import PreviewLayout from '../../layouts/PreviewLayout.astro';
 
-const title = "Orchid Room - Oceanview Suite with Kitchen";
-const description = "645 sq ft oceanview suite with full kitchenette at Island Goodes. Sleep Number bed, private lanai, perfect for extended stays. Adults-only accommodation near Hilo, Hawaii.";
+const title = "Orchid Room - Oceanview Suite with Kitchenette";
+const description = "645 sq ft oceanview suite with kitchenette at Island Goodes. Sleep Number King Bed, private lanai, perfect for extended stays. Adults-only accommodation near Hilo, Hawaii.";
 
 const images = [
-  { src: "/images/rooms/orchid/bed.jpg", alt: "Sleep Number bed in Orchid Room" },
+  { src: "/images/rooms/orchid/bed.jpg", alt: "Sleep Number King Bed in Orchid Room" },
   { src: "/images/rooms/orchid/room.jpg", alt: "Orchid Room overview" },
   { src: "/images/rooms/orchid/lanai.jpg", alt: "Private lanai with ocean views" },
   { src: "/images/rooms/orchid/bathroom.jpg", alt: "Private bathroom" },
-  { src: "/images/rooms/orchid/kitchen.jpg", alt: "Full kitchenette" },
-  { src: "/images/rooms/orchid/kitchen2.jpg", alt: "Kitchen appliances" },
+  { src: "/images/rooms/orchid/kitchen.jpg", alt: "Kitchenette" },
+  { src: "/images/rooms/orchid/kitchen2.jpg", alt: "Kitchenette appliances" },
 ];
 
 const amenities = [
   "645 square feet",
   "Ocean view",
-  "Full kitchenette",
-  "Stove & oven",
-  "Full-size refrigerator",
+  "Kitchenette",
+  "Mid-size refrigerator/freezer",
   "Private entrance",
   "Private bathroom",
   "Private lanai",
-  "Sleep Number king bed",
+  "Sleep Number King Bed",
   "Premium linens",
   "Free WiFi",
-  "Coffee maker",
+  "Coffee maker with our own house blend of strong coffee",
+  "Coffee press",
+  "Electric hot water kettle",
+  "Toaster",
+  "Silverware, plates, cups, wine glasses, wine decorker",
+  "Other appliances upon request",
   "Air conditioning",
-  "Ceiling fan"
+  "Two adjustable ceiling fans",
+  "Floor fan",
+  "32\" HDTV - access apps by using your own account"
+];
+
+const bathroomAmenities = [
+  "Shower only",
+  "Fresh hand and full-size towels",
+  "Hair dryer",
+  "Soap",
+  "Body wash",
+  "Shampoo",
+  "Conditioner",
+  "Beach towels"
 ];
 ---
 
@@ -41,7 +58,7 @@ const amenities = [
       <nav class="breadcrumb">
         <a href="/">Home</a> / <a href="/rooms">Rooms</a> / Orchid Room
       </nav>
-      <span class="room-badge">Full Kitchen</span>
+      <span class="room-badge">Kitchenette</span>
       <h1>Orchid Room</h1>
       <p class="tagline">Elegant Oceanview Suite with Kitchenette</p>
     </div>
@@ -75,11 +92,11 @@ const amenities = [
             </div>
             <div class="info-item">
               <span class="info-label">Bed</span>
-              <span class="info-value">King</span>
+              <span class="info-value">Sleep Number King</span>
             </div>
             <div class="info-item">
               <span class="info-label">Kitchen</span>
-              <span class="info-value">Full</span>
+              <span class="info-value">Kitchenette</span>
             </div>
           </div>
 
@@ -97,17 +114,17 @@ const amenities = [
           <div class="description">
             <h2>About This Room</h2>
             <p>
-              At 645 square feet, the Orchid Room is our most spacious accommodation and perfect for extended stays.
+              At 645 square feet, the Orchid Room is a spacious accommodation perfect for extended stays.
               Named for the beautiful orchids that bloom throughout our property, this suite combines elegant decor
-              with stunning ocean views and a full kitchenette.
+              with stunning ocean views and a kitchenette.
             </p>
             <p>
-              The kitchenette includes a stove, full-size refrigerator, microwave, and all the cookware and utensils
+              The kitchenette includes a mid-size refrigerator/freezer, microwave, and all the cookware and utensils
               you need to prepare meals with fresh local ingredients from the nearby Hilo Farmers Market.
             </p>
             <p>
-              Enjoy your morning coffee on the private lanai while watching the sunrise over Hilo Bay, then retreat
-              to the comfort of your Sleep Number adjustable bed at night for the perfect sleep.
+              Enjoy our own house blend of strong coffee on the private lanai while watching the sunrise over Hilo Bay, then retreat
+              to the comfort of your Sleep Number King Bed at night for the perfect sleep.
             </p>
           </div>
 
@@ -117,15 +134,15 @@ const amenities = [
               <div class="highlight-item">
                 <span class="highlight-icon">🍳</span>
                 <div>
-                  <strong>Full Kitchen</strong>
-                  <p>Stove, oven, full-size fridge, and all cookware needed</p>
+                  <strong>Kitchenette</strong>
+                  <p>Mid-size fridge/freezer, microwave, and all cookware needed</p>
                 </div>
               </div>
               <div class="highlight-item">
                 <span class="highlight-icon">📐</span>
                 <div>
-                  <strong>Most Spacious</strong>
-                  <p>645 square feet - our largest accommodation</p>
+                  <strong>Spacious</strong>
+                  <p>645 square feet of comfortable living space</p>
                 </div>
               </div>
               <div class="highlight-item">
@@ -146,9 +163,18 @@ const amenities = [
           </div>
 
           <div class="amenities">
-            <h3>All Amenities</h3>
+            <h3>Room Amenities</h3>
             <ul class="amenities-grid">
               {amenities.map((amenity) => (
+                <li>{amenity}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="amenities bathroom-amenities">
+            <h3>Bathroom Amenities</h3>
+            <ul class="amenities-grid">
+              {bathroomAmenities.map((amenity) => (
                 <li>{amenity}</li>
               ))}
             </ul>

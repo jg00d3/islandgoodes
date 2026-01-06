@@ -24,22 +24,22 @@ const description = "Meet the friendly animal residents at Island Goodes. Our pr
     <div class="container">
       <p class="intro">
         Island Goodes is home to some friendly animal residents who help make our property feel like a true Hawaiian retreat.
-        While they live on the property, they respect guest privacy and add to the tropical charm of your stay.
+        While they live on the property, they are not allowed in guest rooms and respect guest privacy.
       </p>
 
       <div class="pets-grid">
         <div class="pet-card">
           <div class="pet-image">
             <img src="/images/property/pool.jpg" alt="Island Goodes property" loading="lazy" />
-            <div class="pet-badge">Resident Friends</div>
+            <div class="pet-badge">Resident Cat</div>
           </div>
           <div class="pet-info">
             <div class="pet-icon">🐱</div>
-            <h2>Our Friendly Cats</h2>
+            <h2>Miss Kitty</h2>
             <p>
-              You may spot our resident cats lounging in sunny spots around the property.
-              They're friendly but independent, and love to greet guests from a distance.
-              They help keep the property free of geckos and other small critters.
+              Meet Miss Kitty, our beautiful calico cat who calls Island Goodes home.
+              She's friendly and loves to greet guests from a distance, but she is not allowed
+              in guest rooms. You may spot her lounging in sunny spots around the property.
             </p>
           </div>
         </div>
@@ -47,6 +47,54 @@ const description = "Meet the friendly animal residents at Island Goodes. Our pr
         <div class="pet-card reverse">
           <div class="pet-image">
             <img src="/images/rooms/hilo-bay/lanai.jpg" alt="View from lanai" loading="lazy" />
+            <div class="pet-badge">Friendly Dog</div>
+          </div>
+          <div class="pet-info">
+            <div class="pet-icon">🐕</div>
+            <h2>Jake (Coconut Jake)</h2>
+            <p>
+              Jake, also known as Coconut Jake, is our friendly and well-trained dog.
+              He loves meeting guests but is not allowed in guest rooms.
+              Jake is gentle and well-behaved, adding to the welcoming atmosphere of our property.
+            </p>
+          </div>
+        </div>
+
+        <div class="pet-card">
+          <div class="pet-image">
+            <img src="/images/property/pool.jpg" alt="Island Goodes property" loading="lazy" />
+            <div class="pet-badge">Farm Friends</div>
+          </div>
+          <div class="pet-info">
+            <div class="pet-icon">🫏</div>
+            <h2>Prudy & Jasper</h2>
+            <p>
+              Prudy and Jasper are our adorable donkeys who live on the property.
+              They're gentle and curious, and guests often enjoy watching them from a distance.
+              They add to the rural Hawaiian charm of Island Goodes.
+            </p>
+          </div>
+        </div>
+
+        <div class="pet-card reverse">
+          <div class="pet-image">
+            <img src="/images/rooms/hilo-bay/lanai.jpg" alt="View from lanai" loading="lazy" />
+            <div class="pet-badge">Equine Resident</div>
+          </div>
+          <div class="pet-info">
+            <div class="pet-icon">🐴</div>
+            <h2>Gypsy</h2>
+            <p>
+              Gypsy is our beautiful horse who roams the property. She's graceful and adds
+              to the peaceful, pastoral atmosphere of Island Goodes. Guests enjoy watching
+              her graze in the Hawaiian sunshine.
+            </p>
+          </div>
+        </div>
+
+        <div class="pet-card">
+          <div class="pet-image">
+            <img src="/images/property/pool.jpg" alt="Island Goodes property" loading="lazy" />
             <div class="pet-badge">Morning Chorus</div>
           </div>
           <div class="pet-info">
@@ -61,13 +109,24 @@ const description = "Meet the friendly animal residents at Island Goodes. Our pr
         </div>
       </div>
 
+      <div class="note-box warning">
+        <div class="note-icon">⚠️</div>
+        <div class="note-content">
+          <h3>Please Do Not Feed the Animals</h3>
+          <p>
+            Our animals are on special diets. Please do not feed them, as this can be harmful to their health.
+            We appreciate your understanding and cooperation.
+          </p>
+        </div>
+      </div>
+
       <div class="note-box">
         <div class="note-icon">📋</div>
         <div class="note-content">
-          <h3>A Note About Guest Pets</h3>
+          <h3>Guest Pet Policy</h3>
           <p>
-            While we have animal residents on the property, we are unable to accommodate guest pets
-            at this time. <strong>Service animals are welcome</strong> with advance notice.
+            We are unable to accommodate guest animals at this time. This includes all pets.
+            <strong>Service animals are welcome</strong> with advance notice.
           </p>
           <p>
             If you have any concerns about animal allergies, please <a href="/contact">contact us</a> before booking.
@@ -237,7 +296,12 @@ const description = "Meet the friendly animal residents at Island Goodes. Our pr
     border-radius: 16px;
     border-left: 4px solid var(--color-secondary);
     max-width: 800px;
-    margin: 0 auto;
+    margin: 0 auto 2rem;
+  }
+
+  .note-box.warning {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 152, 0, 0.1) 100%);
+    border-left-color: #ff9800;
   }
 
   .note-icon {
