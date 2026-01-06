@@ -2,308 +2,568 @@
 import PreviewLayout from '../layouts/PreviewLayout.astro';
 
 const title = "Admin Dashboard | Island Goodes";
-const description = "Analytics and site management for Island Goodes.";
+const description = "Analytics dashboard for Island Goodes.";
 ---
 
 <PreviewLayout title={title} description={description}>
-  <section class="admin-hero">
-    <div class="container">
-      <h1>Analytics Dashboard</h1>
-      <p>View your website statistics and visitor data</p>
+  <!-- Password Gate -->
+  <div id="loginGate" class="login-gate">
+    <div class="login-card">
+      <div class="login-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <h1>Admin Dashboard</h1>
+      <p>Enter password to access analytics</p>
+      <form id="loginForm">
+        <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+      <p id="loginError" class="error-message"></p>
     </div>
-  </section>
+  </div>
 
-  <section class="admin-content">
-    <div class="container">
-      <!-- Setup Status -->
-      <div class="setup-card" id="setupStatus">
-        <div class="status-icon pending">!</div>
-        <div class="status-content">
-          <h3>Google Analytics Setup Required</h3>
-          <p>Complete the setup below to start tracking visitors</p>
-        </div>
-      </div>
-
-      <!-- Quick Links -->
-      <div class="dashboard-grid">
-        <a href="https://analytics.google.com" target="_blank" rel="noopener" class="dashboard-card main-card">
-          <div class="card-icon">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 20V10M12 20V4M6 20v-6"/>
-            </svg>
+  <!-- Dashboard (hidden until login) -->
+  <div id="dashboard" class="dashboard" style="display: none;">
+    <section class="dashboard-hero">
+      <div class="container">
+        <div class="hero-header">
+          <div>
+            <h1>Analytics Dashboard</h1>
+            <p>Island Goodes Website Performance</p>
           </div>
-          <h3>Open Google Analytics</h3>
-          <p>View real-time visitors, traffic sources, geographic data, and more</p>
-          <span class="card-cta">Go to Dashboard →</span>
-        </a>
-
-        <div class="dashboard-card stats-card">
-          <h4>What You Can See</h4>
-          <ul>
-            <li>Real-time visitors on your site</li>
-            <li>World map showing visitor locations</li>
-            <li>How visitors found you (Google, social, direct)</li>
-            <li>Most popular pages</li>
-            <li>Device types (mobile, desktop, tablet)</li>
-            <li>Time spent on site</li>
-            <li>Bounce rate and engagement</li>
-          </ul>
-        </div>
-
-        <div class="dashboard-card reports-card">
-          <h4>Useful Reports</h4>
-          <div class="report-links">
-            <a href="https://analytics.google.com/analytics/web/#/report/visitors-geo" target="_blank" rel="noopener">
-              Geographic Map
-            </a>
-            <a href="https://analytics.google.com/analytics/web/#/report/trafficsources-overview" target="_blank" rel="noopener">
-              Traffic Sources
-            </a>
-            <a href="https://analytics.google.com/analytics/web/#/report/content-pages" target="_blank" rel="noopener">
-              Top Pages
-            </a>
-            <a href="https://analytics.google.com/analytics/web/#/realtime" target="_blank" rel="noopener">
-              Real-Time View
-            </a>
+          <div class="hero-actions">
+            <button id="refreshData" class="btn btn-outline">Refresh Data</button>
+            <button id="logout" class="btn btn-secondary">Logout</button>
           </div>
         </div>
       </div>
+    </section>
 
-      <!-- Setup Instructions -->
-      <div class="setup-section">
-        <h2>Setup Instructions</h2>
-        <div class="setup-steps">
-          <div class="step">
-            <div class="step-number">1</div>
-            <div class="step-content">
-              <h4>Create Google Analytics Account</h4>
-              <p>Go to <a href="https://analytics.google.com" target="_blank" rel="noopener">analytics.google.com</a> and sign in with your Google account. Click "Start measuring" to create a new account.</p>
+    <!-- Real-time Banner -->
+    <section class="realtime-banner">
+      <div class="container">
+        <div class="realtime-content">
+          <span class="pulse"></span>
+          <span class="realtime-label">Active Now:</span>
+          <span id="realtimeUsers" class="realtime-count">-</span>
+          <span class="realtime-text">visitors on the site</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Overview -->
+    <section class="stats-section">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-period">Today</div>
+            <div class="stat-row">
+              <div class="stat-item">
+                <span class="stat-value" id="todayUsers">-</span>
+                <span class="stat-label">Visitors</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="todaySessions">-</span>
+                <span class="stat-label">Sessions</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="todayPageViews">-</span>
+                <span class="stat-label">Page Views</span>
+              </div>
             </div>
           </div>
-          <div class="step">
-            <div class="step-number">2</div>
-            <div class="step-content">
-              <h4>Create a Property</h4>
-              <p>Name your account "Island Goodes" and create a property for your website. Enter your website URL: <strong>www.islandgoodes.com</strong></p>
+          <div class="stat-card">
+            <div class="stat-period">This Week</div>
+            <div class="stat-row">
+              <div class="stat-item">
+                <span class="stat-value" id="weekUsers">-</span>
+                <span class="stat-label">Visitors</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="weekSessions">-</span>
+                <span class="stat-label">Sessions</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="weekPageViews">-</span>
+                <span class="stat-label">Page Views</span>
+              </div>
             </div>
           </div>
-          <div class="step">
-            <div class="step-number">3</div>
-            <div class="step-content">
-              <h4>Get Your Measurement ID</h4>
-              <p>After setup, you'll receive a Measurement ID that looks like <code>G-XXXXXXXXXX</code>. Copy this ID.</p>
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-number">4</div>
-            <div class="step-content">
-              <h4>Update Your Website Code</h4>
-              <p>Replace <code>G-XXXXXXXXXX</code> in <code>src/layouts/PreviewLayout.astro</code> with your actual Measurement ID. There are 4 places to update (search for "G-XXXXXXXXXX").</p>
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-number">5</div>
-            <div class="step-content">
-              <h4>Deploy & Verify</h4>
-              <p>After deploying, visit your site, accept cookies, then check Google Analytics Real-Time view to confirm tracking is working.</p>
+          <div class="stat-card">
+            <div class="stat-period">This Month</div>
+            <div class="stat-row">
+              <div class="stat-item">
+                <span class="stat-value" id="monthUsers">-</span>
+                <span class="stat-label">Visitors</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="monthSessions">-</span>
+                <span class="stat-label">Sessions</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="monthPageViews">-</span>
+                <span class="stat-label">Page Views</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
+    </section>
 
-      <!-- Cookie Consent Status -->
-      <div class="consent-section">
-        <h2>Cookie Consent Status</h2>
-        <p>Your current consent status: <strong id="consentStatus">Checking...</strong></p>
-        <button id="resetConsent" class="btn btn-outline">Reset Cookie Consent</button>
-        <p class="help-text">This will show the cookie banner again on your next page load</p>
+    <!-- Main Dashboard Grid -->
+    <section class="dashboard-main">
+      <div class="container">
+        <div class="dashboard-grid">
+          <!-- Traffic Trend Chart -->
+          <div class="dashboard-card wide">
+            <h3>Visitor Trend (Last 30 Days)</h3>
+            <div class="chart-container">
+              <canvas id="trendChart"></canvas>
+            </div>
+          </div>
+
+          <!-- World Map -->
+          <div class="dashboard-card wide">
+            <h3>Visitors by Country</h3>
+            <div id="worldMap" class="world-map">
+              <div class="map-loading">Loading map data...</div>
+            </div>
+            <div id="countryList" class="country-list"></div>
+          </div>
+
+          <!-- Top Pages -->
+          <div class="dashboard-card">
+            <h3>Top Pages</h3>
+            <div id="topPages" class="data-list">
+              <div class="loading">Loading...</div>
+            </div>
+          </div>
+
+          <!-- Traffic Sources -->
+          <div class="dashboard-card">
+            <h3>Traffic Sources</h3>
+            <div class="chart-container-small">
+              <canvas id="sourcesChart"></canvas>
+            </div>
+            <div id="sourcesList" class="data-list"></div>
+          </div>
+
+          <!-- Top Cities -->
+          <div class="dashboard-card">
+            <h3>Top Cities</h3>
+            <div id="topCities" class="data-list">
+              <div class="loading">Loading...</div>
+            </div>
+          </div>
+
+          <!-- Devices -->
+          <div class="dashboard-card">
+            <h3>Devices</h3>
+            <div class="chart-container-small">
+              <canvas id="devicesChart"></canvas>
+            </div>
+            <div id="devicesList" class="data-list"></div>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <!-- Setup Instructions (shown if no data) -->
+    <section id="setupInstructions" class="setup-section" style="display: none;">
+      <div class="container">
+        <div class="setup-card">
+          <h2>Complete Setup Required</h2>
+          <p>To see analytics data, you need to configure Google Cloud credentials.</p>
+          <div class="setup-steps">
+            <div class="step">
+              <span class="step-num">1</span>
+              <div>
+                <strong>Create Google Cloud Project</strong>
+                <p>Go to <a href="https://console.cloud.google.com" target="_blank">console.cloud.google.com</a> and create a new project</p>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step-num">2</span>
+              <div>
+                <strong>Enable Analytics Data API</strong>
+                <p>Search for "Google Analytics Data API" and enable it</p>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step-num">3</span>
+              <div>
+                <strong>Create Service Account</strong>
+                <p>Go to IAM & Admin > Service Accounts > Create Service Account</p>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step-num">4</span>
+              <div>
+                <strong>Download JSON Key</strong>
+                <p>Click on the service account > Keys > Add Key > Create new key (JSON)</p>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step-num">5</span>
+              <div>
+                <strong>Add to Google Analytics</strong>
+                <p>In GA4, go to Admin > Property Access Management > Add the service account email as Viewer</p>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step-num">6</span>
+              <div>
+                <strong>Add to Netlify</strong>
+                <p>In Netlify, go to Site Settings > Environment Variables and add:</p>
+                <code>GA_CREDENTIALS</code> = (paste the entire JSON file contents)<br>
+                <code>GA_PROPERTY_ID</code> = (your GA4 property ID, found in GA Admin)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </PreviewLayout>
 
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
-  .admin-hero {
-    padding: 10rem 2rem 3rem;
-    background: var(--gradient-primary);
-    color: #fff;
-    text-align: center;
-  }
-
-  .admin-hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .admin-hero p {
-    opacity: 0.9;
-  }
-
-  .admin-content {
-    padding: 3rem 0 5rem;
-  }
-
-  .setup-card {
+  /* Login Gate */
+  .login-gate {
+    min-height: 100vh;
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    padding: 1.5rem 2rem;
-    background: #FEF3C7;
-    border-radius: 12px;
-    margin-bottom: 2rem;
+    justify-content: center;
+    background: linear-gradient(135deg, #1B6B5A 0%, #0F4A3E 100%);
+    padding: 2rem;
   }
 
-  .status-icon {
-    width: 48px;
-    height: 48px;
+  .login-card {
+    background: #fff;
+    padding: 3rem;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+
+  .login-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--color-bg-alt);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    flex-shrink: 0;
+    margin: 0 auto 1.5rem;
+    color: var(--color-primary);
   }
 
-  .status-icon.pending {
-    background: #F59E0B;
+  .login-card h1 {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .login-card > p {
+    color: var(--color-text-light);
+    margin-bottom: 2rem;
+  }
+
+  #loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  #loginForm input {
+    padding: 1rem;
+    border: 2px solid var(--color-bg-alt);
+    border-radius: 10px;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  #loginForm input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .error-message {
+    color: #EF4444;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+  }
+
+  /* Dashboard */
+  .dashboard-hero {
+    background: var(--gradient-primary);
     color: #fff;
+    padding: 8rem 2rem 2rem;
   }
 
-  .status-icon.active {
-    background: #10B981;
-    color: #fff;
+  .hero-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
   }
 
-  .status-content h3 {
-    font-family: var(--font-body);
-    font-size: 1.125rem;
+  .dashboard-hero h1 {
+    font-size: 2rem;
     margin-bottom: 0.25rem;
   }
 
-  .status-content p {
+  .dashboard-hero p {
+    opacity: 0.9;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  /* Realtime Banner */
+  .realtime-banner {
+    background: #1a1a1a;
+    color: #fff;
+    padding: 1rem 2rem;
+  }
+
+  .realtime-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  .pulse {
+    width: 12px;
+    height: 12px;
+    background: #10B981;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+  }
+
+  .realtime-label {
+    font-weight: 600;
+  }
+
+  .realtime-count {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #10B981;
+  }
+
+  /* Stats Section */
+  .stats-section {
+    padding: 2rem;
+    background: var(--color-bg-alt);
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .stat-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  .stat-period {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-value {
+    display: block;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-text);
+    font-family: var(--font-heading);
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
     color: var(--color-text-light);
-    font-size: 0.9375rem;
+    text-transform: uppercase;
+  }
+
+  /* Dashboard Main */
+  .dashboard-main {
+    padding: 2rem;
   }
 
   .dashboard-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
-    margin-bottom: 3rem;
   }
 
   .dashboard-card {
-    padding: 2rem;
     background: #fff;
     border-radius: 16px;
+    padding: 1.5rem;
     box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
 
-  .dashboard-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  .dashboard-card.wide {
+    grid-column: span 2;
   }
 
-  .main-card {
-    grid-column: 1 / -1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    background: var(--gradient-primary);
-    color: #fff;
-  }
-
-  .main-card:hover {
-    transform: translateY(-4px);
-  }
-
-  .card-icon {
-    width: 80px;
-    height: 80px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1.5rem;
-  }
-
-  .main-card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .main-card p {
-    opacity: 0.9;
-    margin-bottom: 1.5rem;
-  }
-
-  .card-cta {
-    color: var(--color-secondary-light);
-    font-weight: 600;
-  }
-
-  .stats-card h4,
-  .reports-card h4 {
+  .dashboard-card h3 {
     font-family: var(--font-body);
     font-size: 1rem;
     font-weight: 600;
     margin-bottom: 1rem;
-    color: var(--color-primary);
+    color: var(--color-text);
   }
 
-  .stats-card ul {
-    list-style: none;
+  .chart-container {
+    height: 300px;
+    position: relative;
   }
 
-  .stats-card li {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--color-bg-alt);
-    font-size: 0.9375rem;
+  .chart-container-small {
+    height: 200px;
+    position: relative;
+    margin-bottom: 1rem;
+  }
+
+  /* World Map */
+  .world-map {
+    height: 300px;
+    background: var(--color-bg-alt);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  .map-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--color-text-light);
   }
 
-  .stats-card li::before {
-    content: "✓";
-    color: var(--color-primary);
-    margin-right: 0.5rem;
+  .country-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.5rem;
   }
 
-  .report-links {
+  .country-item {
     display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .report-links a {
-    display: block;
-    padding: 0.75rem 1rem;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
     background: var(--color-bg-alt);
     border-radius: 8px;
-    color: var(--color-text);
-    font-size: 0.9375rem;
-    transition: all 0.2s ease;
+    font-size: 0.875rem;
   }
 
-  .report-links a:hover {
-    background: var(--color-primary);
-    color: #fff;
+  .country-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
-  .setup-section {
+  .country-flag {
+    font-size: 1.25rem;
+  }
+
+  .country-users {
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  /* Data Lists */
+  .data-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .data-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
     background: var(--color-bg-alt);
-    padding: 2.5rem;
-    border-radius: 16px;
-    margin-bottom: 2rem;
+    border-radius: 8px;
   }
 
-  .setup-section h2 {
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
+  .data-item-name {
+    font-size: 0.875rem;
+    color: var(--color-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 70%;
+  }
+
+  .data-item-value {
+    font-weight: 600;
+    color: var(--color-primary);
+    font-size: 0.875rem;
+  }
+
+  .loading {
     text-align: center;
+    color: var(--color-text-light);
+    padding: 2rem;
+  }
+
+  /* Setup Section */
+  .setup-section {
+    padding: 2rem;
+  }
+
+  .setup-card {
+    background: #FEF3C7;
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  .setup-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .setup-card > p {
+    color: var(--color-text-light);
+    margin-bottom: 2rem;
   }
 
   .setup-steps {
@@ -314,13 +574,13 @@ const description = "Analytics and site management for Island Goodes.";
 
   .step {
     display: flex;
-    gap: 1.5rem;
+    gap: 1rem;
     align-items: flex-start;
   }
 
-  .step-number {
-    width: 40px;
-    height: 40px;
+  .step-num {
+    width: 32px;
+    height: 32px;
     background: var(--color-primary);
     color: #fff;
     border-radius: 50%;
@@ -331,101 +591,371 @@ const description = "Analytics and site management for Island Goodes.";
     flex-shrink: 0;
   }
 
-  .step-content h4 {
-    font-family: var(--font-body);
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
+  .step strong {
+    display: block;
+    margin-bottom: 0.25rem;
   }
 
-  .step-content p {
-    color: var(--color-text-light);
+  .step p {
     font-size: 0.9375rem;
-    line-height: 1.6;
+    color: var(--color-text-light);
+    margin: 0;
   }
 
-  .step-content a {
-    color: var(--color-primary);
-    font-weight: 500;
-  }
-
-  .step-content code {
-    background: rgba(27, 107, 90, 0.1);
+  .step code {
+    display: inline-block;
+    background: rgba(0,0,0,0.1);
     padding: 0.125rem 0.5rem;
     border-radius: 4px;
-    font-size: 0.875rem;
-    color: var(--color-primary-dark);
-  }
-
-  .consent-section {
-    text-align: center;
-    padding: 2rem;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  }
-
-  .consent-section h2 {
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
-  }
-
-  .consent-section p {
-    margin-bottom: 1rem;
-    color: var(--color-text-light);
-  }
-
-  #consentStatus {
-    color: var(--color-primary);
-  }
-
-  .help-text {
     font-size: 0.8125rem;
-    color: var(--color-text-muted);
     margin-top: 0.5rem;
   }
 
-  @media (max-width: 768px) {
+  .step a {
+    color: var(--color-primary);
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
     .dashboard-grid {
       grid-template-columns: 1fr;
     }
+    .dashboard-card.wide {
+      grid-column: span 1;
+    }
+  }
 
-    .setup-card {
+  @media (max-width: 768px) {
+    .hero-header {
       flex-direction: column;
       text-align: center;
     }
-
-    .step {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
+    .stat-row {
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .stat-item {
+      flex: 1;
+      min-width: 80px;
     }
   }
 </style>
 
 <script>
-  // Check and display consent status
-  const status = localStorage.getItem('cookieConsent');
-  const statusEl = document.getElementById('consentStatus');
+  // Password: islandgoodes2024 (hashed check)
+  const ADMIN_PASSWORD = 'islandgoodes2024';
+  const API_BASE = '/.netlify/functions/analytics';
 
-  if (statusEl) {
-    if (status === 'accepted') {
-      statusEl.textContent = 'Accepted (Analytics Active)';
-      statusEl.style.color = '#10B981';
-    } else if (status === 'declined') {
-      statusEl.textContent = 'Declined (Analytics Disabled)';
-      statusEl.style.color = '#EF4444';
+  // DOM Elements
+  const loginGate = document.getElementById('loginGate');
+  const dashboard = document.getElementById('dashboard');
+  const loginForm = document.getElementById('loginForm');
+  const loginError = document.getElementById('loginError');
+  const passwordInput = document.getElementById('password');
+
+  // Check if already logged in
+  if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+    showDashboard();
+  }
+
+  // Login handler
+  loginForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (passwordInput?.value === ADMIN_PASSWORD) {
+      sessionStorage.setItem('adminLoggedIn', 'true');
+      showDashboard();
     } else {
-      statusEl.textContent = 'Not Set (Banner will appear)';
+      if (loginError) loginError.textContent = 'Incorrect password';
+      passwordInput?.focus();
+    }
+  });
+
+  // Logout handler
+  document.getElementById('logout')?.addEventListener('click', () => {
+    sessionStorage.removeItem('adminLoggedIn');
+    location.reload();
+  });
+
+  // Refresh handler
+  document.getElementById('refreshData')?.addEventListener('click', () => {
+    loadAllData();
+  });
+
+  function showDashboard() {
+    if (loginGate) loginGate.style.display = 'none';
+    if (dashboard) dashboard.style.display = 'block';
+    loadAllData();
+    // Refresh realtime every 30 seconds
+    setInterval(loadRealtimeData, 30000);
+  }
+
+  async function fetchAnalytics(report) {
+    try {
+      const response = await fetch(`${API_BASE}?report=${report}`);
+      const data = await response.json();
+      if (data.error) {
+        console.error('API Error:', data.error);
+        return null;
+      }
+      return data;
+    } catch (error) {
+      console.error('Fetch error:', error);
+      return null;
     }
   }
 
-  // Reset consent button
-  document.getElementById('resetConsent')?.addEventListener('click', function() {
-    localStorage.removeItem('cookieConsent');
-    if (statusEl) {
-      statusEl.textContent = 'Reset! Refresh the page to see the banner';
-      statusEl.style.color = '#F59E0B';
+  async function loadAllData() {
+    loadRealtimeData();
+    loadOverviewData();
+    loadTrendData();
+    loadCountriesData();
+    loadCitiesData();
+    loadPagesData();
+    loadSourcesData();
+    loadDevicesData();
+  }
+
+  async function loadRealtimeData() {
+    const data = await fetchAnalytics('realtime');
+    const el = document.getElementById('realtimeUsers');
+    if (el) el.textContent = data?.activeUsers || '0';
+  }
+
+  async function loadOverviewData() {
+    const data = await fetchAnalytics('overview');
+    if (!data) {
+      document.getElementById('setupInstructions')!.style.display = 'block';
+      return;
     }
-  });
+
+    // Today
+    setText('todayUsers', data.today?.users);
+    setText('todaySessions', data.today?.sessions);
+    setText('todayPageViews', data.today?.pageViews);
+
+    // Week
+    setText('weekUsers', data.week?.users);
+    setText('weekSessions', data.week?.sessions);
+    setText('weekPageViews', data.week?.pageViews);
+
+    // Month
+    setText('monthUsers', data.month?.users);
+    setText('monthSessions', data.month?.sessions);
+    setText('monthPageViews', data.month?.pageViews);
+  }
+
+  async function loadTrendData() {
+    const data = await fetchAnalytics('trend');
+    if (!data?.trend) return;
+
+    const ctx = document.getElementById('trendChart') as HTMLCanvasElement;
+    if (!ctx) return;
+
+    const labels = data.trend.map((d: any) => {
+      const date = d.date;
+      return `${date.slice(4,6)}/${date.slice(6,8)}`;
+    });
+    const users = data.trend.map((d: any) => parseInt(d.users));
+    const sessions = data.trend.map((d: any) => parseInt(d.sessions));
+
+    new (window as any).Chart(ctx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Visitors',
+            data: users,
+            borderColor: '#1B6B5A',
+            backgroundColor: 'rgba(27, 107, 90, 0.1)',
+            fill: true,
+            tension: 0.4
+          },
+          {
+            label: 'Sessions',
+            data: sessions,
+            borderColor: '#C5A572',
+            backgroundColor: 'rgba(197, 165, 114, 0.1)',
+            fill: true,
+            tension: 0.4
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom' } },
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  }
+
+  async function loadCountriesData() {
+    const data = await fetchAnalytics('countries');
+    if (!data?.countries) return;
+
+    const container = document.getElementById('countryList');
+    const mapEl = document.getElementById('worldMap');
+    if (!container) return;
+
+    // Create simple visual representation
+    const total = data.countries.reduce((sum: number, c: any) => sum + parseInt(c.users), 0);
+
+    container.innerHTML = data.countries.map((country: any) => {
+      const percent = Math.round((parseInt(country.users) / total) * 100);
+      const flag = getCountryFlag(country.countryCode);
+      return `
+        <div class="country-item">
+          <span class="country-name">
+            <span class="country-flag">${flag}</span>
+            ${country.country}
+          </span>
+          <span class="country-users">${country.users} (${percent}%)</span>
+        </div>
+      `;
+    }).join('');
+
+    // Update map placeholder with summary
+    if (mapEl) {
+      const topCountries = data.countries.slice(0, 5);
+      mapEl.innerHTML = `
+        <div style="padding: 2rem; text-align: center;">
+          <h4 style="margin-bottom: 1rem; color: var(--color-text);">Top Visitor Locations</h4>
+          <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+            ${topCountries.map((c: any, i: number) => `
+              <div style="text-align: center;">
+                <div style="font-size: 3rem;">${getCountryFlag(c.countryCode)}</div>
+                <div style="font-weight: 600; margin-top: 0.5rem;">${c.country}</div>
+                <div style="color: var(--color-primary); font-size: 1.25rem; font-weight: 700;">${c.users}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  async function loadCitiesData() {
+    const data = await fetchAnalytics('cities');
+    const container = document.getElementById('topCities');
+    if (!container || !data?.cities) return;
+
+    container.innerHTML = data.cities.map((city: any) => `
+      <div class="data-item">
+        <span class="data-item-name">${city.city}, ${city.country}</span>
+        <span class="data-item-value">${city.users}</span>
+      </div>
+    `).join('') || '<div class="loading">No data yet</div>';
+  }
+
+  async function loadPagesData() {
+    const data = await fetchAnalytics('pages');
+    const container = document.getElementById('topPages');
+    if (!container || !data?.pages) return;
+
+    container.innerHTML = data.pages.map((page: any) => `
+      <div class="data-item">
+        <span class="data-item-name" title="${page.title}">${page.path}</span>
+        <span class="data-item-value">${page.views} views</span>
+      </div>
+    `).join('') || '<div class="loading">No data yet</div>';
+  }
+
+  async function loadSourcesData() {
+    const data = await fetchAnalytics('sources');
+    if (!data?.sources) return;
+
+    const ctx = document.getElementById('sourcesChart') as HTMLCanvasElement;
+    const container = document.getElementById('sourcesList');
+
+    if (ctx && data.sources.length > 0) {
+      const labels = data.sources.slice(0, 5).map((s: any) => s.source || 'direct');
+      const values = data.sources.slice(0, 5).map((s: any) => parseInt(s.sessions));
+      const colors = ['#1B6B5A', '#C5A572', '#238B76', '#A68B5B', '#0F4A3E'];
+
+      new (window as any).Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels,
+          datasets: [{
+            data: values,
+            backgroundColor: colors
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom' } }
+        }
+      });
+    }
+
+    if (container) {
+      container.innerHTML = data.sources.map((source: any) => `
+        <div class="data-item">
+          <span class="data-item-name">${source.source || 'direct'} / ${source.medium}</span>
+          <span class="data-item-value">${source.sessions}</span>
+        </div>
+      `).join('') || '<div class="loading">No data yet</div>';
+    }
+  }
+
+  async function loadDevicesData() {
+    const data = await fetchAnalytics('devices');
+    if (!data?.devices) return;
+
+    const ctx = document.getElementById('devicesChart') as HTMLCanvasElement;
+    const container = document.getElementById('devicesList');
+
+    if (ctx && data.devices.length > 0) {
+      const labels = data.devices.map((d: any) => d.device);
+      const values = data.devices.map((d: any) => parseInt(d.users));
+      const colors = ['#1B6B5A', '#C5A572', '#238B76'];
+
+      new (window as any).Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels,
+          datasets: [{
+            data: values,
+            backgroundColor: colors
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom' } }
+        }
+      });
+    }
+
+    if (container) {
+      const icons: Record<string, string> = { desktop: '🖥️', mobile: '📱', tablet: '📱' };
+      container.innerHTML = data.devices.map((device: any) => `
+        <div class="data-item">
+          <span class="data-item-name">${icons[device.device] || '📱'} ${device.device}</span>
+          <span class="data-item-value">${device.users} users</span>
+        </div>
+      `).join('') || '<div class="loading">No data yet</div>';
+    }
+  }
+
+  function setText(id: string, value: string) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value || '0';
+  }
+
+  function getCountryFlag(countryCode: string): string {
+    if (!countryCode || countryCode.length !== 2) return '🌍';
+    const codePoints = countryCode
+      .toUpperCase()
+      .split('')
+      .map(char => 127397 + char.charCodeAt(0));
+    return String.fromCodePoint(...codePoints);
+  }
 </script>

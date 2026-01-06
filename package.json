@@ -11,6 +11,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@google-analytics/data": "^5.2.1",
     "astro": "^5.0.0"
   }
 }
