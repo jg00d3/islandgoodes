@@ -29,6 +29,34 @@ const description = "Read reviews from guests who have stayed at Island Goodes a
         </div>
         <p class="intro-text">We're proud of the experiences we create for our guests. Read authentic reviews on these platforms:</p>
 
+        <!-- TripAdvisor Rating Badge -->
+        <div class="tripadvisor-badge" id="tripadvisorBadge">
+          <div class="ta-badge-content">
+            <div class="ta-logo">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="#34E0A1">
+                <circle cx="6.5" cy="14" r="3.5" fill="none" stroke="#34E0A1" stroke-width="2"/>
+                <circle cx="17.5" cy="14" r="3.5" fill="none" stroke="#34E0A1" stroke-width="2"/>
+                <circle cx="6.5" cy="14" r="1.5"/>
+                <circle cx="17.5" cy="14" r="1.5"/>
+                <path d="M12 4 C6 4 4 8 4 10 M12 4 C18 4 20 8 20 10" fill="none" stroke="#34E0A1" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="12" cy="8" r="1.5" fill="#34E0A1"/>
+              </svg>
+            </div>
+            <div class="ta-rating">
+              <div class="ta-score">4.5</div>
+              <div class="ta-circles">
+                <span class="ta-circle full"></span>
+                <span class="ta-circle full"></span>
+                <span class="ta-circle full"></span>
+                <span class="ta-circle full"></span>
+                <span class="ta-circle half"></span>
+              </div>
+              <div class="ta-count">245 reviews</div>
+            </div>
+            <a href="https://www.tripadvisor.com/Hotel_Review-g60605-d635399-Reviews-Island_Goode_s-Papaikou_Island_of_Hawaii_Hawaii.html" target="_blank" rel="noopener" class="ta-link">Read reviews on TripAdvisor</a>
+          </div>
+        </div>
+
         <div class="review-platforms">
           <a href="https://www.tripadvisor.com/Hotel_Review-g60605-d635399-Reviews-Island_Goode_s-Papaikou_Island_of_Hawaii_Hawaii.html" target="_blank" rel="noopener" class="platform-card">
             <div class="platform-icon tripadvisor">
@@ -196,6 +224,79 @@ const description = "Read reviews from guests who have stayed at Island Goodes a
     color: var(--color-text-light);
     margin-bottom: 2rem;
     font-size: 1.125rem;
+  }
+
+  /* TripAdvisor Badge */
+  .tripadvisor-badge {
+    max-width: 400px;
+    margin: 0 auto 2.5rem;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+    overflow: hidden;
+    border: 2px solid #34E0A1;
+  }
+
+  .ta-badge-content {
+    padding: 1.5rem 2rem;
+    text-align: center;
+  }
+
+  .ta-logo {
+    margin-bottom: 0.75rem;
+  }
+
+  .ta-rating {
+    margin-bottom: 1rem;
+  }
+
+  .ta-score {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-text);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .ta-circles {
+    display: flex;
+    justify-content: center;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .ta-circle {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    position: relative;
+  }
+
+  .ta-circle.full {
+    background: #34E0A1;
+  }
+
+  .ta-circle.half {
+    background: linear-gradient(90deg, #34E0A1 50%, #e0e0e0 50%);
+  }
+
+  .ta-count {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+  }
+
+  .ta-link {
+    display: inline-block;
+    color: #00AA6C;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: var(--transition-fast);
+  }
+
+  .ta-link:hover {
+    text-decoration: underline;
   }
 
   .review-platforms {

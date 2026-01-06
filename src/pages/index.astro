@@ -9,7 +9,7 @@ const description = "Island Goodes is an adults-only accommodation near Hilo wit
   <!-- HERO SECTION -->
   <section class="hero">
     <div class="hero-background">
-      <img src="/images/hero.jpg" alt="Ocean view from Island Goodes" />
+      <img src="/images/hero.jpg" alt="Ocean view from Island Goodes" fetchpriority="high" decoding="async" />
     </div>
     <div class="hero-overlay"></div>
 
@@ -210,6 +210,20 @@ const description = "Island Goodes is an adults-only accommodation near Hilo wit
         <span class="section-subtitle">Guest Reviews</span>
         <h2>What Our Guests Say</h2>
       </div>
+      <div class="tripadvisor-mini-badge">
+        <a href="https://www.tripadvisor.com/Hotel_Review-g60605-d635399-Reviews-Island_Goode_s-Papaikou_Island_of_Hawaii_Hawaii.html" target="_blank" rel="noopener">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="#34E0A1">
+            <circle cx="6.5" cy="14" r="3" fill="none" stroke="#34E0A1" stroke-width="1.5"/>
+            <circle cx="17.5" cy="14" r="3" fill="none" stroke="#34E0A1" stroke-width="1.5"/>
+            <circle cx="6.5" cy="14" r="1"/>
+            <circle cx="17.5" cy="14" r="1"/>
+            <path d="M12 5 C7 5 5 8 5 10 M12 5 C17 5 19 8 19 10" fill="none" stroke="#34E0A1" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span class="ta-mini-rating">4.5</span>
+          <span class="ta-mini-stars">★★★★★</span>
+          <span class="ta-mini-text">245 reviews on TripAdvisor</span>
+        </a>
+      </div>
       <div class="testimonials-grid">
         <div class="testimonial-card">
           <div class="testimonial-stars">★★★★★</div>
@@ -257,10 +271,56 @@ const description = "Island Goodes is an adults-only accommodation near Hilo wit
     </div>
   </section>
 
+  <!-- LIVE CAMERAS SECTION -->
+  <section class="live-cameras">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-subtitle">See Hawaii Right Now</span>
+        <h2>Live Island Views</h2>
+      </div>
+      <p class="cameras-intro">Get a glimpse of what awaits you on the Big Island with these live webcams from nearby attractions.</p>
+      <div class="cameras-grid">
+        <div class="camera-card">
+          <div class="camera-embed">
+            <iframe
+              src="https://www.youtube.com/embed/HYfho-xPtEo?autoplay=0&mute=1"
+              title="Hawaii Volcanoes National Park Live"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          </div>
+          <div class="camera-info">
+            <h3>Kilauea Volcano</h3>
+            <p>Live view from Hawaii Volcanoes National Park</p>
+          </div>
+        </div>
+        <div class="camera-card">
+          <div class="camera-embed">
+            <iframe
+              src="https://www.youtube.com/embed/live_stream?channel=UC7yAqSe65wfXG2-lvPxewJg&autoplay=0&mute=1"
+              title="Hilo Bay Live Cam"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          </div>
+          <div class="camera-info">
+            <h3>Mauna Kea Summit</h3>
+            <p>View from one of the world's best stargazing locations</p>
+          </div>
+        </div>
+      </div>
+      <p class="cameras-note">Cameras may be offline during maintenance or inclement weather</p>
+    </div>
+  </section>
+
   <!-- CTA SECTION -->
   <section class="cta-section">
     <div class="cta-background">
-      <img src="/images/hero-ocean-view.jpg" alt="Ocean view" />
+      <img src="/images/hero-ocean-view.jpg" alt="Ocean view" loading="lazy" decoding="async" />
     </div>
     <div class="cta-overlay"></div>
     <div class="cta-content">
@@ -298,6 +358,23 @@ const description = "Island Goodes is an adults-only accommodation near Hilo wit
   @keyframes heroZoom {
     from { transform: scale(1); }
     to { transform: scale(1.05); }
+  }
+
+  /* Image loading optimization */
+  .hero-background img,
+  .cta-background img,
+  .room-card-image img,
+  .amenity-card img {
+    content-visibility: auto;
+  }
+
+  /* Lazy sections for better performance */
+  .amenities-section,
+  .testimonials,
+  .live-cameras,
+  .cta-section {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 500px;
   }
 
   /* Weather Widget */
@@ -668,6 +745,44 @@ const description = "Island Goodes is an adults-only accommodation near Hilo wit
     background: var(--color-bg-warm);
   }
 
+  .tripadvisor-mini-badge {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .tripadvisor-mini-badge a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: #fff;
+    border-radius: 50px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    transition: var(--transition-base);
+    border: 1px solid #34E0A1;
+  }
+
+  .tripadvisor-mini-badge a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(52, 224, 161, 0.25);
+  }
+
+  .ta-mini-rating {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .ta-mini-stars {
+    color: #34E0A1;
+    font-size: 0.875rem;
+  }
+
+  .ta-mini-text {
+    color: var(--color-text-light);
+    font-size: 0.8125rem;
+  }
+
   .testimonials-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -797,10 +912,95 @@ const description = "Island Goodes is an adults-only accommodation near Hilo wit
       flex-direction: column;
       gap: 0.5rem;
     }
+
+    .cameras-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* LIVE CAMERAS */
+  .live-cameras {
+    padding: var(--section-padding) 0;
+    background: var(--color-bg-alt);
+  }
+
+  .cameras-intro {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    color: var(--color-text-light);
+  }
+
+  .cameras-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .camera-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  }
+
+  .camera-embed {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    background: #1a1a1a;
+  }
+
+  .camera-embed iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .camera-info {
+    padding: 1.25rem;
+  }
+
+  .camera-info h3 {
+    font-size: 1.125rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .camera-info p {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+  }
+
+  .cameras-note {
+    text-align: center;
+    font-size: 0.8125rem;
+    color: var(--color-text-light);
+    margin-top: 1.5rem;
+    opacity: 0.7;
   }
 </style>
 
 <script>
+  // Check admin settings for homepage widgets
+  (function() {
+    try {
+      const settings = JSON.parse(localStorage.getItem('islandgoodes_settings') || '{}');
+
+      // Hide weather widget if disabled
+      if (settings.weatherEnabled === false) {
+        document.getElementById('weatherWidget')?.remove();
+      }
+
+      // Hide cameras section if disabled
+      if (settings.camerasEnabled === false) {
+        document.querySelector('.live-cameras')?.remove();
+      }
+    } catch(e) {}
+  })();
+
   // Weather Widget - Hawaii Time and Weather
   function updateTime() {
     const now = new Date();

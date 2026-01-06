@@ -122,6 +122,7 @@ const bathroomAmenities = [
             </div>
             <p class="price-note">Plus 17.97% Hawaii tax</p>
             <a href="/book" class="btn btn-primary btn-large btn-block">Book This Room</a>
+            <a href="https://my.matterport.com/show/?m=zrMG54r6RUx&sr=-2.86,.92&ss=13" class="btn btn-outline btn-large btn-block" target="_blank" rel="noopener">View 3D Tour</a>
             <p class="call-option">Or call: <a href="tel:+18089642291">808-964-2291</a></p>
           </div>
 
@@ -304,6 +305,7 @@ const bathroomAmenities = [
     border-radius: 16px;
     overflow: hidden;
     margin-bottom: 1rem;
+    scroll-margin-top: 100px;
   }
 
   .main-image img {
@@ -581,6 +583,7 @@ const bathroomAmenities = [
   // Thumbnail gallery functionality
   const thumbnails = document.querySelectorAll('.thumbnail');
   const featuredImage = document.getElementById('featured-image') as HTMLImageElement;
+  const mainImageContainer = document.querySelector('.main-image');
 
   thumbnails.forEach((thumb) => {
     thumb.addEventListener('click', () => {
@@ -592,6 +595,9 @@ const bathroomAmenities = [
       }
       thumbnails.forEach(t => t.classList.remove('active'));
       thumb.classList.add('active');
+
+      // Scroll to show the full featured image
+      mainImageContainer?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
 

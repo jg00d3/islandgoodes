@@ -29,7 +29,9 @@
       "Bash(for f in *.astro)",
       "Bash(do mv \"$f\" \"_old-$f\")",
       "Bash(done)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(dir:*)",
+      "Bash(npm install:*)"
     ]
   }
 }

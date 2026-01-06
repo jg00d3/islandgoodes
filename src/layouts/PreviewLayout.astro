@@ -192,15 +192,63 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
         </ul>
       </div>
       <div class="footer-cta">
-        <h4>Book Direct</h4>
-        <p>Best rates guaranteed when you book directly with us</p>
-        <a href="/book" class="btn btn-primary">Book Now</a>
+        <h4>Stay Updated</h4>
+        <p>Get travel tips and special offers</p>
+        <form action="https://formspree.io/f/xpwzgvqk" method="POST" class="newsletter-form">
+          <input type="email" name="email" placeholder="Your email" required />
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+        <a href="/book" class="btn btn-secondary footer-book-btn">Book Now</a>
       </div>
     </div>
     <div class="footer-bottom">
+      <div class="footer-social">
+        <a href="https://www.facebook.com/islandgoodes" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/islandgoodes" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="https://www.tripadvisor.com/Hotel_Review-g60583-d1199945-Reviews-Island_Goode_s-Hilo_Island_of_Hawaii_Hawaii.html" target="_blank" rel="noopener" aria-label="TripAdvisor">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c3.94.49 7 3.85 7 7.93s-3.05 7.44-7 7.93V4.07z"/></svg>
+        </a>
+      </div>
       <p>&copy; {new Date().getFullYear()} Island Goodes. All rights reserved. Adults 18+ only.</p>
     </div>
   </footer>
+
+  <!-- Image Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" aria-label="Close">&times;</button>
+    <button class="lightbox-prev" aria-label="Previous">&#10094;</button>
+    <button class="lightbox-next" aria-label="Next">&#10095;</button>
+    <img src="" alt="" class="lightbox-img" id="lightboxImg" />
+    <div class="lightbox-counter" id="lightboxCounter"></div>
+  </div>
+
+  <!-- Social Share Buttons (floating) -->
+  <div class="share-buttons" id="shareButtons">
+    <button class="share-toggle" id="shareToggle" aria-label="Share">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+      </svg>
+    </button>
+    <div class="share-options">
+      <a href="#" class="share-btn share-facebook" aria-label="Share on Facebook">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </a>
+      <a href="#" class="share-btn share-twitter" aria-label="Share on Twitter">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+      </a>
+      <a href="#" class="share-btn share-email" aria-label="Share via Email">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </a>
+      <button class="share-btn share-copy" aria-label="Copy Link">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+    </div>
+  </div>
 
 
 <style is:global>
@@ -701,6 +749,188 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
     color: rgba(255,255,255,0.5);
   }
 
+  /* Newsletter Form */
+  .newsletter-form {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .newsletter-form input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    font-size: 0.875rem;
+  }
+
+  .newsletter-form input::placeholder {
+    color: rgba(255,255,255,0.5);
+  }
+
+  .newsletter-form button {
+    padding: 0.75rem 1.25rem;
+    white-space: nowrap;
+  }
+
+  .footer-book-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Footer Social */
+  .footer-social {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .footer-social a {
+    color: rgba(255,255,255,0.6);
+    transition: var(--transition-fast);
+  }
+
+  .footer-social a:hover {
+    color: var(--color-secondary);
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox.active {
+    display: flex;
+  }
+
+  .lightbox-img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 2.5rem;
+    color: #fff;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  .lightbox-prev, .lightbox-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    color: #fff;
+    background: rgba(0,0,0,0.5);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: var(--transition-fast);
+  }
+
+  .lightbox-prev:hover, .lightbox-next:hover {
+    background: rgba(255,255,255,0.2);
+  }
+
+  .lightbox-prev { left: 1rem; }
+  .lightbox-next { right: 1rem; }
+
+  .lightbox-counter {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.7);
+    font-size: 0.875rem;
+  }
+
+  /* Social Share Buttons */
+  .share-buttons {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 100;
+  }
+
+  .share-toggle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: var(--transition-fast);
+  }
+
+  .share-toggle:hover {
+    background: var(--color-primary-dark);
+    transform: scale(1.05);
+  }
+
+  .share-options {
+    position: absolute;
+    bottom: 60px;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.2s ease;
+  }
+
+  .share-buttons.active .share-options {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .share-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    transition: var(--transition-fast);
+  }
+
+  .share-btn:hover {
+    transform: scale(1.1);
+  }
+
+  .share-facebook { color: #1877f2; }
+  .share-twitter { color: #1da1f2; }
+  .share-email { color: var(--color-primary); }
+  .share-copy { color: #666; }
+
 
   /* ============================================
      RESPONSIVE
@@ -890,6 +1120,150 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
       }
     }
   })();
+
+  // Lightbox functionality - respects admin settings
+  (function() {
+    // Check if lightbox is enabled
+    try {
+      const settings = JSON.parse(localStorage.getItem('islandgoodes_settings') || '{}');
+      if (settings.lightboxEnabled === false) {
+        document.getElementById('lightbox')?.remove();
+        return;
+      }
+    } catch(e) {}
+
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxCounter = document.getElementById('lightboxCounter');
+    const closeBtn = document.querySelector('.lightbox-close');
+    const prevBtn = document.querySelector('.lightbox-prev');
+    const nextBtn = document.querySelector('.lightbox-next');
+
+    let currentImages = [];
+    let currentIndex = 0;
+
+    // Make images in galleries clickable
+    document.querySelectorAll('.room-gallery img, .gallery-grid img, [data-lightbox] img').forEach((img, index) => {
+      img.style.cursor = 'pointer';
+      img.addEventListener('click', function() {
+        const gallery = this.closest('.room-gallery, .gallery-grid, [data-lightbox]');
+        if (gallery) {
+          currentImages = Array.from(gallery.querySelectorAll('img'));
+          currentIndex = currentImages.indexOf(this);
+        } else {
+          currentImages = [this];
+          currentIndex = 0;
+        }
+        showImage();
+        lightbox?.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    function showImage() {
+      if (currentImages[currentIndex]) {
+        lightboxImg.src = currentImages[currentIndex].src;
+        lightboxImg.alt = currentImages[currentIndex].alt;
+        lightboxCounter.textContent = `${currentIndex + 1} / ${currentImages.length}`;
+      }
+    }
+
+    closeBtn?.addEventListener('click', closeLightbox);
+    lightbox?.addEventListener('click', function(e) {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    function closeLightbox() {
+      lightbox?.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    prevBtn?.addEventListener('click', function() {
+      currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+      showImage();
+    });
+
+    nextBtn?.addEventListener('click', function() {
+      currentIndex = (currentIndex + 1) % currentImages.length;
+      showImage();
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      if (!lightbox?.classList.contains('active')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') prevBtn?.click();
+      if (e.key === 'ArrowRight') nextBtn?.click();
+    });
+  })();
+
+  // Share buttons functionality - respects admin settings
+  (function() {
+    // Check if share buttons are enabled
+    try {
+      const settings = JSON.parse(localStorage.getItem('islandgoodes_settings') || '{}');
+      if (settings.shareEnabled === false) {
+        document.getElementById('shareButtons')?.remove();
+        return;
+      }
+    } catch(e) {}
+
+    const shareToggle = document.getElementById('shareToggle');
+    const shareButtons = document.getElementById('shareButtons');
+
+    shareToggle?.addEventListener('click', function() {
+      shareButtons?.classList.toggle('active');
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!shareButtons?.contains(e.target)) {
+        shareButtons?.classList.remove('active');
+      }
+    });
+
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent(document.title);
+
+    document.querySelector('.share-facebook')?.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'width=600,height=400');
+    });
+
+    document.querySelector('.share-twitter')?.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.open(`https://twitter.com/intent/tweet?url=${url}&text=${title}`, '_blank', 'width=600,height=400');
+    });
+
+    document.querySelector('.share-email')?.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.href = `mailto:?subject=${title}&body=Check out Island Goodes: ${decodeURIComponent(url)}`;
+    });
+
+    document.querySelector('.share-copy')?.addEventListener('click', function() {
+      navigator.clipboard.writeText(window.location.href).then(function() {
+        alert('Link copied to clipboard!');
+      });
+    });
+  })();
+</script>
+
+<!-- Live Chat (Tawk.to) - Only loads if enabled in admin settings -->
+<script is:inline>
+  (function(){
+    // Check if chat is enabled in settings
+    try {
+      const settings = JSON.parse(localStorage.getItem('islandgoodes_settings') || '{}');
+      if (settings.chatEnabled === false) return; // Skip loading if explicitly disabled
+    } catch(e) {}
+
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/677c4e5eaf5bfec1dbe5c7e8/1igts8qtg';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+  })();
 </script>
 
 <!-- Google Translate -->
@@ -903,8 +1277,17 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
     }, 'google_translate_element');
   }
 
-  // Language selector functionality
+  // Language selector functionality - respects admin settings
   document.addEventListener('DOMContentLoaded', function() {
+    // Check if language selector is enabled
+    try {
+      const settings = JSON.parse(localStorage.getItem('islandgoodes_settings') || '{}');
+      if (settings.languageEnabled === false) {
+        document.querySelector('.lang-selector')?.remove();
+        return;
+      }
+    } catch(e) {}
+
     const langToggle = document.getElementById('langToggle');
     const langDropdown = document.getElementById('langDropdown');
     const langLabel = langToggle?.querySelector('.lang-label');

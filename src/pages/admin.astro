@@ -171,6 +171,86 @@ const description = "Analytics dashboard for Island Goodes.";
       </div>
     </section>
 
+    <!-- Site Settings -->
+    <section class="settings-section">
+      <div class="container">
+        <div class="settings-card">
+          <h2>Site Settings</h2>
+          <p>Toggle site features on or off. Changes take effect immediately.</p>
+
+          <div class="settings-grid">
+            <div class="setting-item">
+              <div class="setting-info">
+                <strong>Live Chat Widget</strong>
+                <p>Tawk.to chat widget in bottom-right corner</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggleChat" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <strong>Image Lightbox</strong>
+                <p>Click room photos to view full-size in lightbox</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggleLightbox" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <strong>Weather Widget</strong>
+                <p>Current weather and time display on homepage</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggleWeather" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <strong>Live Cameras</strong>
+                <p>Volcano and mountain camera feeds on homepage</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggleCameras" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <strong>Social Share Buttons</strong>
+                <p>Floating share button on all pages</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggleShare" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <strong>Language Selector</strong>
+                <p>Google Translate integration for international guests</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggleLanguage" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="settings-status" id="settingsStatus"></div>
+        </div>
+      </div>
+    </section>
+
     <!-- Setup Instructions (shown if no data) -->
     <section id="setupInstructions" class="setup-section" style="display: none;">
       <div class="container">
@@ -615,6 +695,115 @@ const description = "Analytics dashboard for Island Goodes.";
     color: var(--color-primary);
   }
 
+  /* Settings Section */
+  .settings-section {
+    padding: 2rem;
+    background: var(--color-bg-alt);
+  }
+
+  .settings-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  .settings-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .settings-card > p {
+    color: var(--color-text-light);
+    margin-bottom: 2rem;
+  }
+
+  .settings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem;
+    background: var(--color-bg-alt);
+    border-radius: 12px;
+  }
+
+  .setting-info strong {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--color-text);
+  }
+
+  .setting-info p {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    margin: 0;
+  }
+
+  .toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+
+  .toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: #ccc;
+    transition: 0.3s;
+    border-radius: 28px;
+  }
+
+  .toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    transition: 0.3s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  .toggle-switch input:checked + .toggle-slider {
+    background: var(--color-primary);
+  }
+
+  .toggle-switch input:checked + .toggle-slider:before {
+    transform: translateX(24px);
+  }
+
+  .settings-status {
+    margin-top: 1.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    text-align: center;
+    display: none;
+  }
+
+  .settings-status.success {
+    display: block;
+    background: #ECFDF5;
+    color: #047857;
+  }
+
   /* Responsive */
   @media (max-width: 1024px) {
     .stats-grid {
@@ -625,6 +814,9 @@ const description = "Analytics dashboard for Island Goodes.";
     }
     .dashboard-card.wide {
       grid-column: span 1;
+    }
+    .settings-grid {
+      grid-template-columns: 1fr;
     }
   }
 
@@ -957,5 +1149,75 @@ const description = "Analytics dashboard for Island Goodes.";
       .split('')
       .map(char => 127397 + char.charCodeAt(0));
     return String.fromCodePoint(...codePoints);
+  }
+
+  // Site Settings Management
+  const SETTINGS_KEY = 'islandgoodes_settings';
+
+  const settingsConfig = {
+    toggleChat: { key: 'chatEnabled', default: true },
+    toggleLightbox: { key: 'lightboxEnabled', default: true },
+    toggleWeather: { key: 'weatherEnabled', default: true },
+    toggleCameras: { key: 'camerasEnabled', default: true },
+    toggleShare: { key: 'shareEnabled', default: true },
+    toggleLanguage: { key: 'languageEnabled', default: true }
+  };
+
+  function loadSettings() {
+    try {
+      const stored = localStorage.getItem(SETTINGS_KEY);
+      return stored ? JSON.parse(stored) : {};
+    } catch {
+      return {};
+    }
+  }
+
+  function saveSettings(settings: Record<string, boolean>) {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  }
+
+  function initSettingsToggles() {
+    const settings = loadSettings();
+
+    // Initialize toggle states from saved settings
+    Object.entries(settingsConfig).forEach(([toggleId, config]) => {
+      const toggle = document.getElementById(toggleId) as HTMLInputElement;
+      if (toggle) {
+        // Use saved value if exists, otherwise use default
+        const isEnabled = settings[config.key] !== undefined ? settings[config.key] : config.default;
+        toggle.checked = isEnabled;
+
+        // Add change listener
+        toggle.addEventListener('change', () => {
+          const currentSettings = loadSettings();
+          currentSettings[config.key] = toggle.checked;
+          saveSettings(currentSettings);
+          showSettingsStatus();
+        });
+      }
+    });
+  }
+
+  function showSettingsStatus() {
+    const status = document.getElementById('settingsStatus');
+    if (status) {
+      status.textContent = 'Settings saved! Changes will apply on next page load.';
+      status.className = 'settings-status success';
+      setTimeout(() => {
+        status.className = 'settings-status';
+      }, 3000);
+    }
+  }
+
+  // Initialize settings when dashboard is shown
+  const originalShowDashboard = showDashboard;
+  showDashboard = function() {
+    originalShowDashboard();
+    initSettingsToggles();
+  };
+
+  // If already logged in, init settings now
+  if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+    initSettingsToggles();
   }
 </script>
