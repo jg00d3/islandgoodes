@@ -1,0 +1,237 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "Hilo Farmers Market: Your Complete Guide to Hawaii's Best Market";
+const description = "Everything you need to know about visiting the famous Hilo Farmers Market. Fresh tropical fruits, local crafts, and authentic Hawaiian culture just 5 minutes from Island Goodes.";
+const date = "2025-07-01";
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="blog-post">
+    <header class="post-header">
+      <nav class="breadcrumb">
+        <a href="/">Home</a> / <a href="/blog">Blog</a> / Hilo Farmers Market
+      </nav>
+      <h1>{title}</h1>
+      <div class="post-meta">
+        <time datetime={date}>July 1, 2025</time>
+        <span class="category">Local Guide</span>
+      </div>
+    </header>
+
+    <div class="post-content">
+      <p class="lead">
+        The Hilo Farmers Market is one of Hawaii's largest and most authentic open-air markets,
+        offering an incredible array of tropical fruits, local produce, handmade crafts, and
+        genuine aloha spirit. Located just 5 minutes from Island Goodes, it's a must-visit
+        during your Big Island stay.
+      </p>
+
+      <h2>When to Visit</h2>
+      <p>
+        The market operates every day, but the experience varies significantly:
+      </p>
+      <ul>
+        <li><strong>Wednesday & Saturday (6am-4pm):</strong> The "big market" days with 200+ vendors</li>
+        <li><strong>Other days (7am-4pm):</strong> Smaller but less crowded, 30-50 vendors</li>
+      </ul>
+      <p>
+        Our recommendation: Visit early on Wednesday or Saturday for the best selection and
+        to beat the crowds. Arrive by 7am for the freshest produce and parking.
+      </p>
+
+      <h2>What to Buy</h2>
+
+      <h3>Fresh Tropical Fruits</h3>
+      <p>
+        The fruit selection is legendary. Look for:
+      </p>
+      <ul>
+        <li><strong>Apple bananas:</strong> Smaller, sweeter than regular bananas</li>
+        <li><strong>Lilikoi (passion fruit):</strong> Perfect for making juice or desserts</li>
+        <li><strong>Rambutan & Lychee:</strong> Exotic and refreshing</li>
+        <li><strong>Papaya:</strong> Sunrise and Strawberry varieties—nothing like mainland papaya</li>
+        <li><strong>Fresh coconuts:</strong> Vendors will open them for you to drink</li>
+        <li><strong>Dragonfruit:</strong> Beautiful and delicious</li>
+      </ul>
+
+      <h3>Local Produce</h3>
+      <ul>
+        <li>Avocados (when in season, they're enormous and creamy)</li>
+        <li>Fresh ginger and turmeric</li>
+        <li>Taro and sweet potatoes</li>
+        <li>Fresh herbs and greens</li>
+      </ul>
+
+      <h3>Prepared Foods</h3>
+      <p>
+        Come hungry! Popular options include:
+      </p>
+      <ul>
+        <li>Fresh coconut water and smoothies</li>
+        <li>Hawaiian plate lunches</li>
+        <li>Fresh poke</li>
+        <li>Malasadas (Portuguese donuts)</li>
+        <li>Fresh-pressed sugarcane juice</li>
+      </ul>
+
+      <h3>Handmade Crafts</h3>
+      <ul>
+        <li>Hawaiian quilts and textiles</li>
+        <li>Koa wood crafts</li>
+        <li>Local jewelry made from shells and seeds</li>
+        <li>Hawaiian prints and artwork</li>
+        <li>Locally made soaps and beauty products</li>
+      </ul>
+
+      <h2>Tips for Your Visit</h2>
+      <ul>
+        <li><strong>Bring cash:</strong> Many vendors don't accept cards</li>
+        <li><strong>Bring bags:</strong> Reusable bags are handy for carrying produce</li>
+        <li><strong>Wear comfortable shoes:</strong> You'll do a lot of walking</li>
+        <li><strong>Sample first:</strong> Most fruit vendors offer samples—ask!</li>
+        <li><strong>Talk to vendors:</strong> They love sharing their knowledge about local products</li>
+        <li><strong>Don't buy everything at once:</strong> Walk the whole market first to compare prices</li>
+      </ul>
+
+      <h2>Getting There</h2>
+      <p>
+        The market is located at the corner of Mamo Street and Kamehameha Avenue in downtown Hilo.
+        From Island Goodes:
+      </p>
+      <ul>
+        <li>About 5 minutes by car</li>
+        <li>Free street parking available on surrounding streets (arrive early)</li>
+        <li>Paid parking lots nearby if street parking is full</li>
+      </ul>
+
+      <h2>Beyond the Market</h2>
+      <p>
+        After shopping, explore downtown Hilo's charming shops, galleries, and cafes. Walk
+        along Banyan Drive, visit the nearby Japanese gardens, or grab lunch at one of
+        Hilo's excellent local restaurants.
+      </p>
+
+      <div class="cta-box">
+        <h3>Stock Your Island Kitchen</h3>
+        <p>The Orchid Room at Island Goodes features a full kitchen—perfect for preparing fresh market finds!</p>
+        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary" target="_blank" rel="noopener">Book Your Stay</a>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .blog-post {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+  }
+
+  .post-header {
+    text-align: center;
+    padding: 8rem 0 3rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    color: var(--color-text-light);
+  }
+
+  .breadcrumb a {
+    color: var(--color-primary);
+  }
+
+  .post-header h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    color: var(--color-primary-dark);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .post-meta {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+  }
+
+  .category {
+    background: var(--color-secondary);
+    color: #fff;
+    padding: 0.2rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+  }
+
+  .post-content {
+    line-height: 1.8;
+  }
+
+  .post-content .lead {
+    font-size: 1.15rem;
+    color: var(--color-text-light);
+    margin-bottom: 2rem;
+  }
+
+  .post-content h2 {
+    color: var(--color-primary-dark);
+    margin: 2.5rem 0 1rem;
+    font-size: 1.5rem;
+  }
+
+  .post-content h3 {
+    color: var(--color-primary);
+    margin: 1.5rem 0 0.75rem;
+    font-size: 1.2rem;
+  }
+
+  .post-content p {
+    margin-bottom: 1rem;
+  }
+
+  .post-content ul {
+    margin: 1rem 0 1.5rem 1.5rem;
+  }
+
+  .post-content li {
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-box {
+    background: var(--color-bg-alt);
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 3rem;
+  }
+
+  .cta-box h3 {
+    color: var(--color-primary-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-box p {
+    margin-bottom: 1rem;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .btn-primary {
+    background: var(--color-secondary);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #c49943;
+  }
+</style>

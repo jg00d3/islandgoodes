@@ -25,7 +25,10 @@
       "Bash(GIT_TRACE=1 git push:*)",
       "WebFetch(domain:unsplash.com)",
       "allow all",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "Bash(for f in *.astro)",
+      "Bash(do mv \"$f\" \"_old-$f\")",
+      "Bash(done)"
     ]
   }
 }

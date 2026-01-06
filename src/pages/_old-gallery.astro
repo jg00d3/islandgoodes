@@ -1,0 +1,214 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = "Photo Gallery | Island Goodes";
+const description = "Browse photos of Island Goodes rooms, ocean views, pool, and property. Adults-only accommodation near Hilo, Hawaii.";
+
+// Gallery images organized by category
+const galleryImages = [
+  // Property
+  { src: "/images/property/pool.jpg", alt: "Swimming pool at Island Goodes", category: "Property" },
+  { src: "/images/property/hot-tub.jpg", alt: "Hot tub at Island Goodes", category: "Property" },
+  { src: "/images/rooms/hilo-bay/lanai.jpg", alt: "Ocean view from lanai", category: "Views" },
+  // Hilo Bay Room
+  { src: "/images/rooms/hilo-bay/bed.jpg", alt: "Hilo Bay Room - Sleep Number bed", category: "Hilo Bay Room" },
+  { src: "/images/rooms/hilo-bay/bathroom.jpg", alt: "Hilo Bay Room - Bathroom", category: "Hilo Bay Room" },
+  { src: "/images/rooms/hilo-bay/coffee.jpg", alt: "Hilo Bay Room - Coffee station", category: "Hilo Bay Room" },
+  // Mauna Kea Room
+  { src: "/images/rooms/mauna-kea/bed.jpg", alt: "Mauna Kea Room - Sleep Number bed", category: "Mauna Kea Room" },
+  { src: "/images/rooms/mauna-kea/bathroom.jpg", alt: "Mauna Kea Room - Bathroom", category: "Mauna Kea Room" },
+  { src: "/images/rooms/mauna-kea/lanai.jpg", alt: "Mauna Kea Room - Lanai", category: "Mauna Kea Room" },
+  // Ginger Room
+  { src: "/images/rooms/ginger/room.jpg", alt: "Ginger Room - Sleep Number bed", category: "Ginger Room" },
+  { src: "/images/rooms/ginger/bathroom.jpg", alt: "Ginger Room - Bathroom", category: "Ginger Room" },
+  { src: "/images/rooms/ginger/coffee.jpg", alt: "Ginger Room - Coffee station", category: "Ginger Room" },
+  // Orchid Room
+  { src: "/images/rooms/orchid/bed.jpg", alt: "Orchid Room - Sleep Number bed", category: "Orchid Room" },
+  { src: "/images/rooms/orchid/bathroom.jpg", alt: "Orchid Room - Bathroom", category: "Orchid Room" },
+  { src: "/images/rooms/orchid/lanai.jpg", alt: "Orchid Room - Lanai", category: "Orchid Room" },
+];
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="page-hero">
+    <div class="hero-content">
+      <h1>Photo Gallery</h1>
+      <p>Take a virtual tour of Island Goodes</p>
+    </div>
+  </section>
+
+  <section class="gallery-section">
+    <div class="container">
+      <div class="gallery-intro">
+        <p>Browse photos of our rooms, amenities, and stunning views. For a complete interactive tour, try our <a href="https://my.matterport.com/show/?m=zrMG54r6RUx" target="_blank" rel="noopener">3D Room Tour</a>.</p>
+      </div>
+
+      <div class="gallery-grid">
+        {galleryImages.map((image) => (
+          <div class="gallery-item">
+            <img src={image.src} alt={image.alt} loading="lazy" />
+            <div class="gallery-overlay">
+              <span class="category">{image.category}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="virtual-tour">
+        <h2>3D Virtual Tour</h2>
+        <p>Experience Island Goodes like you're really here with our interactive 3D tour.</p>
+        <a href="https://my.matterport.com/show/?m=zrMG54r6RUx" target="_blank" rel="noopener" class="btn btn-primary btn-large">Launch 3D Tour</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <h2>Ready to Visit?</h2>
+      <p>Book your stay and experience Island Goodes in person</p>
+      <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary btn-large" target="_blank" rel="noopener">Book Now</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/hero.jpg') center/cover no-repeat;
+    min-height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    padding: 8rem 2rem 4rem;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .gallery-section {
+    padding: 4rem 0;
+  }
+
+  .gallery-intro {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: 1.1rem;
+  }
+
+  .gallery-intro a {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+  }
+
+  .gallery-item {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+  }
+
+  .gallery-item:hover img {
+    transform: scale(1.05);
+  }
+
+  .gallery-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    padding: 2rem 1rem 1rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .gallery-item:hover .gallery-overlay {
+    opacity: 1;
+  }
+
+  .gallery-overlay .category {
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .virtual-tour {
+    text-align: center;
+    background: var(--color-bg-alt);
+    padding: 3rem;
+    border-radius: 8px;
+  }
+
+  .virtual-tour h2 {
+    color: var(--color-primary-dark);
+    margin-bottom: 1rem;
+  }
+
+  .virtual-tour p {
+    margin-bottom: 1.5rem;
+    color: var(--color-text-light);
+  }
+
+  .cta-section {
+    text-align: center;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: #fff;
+    padding: 4rem 2rem;
+  }
+
+  .cta-section h2 {
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-section p {
+    margin-bottom: 1.5rem;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .btn-primary {
+    background: var(--color-secondary);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #c49943;
+    color: #fff;
+  }
+
+  .btn-large {
+    padding: 1rem 3rem;
+    font-size: 1.1rem;
+  }
+</style>

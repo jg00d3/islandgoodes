@@ -1,8 +1,8 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import PreviewLayout from '../../layouts/PreviewLayout.astro';
 
 const title = "Ginger Room - Garden View Suite";
-const description = "400 sq ft ground floor room surrounded by tropical gardens. Sleep Number bed, private lanai, private bathroom. Named for the fragrant ginger plants. Adults-only accommodation near Hilo, Hawaii.";
+const description = "400 sq ft ground floor room surrounded by tropical gardens. Sleep Number bed, private lanai, accessible with no steps. Adults-only accommodation near Hilo, Hawaii.";
 
 const images = [
   { src: "/images/rooms/ginger/room.jpg", alt: "Ginger Room with Sleep Number bed" },
@@ -11,110 +11,146 @@ const images = [
   { src: "/images/rooms/ginger/closet.jpg", alt: "Spacious closet" },
   { src: "/images/rooms/ginger/coffee.jpg", alt: "Coffee station" },
 ];
+
+const amenities = [
+  "400 square feet",
+  "Garden view",
+  "Ground floor (no steps)",
+  "Private entrance",
+  "Private bathroom",
+  "Private lanai",
+  "Sleep Number bed",
+  "Premium linens",
+  "Free WiFi",
+  "Mini refrigerator",
+  "Microwave",
+  "Coffee maker",
+  "Air conditioning",
+  "Ceiling fan"
+];
 ---
 
-<BaseLayout title={title} description={description}>
+<PreviewLayout title={title} description={description}>
   <section class="room-hero">
-    <div class="hero-content">
+    <div class="room-hero-bg">
+      <img src="/images/rooms/ginger/sitting-area.jpg" alt="View of Ginger Room" />
+    </div>
+    <div class="room-hero-overlay"></div>
+    <div class="room-hero-content">
       <nav class="breadcrumb">
         <a href="/">Home</a> / <a href="/rooms">Rooms</a> / Ginger Room
       </nav>
+      <span class="room-badge">Accessible</span>
       <h1>Ginger Room</h1>
       <p class="tagline">A Peaceful Garden Retreat</p>
     </div>
   </section>
 
-  <section class="room-overview">
+  <section class="room-content">
     <div class="container">
-      <div class="overview-grid">
-        <div class="main-image">
-          <img src="/images/rooms/ginger/room.jpg" alt="Ginger Room with Sleep Number bed" id="featured-image" />
-        </div>
-        <div class="thumbnail-grid">
-          {images.map((img, i) => (
-            <button class="thumbnail" data-src={img.src} data-alt={img.alt}>
-              <img src={img.src} alt={img.alt} loading="lazy" />
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="room-details">
-    <div class="container">
-      <div class="details-grid">
-        <div class="description">
-          <h2>About This Room</h2>
-          <p class="lead">
-            The Ginger Room offers 400 square feet of comfortable living space surrounded by our lush
-            tropical gardens. Named for the fragrant ginger plants that bloom just outside your door.
-          </p>
-          <p>
-            Located on the ground floor with no steps to climb, this peaceful retreat is perfect for
-            guests who appreciate the beauty of nature. Wake up to birdsong and the scent of tropical
-            flowers drifting through your private lanai.
-          </p>
-          <p>
-            The room features a luxurious Sleep Number adjustable bed and a comfortable sitting area
-            where you can relax with a good book or plan your Big Island adventures. The private bathroom
-            includes grab bars for added safety and convenience.
-          </p>
-          <p>
-            Your own private entrance ensures complete privacy during your stay. The kitchenette includes
-            a mid-size refrigerator/freezer, microwave, and coffee maker for your convenience.
-            Other appliances upon request.
-          </p>
-
-          <div class="highlights">
-            <h3>Room Highlights</h3>
-            <ul>
-              <li><strong>Garden Setting:</strong> Surrounded by tropical flowers and fragrant ginger plants</li>
-              <li><strong>Peaceful Retreat:</strong> Quiet, secluded location perfect for relaxation</li>
-              <li><strong>Accessibility:</strong> Ground floor with no steps and bathroom grab bars</li>
-              <li><strong>Comfortable Space:</strong> 400 sq ft with dedicated sitting area</li>
-              <li><strong>Privacy:</strong> Private entrance, bathroom, and outdoor lanai</li>
-            </ul>
+      <div class="room-grid">
+        <div class="room-gallery">
+          <div class="main-image">
+            <img src={images[0].src} alt={images[0].alt} id="featured-image" />
+          </div>
+          <div class="thumbnail-grid">
+            {images.map((img) => (
+              <button class="thumbnail" data-src={img.src} data-alt={img.alt}>
+                <img src={img.src} alt={img.alt} loading="lazy" />
+              </button>
+            ))}
           </div>
         </div>
 
-        <div class="amenities-sidebar">
+        <div class="room-details">
+          <div class="quick-info">
+            <div class="info-item">
+              <span class="info-label">Size</span>
+              <span class="info-value">400 sq ft</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">View</span>
+              <span class="info-value">Garden</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Bed</span>
+              <span class="info-value">King</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Floor</span>
+              <span class="info-value">Ground</span>
+            </div>
+          </div>
+
           <div class="price-card">
-            <h3>Book This Room</h3>
-            <p class="price">From <strong>$195</strong>/night</p>
-            <p class="price-note">Plus 17.97% tax</p>
-            <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary btn-block" target="_blank" rel="noopener">Check Availability</a>
+            <div class="price-header">
+              <span class="price-label">From</span>
+              <span class="price-amount">$195</span>
+              <span class="price-period">/night</span>
+            </div>
+            <p class="price-note">Plus 17.97% Hawaii tax</p>
+            <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary btn-large btn-block" target="_blank" rel="noopener">Book This Room</a>
             <p class="call-option">Or call: <a href="tel:+18089642291">808-964-2291</a></p>
           </div>
 
-          <div class="amenities-card">
-            <h3>Room Amenities</h3>
-            <ul class="amenities-list">
-              <li>400 square feet</li>
-              <li>Garden view</li>
-              <li>Ground floor (no steps)</li>
-              <li>Private entrance</li>
-              <li>Private bathroom</li>
-              <li>Bathroom grab bars</li>
-              <li>Private lanai</li>
-              <li>Sleep Number bed</li>
-              <li>Sitting area</li>
-              <li>Mid-size refrigerator/freezer</li>
-              <li>Microwave</li>
-              <li>Coffee maker</li>
-              <li>Free High Speed WiFi</li>
-              <li>32" HD TV</li>
-              <li>Air conditioning</li>
-            </ul>
+          <div class="description">
+            <h2>About This Room</h2>
+            <p>
+              The Ginger Room offers 400 square feet of comfort surrounded by our lush tropical gardens.
+              Named for the fragrant ginger plants that bloom just outside your private lanai, this room
+              offers a peaceful retreat with the sights and sounds of nature.
+            </p>
+            <p>
+              Located on the ground floor with no steps to climb, the Ginger Room is perfect for guests who
+              prefer easy access. Wake up to birdsong and the scent of tropical flowers, then enjoy your
+              morning coffee on your private lanai surrounded by greenery.
+            </p>
+            <p>
+              Like all our rooms, the Ginger Room features a luxurious Sleep Number adjustable bed, private
+              bathroom, and all the amenities you need for a relaxing Hawaiian getaway.
+            </p>
           </div>
 
-          <div class="policies-card">
-            <h3>Policies</h3>
-            <ul>
-              <li><strong>Adults Only:</strong> 18+ only, no children</li>
-              <li><strong>Check-in:</strong> 3:00 PM</li>
-              <li><strong>Check-out:</strong> 11:00 AM</li>
-              <li><strong>Minimum Stay:</strong> 2 nights</li>
+          <div class="highlights">
+            <h3>Room Highlights</h3>
+            <div class="highlights-grid">
+              <div class="highlight-item">
+                <span class="highlight-icon">🌿</span>
+                <div>
+                  <strong>Garden Setting</strong>
+                  <p>Surrounded by lush tropical gardens and fragrant ginger plants</p>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <span class="highlight-icon">♿</span>
+                <div>
+                  <strong>Accessible</strong>
+                  <p>Ground floor with no steps - easy access for all guests</p>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <span class="highlight-icon">🐦</span>
+                <div>
+                  <strong>Nature Sounds</strong>
+                  <p>Wake up to birdsong and the sounds of nature</p>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <span class="highlight-icon">🚪</span>
+                <div>
+                  <strong>Complete Privacy</strong>
+                  <p>Private entrance, bathroom, and outdoor lanai</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="amenities">
+            <h3>All Amenities</h3>
+            <ul class="amenities-grid">
+              {amenities.map((amenity) => (
+                <li>{amenity}</li>
+              ))}
             </ul>
           </div>
         </div>
@@ -124,358 +160,113 @@ const images = [
 
   <section class="other-rooms">
     <div class="container">
-      <h2>Explore Our Other Rooms</h2>
-      <div class="rooms-nav">
-        <a href="/rooms/hilo-bay" class="room-nav-card">
+      <div class="section-header">
+        <span class="section-subtitle">Explore More</span>
+        <h2>Other Rooms</h2>
+      </div>
+      <div class="rooms-grid">
+        <a href="/rooms/hilo-bay" class="room-card">
           <img src="/images/rooms/hilo-bay/bed.jpg" alt="Hilo Bay Room" loading="lazy" />
-          <h3>Hilo Bay Room</h3>
-          <p>Our premier oceanview suite</p>
+          <div class="room-card-content">
+            <h3>Hilo Bay Room</h3>
+            <p>488 sq ft premier oceanview</p>
+          </div>
         </a>
-        <a href="/rooms/mauna-kea" class="room-nav-card">
-          <img src="/images/rooms/mauna-kea/bed.jpg" alt="Mauna Kea Room" loading="lazy" />
-          <h3>Mauna Kea Room</h3>
-          <p>Mountain views toward Hawaii's tallest peak</p>
-        </a>
-        <a href="/rooms/orchid" class="room-nav-card">
+        <a href="/rooms/orchid" class="room-card">
           <img src="/images/rooms/orchid/bed.jpg" alt="Orchid Room" loading="lazy" />
-          <h3>Orchid Room</h3>
-          <p>Elegant oceanview suite with kitchenette</p>
+          <div class="room-card-content">
+            <h3>Orchid Room</h3>
+            <p>645 sq ft with full kitchen</p>
+          </div>
+        </a>
+        <a href="/rooms/mauna-kea" class="room-card">
+          <img src="/images/rooms/mauna-kea/bed.jpg" alt="Mauna Kea Room" loading="lazy" />
+          <div class="room-card-content">
+            <h3>Mauna Kea Room</h3>
+            <p>Mountain views & stargazing</p>
+          </div>
         </a>
       </div>
     </div>
   </section>
-</BaseLayout>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const thumbnails = document.querySelectorAll('.thumbnail');
-    const featuredImage = document.getElementById('featured-image') as HTMLImageElement;
-
-    thumbnails.forEach(thumb => {
-      thumb.addEventListener('click', () => {
-        const src = thumb.getAttribute('data-src');
-        const alt = thumb.getAttribute('data-alt');
-        if (featuredImage && src && alt) {
-          featuredImage.src = src;
-          featuredImage.alt = alt;
-        }
-        thumbnails.forEach(t => t.classList.remove('active'));
-        thumb.classList.add('active');
-      });
-    });
-
-    if (thumbnails.length > 0) {
-      thumbnails[0].classList.add('active');
-    }
-  });
-</script>
+</PreviewLayout>
 
 <style>
-  .room-hero {
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/rooms/ginger/sitting-area.jpg') center/cover no-repeat;
-    min-height: 25vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: #fff;
-    padding: 6rem 2rem 2rem;
-  }
+  .room-hero { position: relative; min-height: 50vh; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; padding: 10rem 2rem 4rem; }
+  .room-hero-bg { position: absolute; inset: 0; z-index: -2; }
+  .room-hero-bg img { width: 100%; height: 100%; object-fit: cover; }
+  .room-hero-overlay { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%); }
+  .room-hero-content { max-width: 800px; }
+  .room-badge { display: inline-block; background: var(--color-secondary); color: #1a1a1a; padding: 0.375rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+  .room-hero h1 { font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 0.5rem; }
+  .tagline { font-size: 1.25rem; opacity: 0.9; }
 
-  .breadcrumb {
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-    opacity: 0.9;
-  }
+  .room-content { padding: var(--section-padding) 0; }
+  .room-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
 
-  .breadcrumb a {
-    color: #fff;
-  }
+  .main-image { border-radius: 16px; overflow: hidden; margin-bottom: 1rem; }
+  .main-image img { width: 100%; height: auto; }
+  .thumbnail-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+  .thumbnail { border: none; padding: 0; border-radius: 8px; overflow: hidden; cursor: pointer; opacity: 0.7; transition: var(--transition-base); }
+  .thumbnail:hover, .thumbnail.active { opacity: 1; }
+  .thumbnail img { width: 100%; aspect-ratio: 1; object-fit: cover; }
 
-  .room-hero h1 {
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    margin-bottom: 0.5rem;
-  }
+  .quick-info { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; padding: 1.5rem; background: var(--color-bg-alt); border-radius: 12px; }
+  .info-item { text-align: center; }
+  .info-label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-light); margin-bottom: 0.25rem; }
+  .info-value { font-size: 1.125rem; font-weight: 600; color: var(--color-text); }
 
-  .tagline {
-    font-size: 1.25rem;
-    color: var(--color-secondary);
-  }
+  .price-card { background: var(--gradient-primary); color: #fff; padding: 2rem; border-radius: 16px; margin-bottom: 2rem; }
+  .price-header { display: flex; align-items: baseline; gap: 0.25rem; margin-bottom: 0.25rem; }
+  .price-label { font-size: 1rem; }
+  .price-amount { font-size: 3rem; font-weight: 700; font-family: var(--font-heading); }
+  .price-period { font-size: 1rem; opacity: 0.8; }
+  .price-note { font-size: 0.875rem; opacity: 0.8; margin-bottom: 1.5rem; }
+  .btn-block { display: block; width: 100%; text-align: center; }
+  .call-option { text-align: center; margin-top: 1rem; font-size: 0.9375rem; }
+  .call-option a { color: var(--color-secondary-light); }
 
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-  }
+  .description { margin-bottom: 2rem; }
+  .description h2 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--color-text); }
+  .description p { color: var(--color-text-light); line-height: 1.8; margin-bottom: 1rem; }
 
-  .room-overview {
-    padding: 2rem 0;
-  }
+  .highlights { background: var(--color-bg-alt); padding: 2rem; border-radius: 16px; margin-bottom: 2rem; }
+  .highlights h3 { font-size: 1.25rem; margin-bottom: 1.5rem; }
+  .highlights-grid { display: grid; gap: 1.5rem; }
+  .highlight-item { display: flex; gap: 1rem; }
+  .highlight-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .highlight-item strong { display: block; color: var(--color-text); margin-bottom: 0.25rem; }
+  .highlight-item p { font-size: 0.9375rem; color: var(--color-text-light); margin: 0; }
 
-  .overview-grid {
-    display: grid;
-    gap: 0.75rem;
-  }
+  .amenities h3 { font-size: 1.25rem; margin-bottom: 1rem; }
+  .amenities-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; list-style: none; }
+  .amenities-grid li { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9375rem; color: var(--color-text-light); }
+  .amenities-grid li::before { content: "✓"; color: var(--color-primary); font-weight: 600; }
 
-  .main-image img {
-    width: 100%;
-    max-height: 400px;
-    object-fit: contain;
-    border-radius: 8px;
-    background: #f5f5f5;
-  }
+  .other-rooms { padding: var(--section-padding) 0; background: var(--color-bg-alt); }
+  .rooms-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .room-card { background: #fff; border-radius: 16px; overflow: hidden; transition: var(--transition-base); }
+  .room-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(0,0,0,0.1); }
+  .room-card img { width: 100%; aspect-ratio: 16/10; object-fit: cover; }
+  .room-card-content { padding: 1.25rem; }
+  .room-card-content h3 { font-size: 1.125rem; margin-bottom: 0.25rem; }
+  .room-card-content p { font-size: 0.875rem; color: var(--color-text-light); }
 
-  .thumbnail-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 0.5rem;
-  }
-
-  .thumbnail {
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    border-radius: 4px;
-    overflow: hidden;
-    opacity: 0.7;
-    transition: opacity 0.3s, transform 0.3s;
-  }
-
-  .thumbnail:hover, .thumbnail.active {
-    opacity: 1;
-    transform: scale(1.02);
-  }
-
-  .thumbnail.active {
-    box-shadow: 0 0 0 3px var(--color-secondary);
-  }
-
-  .thumbnail img {
-    width: 100%;
-    height: 80px;
-    object-fit: cover;
-  }
-
-  .room-details {
-    padding: 4rem 0;
-    background: var(--color-bg-alt);
-  }
-
-  .details-grid {
-    display: grid;
-    grid-template-columns: 1fr 350px;
-    gap: 3rem;
-    align-items: start;
-  }
-
-  .description h2 {
-    color: var(--color-primary-dark);
-    margin-bottom: 1rem;
-  }
-
-  .description .lead {
-    font-size: 1.15rem;
-    color: var(--color-text-light);
-    margin-bottom: 1.5rem;
-  }
-
-  .description p {
-    line-height: 1.8;
-    margin-bottom: 1rem;
-  }
-
-  .highlights {
-    background: #fff;
-    padding: 1.5rem;
-    border-radius: 8px;
-    margin-top: 2rem;
-  }
-
-  .highlights h3 {
-    color: var(--color-primary-dark);
-    margin-bottom: 1rem;
-  }
-
-  .highlights ul {
-    list-style: none;
-  }
-
-  .highlights li {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--color-bg-alt);
-  }
-
-  .highlights li:last-child {
-    border-bottom: none;
-  }
-
-  .amenities-sidebar > div {
-    background: #fff;
-    padding: 1.5rem;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
-  }
-
-  .price-card {
-    text-align: center;
-  }
-
-  .price-card h3 {
-    color: var(--color-primary-dark);
-    margin-bottom: 0.5rem;
-  }
-
-  .price {
-    font-size: 1.5rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .price strong {
-    color: var(--color-primary);
-  }
-
-  .price-note {
-    font-size: 0.85rem;
-    color: var(--color-text-light);
-    margin-bottom: 1rem;
-  }
-
-  .btn {
-    display: inline-block;
-    padding: 0.875rem 2rem;
-    border-radius: 4px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s;
-  }
-
-  .btn-primary {
-    background: var(--color-secondary);
-    color: #fff;
-  }
-
-  .btn-primary:hover {
-    background: #c49943;
-  }
-
-  .btn-block {
-    display: block;
-    width: 100%;
-    text-align: center;
-  }
-
-  .call-option {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-  }
-
-  .call-option a {
-    color: var(--color-primary);
-  }
-
-  .amenities-card h3, .policies-card h3 {
-    color: var(--color-primary-dark);
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
-  }
-
-  .amenities-list {
-    list-style: none;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-  }
-
-  .amenities-list li {
-    font-size: 0.9rem;
-    padding: 0.25rem 0;
-    color: var(--color-text-light);
-  }
-
-  .policies-card ul {
-    list-style: none;
-  }
-
-  .policies-card li {
-    padding: 0.35rem 0;
-    font-size: 0.9rem;
-  }
-
-  .other-rooms {
-    padding: 4rem 0;
-  }
-
-  .other-rooms h2 {
-    text-align: center;
-    color: var(--color-primary-dark);
-    margin-bottom: 2rem;
-  }
-
-  .rooms-nav {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .room-nav-card {
-    background: #fff;
-    border-radius: 8px;
-    overflow: hidden;
-    text-decoration: none;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    transition: transform 0.3s;
-  }
-
-  .room-nav-card:hover {
-    transform: translateY(-5px);
-  }
-
-  .room-nav-card img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-  }
-
-  .room-nav-card h3 {
-    color: var(--color-primary-dark);
-    padding: 1rem 1rem 0.25rem;
-    margin: 0;
-  }
-
-  .room-nav-card p {
-    color: var(--color-text-light);
-    padding: 0 1rem 1rem;
-    margin: 0;
-    font-size: 0.9rem;
-  }
-
-  @media (max-width: 900px) {
-    .details-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .amenities-sidebar {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1rem;
-    }
-
-    .amenities-sidebar > div {
-      margin-bottom: 0;
-    }
-  }
-
-  @media (max-width: 600px) {
-    .main-image img {
-      height: 300px;
-    }
-
-    .thumbnail img {
-      height: 60px;
-    }
-
-    .amenities-list {
-      grid-template-columns: 1fr;
-    }
-  }
+  @media (max-width: 1024px) { .room-grid, .rooms-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 768px) { .quick-info { grid-template-columns: repeat(2, 1fr); } .thumbnail-grid { grid-template-columns: repeat(3, 1fr); } .amenities-grid { grid-template-columns: 1fr; } }
 </style>
+
+<script>
+  const thumbnails = document.querySelectorAll('.thumbnail');
+  const featuredImage = document.getElementById('featured-image') as HTMLImageElement;
+  thumbnails.forEach((thumb) => {
+    thumb.addEventListener('click', () => {
+      const src = thumb.getAttribute('data-src');
+      const alt = thumb.getAttribute('data-alt');
+      if (src && featuredImage) { featuredImage.src = src; featuredImage.alt = alt || ''; }
+      thumbnails.forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+    });
+  });
+  thumbnails[0]?.classList.add('active');
+</script>

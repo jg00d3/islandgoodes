@@ -1,10 +1,10 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import PreviewLayout from '../../layouts/PreviewLayout.astro';
 
 const title = "Big Island Travel Blog";
 const description = "Travel tips, guides, and insider knowledge for visiting Hilo and the Big Island of Hawaii. Discover volcanoes, waterfalls, beaches, and local favorites.";
 
-// Blog posts - 9 posts over the last 9 months
+// Blog posts - 12 posts
 const allPosts = [
   {
     slug: "hawaii-volcanoes-national-park",
@@ -15,6 +15,14 @@ const allPosts = [
     image: "/images/blog/volcanoes.jpg"
   },
   {
+    slug: "best-poke-hilo",
+    title: "Best Poke in Hilo: A Local's Guide to Fresh Fish",
+    excerpt: "Discover where locals go for the freshest poke bowls in Hilo. From historic fish markets to hidden gems.",
+    date: "2025-12-15",
+    category: "Food & Dining",
+    image: "/images/blog/farmers-market.jpg"
+  },
+  {
     slug: "whale-watching-hawaii",
     title: "Whale Watching Season in Hawaii: Your Complete Guide",
     excerpt: "Humpback whales visit Hawaii from December through April. Learn the best spots, tours, and tips for whale watching on the Big Island.",
@@ -23,12 +31,28 @@ const allPosts = [
     image: "/images/blog/whale-watching.jpg"
   },
   {
+    slug: "uncle-roberts-night-market",
+    title: "Uncle Robert's Wednesday Night Market: The Real Puna Experience",
+    excerpt: "Experience authentic Hawaiian culture at Kalapana's famous night market. Live music, awa bar, local food, and genuine aloha.",
+    date: "2025-11-20",
+    category: "Events & Culture",
+    image: "/images/blog/farmers-market.jpg"
+  },
+  {
     slug: "mauna-kea-stargazing",
     title: "Stargazing on Mauna Kea: What to Know Before You Go",
     excerpt: "Tips for experiencing world-class stargazing at 13,800 feet, from the best times to visit to what to bring.",
     date: "2025-11-01",
     category: "Activities",
     image: "/images/blog/mauna-kea.jpg"
+  },
+  {
+    slug: "swimming-holes-hilo",
+    title: "Hidden Swimming Holes Near Hilo: A Local's Guide",
+    excerpt: "Discover secret swimming holes and freshwater pools near Hilo. Cool off in waterfalls, rivers, and natural pools along the Hamakua Coast.",
+    date: "2025-10-25",
+    category: "Nature",
+    image: "/images/blog/waterfalls.jpg"
   },
   {
     slug: "kona-coffee-tours",
@@ -87,13 +111,22 @@ today.setHours(23, 59, 59, 999); // Include posts from today
 const posts = allPosts
   .filter(post => new Date(post.date) <= today)
   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+const categories = [...new Set(posts.map(p => p.category))];
 ---
 
-<BaseLayout title={title} description={description}>
+<PreviewLayout title={title} description={description}>
   <section class="page-hero">
-    <div class="hero-content">
+    <div class="page-hero-bg">
+      <img src="/images/blog-hero.jpg" alt="Big Island Hawaii landscape" />
+    </div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <nav class="breadcrumb">
+        <a href="/">Home</a> / Blog
+      </nav>
       <h1>Big Island Travel Blog</h1>
-      <p>Insider tips and guides from your hosts at Island Goodes</p>
+      <p class="tagline">Insider tips and guides from your hosts at Island Goodes</p>
     </div>
   </section>
 
@@ -125,21 +158,28 @@ const posts = allPosts
 
   <section class="topics">
     <div class="container">
-      <h2>Explore by Topic</h2>
+      <div class="section-header center">
+        <span class="section-subtitle">Filter by Category</span>
+        <h2>Explore by Topic</h2>
+      </div>
       <div class="topics-grid">
         <a href="/blog?category=attractions" class="topic-card">
+          <div class="topic-icon">🌋</div>
           <h3>Attractions</h3>
           <p>Volcanoes, gardens, museums</p>
         </a>
         <a href="/blog?category=nature" class="topic-card">
+          <div class="topic-icon">🌊</div>
           <h3>Nature</h3>
           <p>Waterfalls, beaches, hiking</p>
         </a>
         <a href="/blog?category=activities" class="topic-card">
+          <div class="topic-icon">🤿</div>
           <h3>Activities</h3>
           <p>Stargazing, snorkeling, tours</p>
         </a>
         <a href="/blog?category=local-guide" class="topic-card">
+          <div class="topic-icon">🍍</div>
           <h3>Local Guide</h3>
           <p>Food, markets, culture</p>
         </a>
@@ -149,69 +189,95 @@ const posts = allPosts
 
   <section class="cta-section">
     <div class="container">
-      <h2>Plan Your Stay</h2>
-      <p>Book your room at Island Goodes and let us help you plan the perfect Big Island adventure</p>
-      <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary btn-large" target="_blank" rel="noopener">Check Availability</a>
+      <div class="cta-content">
+        <h2>Plan Your Stay</h2>
+        <p>Book your room at Island Goodes and let us help you plan the perfect Big Island adventure</p>
+        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-secondary btn-large" target="_blank" rel="noopener">Check Availability</a>
+      </div>
     </div>
   </section>
-</BaseLayout>
+</PreviewLayout>
 
 <style>
   .page-hero {
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/blog-hero.jpg') center/cover no-repeat;
-    min-height: 40vh;
+    position: relative;
+    min-height: 45vh;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     color: #fff;
-    padding: 8rem 2rem 4rem;
+    padding: 10rem 2rem 4rem;
+  }
+
+  .page-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .page-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .page-hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%);
+  }
+
+  .page-hero-content {
+    max-width: 800px;
   }
 
   .page-hero h1 {
-    font-size: clamp(2rem, 5vw, 3rem);
+    font-size: clamp(2.5rem, 6vw, 4rem);
     margin-bottom: 0.5rem;
   }
 
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
+  .tagline {
+    font-size: 1.25rem;
+    opacity: 0.9;
   }
 
   .blog-section {
-    padding: 4rem 0;
+    padding: var(--section-padding) 0;
   }
 
   .blog-intro {
     text-align: center;
     max-width: 700px;
     margin: 0 auto 3rem;
-    font-size: 1.1rem;
+    font-size: 1.125rem;
     color: var(--color-text-light);
+    line-height: 1.8;
   }
 
   .blog-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
   }
 
   .blog-card {
     background: #fff;
-    border-radius: 8px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    transition: transform 0.3s;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+    transition: var(--transition-base);
   }
 
   .blog-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.12);
   }
 
   .blog-image {
     display: block;
-    height: 180px;
+    height: 200px;
     position: relative;
     overflow: hidden;
     background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
@@ -221,11 +287,11 @@ const posts = allPosts
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s;
+    transition: transform 0.5s ease;
   }
 
   .blog-card:hover .blog-image img {
-    transform: scale(1.05);
+    transform: scale(1.08);
   }
 
   .blog-image img[src=""], .blog-image img:not([src]) {
@@ -237,11 +303,13 @@ const posts = allPosts
     bottom: 1rem;
     left: 1rem;
     background: var(--color-secondary);
-    color: #fff;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
+    color: #1a1a1a;
+    padding: 0.375rem 0.875rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
     font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
   }
 
   .blog-content {
@@ -249,19 +317,20 @@ const posts = allPosts
   }
 
   .blog-content time {
-    font-size: 0.85rem;
+    font-size: 0.8125rem;
     color: var(--color-text-light);
   }
 
   .blog-content h2 {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     margin: 0.5rem 0;
-    line-height: 1.3;
+    line-height: 1.4;
   }
 
   .blog-content h2 a {
-    color: var(--color-primary-dark);
+    color: var(--color-text);
     text-decoration: none;
+    transition: var(--transition-base);
   }
 
   .blog-content h2 a:hover {
@@ -269,96 +338,131 @@ const posts = allPosts
   }
 
   .blog-content p {
-    font-size: 0.95rem;
+    font-size: 0.9375rem;
     color: var(--color-text-light);
     margin-bottom: 1rem;
+    line-height: 1.6;
   }
 
   .read-more {
     font-weight: 600;
     color: var(--color-primary);
+    font-size: 0.9375rem;
+    transition: var(--transition-base);
+  }
+
+  .read-more:hover {
+    color: var(--color-primary-dark);
   }
 
   .topics {
     background: var(--color-bg-alt);
-    padding: 4rem 0;
+    padding: var(--section-padding) 0;
   }
 
-  .topics h2 {
-    text-align: center;
-    color: var(--color-primary-dark);
+  .section-header {
     margin-bottom: 2rem;
+  }
+
+  .section-header.center {
+    text-align: center;
+  }
+
+  .section-subtitle {
+    display: inline-block;
+    color: var(--color-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-header h2 {
+    font-size: 2rem;
+    color: var(--color-text);
   }
 
   .topics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
   }
 
   .topic-card {
     background: #fff;
-    padding: 1.5rem;
-    border-radius: 8px;
+    padding: 2rem 1.5rem;
+    border-radius: 16px;
     text-align: center;
     text-decoration: none;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: var(--transition-base);
+    border: 1px solid transparent;
   }
 
   .topic-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border-color: var(--color-primary);
+  }
+
+  .topic-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
   }
 
   .topic-card h3 {
-    color: var(--color-primary-dark);
+    color: var(--color-text);
     margin-bottom: 0.25rem;
+    font-size: 1.125rem;
   }
 
   .topic-card p {
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     color: var(--color-text-light);
   }
 
-  .btn {
-    display: inline-block;
-    padding: 0.875rem 2rem;
-    border-radius: 4px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s;
-  }
-
-  .btn-primary {
-    background: var(--color-secondary);
-    color: #fff;
-  }
-
-  .btn-primary:hover {
-    background: #c49943;
-    color: #fff;
-  }
-
-  .btn-large {
-    padding: 1rem 3rem;
-    font-size: 1.1rem;
-  }
-
   .cta-section {
+    background: var(--gradient-primary);
+    padding: 5rem 2rem;
     text-align: center;
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-    color: #fff;
-    padding: 4rem 2rem;
+  }
+
+  .cta-content {
+    max-width: 600px;
+    margin: 0 auto;
   }
 
   .cta-section h2 {
     color: #fff;
-    margin-bottom: 0.5rem;
+    font-size: 2.25rem;
+    margin-bottom: 0.75rem;
   }
 
   .cta-section p {
-    margin-bottom: 1.5rem;
+    color: rgba(255,255,255,0.9);
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+  }
+
+  @media (max-width: 1024px) {
+    .blog-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .topics-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .blog-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .topics-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

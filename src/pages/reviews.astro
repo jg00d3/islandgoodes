@@ -1,78 +1,103 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PreviewLayout from '../layouts/PreviewLayout.astro';
 
 const title = "Guest Reviews | Island Goodes";
 const description = "Read reviews from guests who have stayed at Island Goodes adults-only accommodation in Hilo, Hawaii. See what visitors say about our oceanview rooms.";
 ---
 
-<BaseLayout title={title} description={description}>
+<PreviewLayout title={title} description={description}>
   <section class="page-hero">
-    <div class="hero-content">
+    <div class="page-hero-bg">
+      <img src="/images/hero-ocean-view.jpg" alt="Ocean view from Island Goodes" />
+    </div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <nav class="breadcrumb">
+        <a href="/">Home</a> / Reviews
+      </nav>
       <h1>Guest Reviews</h1>
-      <p>What our guests are saying</p>
+      <p class="tagline">What our guests are saying</p>
     </div>
   </section>
 
   <section class="reviews-section">
     <div class="container">
       <div class="review-links">
-        <h2>Read Our Reviews</h2>
-        <p>We're proud of the experiences we create for our guests. Read authentic reviews on these platforms:</p>
+        <div class="section-header center">
+          <span class="section-subtitle">Trusted Reviews</span>
+          <h2>Read Our Reviews</h2>
+        </div>
+        <p class="intro-text">We're proud of the experiences we create for our guests. Read authentic reviews on these platforms:</p>
 
         <div class="review-platforms">
           <a href="https://www.tripadvisor.com/Hotel_Review-g60605-d635399-Reviews-Island_Goode_s-Papaikou_Island_of_Hawaii_Hawaii.html" target="_blank" rel="noopener" class="platform-card">
-            <div class="platform-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
-                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+            <div class="platform-icon tripadvisor">
+              <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
                 <circle cx="8.5" cy="11" r="2"/>
                 <circle cx="15.5" cy="11" r="2"/>
-                <path d="M12 2 C12 2 9 5 6 5 M12 2 C12 2 15 5 18 5" fill="none" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 2 C12 2 9 5 6 5 M12 2 C12 2 15 5 18 5" fill="none" stroke="currentColor" stroke-width="1.5"/>
               </svg>
             </div>
             <h3>TripAdvisor</h3>
             <p>Read reviews from travelers worldwide</p>
-            <span class="btn btn-outline">View Reviews →</span>
+            <span class="platform-btn">View Reviews</span>
           </a>
 
           <a href="https://www.google.com/search?q=Island+Goodes+Papaikou+Hawaii+reviews" target="_blank" rel="noopener" class="platform-card">
-            <div class="platform-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+            <div class="platform-icon google">
+              <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
               </svg>
             </div>
             <h3>Google Reviews</h3>
             <p>See ratings and reviews on Google</p>
-            <span class="btn btn-outline">View Reviews →</span>
+            <span class="platform-btn">View Reviews</span>
           </a>
         </div>
       </div>
 
       <div class="testimonials">
-        <h2>Featured Guest Experiences</h2>
+        <div class="section-header center">
+          <span class="section-subtitle">Guest Experiences</span>
+          <h2>Featured Reviews</h2>
+        </div>
 
         <div class="testimonial-grid">
           <div class="testimonial-card">
             <div class="stars">★★★★★</div>
             <p class="quote">"The view from our lanai was absolutely breathtaking. Waking up to see Hilo Bay every morning made our trip unforgettable. The room was spotless and the hosts were so welcoming."</p>
-            <p class="author">— Recent Guest, Hilo Bay Room</p>
+            <div class="author">
+              <span class="author-name">Recent Guest</span>
+              <span class="room-name">Hilo Bay Room</span>
+            </div>
           </div>
 
           <div class="testimonial-card">
             <div class="stars">★★★★★</div>
             <p class="quote">"Perfect location for exploring the Big Island's east side. We loved visiting the waterfalls and volcanoes, then coming back to this peaceful retreat. The adults-only policy made it so quiet and relaxing."</p>
-            <p class="author">— Recent Guest, Mauna Kea Room</p>
+            <div class="author">
+              <span class="author-name">Recent Guest</span>
+              <span class="room-name">Mauna Kea Room</span>
+            </div>
           </div>
 
           <div class="testimonial-card">
             <div class="stars">★★★★★</div>
             <p class="quote">"The Sleep Number bed was incredibly comfortable. We appreciated all the little touches - the coffee station, the private lanai, and the helpful recommendations from our hosts."</p>
-            <p class="author">— Recent Guest, Ginger Room</p>
+            <div class="author">
+              <span class="author-name">Recent Guest</span>
+              <span class="room-name">Ginger Room</span>
+            </div>
           </div>
 
           <div class="testimonial-card">
             <div class="stars">★★★★★</div>
             <p class="quote">"Spacious, clean, and beautiful views. The Orchid Room was perfect for our anniversary trip. We loved having our own private entrance and outdoor space. Will definitely return!"</p>
-            <p class="author">— Recent Guest, Orchid Room</p>
+            <div class="author">
+              <span class="author-name">Recent Guest</span>
+              <span class="room-name">Orchid Room</span>
+            </div>
           </div>
         </div>
       </div>
@@ -81,58 +106,101 @@ const description = "Read reviews from guests who have stayed at Island Goodes a
 
   <section class="cta-section">
     <div class="container">
-      <h2>Experience It Yourself</h2>
-      <p>Join our happy guests and create your own Island Goodes memories</p>
-      <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary btn-large" target="_blank" rel="noopener">Book Your Stay</a>
+      <div class="cta-content">
+        <h2>Experience It Yourself</h2>
+        <p>Join our happy guests and create your own Island Goodes memories</p>
+        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-secondary btn-large" target="_blank" rel="noopener">Book Your Stay</a>
+      </div>
     </div>
   </section>
-</BaseLayout>
+</PreviewLayout>
 
 <style>
   .page-hero {
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/hero-ocean-view.jpg') center/cover no-repeat;
-    min-height: 40vh;
+    position: relative;
+    min-height: 45vh;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     color: #fff;
-    padding: 8rem 2rem 4rem;
+    padding: 10rem 2rem 4rem;
+  }
+
+  .page-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .page-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .page-hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%);
+  }
+
+  .page-hero-content {
+    max-width: 800px;
   }
 
   .page-hero h1 {
-    font-size: clamp(2rem, 5vw, 3rem);
+    font-size: clamp(2.5rem, 6vw, 4rem);
     margin-bottom: 0.5rem;
   }
 
-  .container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 2rem;
+  .tagline {
+    font-size: 1.25rem;
+    opacity: 0.9;
   }
 
   .reviews-section {
-    padding: 4rem 0;
+    padding: var(--section-padding) 0;
+  }
+
+  .section-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .section-header.center {
+    text-align: center;
+  }
+
+  .section-subtitle {
+    display: inline-block;
+    color: var(--color-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-header h2 {
+    font-size: 2rem;
+    color: var(--color-text);
   }
 
   .review-links {
+    margin-bottom: 5rem;
+  }
+
+  .intro-text {
     text-align: center;
-    margin-bottom: 4rem;
-  }
-
-  .review-links h2 {
-    color: var(--color-primary-dark);
-    margin-bottom: 1rem;
-  }
-
-  .review-links > p {
     color: var(--color-text-light);
     margin-bottom: 2rem;
+    font-size: 1.125rem;
   }
 
   .review-platforms {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
     max-width: 700px;
     margin: 0 auto;
@@ -140,119 +208,146 @@ const description = "Read reviews from guests who have stayed at Island Goodes a
 
   .platform-card {
     background: #fff;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    padding: 2.5rem 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.08);
     text-align: center;
     text-decoration: none;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: var(--transition-base);
+    border: 1px solid transparent;
   }
 
   .platform-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+    border-color: var(--color-primary);
   }
 
   .platform-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--color-bg-alt);
     color: var(--color-primary);
-    margin-bottom: 1rem;
   }
 
   .platform-card h3 {
-    color: var(--color-primary-dark);
+    color: var(--color-text);
     margin-bottom: 0.5rem;
+    font-size: 1.25rem;
   }
 
   .platform-card p {
     color: var(--color-text-light);
-    font-size: 0.95rem;
-    margin-bottom: 1rem;
+    font-size: 0.9375rem;
+    margin-bottom: 1.25rem;
   }
 
-  .testimonials h2 {
-    color: var(--color-primary-dark);
-    text-align: center;
+  .platform-btn {
+    display: inline-block;
+    padding: 0.625rem 1.25rem;
+    border: 2px solid var(--color-primary);
+    border-radius: 50px;
+    color: var(--color-primary);
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: var(--transition-base);
+  }
+
+  .platform-card:hover .platform-btn {
+    background: var(--color-primary);
+    color: #fff;
+  }
+
+  .testimonials {
     margin-bottom: 2rem;
   }
 
   .testimonial-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
+    margin-top: 2rem;
   }
 
   .testimonial-card {
     background: var(--color-bg-alt);
     padding: 2rem;
-    border-radius: 8px;
+    border-radius: 16px;
+    transition: var(--transition-base);
+  }
+
+  .testimonial-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
   }
 
   .stars {
     color: var(--color-secondary);
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     margin-bottom: 1rem;
+    letter-spacing: 0.1em;
   }
 
   .quote {
     font-style: italic;
-    line-height: 1.7;
-    margin-bottom: 1rem;
+    line-height: 1.8;
+    margin-bottom: 1.25rem;
+    color: var(--color-text-light);
+    font-size: 0.9375rem;
   }
 
   .author {
-    color: var(--color-text-light);
-    font-size: 0.9rem;
-    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0,0,0,0.08);
   }
 
-  .btn {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    border-radius: 4px;
+  .author-name {
     font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s;
+    color: var(--color-text);
+    font-size: 0.875rem;
   }
 
-  .btn-outline {
-    border: 2px solid var(--color-primary);
+  .room-name {
     color: var(--color-primary);
-    background: transparent;
-  }
-
-  .btn-outline:hover {
-    background: var(--color-primary);
-    color: #fff;
+    font-size: 0.8125rem;
+    font-weight: 500;
   }
 
   .cta-section {
+    background: var(--gradient-primary);
+    padding: 5rem 2rem;
     text-align: center;
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-    color: #fff;
-    padding: 4rem 2rem;
+  }
+
+  .cta-content {
+    max-width: 600px;
+    margin: 0 auto;
   }
 
   .cta-section h2 {
     color: #fff;
-    margin-bottom: 0.5rem;
+    font-size: 2.25rem;
+    margin-bottom: 0.75rem;
   }
 
   .cta-section p {
-    margin-bottom: 1.5rem;
+    color: rgba(255,255,255,0.9);
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
   }
 
-  .btn-primary {
-    background: var(--color-secondary);
-    color: #fff;
-  }
-
-  .btn-primary:hover {
-    background: #c49943;
-    color: #fff;
-  }
-
-  .btn-large {
-    padding: 1rem 3rem;
-    font-size: 1.1rem;
+  @media (max-width: 768px) {
+    .review-platforms,
+    .testimonial-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

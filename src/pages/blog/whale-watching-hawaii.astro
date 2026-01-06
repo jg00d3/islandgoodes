@@ -1,249 +1,250 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import PreviewLayout from '../../layouts/PreviewLayout.astro';
 
 const title = "Whale Watching Season in Hawaii: Your Complete Guide";
-const description = "Humpback whales visit Hawaii from December through April. Learn the best spots, tours, and tips for whale watching on the Big Island near Hilo.";
-const date = "2025-12-01";
+const description = "Humpback whales visit Hawaii from December through April. Learn the best spots, tours, and tips for whale watching on the Big Island.";
+const publishDate = "2025-12-01";
+const category = "Nature";
+const image = "/images/blog/whale-watching.jpg";
 ---
 
-<BaseLayout title={title} description={description}>
+<PreviewLayout title={title} description={description}>
   <article class="blog-post">
     <header class="post-header">
-      <nav class="breadcrumb">
-        <a href="/">Home</a> / <a href="/blog">Blog</a> / Whale Watching
-      </nav>
-      <h1>{title}</h1>
-      <div class="post-meta">
-        <time datetime={date}>December 1, 2025</time>
+      <div class="post-header-bg">
+        <img src="/images/blog/whale-watching.jpg" alt="Whale watching in Hawaii" />
+      </div>
+      <div class="post-header-overlay"></div>
+      <div class="post-header-content">
+        <nav class="breadcrumb">
+          <a href="">Home</a> / <a href="/blog">Blog</a> / Whale Watching
+        </nav>
         <span class="category">Nature</span>
+        <h1>{title}</h1>
+        <p class="excerpt">Humpback whales visit Hawaii from December through April. Learn the best spots, tours, and tips for whale watching on the Big Island.</p>
+        <time datetime="2025-12-01">December 1, 2025</time>
       </div>
     </header>
 
     <div class="post-content">
-      <p class="lead">
-        Every winter, thousands of humpback whales migrate from Alaska to the warm Hawaiian
-        waters to breed, give birth, and nurse their calves. From December through April,
-        the Big Island becomes one of the best places on Earth to witness these magnificent
-        creatures—and you might even spot them from your lanai at Island Goodes!
-      </p>
+      <div class="container">
+        <p class="lead">
+          Every winter, approximately 10,000 humpback whales make the 3,000-mile journey from Alaska to Hawaii's warm waters to breed, give birth, and nurse their young. The Big Island offers exceptional whale watching opportunities, and staying at Island Goodes puts you in a prime position to experience this natural wonder.
+        </p>
 
-      <h2>When to Visit for Whale Watching</h2>
-      <p>
-        While whales begin arriving in November and some linger until May, the peak season is:
-      </p>
-      <ul>
-        <li><strong>Best months:</strong> January through March</li>
-        <li><strong>Peak activity:</strong> Mid-February to mid-March</li>
-        <li><strong>Early/late season:</strong> December and April offer fewer crowds</li>
-      </ul>
-      <p>
-        During peak season, an estimated 10,000 humpback whales visit Hawaiian waters—about
-        two-thirds of the entire North Pacific population!
-      </p>
+        <h2>When to See Whales</h2>
+        <p>
+          Whale watching season runs from <strong>December through April</strong>, with peak activity typically occurring from January through March. During this time, you can spot whales from shore, from boats, and sometimes even from your lanai at Island Goodes!
+        </p>
 
-      <h2>Whale Watching from Island Goodes</h2>
-      <p>
-        One of the special benefits of staying with us is the ocean view from our property.
-        Guests in the Hilo Bay Room and Orchid Room have spotted whales right from their
-        private lanais! Look for:
-      </p>
-      <ul>
-        <li><strong>Spouts:</strong> Tall, misty exhalations visible from miles away</li>
-        <li><strong>Breaching:</strong> Whales leaping out of the water—spectacular!</li>
-        <li><strong>Tail slaps:</strong> Whales raising their flukes above the surface</li>
-        <li><strong>Pec slaps:</strong> Whales slapping their long pectoral fins</li>
-      </ul>
-      <p>
-        We have binoculars available for guests—just ask!
-      </p>
+        <h2>Best Shore-Based Viewing Spots</h2>
 
-      <h2>Best Shore Viewing Spots</h2>
+        <h3>From Island Goodes</h3>
+        <p>
+          Our Hilo Bay Room offers ocean views where guests have spotted whales breaching right from their private lanai. Bring binoculars and watch for spouts on the horizon.
+        </p>
 
-      <h3>Near Hilo (East Side)</h3>
-      <ul>
-        <li><strong>Leleiwi Beach Park:</strong> Elevated viewing point with morning sun behind you</li>
-        <li><strong>Richardson Beach:</strong> Rocky points offer good vantage points</li>
-        <li><strong>Coconut Island:</strong> 360-degree views from Hilo Bay</li>
-        <li><strong>Pepe'ekeo Scenic Drive:</strong> Pull-offs with ocean views</li>
-      </ul>
+        <h3>Laupahoehoe Point</h3>
+        <p>
+          About 25 minutes north of Island Goodes, this scenic lookout offers dramatic cliffs and excellent whale watching. Pack a picnic and spend the morning scanning the horizon.
+        </p>
 
-      <h3>Kohala Coast (West Side)</h3>
-      <ul>
-        <li><strong>Puako:</strong> Calm waters where mothers and calves rest</li>
-        <li><strong>Lapakahi State Historical Park:</strong> Elevated coastal views</li>
-        <li><strong>Pololu Valley Lookout:</strong> Dramatic cliffside viewing</li>
-      </ul>
+        <h3>Richardson Beach</h3>
+        <p>
+          Just 10 minutes from Island Goodes, this black sand beach is a great spot for whale watching. The calm waters also make it perfect for snorkeling when you want to cool off.
+        </p>
 
-      <h2>Whale Watching Tours</h2>
-      <p>
-        For up-close encounters, consider a boat tour:
-      </p>
+        <h2>Whale Watching Tours</h2>
+        <p>
+          For the best experience, consider a whale watching boat tour. Tours depart from Hilo Bay and typically last 2-3 hours. Many tours offer a whale sighting guarantee during peak season.
+        </p>
 
-      <h3>From Hilo</h3>
-      <ul>
-        <li>Several operators run seasonal tours from Hilo Harbor</li>
-        <li>Smaller boats mean more intimate experiences</li>
-        <li>Morning tours typically have calmer seas</li>
-      </ul>
+        <h3>What to Expect</h3>
+        <ul>
+          <li><strong>Breaching:</strong> Whales leaping out of the water—the most spectacular behavior</li>
+          <li><strong>Tail slapping:</strong> Whales slapping their flukes on the water surface</li>
+          <li><strong>Spy hopping:</strong> Whales poking their heads above water to look around</li>
+          <li><strong>Spouting:</strong> The spray from a whale's blowhole, visible from far away</li>
+        </ul>
 
-      <h3>From Kona</h3>
-      <ul>
-        <li>More tour options and larger boats</li>
-        <li>Calmer Kona waters can mean better viewing conditions</li>
-        <li>Many tours guarantee sightings or offer free return trip</li>
-      </ul>
+        <h2>Tips for Whale Watching</h2>
+        <ul>
+          <li>Bring binoculars for shore-based viewing</li>
+          <li>Take motion sickness medication before boat tours if you're prone to seasickness</li>
+          <li>Morning tours typically have calmer waters</li>
+          <li>Wear layers—it can be windy and cool on the water</li>
+          <li>Keep your camera ready—whale behavior is unpredictable!</li>
+        </ul>
 
-      <h3>Tour Tips</h3>
-      <ul>
-        <li>Book in advance during peak season</li>
-        <li>Take motion sickness medication if prone to seasickness</li>
-        <li>Bring layers—it's cooler on the water</li>
-        <li>Bring a camera with good zoom capability</li>
-        <li>Listen to naturalist guides—they share fascinating facts</li>
-      </ul>
+        <h2>Humpback Whale Facts</h2>
+        <p>
+          Humpback whales are truly remarkable creatures:
+        </p>
+        <ul>
+          <li>Adults weigh up to 40 tons and can be 60 feet long</li>
+          <li>Calves are born weighing about 1 ton and measuring 10-15 feet</li>
+          <li>They don't eat while in Hawaii—they live off fat reserves from feeding in Alaska</li>
+          <li>Male humpbacks sing complex songs that can last up to 20 minutes</li>
+          <li>Each whale's tail fluke pattern is unique, like a fingerprint</li>
+        </ul>
 
-      <h2>Humpback Whale Facts</h2>
-      <ul>
-        <li><strong>Size:</strong> Adults reach 45-60 feet long, weighing 40 tons</li>
-        <li><strong>Migration:</strong> They travel 3,000 miles from Alaska—one of the longest migrations of any mammal</li>
-        <li><strong>Fasting:</strong> Whales don't eat while in Hawaii; they live off blubber reserves</li>
-        <li><strong>Songs:</strong> Male humpbacks "sing" complex songs that can last 20 minutes</li>
-        <li><strong>Calves:</strong> Newborns are 10-15 feet long and gain 100 pounds per day nursing</li>
-        <li><strong>Protection:</strong> Humpbacks are protected under the Endangered Species Act</li>
-      </ul>
+        <div class="cta-box">
+          <h3>Stay at Island Goodes During Whale Season</h3>
+          <p>Book the Hilo Bay Room for the best chance to spot whales from your private lanai. Our oceanview accommodations put you front and center for Hawaii's most magical wildlife experience.</p>
+          <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary btn-large" target="_blank" rel="noopener">Book Your Stay</a>
+        </div>
 
-      <h2>Responsible Whale Watching</h2>
-      <p>
-        Hawaii has strict laws protecting whales:
-      </p>
-      <ul>
-        <li>Stay at least 100 yards from whales by boat or in water</li>
-        <li>Don't chase, surround, or approach whales</li>
-        <li>If whales approach you, put engine in neutral</li>
-        <li>Never swim with or touch whales</li>
-        <li>Report distressed whales to NOAA: 1-888-256-9840</li>
-      </ul>
-
-      <div class="cta-box">
-        <h3>Book Your Whale Season Stay</h3>
-        <p>Visit Island Goodes during whale season (December-April) and experience the magic of humpback whales—possibly from your own lanai!</p>
-        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary" target="_blank" rel="noopener">Check Availability</a>
+        <div class="back-link">
+          <a href="/blog">← Back to Blog</a>
+        </div>
       </div>
     </div>
   </article>
-</BaseLayout>
+</PreviewLayout>
 
 <style>
-  .blog-post {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 0 2rem 4rem;
-  }
-
   .post-header {
-    text-align: center;
-    padding: 8rem 0 3rem;
-  }
-
-  .breadcrumb {
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-    color: var(--color-text-light);
-  }
-
-  .breadcrumb a {
-    color: var(--color-primary);
-  }
-
-  .post-header h1 {
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    color: var(--color-primary-dark);
-    margin-bottom: 1rem;
-    line-height: 1.2;
-  }
-
-  .post-meta {
+    position: relative;
+    min-height: 55vh;
     display: flex;
+    align-items: center;
     justify-content: center;
-    gap: 1rem;
-    color: var(--color-text-light);
-    font-size: 0.9rem;
+    color: #fff;
+    padding: 10rem 2rem 4rem;
+    text-align: center;
+  }
+
+  .post-header-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .post-header-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .post-header-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%);
+  }
+
+  .post-header-content {
+    max-width: 800px;
   }
 
   .category {
+    display: inline-block;
     background: var(--color-secondary);
-    color: #fff;
-    padding: 0.2rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
+    color: #1a1a1a;
+    padding: 0.375rem 1rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+
+  .post-header h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin: 1rem 0;
+    line-height: 1.2;
+  }
+
+  .excerpt {
+    font-size: 1.125rem;
+    opacity: 0.9;
+    margin-bottom: 1rem;
+    line-height: 1.7;
+  }
+
+  .post-header time {
+    opacity: 0.8;
+    font-size: 0.9375rem;
   }
 
   .post-content {
-    line-height: 1.8;
+    padding: var(--section-padding) 2rem;
+  }
+
+  .post-content .container {
+    max-width: 750px;
+    margin: 0 auto;
   }
 
   .post-content .lead {
-    font-size: 1.15rem;
+    font-size: 1.25rem;
     color: var(--color-text-light);
-    margin-bottom: 2rem;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #eee;
   }
 
   .post-content h2 {
-    color: var(--color-primary-dark);
-    margin: 2.5rem 0 1rem;
-    font-size: 1.5rem;
+    color: var(--color-text);
+    margin-top: 3rem;
+    margin-bottom: 1.25rem;
+    font-size: 1.75rem;
   }
 
   .post-content h3 {
     color: var(--color-primary);
-    margin: 1.5rem 0 0.75rem;
-    font-size: 1.2rem;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
   }
 
   .post-content p {
-    margin-bottom: 1rem;
+    line-height: 1.9;
+    margin-bottom: 1.25rem;
+    color: var(--color-text-light);
   }
 
   .post-content ul {
-    margin: 1rem 0 1.5rem 1.5rem;
+    margin: 1.5rem 0 1.5rem 1.5rem;
+    line-height: 1.9;
   }
 
   .post-content li {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-text-light);
   }
 
   .cta-box {
-    background: var(--color-bg-alt);
-    padding: 2rem;
-    border-radius: 8px;
-    text-align: center;
+    background: linear-gradient(135deg, var(--color-bg-alt) 0%, rgba(27, 107, 90, 0.08) 100%);
+    padding: 2.5rem;
+    border-radius: 16px;
     margin-top: 3rem;
+    text-align: center;
+    border: 1px solid rgba(27, 107, 90, 0.1);
   }
 
   .cta-box h3 {
-    color: var(--color-primary-dark);
-    margin-bottom: 0.5rem;
+    color: var(--color-text);
+    margin-top: 0;
+    font-size: 1.5rem;
   }
 
   .cta-box p {
-    margin-bottom: 1rem;
+    color: var(--color-text-light);
+    margin-bottom: 1.5rem;
   }
 
-  .btn {
-    display: inline-block;
-    padding: 0.875rem 2rem;
-    border-radius: 4px;
+  .back-link {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+  }
+
+  .back-link a {
+    color: var(--color-primary);
     font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s;
-  }
-
-  .btn-primary {
-    background: var(--color-secondary);
-    color: #fff;
-  }
-
-  .btn-primary:hover {
-    background: #c49943;
+    font-size: 0.9375rem;
   }
 </style>

@@ -22,7 +22,7 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex, nofollow" />
+  <!-- SEO enabled -->
   <meta name="generator" content={Astro.generator} />
 
   <!-- Primary Meta Tags -->
@@ -99,15 +99,15 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
   <!-- HEADER -->
   <header class="site-header">
     <nav class="nav-container">
-      <a href="/preview" class="logo">
+      <a href="/" class="logo">
         <span class="logo-text">Island <span class="logo-accent">Goodes</span></span>
       </a>
       <ul class="nav-links">
-        <li><a href="/preview" class="nav-link">Home</a></li>
-        <li><a href="/preview/rooms" class="nav-link">Rooms</a></li>
-        <li><a href="/preview/guide" class="nav-link">Guide</a></li>
-        <li><a href="/preview/blog" class="nav-link">Blog</a></li>
-        <li><a href="/preview/contact" class="nav-link">Contact</a></li>
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/rooms" class="nav-link">Rooms</a></li>
+        <li><a href="/guide" class="nav-link">Guide</a></li>
+        <li><a href="/blog" class="nav-link">Blog</a></li>
+        <li><a href="/contact" class="nav-link">Contact</a></li>
         <li><a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary" target="_blank" rel="noopener">Book Now</a></li>
       </ul>
       <button class="mobile-menu-toggle" aria-label="Toggle menu">
@@ -137,22 +137,22 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
       <div class="footer-links">
         <h4>Quick Links</h4>
         <ul>
-          <li><a href="/preview">Home</a></li>
-          <li><a href="/preview/rooms">Rooms</a></li>
-          <li><a href="/preview/guide">Destination Guide</a></li>
-          <li><a href="/preview/blog">Blog</a></li>
-          <li><a href="/preview/contact">Contact Us</a></li>
-          <li><a href="/preview/policies">Policies</a></li>
+          <li><a href="/">Home</a></li>
+          <li><a href="/rooms">Rooms</a></li>
+          <li><a href="/guide">Destination Guide</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/contact">Contact Us</a></li>
+          <li><a href="/policies">Policies</a></li>
         </ul>
       </div>
       <div class="footer-links">
         <h4>More Info</h4>
         <ul>
-          <li><a href="/preview/gallery">Photo Gallery</a></li>
+          <li><a href="/gallery">Photo Gallery</a></li>
           <li><a href="https://my.matterport.com/show/?m=zrMG54r6RUx" target="_blank" rel="noopener">3D Room Tour</a></li>
-          <li><a href="/preview/reviews">Reviews</a></li>
-          <li><a href="/preview/property">Property</a></li>
-          <li><a href="/preview/pets">Our Pets</a></li>
+          <li><a href="/reviews">Reviews</a></li>
+          <li><a href="/property">Property</a></li>
+          <li><a href="/pets">Our Pets</a></li>
         </ul>
       </div>
       <div class="footer-cta">
@@ -166,11 +166,6 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
     </div>
   </footer>
 
-  <!-- PREVIEW NOTICE -->
-  <div class="preview-notice">
-    <span>Design Preview</span>
-    <a href="/" class="btn btn-small">View Current Site</a>
-  </div>
 
 <style is:global>
   /* ============================================
@@ -591,30 +586,6 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
     color: rgba(255,255,255,0.5);
   }
 
-  /* ============================================
-     PREVIEW NOTICE
-     ============================================ */
-  .preview-notice {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    background: var(--color-primary);
-    color: #fff;
-    padding: 0.75rem 1.25rem;
-    border-radius: 50px;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    z-index: 9999;
-  }
-
-  .preview-notice .btn-small {
-    background: #fff;
-    color: var(--color-primary);
-  }
 
   /* ============================================
      RESPONSIVE
@@ -664,13 +635,6 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
     .footer-brand p,
     .footer-contact {
       margin-inline: auto;
-    }
-
-    .preview-notice {
-      bottom: 1rem;
-      right: 1rem;
-      left: 1rem;
-      justify-content: center;
     }
 
     .page-hero {

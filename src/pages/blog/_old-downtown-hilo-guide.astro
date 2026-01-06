@@ -1,0 +1,229 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "A Local's Guide to Downtown Hilo";
+const description = "Discover downtown Hilo's best restaurants, farmers markets, shops, and hidden gems. An insider's guide to Hawaii's most authentic town from Island Goodes.";
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="blog-post">
+    <header class="post-header">
+      <div class="container">
+        <span class="category">Local Guide</span>
+        <h1>{title}</h1>
+        <p class="excerpt">Farmers markets, historic buildings, local restaurants, and hidden gems in Hawaii's most authentic town.</p>
+        <time datetime="2025-05-01">May 1, 2025</time>
+      </div>
+    </header>
+
+    <div class="post-content">
+      <div class="container">
+        <p class="lead">
+          While many visitors flock to the resort areas of Kona, those in the know head to Hilo—Hawaii's most authentic town. Free of big resort development, Hilo retains an old Hawaii charm that's increasingly rare in the islands.
+        </p>
+
+        <h2>Hilo Farmers Market</h2>
+        <p>
+          The Hilo Farmers Market is one of the best in all of Hawaii. While vendors are present daily, the full market happens on <strong>Wednesdays and Saturdays</strong> from 6 AM to 4 PM. You'll find:
+        </p>
+        <ul>
+          <li>Fresh tropical fruits (try the apple bananas and white pineapple)</li>
+          <li>Local vegetables and herbs</li>
+          <li>Fresh flower leis at incredible prices</li>
+          <li>Local food vendors (malasadas, plate lunches, fresh coconut)</li>
+          <li>Handmade crafts and souvenirs</li>
+          <li>Local honey, mac nuts, and coffee</li>
+        </ul>
+        <p>
+          <strong>Pro tip:</strong> Arrive early (7-8 AM) for the best selection and to avoid crowds. Bring cash—many vendors don't accept cards.
+        </p>
+
+        <h2>Where to Eat</h2>
+
+        <h3>Breakfast & Coffee</h3>
+        <ul>
+          <li><strong>Hawaiian Style Cafe:</strong> Legendary for massive portions and local-style breakfasts</li>
+          <li><strong>Café 100:</strong> Home of the original loco moco since 1946</li>
+          <li><strong>Hilo Coffee Mill:</strong> Tour the facility and sample 100% Hilo-grown coffee</li>
+        </ul>
+
+        <h3>Lunch & Dinner</h3>
+        <ul>
+          <li><strong>Pineapples:</strong> Farm-to-table in a historic building, excellent cocktails</li>
+          <li><strong>Hilo Bay Cafe:</strong> Upscale local cuisine with bay views</li>
+          <li><strong>Moon & Turtle:</strong> Creative small plates, great for foodies</li>
+          <li><strong>Suisan Fish Market:</strong> The freshest poke on the island</li>
+          <li><strong>Ken's House of Pancakes:</strong> 24-hour diner, a Hilo institution</li>
+        </ul>
+
+        <h3>Sweet Treats</h3>
+        <ul>
+          <li><strong>Two Ladies Kitchen:</strong> Famous mochi (get there early, they sell out!)</li>
+          <li><strong>Big Island Candies:</strong> Chocolate-dipped shortbread, free samples</li>
+        </ul>
+
+        <h2>Things to See & Do</h2>
+
+        <h3>Pacific Tsunami Museum</h3>
+        <p>
+          Learn about the devastating tsunamis that shaped Hilo's history. The 1946 and 1960 tsunamis killed hundreds and completely transformed the downtown area. A moving and educational experience.
+        </p>
+
+        <h3>Lyman Museum</h3>
+        <p>
+          Explore Hawaiian history, culture, and natural history in one of Hawaii's oldest museums. The adjacent 1839 missionary home is one of the oldest wood-frame buildings in Hawaii.
+        </p>
+
+        <h3>Historic Downtown Walk</h3>
+        <p>
+          Hilo's downtown features beautiful early 20th-century architecture. Pick up a walking tour map at the Visitor Center and explore buildings that survived the tsunamis.
+        </p>
+
+        <h3>Mokupapapa Discovery Center</h3>
+        <p>
+          Free museum dedicated to the Papahānaumokuākea Marine National Monument. Interactive exhibits about Hawaii's remote northwestern islands.
+        </p>
+
+        <h2>Shopping</h2>
+        <ul>
+          <li><strong>Basically Books:</strong> Hawaii's best selection of books about the islands</li>
+          <li><strong>Sig Zane Designs:</strong> Beautiful Hawaiian-inspired fabrics and clothing</li>
+          <li><strong>Dragon Mama:</strong> Eclectic gifts, local art, handmade items</li>
+          <li><strong>Local antique shops:</strong> Hunt for vintage Hawaiian treasures along Kamehameha Avenue</li>
+        </ul>
+
+        <h2>Day Trip Itinerary</h2>
+        <ol>
+          <li><strong>7:00 AM:</strong> Arrive at Farmers Market</li>
+          <li><strong>8:30 AM:</strong> Breakfast at Hawaiian Style Cafe</li>
+          <li><strong>10:00 AM:</strong> Pacific Tsunami Museum</li>
+          <li><strong>11:30 AM:</strong> Downtown walking tour and shopping</li>
+          <li><strong>12:30 PM:</strong> Lunch at Pineapples or Suisan Fish Market</li>
+          <li><strong>2:00 PM:</strong> Two Ladies Kitchen for mochi</li>
+          <li><strong>2:30 PM:</strong> Big Island Candies (free samples!)</li>
+          <li><strong>3:30 PM:</strong> Rainbow Falls before heading back</li>
+        </ol>
+
+        <div class="cta-box">
+          <h3>Experience Real Hawaii</h3>
+          <p>Island Goodes is just 5 minutes from downtown Hilo. Let us share our favorite spots and insider tips during your stay.</p>
+          <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary" target="_blank" rel="noopener">Book Your Stay</a>
+        </div>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .post-header {
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/images/blog/hilo-town.jpg') center/cover no-repeat;
+    color: #fff;
+    padding: 10rem 2rem 4rem;
+    text-align: center;
+  }
+
+  .post-header .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .category {
+    background: var(--color-secondary);
+    color: #fff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .post-header h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin: 1rem 0;
+    line-height: 1.2;
+  }
+
+  .excerpt {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 1rem;
+  }
+
+  .post-header time {
+    opacity: 0.8;
+  }
+
+  .post-content {
+    padding: 4rem 2rem;
+  }
+
+  .post-content .container {
+    max-width: 750px;
+    margin: 0 auto;
+  }
+
+  .post-content .lead {
+    font-size: 1.2rem;
+    color: var(--color-text-light);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .post-content h2 {
+    color: var(--color-primary-dark);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .post-content h3 {
+    color: var(--color-primary);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .post-content p {
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+
+  .post-content ul, .post-content ol {
+    margin: 1rem 0 1rem 1.5rem;
+    line-height: 1.8;
+  }
+
+  .post-content li {
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-box {
+    background: var(--color-bg-alt);
+    padding: 2rem;
+    border-radius: 8px;
+    margin-top: 3rem;
+    text-align: center;
+  }
+
+  .cta-box h3 {
+    color: var(--color-primary-dark);
+    margin-top: 0;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    margin-top: 1rem;
+  }
+
+  .btn-primary {
+    background: var(--color-secondary);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #c49943;
+    color: #fff;
+  }
+</style>

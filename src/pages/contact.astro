@@ -1,15 +1,22 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PreviewLayout from '../layouts/PreviewLayout.astro';
 
 const title = "Contact Island Goodes | Hilo Hawaii Accommodation";
 const description = "Contact Island Goodes in Hilo, Hawaii. Call 808-964-2291 or book online. Located at 27-2365 Hawaii Belt Rd, Papaikou, HI 96781.";
 ---
 
-<BaseLayout title={title} description={description}>
+<PreviewLayout title={title} description={description}>
   <section class="page-hero">
-    <div class="hero-content">
-      <h1>Contact Island Goodes</h1>
-      <p>Get in touch with our Hilo, Hawaii accommodation</p>
+    <div class="page-hero-bg">
+      <img src="/images/property/pool.jpg" alt="Island Goodes pool and property" />
+    </div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <nav class="breadcrumb">
+        <a href="">Home</a> / Contact
+      </nav>
+      <h1>Contact Us</h1>
+      <p class="tagline">We'd love to hear from you</p>
     </div>
   </section>
 
@@ -17,64 +24,87 @@ const description = "Contact Island Goodes in Hilo, Hawaii. Call 808-964-2291 or
     <div class="container">
       <div class="contact-grid">
         <div class="contact-info">
-          <h2>Get in Touch</h2>
-
-          <div class="contact-method">
-            <h3>Phone</h3>
-            <p><a href="tel:+18089642291">808-964-2291</a></p>
-            <p class="note">Best way to reach us for quick questions</p>
+          <div class="section-header">
+            <span class="section-subtitle">Get in Touch</span>
+            <h2>Contact Information</h2>
           </div>
 
-          <div class="contact-method">
-            <h3>Book Online</h3>
-            <p><a href="https://v2.reservationkey.com/3655/reserve/c" target="_blank" rel="noopener">Check availability and book your stay</a></p>
-            <p class="note">Instant confirmation, secure booking</p>
-          </div>
+          <div class="contact-cards">
+            <div class="contact-card">
+              <div class="contact-icon">📞</div>
+              <div class="contact-content">
+                <h3>Phone</h3>
+                <p><a href="tel:+18089642291">808-964-2291</a></p>
+                <span class="note">Best way to reach us for quick questions</span>
+              </div>
+            </div>
 
-          <div class="contact-method">
-            <h3>Address</h3>
-            <p>
-              Island Goodes<br />
-              27-2365 Hawaii Belt Rd<br />
-              Papaikou, HI 96781
-            </p>
-            <p><a href="https://maps.google.com/?q=27-2365+Hawaii+Belt+Rd+Papaikou+HI+96781" target="_blank" rel="noopener">Get Directions</a></p>
-          </div>
+            <div class="contact-card">
+              <div class="contact-icon">🌐</div>
+              <div class="contact-content">
+                <h3>Book Online</h3>
+                <p><a href="https://v2.reservationkey.com/3655/reserve/c" target="_blank" rel="noopener">Check availability & book</a></p>
+                <span class="note">Instant confirmation, secure booking</span>
+              </div>
+            </div>
 
-          <div class="contact-method">
-            <h3>Hours</h3>
-            <p>Office: 9:00 AM - 5:00 PM daily</p>
-            <p>Check-in: 3:00 PM</p>
-            <p>Check-out: 11:00 AM</p>
+            <div class="contact-card">
+              <div class="contact-icon">📍</div>
+              <div class="contact-content">
+                <h3>Address</h3>
+                <p>
+                  Island Goodes<br />
+                  27-2365 Hawaii Belt Rd<br />
+                  Papaikou, HI 96781
+                </p>
+                <a href="https://maps.google.com/?q=27-2365+Hawaii+Belt+Rd+Papaikou+HI+96781" target="_blank" rel="noopener" class="directions-link">Get Directions →</a>
+              </div>
+            </div>
+
+            <div class="contact-card">
+              <div class="contact-icon">🕐</div>
+              <div class="contact-content">
+                <h3>Hours</h3>
+                <p>Office: 9:00 AM - 5:00 PM daily</p>
+                <p>Check-in: 3:00 PM</p>
+                <p>Check-out: 11:00 AM</p>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="contact-form-container">
-          <h2>Send a Message</h2>
+          <div class="form-header">
+            <h2>Send a Message</h2>
+            <p>Have a question? We typically respond within 24 hours.</p>
+          </div>
           <form class="contact-form" action="https://formspree.io/f/xojvbgld" method="POST">
-            <div class="form-group">
-              <label for="name">Name *</label>
-              <input type="text" id="name" name="name" required />
+            <div class="form-row">
+              <div class="form-group">
+                <label for="name">Name *</label>
+                <input type="text" id="name" name="name" required placeholder="Your name" />
+              </div>
+              <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" required placeholder="your@email.com" />
+              </div>
             </div>
-            <div class="form-group">
-              <label for="email">Email *</label>
-              <input type="email" id="email" name="email" required />
-            </div>
-            <div class="form-group">
-              <label for="phone">Phone</label>
-              <input type="tel" id="phone" name="phone" />
-            </div>
-            <div class="form-group">
-              <label for="dates">Desired Dates</label>
-              <input type="text" id="dates" name="dates" placeholder="e.g., March 15-20, 2025" />
+            <div class="form-row">
+              <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" name="phone" placeholder="(808) 555-0123" />
+              </div>
+              <div class="form-group">
+                <label for="dates">Desired Dates</label>
+                <input type="text" id="dates" name="dates" placeholder="e.g., March 15-20, 2025" />
+              </div>
             </div>
             <div class="form-group">
               <label for="message">Message *</label>
-              <textarea id="message" name="message" rows="5" required></textarea>
+              <textarea id="message" name="message" rows="5" required placeholder="How can we help you?"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Send Message</button>
+            <button type="submit" class="btn btn-primary btn-large btn-block">Send Message</button>
           </form>
-          <p class="form-note">* Required fields. We typically respond within 24 hours.</p>
         </div>
       </div>
     </div>
@@ -82,7 +112,10 @@ const description = "Contact Island Goodes in Hilo, Hawaii. Call 808-964-2291 or
 
   <section class="faq-section">
     <div class="container">
-      <h2>Frequently Asked Questions</h2>
+      <div class="section-header center">
+        <span class="section-subtitle">Questions?</span>
+        <h2>Frequently Asked Questions</h2>
+      </div>
       <div class="faq-grid">
         <details class="faq-item">
           <summary>Is Island Goodes really adults only?</summary>
@@ -106,7 +139,7 @@ const description = "Contact Island Goodes in Hilo, Hawaii. Call 808-964-2291 or
         </details>
         <details class="faq-item">
           <summary>What's your cancellation policy?</summary>
-          <p>Please check our booking page for current cancellation policies, as they may vary by rate type and season.</p>
+          <p>All rooms are booked at our Special Non-Refundable Rate. If you have to cancel, there are no refunds, but we will give you a 1-year voucher to rebook. Please see our <a href="/policies">policies page</a> for full details.</p>
         </details>
       </div>
     </div>
@@ -114,80 +147,184 @@ const description = "Contact Island Goodes in Hilo, Hawaii. Call 808-964-2291 or
 
   <section class="cta-section">
     <div class="container">
-      <h2>Ready to Book?</h2>
-      <p>Reserve your room online for instant confirmation</p>
-      <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary btn-large" target="_blank" rel="noopener">Check Availability</a>
+      <div class="cta-content">
+        <h2>Ready to Book Your Stay?</h2>
+        <p>Reserve your room online for instant confirmation</p>
+        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-secondary btn-large" target="_blank" rel="noopener">Check Availability</a>
+      </div>
     </div>
   </section>
-</BaseLayout>
+</PreviewLayout>
 
 <style>
   .page-hero {
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/property/pool.jpg') center/cover no-repeat;
-    min-height: 40vh;
+    position: relative;
+    min-height: 45vh;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     color: #fff;
-    padding: 8rem 2rem 4rem;
+    padding: 10rem 2rem 4rem;
+  }
+
+  .page-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .page-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .page-hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%);
+  }
+
+  .page-hero-content {
+    max-width: 800px;
   }
 
   .page-hero h1 {
-    font-size: clamp(2rem, 5vw, 3rem);
+    font-size: clamp(2.5rem, 6vw, 4rem);
     margin-bottom: 0.5rem;
   }
 
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
+  .tagline {
+    font-size: 1.25rem;
+    opacity: 0.9;
   }
 
   .contact-section {
-    padding: 4rem 0;
+    padding: var(--section-padding) 0;
   }
 
   .contact-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1.2fr;
     gap: 4rem;
+    align-items: start;
   }
 
-  .contact-info h2,
-  .contact-form-container h2 {
-    color: var(--color-primary-dark);
+  .section-header {
     margin-bottom: 2rem;
   }
 
-  .contact-method {
-    margin-bottom: 2rem;
+  .section-header.center {
+    text-align: center;
   }
 
-  .contact-method h3 {
+  .section-subtitle {
+    display: inline-block;
     color: var(--color-primary);
-    font-size: 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     margin-bottom: 0.5rem;
   }
 
-  .contact-method a {
-    font-size: 1.1rem;
+  .section-header h2 {
+    font-size: 2rem;
+    color: var(--color-text);
   }
 
-  .contact-method .note {
-    font-size: 0.85rem;
+  .contact-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .contact-card {
+    display: flex;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    background: var(--color-bg-alt);
+    border-radius: 12px;
+    transition: var(--transition-base);
+  }
+
+  .contact-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  .contact-icon {
+    font-size: 1.75rem;
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 12px;
+  }
+
+  .contact-content h3 {
+    font-size: 1rem;
+    color: var(--color-text);
+    margin-bottom: 0.25rem;
+  }
+
+  .contact-content p {
     color: var(--color-text-light);
-    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .contact-content a {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .contact-content .note {
+    font-size: 0.8125rem;
+    color: var(--color-text-light);
+  }
+
+  .directions-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .contact-form-container {
+    background: #fff;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.08);
+  }
+
+  .form-header {
+    margin-bottom: 2rem;
+  }
+
+  .form-header h2 {
+    font-size: 1.5rem;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+  }
+
+  .form-header p {
+    color: var(--color-text-light);
   }
 
   .contact-form {
-    background: var(--color-bg-alt);
-    padding: 2rem;
-    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
   }
 
-  .form-group {
-    margin-bottom: 1.25rem;
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
   }
 
   .form-group label {
@@ -195,67 +332,43 @@ const description = "Contact Island Goodes in Hilo, Hawaii. Call 808-964-2291 or
     margin-bottom: 0.5rem;
     font-weight: 500;
     color: var(--color-text);
+    font-size: 0.9375rem;
   }
 
   .form-group input,
   .form-group textarea {
     width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    padding: 0.875rem 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
     font-family: inherit;
     font-size: 1rem;
-    transition: border-color 0.3s;
+    transition: var(--transition-base);
+    background: var(--color-bg-alt);
   }
 
   .form-group input:focus,
   .form-group textarea:focus {
     outline: none;
     border-color: var(--color-primary);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(27, 107, 90, 0.1);
   }
 
-  .form-note {
-    font-size: 0.85rem;
-    color: var(--color-text-light);
-    margin-top: 1rem;
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: #aaa;
   }
 
-  .btn {
-    display: inline-block;
-    padding: 0.875rem 2rem;
-    border-radius: 4px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s;
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-  }
-
-  .btn-primary {
-    background: var(--color-secondary);
-    color: #fff;
-  }
-
-  .btn-primary:hover {
-    background: #c49943;
-    color: #fff;
-  }
-
-  .btn-large {
-    padding: 1rem 3rem;
-    font-size: 1.1rem;
+  .btn-block {
+    display: block;
+    width: 100%;
+    text-align: center;
   }
 
   .faq-section {
     background: var(--color-bg-alt);
-    padding: 4rem 0;
-  }
-
-  .faq-section h2 {
-    text-align: center;
-    color: var(--color-primary-dark);
-    margin-bottom: 2rem;
+    padding: var(--section-padding) 0;
   }
 
   .faq-grid {
@@ -266,19 +379,25 @@ const description = "Contact Island Goodes in Hilo, Hawaii. Call 808-964-2291 or
   .faq-item {
     background: #fff;
     margin-bottom: 1rem;
-    border-radius: 8px;
+    border-radius: 12px;
     overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
   }
 
   .faq-item summary {
-    padding: 1.25rem;
+    padding: 1.25rem 1.5rem;
     cursor: pointer;
     font-weight: 600;
-    color: var(--color-primary-dark);
+    color: var(--color-text);
     list-style: none;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: var(--transition-base);
+  }
+
+  .faq-item summary:hover {
+    color: var(--color-primary);
   }
 
   .faq-item summary::-webkit-details-marker {
@@ -289,6 +408,11 @@ const description = "Contact Island Goodes in Hilo, Hawaii. Call 808-964-2291 or
     content: "+";
     font-size: 1.5rem;
     color: var(--color-secondary);
+    font-weight: 300;
+  }
+
+  .faq-item[open] summary {
+    color: var(--color-primary);
   }
 
   .faq-item[open] summary::after {
@@ -296,31 +420,53 @@ const description = "Contact Island Goodes in Hilo, Hawaii. Call 808-964-2291 or
   }
 
   .faq-item p {
-    padding: 0 1.25rem 1.25rem;
+    padding: 0 1.5rem 1.5rem;
     color: var(--color-text-light);
-    line-height: 1.6;
+    line-height: 1.7;
+  }
+
+  .faq-item p a {
+    color: var(--color-primary);
+    font-weight: 500;
   }
 
   .cta-section {
+    background: var(--gradient-primary);
+    padding: 5rem 2rem;
     text-align: center;
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-    color: #fff;
-    padding: 4rem 2rem;
+  }
+
+  .cta-content {
+    max-width: 600px;
+    margin: 0 auto;
   }
 
   .cta-section h2 {
     color: #fff;
-    margin-bottom: 0.5rem;
+    font-size: 2.25rem;
+    margin-bottom: 0.75rem;
   }
 
   .cta-section p {
-    margin-bottom: 1.5rem;
+    color: rgba(255,255,255,0.9);
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     .contact-grid {
       grid-template-columns: 1fr;
       gap: 3rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+
+    .contact-form-container {
+      padding: 1.5rem;
     }
   }
 </style>
