@@ -31,7 +31,9 @@
       "Bash(done)",
       "Bash(cat:*)",
       "Bash(dir:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "WebFetch(domain:www.usgs.gov)",
+      "WebFetch(domain:www.naoj.org)"
     ]
   }
 }
