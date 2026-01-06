@@ -1,0 +1,223 @@
+---
+import PreviewLayout from '../layouts/PreviewLayout.astro';
+
+const title = "Book Your Stay - Island Goodes";
+const description = "Book your stay at Island Goodes, an adults-only oceanview accommodation near Hilo, Hawaii. Check availability and reserve your room online.";
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="booking-page">
+    <div class="booking-header">
+      <div class="container">
+        <nav class="breadcrumb">
+          <a href="/">Home</a> / Book Your Stay
+        </nav>
+        <h1>Book Your Stay</h1>
+        <p class="tagline">Check availability and reserve your room at Island Goodes</p>
+      </div>
+    </div>
+
+    <div class="booking-content">
+      <div class="booking-info">
+        <div class="container">
+          <div class="info-cards">
+            <div class="info-card">
+              <span class="info-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+              </span>
+              <div>
+                <strong>Book Direct & Save</strong>
+                <p>Best rates guaranteed when you book directly with us</p>
+              </div>
+            </div>
+            <div class="info-card">
+              <span class="info-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+              </span>
+              <div>
+                <strong>Flexible Dates</strong>
+                <p>2-night minimum, seasonal discounts available</p>
+              </div>
+            </div>
+            <div class="info-card">
+              <span class="info-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+              </span>
+              <div>
+                <strong>Questions?</strong>
+                <p>Call us at <a href="tel:+18089642291">808-964-2291</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="iframe-container">
+        <div class="iframe-loading" id="iframeLoading">
+          <div class="spinner"></div>
+          <p>Loading booking system...</p>
+        </div>
+        <iframe
+          id="bookingFrame"
+          src="https://v2.reservationkey.com/3655/reserve/c"
+          title="Island Goodes Reservation System"
+          loading="eager"
+          onload="document.getElementById('iframeLoading').style.display='none';"
+        ></iframe>
+      </div>
+    </div>
+  </section>
+</PreviewLayout>
+
+<style>
+  .booking-page {
+    min-height: 100vh;
+    background: var(--color-bg-alt);
+  }
+
+  .booking-header {
+    background: var(--gradient-primary);
+    color: #fff;
+    padding: 8rem 2rem 3rem;
+    text-align: center;
+  }
+
+  .booking-header h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .tagline {
+    font-size: 1.125rem;
+    opacity: 0.9;
+  }
+
+  .breadcrumb {
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+
+  .breadcrumb a {
+    color: inherit;
+  }
+
+  .booking-info {
+    background: #fff;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    padding: 1.5rem 0;
+  }
+
+  .info-cards {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .info-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    max-width: 280px;
+  }
+
+  .info-icon {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    background: var(--color-primary-subtle);
+    color: var(--color-primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .info-card strong {
+    display: block;
+    color: var(--color-text);
+    margin-bottom: 0.25rem;
+  }
+
+  .info-card p {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    margin: 0;
+  }
+
+  .info-card a {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .iframe-container {
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - 250px);
+    background: #fff;
+  }
+
+  .iframe-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    z-index: 10;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-bg-alt);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .iframe-loading p {
+    margin-top: 1rem;
+    color: var(--color-text-light);
+  }
+
+  #bookingFrame {
+    width: 100%;
+    min-height: calc(100vh - 250px);
+    height: 800px;
+    border: none;
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    .info-cards {
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .info-card {
+      max-width: 100%;
+    }
+
+    #bookingFrame {
+      height: 600px;
+    }
+  }
+</style>

@@ -163,27 +163,43 @@ const categories = [...new Set(posts.map(p => p.category))];
         <h2>Explore by Topic</h2>
       </div>
       <div class="topics-grid">
-        <a href="/blog?category=attractions" class="topic-card">
+        <button type="button" class="topic-card active" data-category="all">
+          <div class="topic-icon">📚</div>
+          <h3>All Posts</h3>
+          <p>View all articles</p>
+        </button>
+        <button type="button" class="topic-card" data-category="attractions">
           <div class="topic-icon">🌋</div>
           <h3>Attractions</h3>
           <p>Volcanoes, gardens, museums</p>
-        </a>
-        <a href="/blog?category=nature" class="topic-card">
+        </button>
+        <button type="button" class="topic-card" data-category="nature">
           <div class="topic-icon">🌊</div>
           <h3>Nature</h3>
           <p>Waterfalls, beaches, hiking</p>
-        </a>
-        <a href="/blog?category=activities" class="topic-card">
+        </button>
+        <button type="button" class="topic-card" data-category="activities">
           <div class="topic-icon">🤿</div>
           <h3>Activities</h3>
           <p>Stargazing, snorkeling, tours</p>
-        </a>
-        <a href="/blog?category=local-guide" class="topic-card">
+        </button>
+        <button type="button" class="topic-card" data-category="local-guide">
           <div class="topic-icon">🍍</div>
           <h3>Local Guide</h3>
           <p>Food, markets, culture</p>
-        </a>
+        </button>
+        <button type="button" class="topic-card" data-category="food">
+          <div class="topic-icon">🍴</div>
+          <h3>Food & Dining</h3>
+          <p>Restaurants, poke, local eats</p>
+        </button>
+        <button type="button" class="topic-card" data-category="events">
+          <div class="topic-icon">🎉</div>
+          <h3>Events & Culture</h3>
+          <p>Markets, festivals, traditions</p>
+        </button>
       </div>
+      <p class="filter-status" id="filterStatus"></p>
     </div>
   </section>
 
@@ -192,7 +208,7 @@ const categories = [...new Set(posts.map(p => p.category))];
       <div class="cta-content">
         <h2>Plan Your Stay</h2>
         <p>Book your room at Island Goodes and let us help you plan the perfect Big Island adventure</p>
-        <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-secondary btn-large" target="_blank" rel="noopener">Check Availability</a>
+        <a href="/book" class="btn btn-secondary btn-large">Check Availability</a>
       </div>
     </div>
   </section>
@@ -385,8 +401,8 @@ const categories = [...new Set(posts.map(p => p.category))];
 
   .topics-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
     max-width: 1000px;
     margin: 0 auto;
   }
@@ -462,7 +478,99 @@ const categories = [...new Set(posts.map(p => p.category))];
     }
 
     .topics-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, 1fr);
     }
   }
+
+  .topic-card {
+    cursor: pointer;
+    border: 2px solid transparent;
+    font-family: inherit;
+  }
+
+  .topic-card.active {
+    border-color: var(--color-primary);
+    background: var(--color-primary-subtle);
+  }
+
+  .topic-card.active h3 {
+    color: var(--color-primary);
+  }
+
+  .filter-status {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: var(--color-text-light);
+    font-size: 0.9375rem;
+  }
+
+  .blog-card.hidden {
+    display: none;
+  }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const topicCards = document.querySelectorAll('.topic-card');
+    const blogCards = document.querySelectorAll('.blog-card');
+    const filterStatus = document.getElementById('filterStatus');
+
+    // Category mapping for matching
+    const categoryMap = {
+      'all': null,
+      'attractions': 'Attractions',
+      'nature': 'Nature',
+      'activities': 'Activities',
+      'local-guide': 'Local Guide',
+      'food': 'Food & Dining',
+      'events': 'Events & Culture'
+    };
+
+    function filterPosts(category) {
+      let visibleCount = 0;
+
+      blogCards.forEach(card => {
+        const cardCategory = card.querySelector('.category')?.textContent.trim();
+
+        if (category === 'all' || cardCategory === categoryMap[category]) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      // Update filter status
+      if (category === 'all') {
+        filterStatus.textContent = '';
+      } else {
+        const categoryName = categoryMap[category] || category;
+        filterStatus.textContent = visibleCount > 0
+          ? `Showing ${visibleCount} post${visibleCount !== 1 ? 's' : ''} in "${categoryName}"`
+          : `No posts found in "${categoryName}"`;
+      }
+
+      // Update active state on buttons
+      topicCards.forEach(card => {
+        card.classList.toggle('active', card.dataset.category === category);
+      });
+
+      // Scroll to blog section
+      document.querySelector('.blog-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Add click handlers to topic cards
+    topicCards.forEach(card => {
+      card.addEventListener('click', () => {
+        filterPosts(card.dataset.category);
+      });
+    });
+
+    // Check URL for initial filter
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialCategory = urlParams.get('category');
+    if (initialCategory && categoryMap[initialCategory]) {
+      filterPosts(initialCategory);
+    }
+  });
+</script>
