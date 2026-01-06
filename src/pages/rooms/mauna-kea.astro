@@ -15,6 +15,7 @@ const images = [
 ];
 
 const amenities = [
+  "527 square feet",
   "Mountain view",
   "View of Mauna Kea",
   "Private entrance",
@@ -84,6 +85,10 @@ const bathroomAmenities = [
         <div class="room-details">
           <div class="quick-info">
             <div class="info-item">
+              <span class="info-label">Size</span>
+              <span class="info-value">527 sq ft</span>
+            </div>
+            <div class="info-item">
               <span class="info-label">View</span>
               <span class="info-value">Mountain</span>
             </div>
@@ -115,8 +120,8 @@ const bathroomAmenities = [
           <div class="description">
             <h2>About This Room</h2>
             <p>
-              Named for the majestic mountain visible in the distance, the Mauna Kea Room offers a peaceful
-              retreat with views toward Hawaii's tallest peak at 13,796 feet.
+              Named for the majestic mountain visible in the distance, the Mauna Kea Room with 527 sq ft
+              offers views toward Hawaii's tallest peak at 13,796 feet.
             </p>
             <p>
               This room is perfect for stargazing enthusiasts planning a trip to the world-renowned Mauna Kea
@@ -265,7 +270,9 @@ const bathroomAmenities = [
   .highlight-item strong { display: block; color: var(--color-text); margin-bottom: 0.25rem; }
   .highlight-item p { font-size: 0.9375rem; color: var(--color-text-light); margin: 0; }
 
+  .amenities { margin-bottom: 2rem; }
   .amenities h3 { font-size: 1.25rem; margin-bottom: 1rem; }
+  .bathroom-amenities { margin-top: 2.5rem; }
   .amenities-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; list-style: none; }
   .amenities-grid li { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9375rem; color: var(--color-text-light); }
   .amenities-grid li::before { content: "✓"; color: var(--color-primary); font-weight: 600; }

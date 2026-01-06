@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Island Goodes Website Changes - For Review</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #1B6B5A;
+      font-size: 28px;
+      margin-bottom: 10px;
+      border-bottom: 3px solid #C5A572;
+      padding-bottom: 15px;
+    }
+    .date {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+    h2 {
+      color: #1B6B5A;
+      font-size: 20px;
+      margin-top: 35px;
+      margin-bottom: 15px;
+    }
+    h3 {
+      color: #444;
+      font-size: 16px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    p {
+      margin-bottom: 15px;
+    }
+    ul {
+      margin-left: 25px;
+      margin-bottom: 20px;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    .highlight-box {
+      background: #f0f7f5;
+      border-left: 4px solid #1B6B5A;
+      padding: 20px;
+      margin: 25px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .warning-box {
+      background: #fff8e6;
+      border-left: 4px solid #C5A572;
+      padding: 20px;
+      margin: 25px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .link-section {
+      background: #1B6B5A;
+      color: white;
+      padding: 25px;
+      border-radius: 8px;
+      margin: 30px 0;
+      text-align: center;
+    }
+    .link-section a {
+      color: #C5A572;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #1B6B5A;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+    .status-live {
+      color: #1B6B5A;
+      font-weight: bold;
+    }
+    .status-archived {
+      color: #888;
+    }
+    .approval-section {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 2px solid #eee;
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 15px;
+      padding: 10px;
+      background: #f9f9f9;
+      border-radius: 6px;
+    }
+    .checkbox-item input {
+      margin-top: 4px;
+      width: 18px;
+      height: 18px;
+    }
+    .signature-line {
+      border-bottom: 1px solid #333;
+      width: 300px;
+      margin: 30px 0 10px;
+    }
+    .signature-label {
+      color: #666;
+      font-size: 14px;
+    }
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .comparison-box {
+      padding: 15px;
+      border-radius: 8px;
+    }
+    .old-design {
+      background: #fee;
+      border: 1px solid #fcc;
+    }
+    .new-design {
+      background: #efe;
+      border: 1px solid #cfc;
+    }
+    @media print {
+      body {
+        background: white;
+        padding: 20px;
+      }
+      .container {
+        box-shadow: none;
+        padding: 0;
+      }
+      .link-section a {
+        color: #1B6B5A;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Island Goodes Website Changes</h1>
+    <p class="date">Prepared: January 5, 2026</p>
+
+    <p>This document summarizes the changes made to the Island Goodes website. The new modern design has been deployed and is now live. Please review the changes below.</p>
+
+    <div class="link-section">
+      <p>View the new live site:</p>
+      <a href="https://gentle-centaur-98d6af.netlify.app/" target="_blank">https://gentle-centaur-98d6af.netlify.app/</a>
+    </div>
+
+    <h2>What Changed</h2>
+
+    <h3>New Design</h3>
+    <div class="comparison">
+      <div class="comparison-box old-design">
+        <strong>Old Design:</strong>
+        <ul style="margin-top: 10px;">
+          <li>Basic layout</li>
+          <li>Standard colors</li>
+          <li>Simple navigation</li>
+          <li>Limited content sections</li>
+        </ul>
+      </div>
+      <div class="comparison-box new-design">
+        <strong>New Design:</strong>
+        <ul style="margin-top: 10px;">
+          <li>Modern, elegant layout</li>
+          <li>Ocean Teal & Champagne Gold colors</li>
+          <li>Smooth navigation with mobile menu</li>
+          <li>Comprehensive destination guide</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>New Site Features</h3>
+    <ul>
+      <li><strong>Elegant color scheme:</strong> Ocean Teal (#1B6B5A) paired with Champagne Gold (#C5A572)</li>
+      <li><strong>Premium typography:</strong> Playfair Display for headings, Inter for body text</li>
+      <li><strong>Mobile-responsive:</strong> Works beautifully on phones, tablets, and desktops</li>
+      <li><strong>SEO-optimized:</strong> Better search engine visibility</li>
+      <li><strong>Structured data:</strong> Rich snippets for Google search results</li>
+    </ul>
+
+    <h2>New Pages Added</h2>
+
+    <h3>Destination Guide Section (NEW)</h3>
+    <p>A comprehensive guide to help guests explore the Big Island:</p>
+    <table>
+      <tr>
+        <th>Page</th>
+        <th>URL</th>
+        <th>Content</th>
+      </tr>
+      <tr>
+        <td>Guide Home</td>
+        <td>/guide/</td>
+        <td>Overview of all guide categories</td>
+      </tr>
+      <tr>
+        <td>Attractions</td>
+        <td>/guide/attractions/</td>
+        <td>Volcanoes, waterfalls, gardens, museums</td>
+      </tr>
+      <tr>
+        <td>Activities</td>
+        <td>/guide/activities/</td>
+        <td>Snorkeling, stargazing, zip-lining, tours</td>
+      </tr>
+      <tr>
+        <td>Beaches</td>
+        <td>/guide/beaches/</td>
+        <td>Black sand beaches, swimming spots, turtle viewing</td>
+      </tr>
+      <tr>
+        <td>Food & Dining</td>
+        <td>/guide/food/</td>
+        <td>Restaurants, poke spots, food trucks, local eats</td>
+      </tr>
+      <tr>
+        <td>Day Trips</td>
+        <td>/guide/day-trips/</td>
+        <td>Curated itineraries from Island Goodes</td>
+      </tr>
+      <tr>
+        <td>Events</td>
+        <td>/guide/events/</td>
+        <td>Merrie Monarch 2026, markets, festivals</td>
+      </tr>
+    </table>
+
+    <h3>New Blog Posts</h3>
+    <table>
+      <tr>
+        <th>Post</th>
+        <th>URL</th>
+      </tr>
+      <tr>
+        <td>Best Poke in Hilo: A Local's Guide</td>
+        <td>/blog/best-poke-hilo/</td>
+      </tr>
+      <tr>
+        <td>Uncle Robert's Wednesday Night Market</td>
+        <td>/blog/uncle-roberts-night-market/</td>
+      </tr>
+      <tr>
+        <td>Hidden Swimming Holes Near Hilo</td>
+        <td>/blog/swimming-holes-hilo/</td>
+      </tr>
+    </table>
+
+    <h2>Updated Pages</h2>
+    <table>
+      <tr>
+        <th>Page</th>
+        <th>URL</th>
+        <th>Status</th>
+      </tr>
+      <tr>
+        <td>Homepage</td>
+        <td>/</td>
+        <td class="status-live">New Design Live</td>
+      </tr>
+      <tr>
+        <td>Rooms Overview</td>
+        <td>/rooms/</td>
+        <td class="status-live">New Design Live</td>
+      </tr>
+      <tr>
+        <td>Hilo Bay Room</td>
+        <td>/rooms/hilo-bay/</td>
+        <td class="status-live">New Design Live</td>
+      </tr>
+      <tr>
+        <td>Mauna Kea Room</td>
+        <td>/rooms/mauna-kea/</td>
+        <td class="status-live">New Design Live</td>
+      </tr>
+      <tr>
+        <td>Orchid Room</td>
+        <td>/rooms/orchid/</td>
+        <td class="status-live">New Design Live</td>
+      </tr>
+      <tr>
+        <td>Ginger Room</td>
+        <td>/rooms/ginger/</td>
+        <td class="status-live">New Design Live</td>
+      </tr>
+      <tr>
+        <td>Contact</td>
+        <td>/contact/</td>
+        <td class="status-live">New Design Live</td>
+      </tr>
+      <tr>
+        <td>Gallery</td>
+        <td>/gallery/</td>
+        <td class="status-live">New Design Live</td>
+      </tr>
+      <tr>
+        <td>Reviews</td>
+        <td>/reviews/</td>
+        <td class="status-live">New Design Live</td>
+      </tr>
+      <tr>
+        <td>Policies</td>
+        <td>/policies/</td>
+        <td class="status-live">New Design Live</td>
+      </tr>
+      <tr>
+        <td>Property</td>
+        <td>/property/</td>
+        <td class="status-live">New Design Live</td>
+      </tr>
+      <tr>
+        <td>Our Pets</td>
+        <td>/pets/</td>
+        <td class="status-live">New Design Live</td>
+      </tr>
+      <tr>
+        <td>Blog</td>
+        <td>/blog/</td>
+        <td class="status-live">New Design Live (12 posts)</td>
+      </tr>
+    </table>
+
+    <div class="highlight-box">
+      <strong>Important:</strong> The old site design has been archived (not deleted). All original pages are preserved and can be restored if needed.
+    </div>
+
+    <h2>Key Content Updates</h2>
+    <ul>
+      <li><strong>Merrie Monarch 2026:</strong> Updated dates to April 5-11, 2026</li>
+      <li><strong>Manta Ray Dives:</strong> Added 96% sighting rate and operator info</li>
+      <li><strong>Poke Spots:</strong> Added Suisan Fish Market (since 1907), Poke Market, Poke To Your Taste</li>
+      <li><strong>Uncle Robert's Market:</strong> $10 admission, cash only, opens 4pm Wednesdays</li>
+      <li><strong>Sea Turtle Guidelines:</strong> Added fine warnings ($1,000-$10,500)</li>
+      <li><strong>Swimming Holes:</strong> Added safety warnings for dangerous locations</li>
+    </ul>
+
+    <h2>What Stayed the Same</h2>
+    <ul>
+      <li>All booking links still go to ReservationKey</li>
+      <li>Phone number: 808-964-2291</li>
+      <li>Address: 27-2365 Hawaii Belt Rd, Papaikou, HI 96781</li>
+      <li>Room pricing and descriptions</li>
+      <li>Adults-only (18+) policy messaging</li>
+      <li>3D Matterport tour link</li>
+    </ul>
+
+    <div class="warning-box">
+      <strong>Note:</strong> If any changes need to be made, please let us know and we can adjust. The old design can be restored if preferred.
+    </div>
+
+    <div class="approval-section">
+      <h2>Approval</h2>
+      <p>Please review the live site and check each item below:</p>
+
+      <div class="checkbox-item">
+        <input type="checkbox" id="check1">
+        <label for="check1">I have reviewed the new homepage design</label>
+      </div>
+
+      <div class="checkbox-item">
+        <input type="checkbox" id="check2">
+        <label for="check2">I have reviewed the room pages (Hilo Bay, Mauna Kea, Orchid, Ginger)</label>
+      </div>
+
+      <div class="checkbox-item">
+        <input type="checkbox" id="check3">
+        <label for="check3">I have reviewed the Destination Guide section</label>
+      </div>
+
+      <div class="checkbox-item">
+        <input type="checkbox" id="check4">
+        <label for="check4">I have verified the contact information is correct</label>
+      </div>
+
+      <div class="checkbox-item">
+        <input type="checkbox" id="check5">
+        <label for="check5">I have tested the booking button links</label>
+      </div>
+
+      <div class="checkbox-item">
+        <input type="checkbox" id="check6">
+        <label for="check6">I approve these changes to go live on the main domain</label>
+      </div>
+
+      <div class="signature-line"></div>
+      <p class="signature-label">Signature / Date</p>
+
+      <div style="margin-top: 30px;">
+        <p><strong>Comments or requested changes:</strong></p>
+        <div style="border: 1px solid #ddd; min-height: 100px; padding: 10px; margin-top: 10px; border-radius: 6px;"></div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

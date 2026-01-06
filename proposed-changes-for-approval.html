@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Island Goodes - Proposed Website Changes for Approval</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #1B6B5A;
+      font-size: 28px;
+      margin-bottom: 10px;
+      border-bottom: 3px solid #C5A572;
+      padding-bottom: 15px;
+    }
+    .date {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+    h2 {
+      color: #1B6B5A;
+      font-size: 20px;
+      margin-top: 35px;
+      margin-bottom: 15px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #eee;
+    }
+    h3 {
+      color: #444;
+      font-size: 16px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    p {
+      margin-bottom: 15px;
+    }
+    ul {
+      margin-left: 25px;
+      margin-bottom: 20px;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    .change-item {
+      background: #f9f9f9;
+      border-left: 4px solid #1B6B5A;
+      padding: 15px 20px;
+      margin: 15px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .change-item.remove {
+      border-left-color: #dc3545;
+      background: #fff5f5;
+    }
+    .change-item.add {
+      border-left-color: #28a745;
+      background: #f5fff5;
+    }
+    .change-item.modify {
+      border-left-color: #C5A572;
+      background: #fffef5;
+    }
+    .label {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .label-remove {
+      background: #dc3545;
+      color: white;
+    }
+    .label-add {
+      background: #28a745;
+      color: white;
+    }
+    .label-change {
+      background: #C5A572;
+      color: white;
+    }
+    .old-text {
+      text-decoration: line-through;
+      color: #999;
+      background: #fee;
+      padding: 2px 5px;
+    }
+    .new-text {
+      color: #1B6B5A;
+      background: #efe;
+      padding: 2px 5px;
+      font-weight: 500;
+    }
+    .section-box {
+      border: 2px solid #1B6B5A;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .section-box h4 {
+      color: #1B6B5A;
+      margin-bottom: 15px;
+    }
+    .highlight-box {
+      background: #e8f4f2;
+      border: 1px solid #1B6B5A;
+      padding: 20px;
+      margin: 25px 0;
+      border-radius: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #1B6B5A;
+      color: white;
+    }
+    .approval-section {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 2px solid #eee;
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 15px;
+      padding: 12px;
+      background: #f9f9f9;
+      border-radius: 6px;
+    }
+    .checkbox-item input {
+      margin-top: 4px;
+      width: 18px;
+      height: 18px;
+    }
+    .signature-line {
+      border-bottom: 1px solid #333;
+      width: 300px;
+      margin: 30px 0 10px;
+    }
+    .signature-label {
+      color: #666;
+      font-size: 14px;
+    }
+    .toc {
+      background: #f5f5f5;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+    .toc h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+    .toc ul {
+      list-style: none;
+      margin-left: 0;
+    }
+    .toc li {
+      margin-bottom: 5px;
+    }
+    .toc a {
+      color: #1B6B5A;
+      text-decoration: none;
+    }
+    .toc a:hover {
+      text-decoration: underline;
+    }
+    @media print {
+      body {
+        background: white;
+        padding: 20px;
+      }
+      .container {
+        box-shadow: none;
+        padding: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Proposed Website Changes</h1>
+    <p class="date">Prepared: January 5, 2026 | For Review & Approval</p>
+
+    <p>The following changes have been requested for the Island Goodes website. Please review each item carefully and indicate your approval at the bottom of this document.</p>
+
+    <div class="toc">
+      <h3>Table of Contents</h3>
+      <ul>
+        <li><a href="#pricing">1. Pricing & Promotions</a></li>
+        <li><a href="#policies">2. Policies Page</a></li>
+        <li><a href="#beds">3. Bed Descriptions</a></li>
+        <li><a href="#rooms">4. Room Descriptions</a></li>
+        <li><a href="#amenities">5. Room Amenities (All Rooms)</a></li>
+        <li><a href="#bathroom">6. New Bathroom Amenities Section</a></li>
+        <li><a href="#appliances">7. Appliances & Equipment</a></li>
+        <li><a href="#smoking">8. Smoking Policy</a></li>
+        <li><a href="#houserules">9. House Rules</a></li>
+        <li><a href="#coffee">10. Coffee</a></li>
+        <li><a href="#accessibility">11. Accessibility Wording</a></li>
+        <li><a href="#pets">12. Pets Page</a></li>
+      </ul>
+    </div>
+
+    <!-- SECTION 1: PRICING -->
+    <h2 id="pricing">1. Pricing & Promotions</h2>
+
+    <div class="change-item add">
+      <span class="label label-add">Add</span>
+      <p><strong>Add pricing notice:</strong></p>
+      <p class="new-text">"Price may change on high demand dates. See booking calendar (Book Now) for all up-to-date pricing."</p>
+    </div>
+
+    <div class="change-item modify">
+      <span class="label label-change">Change</span>
+      <p><strong>Discount text:</strong></p>
+      <p><span class="old-text">SAVE 20% UP TO 55%</span> &rarr; <span class="new-text">SAVE UP TO 55%</span></p>
+    </div>
+
+    <div class="change-item remove">
+      <span class="label label-remove">Remove</span>
+      <p><span class="old-text">"Contact us for current promotions."</span></p>
+    </div>
+
+    <!-- SECTION 2: POLICIES -->
+    <h2 id="policies">2. Policies Page</h2>
+
+    <div class="change-item add">
+      <span class="label label-add">Add</span>
+      <p><strong>Add "Full Policy" button at bottom of page:</strong></p>
+      <p>Keep existing policy content, but add a clickable button labeled <span class="new-text">"Full Policy"</span> at the bottom that shows the complete policy from the original website.</p>
+    </div>
+
+    <!-- SECTION 3: BEDS -->
+    <h2 id="beds">3. Bed Descriptions</h2>
+
+    <div class="change-item modify">
+      <span class="label label-change">Standardize</span>
+      <p><strong>Change ALL bed references to consistent naming:</strong></p>
+      <table>
+        <tr>
+          <th>Remove These</th>
+          <th>Replace With</th>
+        </tr>
+        <tr>
+          <td><span class="old-text">King Bed</span></td>
+          <td rowspan="3"><span class="new-text">Sleep Number King Bed</span></td>
+        </tr>
+        <tr>
+          <td><span class="old-text">Sleep number</span></td>
+        </tr>
+        <tr>
+          <td><span class="old-text">Sleep number bed</span></td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- SECTION 4: ROOMS -->
+    <h2 id="rooms">4. Room Descriptions</h2>
+
+    <div class="change-item remove">
+      <span class="label label-remove">Remove</span>
+      <p>All references to <span class="old-text">"our largest room"</span></p>
+    </div>
+
+    <div class="change-item remove">
+      <span class="label label-remove">Remove</span>
+      <p>All references to <span class="old-text">bathroom having ocean views</span></p>
+    </div>
+
+    <div class="change-item remove">
+      <span class="label label-remove">Remove</span>
+      <p>All references to <span class="old-text">lending binoculars to guests</span></p>
+    </div>
+
+    <div class="change-item modify">
+      <span class="label label-change">Change</span>
+      <p><strong>Kitchen references:</strong></p>
+      <p><span class="old-text">"full Kitchen"</span> or <span class="old-text">"Kitchen"</span> &rarr; <span class="new-text">"Kitchenette"</span></p>
+    </div>
+
+    <div class="change-item modify">
+      <span class="label label-change">Change</span>
+      <p><strong>Hilo Bay Room description:</strong></p>
+      <p><span class="old-text">"The Hilo Bay Room is our largest and most popular accommodation."</span></p>
+      <p>&darr;</p>
+      <p><span class="new-text">"The Hilo Bay Room is a large room and very popular with guests."</span></p>
+    </div>
+
+    <!-- SECTION 5: ROOM AMENITIES -->
+    <h2 id="amenities">5. Room Amenities (All Rooms)</h2>
+
+    <div class="change-item add">
+      <span class="label label-add">Add to All Rooms</span>
+      <p><strong>Add these amenities to all room listings:</strong></p>
+      <ul>
+        <li>Two adjustable ceiling fans</li>
+        <li>Floor fan</li>
+        <li>Electric hot water kettle</li>
+        <li>Coffee press</li>
+        <li>Coffee maker</li>
+        <li>Toaster</li>
+        <li>Silverware</li>
+        <li>Plates</li>
+        <li>Cups</li>
+        <li>Wine glasses</li>
+        <li>Wine decorker</li>
+        <li>Other appliances upon request</li>
+      </ul>
+      <p><em>Note: Any duplicates will be removed.</em></p>
+    </div>
+
+    <div class="change-item modify">
+      <span class="label label-change">Change</span>
+      <p><strong>TV description (all rooms):</strong></p>
+      <p><span class="old-text">"Flat Screen TV" / "Satellite TV with a wide selection of channels"</span></p>
+      <p>&darr;</p>
+      <p><span class="new-text">"32" HDTV - access apps by using your own account"</span></p>
+    </div>
+
+    <div class="change-item modify">
+      <span class="label label-change">Change</span>
+      <p><strong>Refrigerator (all rooms):</strong></p>
+      <p><span class="old-text">"mini refrigerator" / "mini refrigerator/freezer" / "full-size refrigerator"</span></p>
+      <p>&darr;</p>
+      <p><span class="new-text">"Mid-size refrigerator/freezer"</span></p>
+    </div>
+
+    <!-- SECTION 6: BATHROOM AMENITIES -->
+    <h2 id="bathroom">6. New Bathroom Amenities Section</h2>
+
+    <div class="section-box">
+      <h4>NEW SECTION: Bathroom Amenities (for all rooms)</h4>
+      <p>Add this as a new section underneath Room Amenities on all room pages:</p>
+      <ul>
+        <li>Shower only</li>
+        <li>Fresh hand and full-size towels</li>
+        <li>Hair dryer</li>
+        <li>Soap</li>
+        <li>Body wash</li>
+        <li>Shampoo</li>
+        <li>Conditioner</li>
+        <li>Beach towels</li>
+      </ul>
+    </div>
+
+    <!-- SECTION 7: APPLIANCES -->
+    <h2 id="appliances">7. Appliances & Equipment</h2>
+
+    <div class="change-item remove">
+      <span class="label label-remove">Remove</span>
+      <p>All references to <span class="old-text">"Stove"</span>, <span class="old-text">"oven"</span>, <span class="old-text">"Stove & oven"</span></p>
+    </div>
+
+    <div class="change-item remove">
+      <span class="label label-remove">Remove</span>
+      <p>All references to <span class="old-text">"Flexible when available"</span></p>
+    </div>
+
+    <div class="change-item remove">
+      <span class="label label-remove">Remove</span>
+      <p><span class="old-text">"Early check-in or late check-out may be available upon request"</span></p>
+    </div>
+
+    <!-- SECTION 8: SMOKING -->
+    <h2 id="smoking">8. Smoking Policy</h2>
+
+    <div class="change-item modify">
+      <span class="label label-change">Change</span>
+      <p><strong>Replace smoking policy:</strong></p>
+      <p><span class="old-text">"No smoking on the property"</span></p>
+      <p>&darr;</p>
+      <p><span class="new-text">"No smoking in the room or outside - fines apply and you will be asked to leave and find other accommodations elsewhere. Smoke only in the designated area by the main entrance."</span></p>
+    </div>
+
+    <!-- SECTION 9: HOUSE RULES -->
+    <h2 id="houserules">9. House Rules</h2>
+
+    <div class="change-item add">
+      <span class="label label-add">Add</span>
+      <p><strong>Add to House Rules:</strong></p>
+      <p><span class="new-text">"Only registered guests allowed on the property"</span></p>
+    </div>
+
+    <!-- SECTION 10: COFFEE -->
+    <h2 id="coffee">10. Coffee</h2>
+
+    <div class="change-item modify">
+      <span class="label label-change">Change</span>
+      <p><strong>All coffee references:</strong></p>
+      <p><span class="old-text">"Kona Coffee" / "Hawaiian coffee" / "local coffee"</span></p>
+      <p>&darr;</p>
+      <p><span class="new-text">"Our own house blend of strong coffee"</span></p>
+    </div>
+
+    <!-- SECTION 11: ACCESSIBILITY -->
+    <h2 id="accessibility">11. Accessibility Wording</h2>
+
+    <div class="change-item modify">
+      <span class="label label-change">Change</span>
+      <p><strong>Icon change:</strong></p>
+      <p><span class="old-text">Handicap emoji (&#9855;)</span> &rarr; <span class="new-text">Compass emoji (&#129517;) or similar</span></p>
+    </div>
+
+    <div class="change-item modify">
+      <span class="label label-change">Change</span>
+      <p><strong>Wording:</strong></p>
+      <p><span class="old-text">"Accessibility"</span> &rarr; <span class="new-text">"Easy to get around"</span></p>
+    </div>
+
+    <!-- SECTION 12: PETS -->
+    <h2 id="pets">12. Pets Page (Property Inhabitants)</h2>
+
+    <div class="change-item remove">
+      <span class="label label-remove">Remove</span>
+      <p><span class="old-text">"They help keep the property free of geckos and other small critters."</span></p>
+    </div>
+
+    <div class="change-item modify">
+      <span class="label label-change">Change</span>
+      <p><strong>Cat references:</strong> Change from plural to singular (we only have one cat)</p>
+    </div>
+
+    <div class="section-box">
+      <h4>Updated Pet Descriptions</h4>
+
+      <p><strong>Cat:</strong></p>
+      <p class="new-text">Our calico cat named "Miss Kitty" is not allowed in the rooms.</p>
+
+      <p><strong>Dog:</strong></p>
+      <p class="new-text">Our friendly dog "Jake" (also known as Coconut Jake) is our pet dog and is friendly to everyone. Jake is trained and is not allowed to enter any rooms.</p>
+
+      <p><strong>Donkeys & Horse:</strong></p>
+      <p class="new-text">We have two donkeys, Prudy and Jasper, and one horse named Gypsy. We need to introduce them to you if you are interested.</p>
+
+      <p><strong>Feeding:</strong></p>
+      <p class="new-text">All of our animals are on special diets, so please do not feed them anything.</p>
+    </div>
+
+    <div class="change-item add">
+      <span class="label label-add">Add</span>
+      <p><strong>Add pictures of:</strong></p>
+      <ul>
+        <li>Donkeys (Prudy and Jasper)</li>
+        <li>Cat (Miss Kitty)</li>
+        <li>Dog (Jake/Coconut Jake)</li>
+        <li>Horse (Gypsy)</li>
+      </ul>
+    </div>
+
+    <div class="change-item remove">
+      <span class="label label-remove">Remove Entire Section</span>
+      <p><span class="old-text">"A Note About Guest Pets: While we have animal residents on the property, we are unable to accommodate guest pets at this time. Service animals are welcome with advance notice."</span></p>
+    </div>
+
+    <div class="change-item add">
+      <span class="label label-add">Add</span>
+      <p><strong>New guest pet policy:</strong></p>
+      <p><span class="new-text">"We do not accept guest's animals on the property. If you have any concerns about animal allergies, please contact us before booking."</span></p>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="highlight-box">
+      <h3 style="margin-top: 0;">Summary of Changes</h3>
+      <table>
+        <tr>
+          <th>Category</th>
+          <th>Changes</th>
+        </tr>
+        <tr>
+          <td>Pricing</td>
+          <td>Add high-demand notice, change discount text, remove promotions line</td>
+        </tr>
+        <tr>
+          <td>Policies</td>
+          <td>Add "Full Policy" button</td>
+        </tr>
+        <tr>
+          <td>Beds</td>
+          <td>Standardize all to "Sleep Number King Bed"</td>
+        </tr>
+        <tr>
+          <td>Room Descriptions</td>
+          <td>Remove "largest", ocean view bathroom, binoculars; change kitchen to kitchenette</td>
+        </tr>
+        <tr>
+          <td>Amenities</td>
+          <td>Add fans, kettle, coffee items, kitchenware; update TV and fridge</td>
+        </tr>
+        <tr>
+          <td>Bathroom</td>
+          <td>New section with shower, towels, toiletries</td>
+        </tr>
+        <tr>
+          <td>Appliances</td>
+          <td>Remove stove/oven, flexible check-in references</td>
+        </tr>
+        <tr>
+          <td>Smoking</td>
+          <td>Updated policy with fines and designated area</td>
+        </tr>
+        <tr>
+          <td>House Rules</td>
+          <td>Add "only registered guests" rule</td>
+        </tr>
+        <tr>
+          <td>Coffee</td>
+          <td>Change to "house blend of strong coffee"</td>
+        </tr>
+        <tr>
+          <td>Accessibility</td>
+          <td>Change icon and wording</td>
+        </tr>
+        <tr>
+          <td>Pets Page</td>
+          <td>Update all animal descriptions, add photos, new guest pet policy</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- APPROVAL SECTION -->
+    <div class="approval-section">
+      <h2>Approval</h2>
+      <p>Please review each section above and indicate your approval:</p>
+
+      <div class="checkbox-item">
+        <input type="checkbox" id="check1">
+        <label for="check1"><strong>Section 1:</strong> Pricing & Promotions changes</label>
+      </div>
+
+      <div class="checkbox-item">
+        <input type="checkbox" id="check2">
+        <label for="check2"><strong>Section 2:</strong> Policies page - Add "Full Policy" button</label>
+      </div>
+
+      <div class="checkbox-item">
+        <input type="checkbox" id="check3">
+        <label for="check3"><strong>Section 3:</strong> Standardize all bed names to "Sleep Number King Bed"</label>
+      </div>
+
+      <div class="checkbox-item">
+        <input type="checkbox" id="check4">
+        <label for="check4"><strong>Section 4:</strong> Room description changes (remove largest, ocean view bathroom, binoculars, change to kitchenette)</label>
+      </div>
+
+      <div class="checkbox-item">
+        <input type="checkbox" id="check5">
+        <label for="check5"><strong>Section 5:</strong> Room amenities additions (fans, kettle, kitchenware, etc.)</label>
+      </div>
+
+      <div class="checkbox-item">
+        <input type="checkbox" id="check6">
+        <label for="check6"><strong>Section 6:</strong> New Bathroom Amenities section for all rooms</label>
+      </div>
+
+      <div class="checkbox-item">
+        <input type="checkbox" id="check7">
+        <label for="check7"><strong>Section 7:</strong> Remove stove/oven, flexible check-in references</label>
+      </div>
+
+      <div class="checkbox-item">
+        <input type="checkbox" id="check8">
+        <label for="check8"><strong>Section 8:</strong> Updated smoking policy with fines and designated area</label>
+      </div>
+
+      <div class="checkbox-item">
+        <input type="checkbox" id="check9">
+        <label for="check9"><strong>Section 9:</strong> Add "only registered guests" house rule</label>
+      </div>
+
+      <div class="checkbox-item">
+        <input type="checkbox" id="check10">
+        <label for="check10"><strong>Section 10:</strong> Change coffee to "house blend of strong coffee"</label>
+      </div>
+
+      <div class="checkbox-item">
+        <input type="checkbox" id="check11">
+        <label for="check11"><strong>Section 11:</strong> Change accessibility icon and wording</label>
+      </div>
+
+      <div class="checkbox-item">
+        <input type="checkbox" id="check12">
+        <label for="check12"><strong>Section 12:</strong> Pets page updates (Miss Kitty, Jake, Prudy, Jasper, Gypsy, new policy)</label>
+      </div>
+
+      <div style="margin-top: 30px; padding: 20px; background: #f0f7f5; border-radius: 8px;">
+        <div class="checkbox-item" style="background: white;">
+          <input type="checkbox" id="checkAll">
+          <label for="checkAll"><strong>I approve ALL changes listed above and authorize implementation.</strong></label>
+        </div>
+      </div>
+
+      <div class="signature-line"></div>
+      <p class="signature-label">Signature / Date</p>
+
+      <div style="margin-top: 30px;">
+        <p><strong>Comments, questions, or modifications:</strong></p>
+        <div style="border: 1px solid #ddd; min-height: 120px; padding: 15px; margin-top: 10px; border-radius: 6px; background: #fafafa;"></div>
+      </div>
+
+      <div style="margin-top: 30px; padding: 15px; background: #fff8e6; border-radius: 8px; border: 1px solid #C5A572;">
+        <p><strong>Note:</strong> Once approved, these changes will be implemented and deployed to the live website. The current site will remain unchanged until approval is received.</p>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

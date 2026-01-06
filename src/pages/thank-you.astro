@@ -1,0 +1,92 @@
+---
+import PreviewLayout from '../layouts/PreviewLayout.astro';
+
+const title = "Thank You | Island Goodes";
+const description = "Thank you for contacting Island Goodes. We will respond to your message shortly.";
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="thank-you-section">
+    <div class="container">
+      <div class="thank-you-content">
+        <div class="success-icon">✓</div>
+        <h1>Thank You!</h1>
+        <p class="lead">Your message has been sent successfully.</p>
+        <p>We typically respond within 24 hours. If you need immediate assistance, please call us at <a href="tel:+18089642291">808-964-2291</a>.</p>
+        <div class="actions">
+          <a href="/" class="btn btn-primary">Return Home</a>
+          <a href="/rooms" class="btn btn-outline-dark">View Our Rooms</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</PreviewLayout>
+
+<style>
+  .thank-you-section {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8rem 2rem 4rem;
+    background: linear-gradient(135deg, var(--color-bg-alt) 0%, #fff 100%);
+  }
+
+  .thank-you-content {
+    text-align: center;
+    max-width: 500px;
+  }
+
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--color-primary);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin: 0 auto 2rem;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+  }
+
+  .lead {
+    font-size: 1.25rem;
+    color: var(--color-text-light);
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: var(--color-text-light);
+    margin-bottom: 2rem;
+  }
+
+  p a {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-outline-dark {
+    background: transparent;
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .btn-outline-dark:hover {
+    background: var(--color-primary);
+    color: #fff;
+  }
+</style>
