@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Island Goodes Website Expert Review - January 2026</title>
+  <style>
+    :root {
+      --primary: #1a5f4a;
+      --secondary: #d4a853;
+      --danger: #dc3545;
+      --warning: #ffc107;
+      --success: #28a745;
+      --info: #17a2b8;
+      --dark: #343a40;
+      --light: #f8f9fa;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f5f5f5;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), #134436);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      opacity: 0.9;
+      font-size: 1.1rem;
+    }
+
+    .date {
+      background: var(--secondary);
+      color: white;
+      padding: 0.25rem 1rem;
+      border-radius: 20px;
+      display: inline-block;
+      margin-top: 1rem;
+      font-weight: 600;
+    }
+
+    main {
+      padding: 2rem;
+    }
+
+    section {
+      margin-bottom: 2.5rem;
+    }
+
+    h2 {
+      color: var(--primary);
+      border-bottom: 3px solid var(--secondary);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    h3 {
+      color: var(--dark);
+      margin: 1.5rem 0 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background: var(--light);
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    tr:hover {
+      background: #f9f9f9;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .badge-critical {
+      background: var(--danger);
+      color: white;
+    }
+
+    .badge-high {
+      background: #fd7e14;
+      color: white;
+    }
+
+    .badge-medium {
+      background: var(--warning);
+      color: #333;
+    }
+
+    .badge-low {
+      background: var(--info);
+      color: white;
+    }
+
+    .good-list {
+      background: #e8f5e9;
+      border-left: 4px solid var(--success);
+      padding: 1rem;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .good-list ul {
+      margin-left: 1.5rem;
+    }
+
+    .good-list li {
+      margin: 0.5rem 0;
+    }
+
+    .issue-list {
+      background: #fff3cd;
+      border-left: 4px solid var(--warning);
+      padding: 1rem;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .critical-list {
+      background: #f8d7da;
+      border-left: 4px solid var(--danger);
+      padding: 1rem;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .critical-list ul, .issue-list ul {
+      margin-left: 1.5rem;
+    }
+
+    .critical-list li, .issue-list li {
+      margin: 0.5rem 0;
+    }
+
+    code {
+      background: #e9ecef;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Consolas', monospace;
+      font-size: 0.85rem;
+    }
+
+    .priority-section {
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      border-radius: 8px;
+    }
+
+    .priority-critical {
+      background: linear-gradient(to right, #f8d7da, #fff);
+      border-left: 5px solid var(--danger);
+    }
+
+    .priority-high {
+      background: linear-gradient(to right, #ffe5d0, #fff);
+      border-left: 5px solid #fd7e14;
+    }
+
+    .priority-medium {
+      background: linear-gradient(to right, #fff3cd, #fff);
+      border-left: 5px solid var(--warning);
+    }
+
+    .priority-low {
+      background: linear-gradient(to right, #d1ecf1, #fff);
+      border-left: 5px solid var(--info);
+    }
+
+    .priority-section h4 {
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .priority-section ol {
+      margin-left: 1.5rem;
+    }
+
+    .priority-section li {
+      margin: 0.5rem 0;
+    }
+
+    footer {
+      background: var(--dark);
+      color: white;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: var(--secondary);
+    }
+
+    .summary-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .stat-card {
+      background: var(--light);
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .stat-card .number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stat-card .label {
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+      .container {
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Island Goodes Website Expert Review</h1>
+      <p>Comprehensive Code, Design, and Image Analysis</p>
+      <span class="date">January 7, 2026</span>
+    </header>
+
+    <main>
+      <!-- Summary Stats -->
+      <section>
+        <h2>Executive Summary</h2>
+        <div class="summary-stats">
+          <div class="stat-card">
+            <div class="number">4</div>
+            <div class="label">Critical Issues</div>
+          </div>
+          <div class="stat-card">
+            <div class="number">4</div>
+            <div class="label">High Priority</div>
+          </div>
+          <div class="stat-card">
+            <div class="number">5</div>
+            <div class="label">Medium Priority</div>
+          </div>
+          <div class="stat-card">
+            <div class="number">97</div>
+            <div class="label">Images Reviewed</div>
+          </div>
+        </div>
+        <p>Three expert agents reviewed the Island Goodes website for code quality, design/UX, and visual assets. The site has a strong foundation but several critical security and consistency issues need immediate attention.</p>
+      </section>
+
+      <!-- Code Expert Section -->
+      <section>
+        <h2>Code Expert Findings</h2>
+
+        <h3>Critical Security Issues</h3>
+        <div class="critical-list">
+          <table>
+            <thead>
+              <tr>
+                <th>Issue</th>
+                <th>Location</th>
+                <th>Severity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Hardcoded admin password</strong> in client-side JavaScript</td>
+                <td><code>admin.astro:841</code></td>
+                <td><span class="badge badge-critical">CRITICAL</span></td>
+              </tr>
+              <tr>
+                <td><strong>innerHTML with external data</strong> - XSS vulnerability risk</td>
+                <td><code>admin.astro</code> (6 places)</td>
+                <td><span class="badge badge-high">HIGH</span></td>
+              </tr>
+              <tr>
+                <td><strong>Empty href in breadcrumbs</strong> - broken navigation</td>
+                <td><code>contact.astro</code>, blog pages</td>
+                <td><span class="badge badge-medium">MEDIUM</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Key Recommendations</h3>
+        <ul>
+          <li>Move admin authentication to a serverless function with environment variables</li>
+          <li>Add skip-link for keyboard navigation accessibility</li>
+          <li>Add <code>aria-label</code> attributes to navigation elements</li>
+          <li>Add <code>robots.txt</code> and <code>sitemap.xml</code></li>
+          <li>Remove 15+ <code>_old-*</code> files cluttering <code>src/pages/</code></li>
+        </ul>
+
+        <h3>What's Done Well</h3>
+        <div class="good-list">
+          <ul>
+            <li>Excellent SEO meta tags and JSON-LD structured data</li>
+            <li>Good use of <code>fetchpriority</code>, <code>loading="lazy"</code>, and <code>decoding="async"</code></li>
+            <li>All external links have <code>rel="noopener"</code></li>
+            <li>Proper use of semantic HTML elements</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Design Expert Section -->
+      <section>
+        <h2>Design/UX Expert Findings</h2>
+
+        <h3>Critical UX Issues</h3>
+        <div class="critical-list">
+          <table>
+            <thead>
+              <tr>
+                <th>Issue</th>
+                <th>Impact</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Two different layout systems</strong> (BaseLayout vs PreviewLayout)</td>
+                <td>Inconsistent colors, fonts, and navigation across pages</td>
+              </tr>
+              <tr>
+                <td><strong>Navigation differs between pages</strong></td>
+                <td>Confusing user experience - users don't know where they are</td>
+              </tr>
+              <tr>
+                <td><strong>No active state on nav links</strong></td>
+                <td>Users can't visually identify current page</td>
+              </tr>
+              <tr>
+                <td><strong>Booking page has no footer</strong></td>
+                <td>No phone number or help if users have questions</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Color/Typography Inconsistencies</h3>
+        <div class="issue-list">
+          <table>
+            <thead>
+              <tr>
+                <th>Element</th>
+                <th>BaseLayout</th>
+                <th>PreviewLayout</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Primary Green</td>
+                <td><code>#1a5f4a</code></td>
+                <td><code>#1B6B5A</code></td>
+              </tr>
+              <tr>
+                <td>Secondary Gold</td>
+                <td><code>#d4a853</code></td>
+                <td><code>#C5A572</code></td>
+              </tr>
+              <tr>
+                <td>Body Font</td>
+                <td>Open Sans</td>
+                <td>Inter</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Key Recommendations</h3>
+        <ul>
+          <li>Consolidate to a single layout system</li>
+          <li>Standardize CTA language ("Book Now" vs "Check Availability")</li>
+          <li>Add room comparison functionality</li>
+          <li>Keep minimal footer on booking page with phone number</li>
+          <li>Increase mobile button touch targets to 48px minimum</li>
+        </ul>
+
+        <h3>What's Done Well</h3>
+        <div class="good-list">
+          <ul>
+            <li>Green/gold color palette evokes tropical luxury effectively</li>
+            <li>Playfair Display + sans-serif font pairing is elegant</li>
+            <li>Weather widget creates urgency/FOMO</li>
+            <li>Live volcano and stargazing camera feeds are unique value-adds</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Image Expert Section -->
+      <section>
+        <h2>Graphic/Image Expert Findings</h2>
+
+        <h3>Critical Image Issues</h3>
+        <div class="critical-list">
+          <table>
+            <thead>
+              <tr>
+                <th>Issue</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Missing logo.png</strong></td>
+                <td>Referenced in schema.org structured data but file doesn't exist</td>
+              </tr>
+              <tr>
+                <td><strong>Missing island-goodes-ocean-view.jpg</strong></td>
+                <td>Referenced in layouts but file doesn't exist</td>
+              </tr>
+              <tr>
+                <td><strong>No WebP/AVIF images</strong></td>
+                <td>All 97 images are JPEG - could be 30-80% smaller with modern formats</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Image Inventory Summary</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Directory</th>
+              <th>Count</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Root level</td>
+              <td>10</td>
+              <td>Hero images, some unused</td>
+            </tr>
+            <tr>
+              <td>/property</td>
+              <td>5</td>
+              <td>3 actively used, 2 unused (hosts.jpg, sleep-number.jpg)</td>
+            </tr>
+            <tr>
+              <td>/rooms/hilo-bay</td>
+              <td>16</td>
+              <td>Complete coverage</td>
+            </tr>
+            <tr>
+              <td>/rooms/orchid</td>
+              <td>18</td>
+              <td>Complete coverage</td>
+            </tr>
+            <tr>
+              <td>/rooms/mauna-kea</td>
+              <td>17</td>
+              <td>Complete coverage</td>
+            </tr>
+            <tr>
+              <td>/rooms/ginger</td>
+              <td>8</td>
+              <td><span class="badge badge-medium">Missing lanai, entrance, fridge photos</span></td>
+            </tr>
+            <tr>
+              <td>/blog</td>
+              <td>23</td>
+              <td>Some images shared across multiple posts</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Key Recommendations</h3>
+        <ul>
+          <li>Create <code>/public/images/logo.png</code> for SEO/structured data</li>
+          <li>Add missing Ginger Room photos (lanai, entrance, fridge)</li>
+          <li>Convert all images to WebP format for 30-50% file size reduction</li>
+          <li>Add unique images for blog posts that currently share generic photos</li>
+          <li>Utilize unused images: <code>hosts.jpg</code>, <code>sleep-number.jpg</code>, <code>kitchenette.jpg</code></li>
+        </ul>
+      </section>
+
+      <!-- Prioritized Action List -->
+      <section>
+        <h2>Prioritized Action List</h2>
+
+        <div class="priority-section priority-critical">
+          <h4><span class="badge badge-critical">CRITICAL</span> Do First</h4>
+          <ol>
+            <li><strong>Fix hardcoded admin password</strong> - Major security risk. Move to serverless function with environment variables.</li>
+            <li><strong>Create missing logo.png file</strong> - Required for schema.org structured data and SEO.</li>
+            <li><strong>Fix broken image reference</strong> - Update <code>island-goodes-ocean-view.jpg</code> to use <code>hero-ocean-view.jpg</code> or create the file.</li>
+            <li><strong>Fix empty breadcrumb hrefs</strong> - Change <code>href=""</code> to <code>href="/"</code> on multiple pages.</li>
+          </ol>
+        </div>
+
+        <div class="priority-section priority-high">
+          <h4><span class="badge badge-high">HIGH</span> Priority</h4>
+          <ol start="5">
+            <li><strong>Consolidate layout systems</strong> - Eliminate color, font, and navigation inconsistencies between BaseLayout and PreviewLayout.</li>
+            <li><strong>Standardize navigation</strong> - Same menu items and order across all pages.</li>
+            <li><strong>Add WebP image format support</strong> - Use Astro's image optimization for 30-50% smaller files.</li>
+            <li><strong>Add Ginger Room missing photos</strong> - lanai.jpg, entrance.jpg, fridge.jpg</li>
+          </ol>
+        </div>
+
+        <div class="priority-section priority-medium">
+          <h4><span class="badge badge-medium">MEDIUM</span> Priority</h4>
+          <ol start="9">
+            <li><strong>Add accessibility features</strong> - Skip-link and ARIA labels for screen readers.</li>
+            <li><strong>Add active state to navigation</strong> - Visual indicator for current page.</li>
+            <li><strong>Keep minimal footer on booking page</strong> - Include phone number for questions.</li>
+            <li><strong>Improve image alt text</strong> - Add room names and context to descriptions.</li>
+            <li><strong>Remove old files</strong> - Delete 15+ <code>_old-*</code> files from src/pages/</li>
+          </ol>
+        </div>
+
+        <div class="priority-section priority-low">
+          <h4><span class="badge badge-low">NICE TO HAVE</span></h4>
+          <ol start="14">
+            <li>Add robots.txt and sitemap.xml</li>
+            <li>Add room comparison feature</li>
+            <li>Use Astro's <code>&lt;Image&gt;</code> component for automatic optimization</li>
+            <li>Utilize unused property images (hosts, sleep-number, kitchenette)</li>
+          </ol>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Generated by Claude Code Expert Review Agents</p>
+      <p>Island Goodes &bull; <a href="https://www.islandgoodes.com">www.islandgoodes.com</a></p>
+    </footer>
+  </div>
+</body>
+</html>
