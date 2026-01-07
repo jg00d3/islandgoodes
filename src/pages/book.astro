@@ -112,6 +112,11 @@ const description = "Book your stay at Island Goodes, an adults-only oceanview a
     display: block;
   }
 
+  /* Hide footer on book page */
+  :global(.site-footer) {
+    display: none;
+  }
+
   @media (max-width: 768px) {
     .booking-bar {
       padding: 0.625rem 1rem;
