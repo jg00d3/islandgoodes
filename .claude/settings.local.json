@@ -33,7 +33,10 @@
       "Bash(dir:*)",
       "Bash(npm install:*)",
       "WebFetch(domain:www.usgs.gov)",
-      "WebFetch(domain:www.naoj.org)"
+      "WebFetch(domain:www.naoj.org)",
+      "WebFetch(domain:commons.wikimedia.org)",
+      "WebFetch(domain:www.pexels.com)",
+      "Bash(git config:*)"
     ]
   }
 }
