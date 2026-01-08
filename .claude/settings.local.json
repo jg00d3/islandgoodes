@@ -37,7 +37,8 @@
       "WebFetch(domain:commons.wikimedia.org)",
       "WebFetch(domain:www.pexels.com)",
       "Bash(git config:*)",
-      "Bash(node scripts/optimize-images.mjs:*)"
+      "Bash(node scripts/optimize-images.mjs:*)",
+      "Bash(git pull:*)"
     ]
   }
 }
