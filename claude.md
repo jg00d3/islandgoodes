@@ -10,6 +10,8 @@ Island Goodes is a static marketing website for an adults-only (18+) oceanview a
 - Adults only property - no children under 18 permitted
 - No breakfast service (removed "B&B" references)
 - Four rooms: Hilo Bay, Mauna Kea, Ginger, Orchid
+- Phone: 808-964-2291
+- Address: 27-2365 Hawaii Belt Rd, Papaikou, HI 96781
 
 ## Commands
 
@@ -23,80 +25,90 @@ Deploy: Push to master branch triggers automatic Netlify deployment.
 
 ## Architecture
 
+### Layouts
+
+- **PreviewLayout.astro** - Main layout used by all active pages. Contains header, footer, navigation, SEO meta tags, schema.org data, global CSS, social share buttons, lightbox, and live chat integration.
+- **BaseLayout.astro** - Legacy layout, kept for reference but not actively used.
+
 ### File Structure
 ```
 src/
 ├── layouts/
-│   └── BaseLayout.astro    # Main layout with header, footer, SEO, schema.org
+│   └── PreviewLayout.astro  # Main layout with all global components
 ├── pages/
-│   ├── index.astro         # Homepage
-│   ├── rooms.astro         # Room listing page
-│   ├── rooms/              # Individual room detail pages (hilo-bay, mauna-kea, ginger, orchid)
-│   ├── blog/
-│   │   ├── index.astro     # Blog listing (posts array defined here)
-│   │   └── [topic].astro   # Individual blog posts as separate files
-│   ├── contact.astro       # Contact form
-│   ├── policies.astro      # Booking policies
-│   ├── reviews.astro       # Guest reviews
-│   ├── property.astro      # Property & amenities info
-│   ├── gallery.astro       # Photo slideshow
-│   └── pets.astro          # Property pets info
+│   ├── index.astro          # Homepage
+│   ├── book.astro           # Booking page (ReservationKey iframe)
+│   ├── rooms/               # Room pages (index, ginger, hilo-bay, mauna-kea, orchid)
+│   ├── guide/               # Area guide section
+│   │   ├── index.astro      # Guide landing page
+│   │   ├── food.astro       # Restaurant recommendations
+│   │   ├── day-trips.astro  # Day trip destinations
+│   │   ├── activities.astro # Activities & tours
+│   │   ├── attractions.astro# Local attractions
+│   │   ├── beaches.astro    # Beach guide
+│   │   └── events.astro     # Local events
+│   ├── blog/                # Blog posts
+│   │   ├── index.astro      # Blog listing (allPosts array defined here)
+│   │   └── [topic].astro    # Individual blog posts
+│   ├── admin.astro          # Admin settings panel (localStorage-based toggles)
+│   ├── contact.astro        # Contact form (Formspree)
+│   ├── reviews.astro        # TripAdvisor reviews display
+│   ├── gallery.astro        # Photo slideshow with lightbox
+│   └── ...                  # Other pages (policies, property, pets, etc.)
 public/
 └── images/
-    ├── rooms/[room-name]/  # Room photos (room.jpg, lanai.jpg, etc.)
-    ├── blog/               # Blog post featured images
-    └── property/           # Amenity photos (pool.jpg, hot-tub.jpg, hosts.jpg, etc.)
+    ├── rooms/[room-name]/   # Room photos
+    ├── blog/                # Blog featured images
+    └── property/            # Amenity photos
 ```
 
-### BaseLayout
+### Disabled Pages
 
-All pages use `BaseLayout.astro` which provides:
-- SEO meta tags (title, description, Open Graph, Twitter Cards)
-- Schema.org structured data (LodgingBusiness)
-- Global CSS variables and styles
-- Fixed header with navigation
-- Footer with contact info and links
-- Mobile menu toggle script
+Files prefixed with `_old-` are disabled/archived pages. Astro ignores these during build. To re-enable, remove the `_old-` prefix.
 
-Props: `title` (required), `description` (required), `image` (optional), `canonicalURL` (optional)
+### CSS Variables (defined in PreviewLayout.astro)
 
-### Styling Pattern
-
-Each page uses scoped `<style>` blocks. Global CSS variables defined in BaseLayout:
-- `--color-primary: #1a5f4a` (green)
-- `--color-secondary: #d4a853` (gold)
-- `--font-heading: 'Playfair Display'`
-- `--font-body: 'Open Sans'`
+```css
+--color-primary: #1B6B5A;      /* Ocean Teal */
+--color-secondary: #C5A572;    /* Champagne Gold */
+--color-text: #2D3436;
+--color-bg-alt: #F7F5F2;
+--gradient-primary: linear-gradient(135deg, #1B6B5A 0%, #0F4A3E 100%);
+```
 
 ### Blog System
 
-Blog posts are individual .astro files in `src/pages/blog/`. The blog index (`index.astro`) maintains an `allPosts` array that references these files:
+Blog posts are individual .astro files in `src/pages/blog/`. The blog index maintains an `allPosts` array:
 ```javascript
 const allPosts = [
   { slug: "hawaii-volcanoes-national-park", title: "...", excerpt: "...", date: "2026-01-01", category: "...", image: "..." },
-  // ...
 ];
 ```
 When adding/removing blog posts, update both the individual .astro file AND the `allPosts` array in `index.astro`.
+
+### Admin Panel
+
+`/admin` page provides toggles for:
+- Live chat (Tawk.to)
+- Weather widget
+- TripAdvisor badge
+- Announcement bar
+
+Settings stored in localStorage under `islandgoodes_settings`.
 
 ## External Services
 
 - **Booking:** ReservationKey - https://v2.reservationkey.com/3655/reserve/c
 - **3D Tour:** Matterport - https://my.matterport.com/show/?m=zrMG54r6RUx
+- **Contact Form:** Formspree - https://formspree.io/f/xojvbgld
+- **Live Chat:** Tawk.to (configured in PreviewLayout.astro)
+- **Reviews:** TripAdvisor (hardcoded, rating: 4.9)
 - **Hosting:** Netlify (auto-deploy from master)
-- **Domain:** islandgoodes.com (DNS pending migration from GoDaddy)
+- **Domain:** islandgoodes.com
 
-## Room Photo Guidelines
+## Social Links
 
-Source photos in `CLAUDES PICTURES/` folder (not committed). When adding room images:
-- Avoid folders named "NO USE PICTURES" or "NOT TO USE"
-- Main room image should show the bed
-- Standard photos: room.jpg, lanai.jpg, bathroom.jpg, coffee.jpg
+- Instagram: @islandgoodes
+- Facebook: /islandgoodes
 
-## Navigation Structure
-
-- **Top nav:** Home, Rooms, Contact Us, Book Now, Policies, Blog
-- **Footer Quick Links:** Same as top nav
-- **Footer More Info:** Slide Show, 3D Room Tour, Reviews, Property, Our Pets
-
-Navigation is managed in `BaseLayout.astro` (lines ~107-165).
+Social share buttons in footer: Facebook, Twitter, Pinterest, WhatsApp, Instagram, Email, Copy Link.

@@ -36,7 +36,8 @@
       "WebFetch(domain:www.naoj.org)",
       "WebFetch(domain:commons.wikimedia.org)",
       "WebFetch(domain:www.pexels.com)",
-      "Bash(git config:*)"
+      "Bash(git config:*)",
+      "Bash(node scripts/optimize-images.mjs:*)"
     ]
   }
 }
