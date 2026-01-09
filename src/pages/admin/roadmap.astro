@@ -478,6 +478,24 @@ const defaultRoadmap = [
 
 <script define:vars={{ defaultRoadmap }}>
   const ROADMAP_KEY = 'islandgoodes_roadmap';
+  const ACTIVITY_LOG_KEY = 'islandgoodes_activity_log';
+
+  function logActivity(type, action, details) {
+    try {
+      const log = JSON.parse(localStorage.getItem(ACTIVITY_LOG_KEY) || '[]');
+      log.push({
+        type,
+        action,
+        details,
+        admin: 'admin',
+        timestamp: new Date().toISOString()
+      });
+      if (log.length > 500) log.shift();
+      localStorage.setItem(ACTIVITY_LOG_KEY, JSON.stringify(log));
+    } catch (e) {
+      console.error('Failed to log activity:', e);
+    }
+  }
 
   function getRoadmap() {
     try {
@@ -554,8 +572,11 @@ const defaultRoadmap = [
   // Delete item
   window.deleteItem = function(id) {
     if (!confirm('Delete this item?')) return;
-    const items = getRoadmap().filter(item => item.id !== id);
-    saveRoadmap(items);
+    const items = getRoadmap();
+    const deleted = items.find(item => item.id === id);
+    const filtered = items.filter(item => item.id !== id);
+    saveRoadmap(filtered);
+    logActivity('roadmap', 'Roadmap item deleted', deleted?.title || 'Unknown item');
     renderRoadmap(currentFilter);
   };
 
@@ -575,6 +596,7 @@ const defaultRoadmap = [
 
     items.push(newItem);
     saveRoadmap(items);
+    logActivity('roadmap', 'Roadmap item added', newItem.title);
     e.target.reset();
     renderRoadmap(currentFilter);
   });

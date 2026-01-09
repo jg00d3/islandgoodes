@@ -556,6 +556,24 @@ const description = "Manage admin accounts with email 2FA";
   const ADMIN_STORAGE_KEY = 'islandgoodes_admins';
   const SECURITY_STORAGE_KEY = 'islandgoodes_security';
   const SESSION_KEY = 'islandgoodes_user_session';
+  const ACTIVITY_LOG_KEY = 'islandgoodes_activity_log';
+
+  function logActivity(type: string, action: string, details?: string) {
+    try {
+      const log = JSON.parse(localStorage.getItem(ACTIVITY_LOG_KEY) || '[]');
+      log.push({
+        type,
+        action,
+        details,
+        admin: 'admin',
+        timestamp: new Date().toISOString()
+      });
+      if (log.length > 500) log.shift();
+      localStorage.setItem(ACTIVITY_LOG_KEY, JSON.stringify(log));
+    } catch (e) {
+      console.error('Failed to log activity:', e);
+    }
+  }
 
   // Default admin user
   const DEFAULT_ADMIN = {
@@ -782,8 +800,10 @@ const description = "Manage admin accounts with email 2FA";
     if (!confirm('Are you sure you want to remove this admin?')) return;
 
     const admins = getAdmins();
+    const removed = admins.find((a: any) => a.id === id);
     const filtered = admins.filter((a: any) => a.id !== id);
     saveAdmins(filtered);
+    logActivity('user', 'Admin user removed', removed?.username || 'Unknown');
     renderAdminList();
   };
 
@@ -833,6 +853,7 @@ const description = "Manage admin accounts with email 2FA";
 
     admins.push(newAdmin);
     saveAdmins(admins);
+    logActivity('user', 'Admin user added', username);
 
     // Clear form
     (document.getElementById('addAdminForm') as HTMLFormElement)?.reset();
@@ -861,6 +882,7 @@ const description = "Manage admin accounts with email 2FA";
       const current = getSecuritySettings();
       current.require2FA = toggle2FA.checked;
       saveSecuritySettings(current);
+      logActivity('settings', `Email 2FA ${toggle2FA.checked ? 'enabled' : 'disabled'}`, 'Security setting changed');
       showSecurityStatus();
     });
 
@@ -868,6 +890,7 @@ const description = "Manage admin accounts with email 2FA";
       const current = getSecuritySettings();
       current.sessionTimeout = parseInt(sessionTimeout.value);
       saveSecuritySettings(current);
+      logActivity('settings', `Session timeout changed to ${sessionTimeout.value} minutes`, 'Security setting changed');
       showSecurityStatus();
     });
   }
