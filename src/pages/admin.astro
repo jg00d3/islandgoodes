@@ -431,10 +431,10 @@ const description = "Analytics dashboard for Island Goodes.";
           <h2>Known Limitations</h2>
           <p>These features need external services to be fully functional.</p>
           <div class="limitations-grid">
-            <div class="limitation-item warning">
-              <span class="limitation-status">Needs Setup</span>
+            <div class="limitation-item info">
+              <span class="limitation-status">Working</span>
               <strong>Email 2FA</strong>
-              <p>2FA codes show in popup. To send real emails, set up an EmailJS account (free).</p>
+              <p>Real email verification codes are sent via Resend when logging in.</p>
             </div>
             <div class="limitation-item warning">
               <span class="limitation-status">Needs Setup</span>
@@ -447,7 +447,7 @@ const description = "Analytics dashboard for Island Goodes.";
               <p>Settings save to localStorage but don't actually enable/disable features on the site.</p>
             </div>
           </div>
-          <p class="limitations-note">Image Manager, Password Change, and Session Timeout are now fully working!</p>
+          <p class="limitations-note">Email 2FA, Image Manager, Password Change, and Session Timeout are now fully working!</p>
         </div>
       </div>
     </section>
@@ -1318,11 +1318,9 @@ const description = "Analytics dashboard for Island Goodes.";
   const SESSION_KEY = 'islandgoodes_admin_session';
   const SECURITY_KEY = 'islandgoodes_security';
 
-  // EmailJS configuration (free tier: 200 emails/month)
-  // You need to set up an account at emailjs.com and get these values
-  const EMAILJS_SERVICE_ID = 'service_islandgoodes'; // Create this in EmailJS
-  const EMAILJS_TEMPLATE_ID = 'template_2fa_code';    // Create this template
-  const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';       // Get from EmailJS dashboard
+  // 2FA via Resend (Netlify Functions)
+  const SEND_2FA_URL = '/.netlify/functions/send-2fa';
+  const VERIFY_2FA_URL = '/.netlify/functions/verify-2fa';
 
   // Default super admin (first time setup)
   const DEFAULT_ADMIN = {
@@ -1337,8 +1335,7 @@ const description = "Analytics dashboard for Island Goodes.";
 
   // State
   let currentAdmin: any = null;
-  let verificationCode: string = '';
-  let codeExpiry: number = 0;
+  let verificationToken: string = '';  // Token from server for verification
 
   // Get admins from localStorage
   function getAdmins() {
@@ -1393,55 +1390,55 @@ const description = "Analytics dashboard for Island Goodes.";
     }));
   }
 
-  // Generate 6-digit code
-  function generateCode(): string {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-  }
-
   // Mask email for display
   function maskEmail(email: string): string {
     const [user, domain] = email.split('@');
     return user.charAt(0) + '***' + user.charAt(user.length - 1) + '@' + domain;
   }
 
-  // Send 2FA code via EmailJS (real email sending)
-  async function send2FACode(email: string, code: string, adminName: string): Promise<boolean> {
-    console.log(`[2FA] Sending code ${code} to ${email}`);
-
-    // Check if EmailJS is configured
-    if (EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
-      // EmailJS not configured - show alert with instructions
-      alert(`⚠️ EMAIL NOT CONFIGURED\n\nYour verification code is: ${code}\n\nTo enable real email 2FA:\n1. Sign up at emailjs.com (free)\n2. Create a service & template\n3. Update the constants in admin.astro\n\nFor now, use this code to login.`);
-      return true;
-    }
+  // Send 2FA code via Resend (Netlify Function)
+  async function send2FACode(email: string): Promise<{success: boolean, token?: string, error?: string}> {
+    console.log(`[2FA] Sending code to ${email}`);
 
     try {
-      // Load EmailJS dynamically if not loaded
-      if (!(window as any).emailjs) {
-        await new Promise((resolve, reject) => {
-          const script = document.createElement('script');
-          script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
-          script.onload = resolve;
-          script.onerror = reject;
-          document.head.appendChild(script);
-        });
-        (window as any).emailjs.init(EMAILJS_PUBLIC_KEY);
-      }
-
-      // Send email
-      await (window as any).emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-        to_email: email,
-        to_name: adminName,
-        verification_code: code,
-        expiry_minutes: '10'
+      const response = await fetch(SEND_2FA_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
       });
 
-      return true;
+      const data = await response.json();
+
+      if (!response.ok) {
+        return { success: false, error: data.error || 'Failed to send code' };
+      }
+
+      return { success: true, token: data.token };
     } catch (error) {
-      console.error('EmailJS error:', error);
-      // Fallback to alert
-      alert(`Email sending failed. Your verification code is: ${code}`);
-      return true;
+      console.error('Send 2FA error:', error);
+      return { success: false, error: 'Network error. Please try again.' };
+    }
+  }
+
+  // Verify 2FA code via Netlify Function
+  async function verify2FACode(email: string, code: string, token: string): Promise<{success: boolean, error?: string}> {
+    try {
+      const response = await fetch(VERIFY_2FA_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, code, token })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return { success: false, error: data.error || 'Invalid code' };
+      }
+
+      return { success: true };
+    } catch (error) {
+      console.error('Verify 2FA error:', error);
+      return { success: false, error: 'Network error. Please try again.' };
     }
   }
 
@@ -1468,6 +1465,7 @@ const description = "Analytics dashboard for Island Goodes.";
     e.preventDefault();
     const username = (document.getElementById('username') as HTMLInputElement)?.value.toLowerCase();
     const password = (document.getElementById('password') as HTMLInputElement)?.value;
+    const submitBtn = loginForm.querySelector('button[type="submit"]') as HTMLButtonElement;
 
     if (loginError) loginError.textContent = '';
 
@@ -1492,15 +1490,27 @@ const description = "Analytics dashboard for Island Goodes.";
     // Check if 2FA is required
     const settings = getSecuritySettings();
     if (settings.require2FA) {
-      // Generate and send 2FA code
-      verificationCode = generateCode();
-      codeExpiry = Date.now() + (10 * 60 * 1000); // 10 minutes
+      // Show loading state
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending code...';
+      }
 
-      const sent = await send2FACode(admin.email, verificationCode, admin.fullName || admin.username);
-      if (!sent) {
-        if (loginError) loginError.textContent = 'Failed to send verification code';
+      // Send 2FA code via Resend
+      const result = await send2FACode(admin.email);
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Continue';
+      }
+
+      if (!result.success) {
+        if (loginError) loginError.textContent = result.error || 'Failed to send verification code';
         return;
       }
+
+      // Store token for verification
+      verificationToken = result.token || '';
 
       // Show step 2
       if (emailDisplay) emailDisplay.textContent = maskEmail(admin.email);
@@ -1536,44 +1546,76 @@ const description = "Analytics dashboard for Island Goodes.";
   });
 
   // Step 2: Verify 2FA code
-  codeForm?.addEventListener('submit', (e) => {
+  codeForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const inputs = document.querySelectorAll('.code-input');
     const enteredCode = Array.from(inputs).map((i: any) => i.value).join('');
+    const submitBtn = codeForm.querySelector('button[type="submit"]') as HTMLButtonElement;
 
     if (codeError) codeError.textContent = '';
 
-    // Check code expiry
-    if (Date.now() > codeExpiry) {
-      if (codeError) codeError.textContent = 'Code expired. Please request a new one.';
+    if (enteredCode.length !== 6) {
+      if (codeError) codeError.textContent = 'Please enter the complete 6-digit code';
       return;
     }
 
-    // Verify code
-    if (enteredCode === verificationCode) {
+    // Show loading state
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Verifying...';
+    }
+
+    // Verify code via Netlify Function
+    const result = await verify2FACode(currentAdmin.email, enteredCode, verificationToken);
+
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Verify & Login';
+    }
+
+    if (result.success) {
       setSession(currentAdmin);
       showDashboard();
     } else {
-      if (codeError) codeError.textContent = 'Invalid verification code';
+      if (codeError) codeError.textContent = result.error || 'Invalid verification code';
     }
   });
 
   // Resend code
   document.getElementById('resendCode')?.addEventListener('click', async () => {
     if (!currentAdmin) return;
-    verificationCode = generateCode();
-    codeExpiry = Date.now() + (10 * 60 * 1000);
-    await send2FACode(currentAdmin.email, verificationCode, currentAdmin.fullName || currentAdmin.username);
+
+    const resendBtn = document.getElementById('resendCode') as HTMLButtonElement;
+    if (resendBtn) {
+      resendBtn.disabled = true;
+      resendBtn.textContent = 'Sending...';
+    }
+
+    const result = await send2FACode(currentAdmin.email);
+
+    if (resendBtn) {
+      resendBtn.disabled = false;
+      resendBtn.textContent = 'Resend Code';
+    }
+
+    if (result.success) {
+      verificationToken = result.token || '';
+      if (codeError) codeError.textContent = '';
+      alert('A new verification code has been sent to your email.');
+    } else {
+      if (codeError) codeError.textContent = result.error || 'Failed to resend code';
+    }
   });
 
   // Back to login
   document.getElementById('backToLogin')?.addEventListener('click', () => {
     currentAdmin = null;
-    verificationCode = '';
+    verificationToken = '';
     if (loginStep1) loginStep1.style.display = 'block';
     if (loginStep2) loginStep2.style.display = 'none';
     // Clear code inputs
     document.querySelectorAll('.code-input').forEach((i: any) => i.value = '');
+    if (codeError) codeError.textContent = '';
   });
 
   // Logout handler
