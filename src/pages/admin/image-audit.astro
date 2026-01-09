@@ -1,0 +1,304 @@
+---
+import PreviewLayout from '../../layouts/PreviewLayout.astro';
+
+const title = "Image Audit - Copyright Review";
+const description = "Review all images on the site for copyright compliance";
+
+// Images provided by owner (from CLAUDES PICTURES folder) - SAFE
+const ownerImages = [
+  // Blog - User provided
+  { path: "/images/blog/poke-bowl.jpg", name: "Poke Bowl", source: "Owner Photo" },
+  { path: "/images/blog/uncle-roberts.jpg", name: "Uncle Roberts", source: "Owner Photo" },
+  { path: "/images/blog/swimming-hole.jpg", name: "Swimming Hole", source: "Owner Photo" },
+  { path: "/images/blog/night-market.jpg", name: "Hilo Farmers Market (Pineapples)", source: "Owner Photo" },
+  { path: "/images/blog/manta-rays.jpg", name: "Manta Rays", source: "Owner Photo" },
+  { path: "/images/blog/coffee-farm.jpg", name: "Coffee Farm", source: "Owner Photo" },
+
+  // Attractions - From Toupdate folder
+  { path: "/images/attractions/akaka-falls.jpg", name: "Akaka Falls", source: "Owner Photo" },
+  { path: "/images/attractions/rainbow-falls.jpg", name: "Rainbow Falls", source: "Owner Photo" },
+  { path: "/images/attractions/liliuokalani-gardens.jpg", name: "Liliuokalani Gardens", source: "Owner Photo" },
+  { path: "/images/attractions/waipio-valley.jpg", name: "Waipio Valley", source: "Owner Photo" },
+  { path: "/images/attractions/tsunami-museum.jpg", name: "Tsunami Museum", source: "Owner Photo" },
+  { path: "/images/attractions/panaewa-zoo.jpg", name: "Panaewa Zoo", source: "Owner Photo" },
+  { path: "/images/attractions/lyman-museum.jpg", name: "Lyman Museum", source: "Owner Photo" },
+  { path: "/images/attractions/helicopter.jpg", name: "Helicopter Tours", source: "Owner Photo" },
+  { path: "/images/attractions/kayaking.jpg", name: "Kayaking", source: "Owner Photo" },
+  { path: "/images/attractions/zipline.jpg", name: "Zipline", source: "Owner Photo" },
+  { path: "/images/beaches/carlsmith.jpg", name: "Carlsmith Beach", source: "Owner Photo" },
+
+  // Property photos - All owner's
+  { path: "/images/property/pool.jpg", name: "Pool", source: "Owner Photo" },
+  { path: "/images/property/pool2.jpg", name: "Pool 2", source: "Owner Photo" },
+  { path: "/images/property/pool3.jpg", name: "Pool 3", source: "Owner Photo" },
+  { path: "/images/property/hot-tub.jpg", name: "Hot Tub", source: "Owner Photo" },
+  { path: "/images/property/hot-tub2.jpg", name: "Hot Tub 2", source: "Owner Photo" },
+  { path: "/images/property/garden.jpg", name: "Garden", source: "Owner Photo" },
+  { path: "/images/property/garden2.jpg", name: "Garden 2", source: "Owner Photo" },
+  { path: "/images/property/coconut-jake.jpg", name: "Coconut Jake", source: "Owner Photo" },
+  { path: "/images/property/miss-kitty.jpg", name: "Miss Kitty", source: "Owner Photo" },
+  { path: "/images/property/prudy-jasper.jpg", name: "Prudy & Jasper", source: "Owner Photo" },
+  { path: "/images/property/prudy.jpg", name: "Prudy", source: "Owner Photo" },
+  { path: "/images/property/laundry.jpg", name: "Laundry", source: "Owner Photo" },
+  { path: "/images/property/tropical-plants.jpg", name: "Tropical Plants", source: "Owner Photo" },
+  { path: "/images/hero.jpg", name: "Hero (Property View)", source: "Owner Photo" },
+
+  // Room photos - All owner's
+  { path: "/images/rooms/hilo-bay/bed.jpg", name: "Hilo Bay Bed", source: "Owner Photo" },
+  { path: "/images/rooms/orchid/bed.jpg", name: "Orchid Bed", source: "Owner Photo" },
+  { path: "/images/rooms/mauna-kea/bed.jpg", name: "Mauna Kea Bed", source: "Owner Photo" },
+  { path: "/images/rooms/ginger/room.jpg", name: "Ginger Room", source: "Owner Photo" },
+];
+
+// Images of unknown origin - NEED REVIEW
+const unknownImages = [
+  { path: "/images/blog/black-sand-beach.jpg", name: "Black Sand Beach", note: "Pre-existing - verify source" },
+  { path: "/images/blog/farmers-market.jpg", name: "Farmers Market (Oranges)", note: "Pre-existing - NOT USED, can delete" },
+  { path: "/images/blog/hawaiian-food.jpg", name: "Hawaiian Food (Korean Bibimbap)", note: "WRONG IMAGE - Replace with Hawaiian food" },
+  { path: "/images/blog/hidden-beaches.jpg", name: "Hidden Beaches", note: "Pre-existing - verify source" },
+  { path: "/images/blog/hiking-trails.jpg", name: "Hiking Trails", note: "Pre-existing - verify source" },
+  { path: "/images/blog/hilo-farmers-market.jpg", name: "Hilo Farmers Market", note: "Downloaded - may be Unsplash (free)" },
+  { path: "/images/blog/hilo-town.jpg", name: "Hilo Town", note: "Pre-existing - verify source" },
+  { path: "/images/blog/holiday-hawaii.jpg", name: "Holiday Hawaii", note: "Pre-existing - verify source" },
+  { path: "/images/blog/lava-viewing.jpg", name: "Lava Viewing", note: "Pre-existing - verify source" },
+  { path: "/images/blog/mauna-kea.jpg", name: "Mauna Kea", note: "Pre-existing - verify source" },
+  { path: "/images/blog/new-year-sunrise.jpg", name: "New Year Sunrise", note: "Pre-existing - verify source" },
+  { path: "/images/blog/rainforest.jpg", name: "Rainforest", note: "Pre-existing - verify source" },
+  { path: "/images/blog/romantic-getaway.jpg", name: "Romantic Getaway", note: "Pre-existing - verify source" },
+  { path: "/images/blog/sea-turtles.jpg", name: "Sea Turtles", note: "Pre-existing - verify source" },
+  { path: "/images/blog/snorkeling.jpg", name: "Snorkeling", note: "Pre-existing - verify source" },
+  { path: "/images/blog/tropical-flowers.jpg", name: "Tropical Flowers", note: "Pre-existing - verify source" },
+  { path: "/images/blog/ukulele-music.jpg", name: "Ukulele Music", note: "Pre-existing - verify source" },
+  { path: "/images/blog/volcanoes.jpg", name: "Volcanoes", note: "Pre-existing - verify source" },
+  { path: "/images/blog/waterfalls.jpg", name: "Waterfalls", note: "Pre-existing - verify source" },
+  { path: "/images/blog/whale-watching.jpg", name: "Whale Watching", note: "Pre-existing - verify source" },
+  { path: "/images/hero-ocean-view.jpg", name: "Hero Ocean View", note: "Pre-existing - verify source" },
+  { path: "/images/beaches/richardsons.jpg", name: "Richardsons Beach", note: "Pre-existing - verify source" },
+];
+
+// Recommendations
+const recommendations = [
+  "Replace unknown source images with your own photos when possible",
+  "Unsplash.com images are FREE for commercial use - no attribution required",
+  "Pexels.com images are also FREE for commercial use",
+  "When in doubt, take your own photo or use a verified free stock source",
+  "Keep this audit page updated as you replace images"
+];
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="audit-header">
+    <div class="container">
+      <h1>Image Copyright Audit</h1>
+      <p class="subtitle">Review all images for copyright compliance</p>
+      <div class="summary-cards">
+        <div class="summary-card safe">
+          <span class="count">{ownerImages.length}</span>
+          <span class="label">Owner Photos (Safe)</span>
+        </div>
+        <div class="summary-card warning">
+          <span class="count">{unknownImages.length}</span>
+          <span class="label">Need Review</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="recommendations">
+    <div class="container">
+      <h2>Recommendations</h2>
+      <ul>
+        {recommendations.map(rec => <li>{rec}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="image-section safe-section">
+    <div class="container">
+      <h2>Owner Photos - Safe to Use</h2>
+      <p class="section-note">These are your own photos from the CLAUDES PICTURES folder. No copyright concerns.</p>
+      <div class="image-grid">
+        {ownerImages.map(img => (
+          <div class="image-card safe">
+            <img src={img.path} alt={img.name} loading="lazy" />
+            <div class="image-info">
+              <strong>{img.name}</strong>
+              <span class="source">{img.source}</span>
+              <code>{img.path}</code>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="image-section warning-section">
+    <div class="container">
+      <h2>Unknown Source - Needs Review</h2>
+      <p class="section-note">These images were pre-existing or downloaded. Verify their source or replace with your own photos.</p>
+      <div class="image-grid">
+        {unknownImages.map(img => (
+          <div class="image-card warning">
+            <img src={img.path} alt={img.name} loading="lazy" />
+            <div class="image-info">
+              <strong>{img.name}</strong>
+              <span class="note">{img.note}</span>
+              <code>{img.path}</code>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</PreviewLayout>
+
+<style>
+  .audit-header {
+    background: var(--gradient-primary);
+    color: #fff;
+    padding: 6rem 2rem 3rem;
+    text-align: center;
+  }
+
+  .audit-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    opacity: 0.9;
+    margin-bottom: 2rem;
+  }
+
+  .summary-cards {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .summary-card {
+    background: rgba(255,255,255,0.15);
+    padding: 1.5rem 2.5rem;
+    border-radius: 12px;
+    text-align: center;
+  }
+
+  .summary-card .count {
+    display: block;
+    font-size: 3rem;
+    font-weight: 700;
+  }
+
+  .summary-card .label {
+    font-size: 0.875rem;
+    opacity: 0.9;
+  }
+
+  .recommendations {
+    background: #fffbeb;
+    padding: 2rem;
+    border-bottom: 3px solid #f59e0b;
+  }
+
+  .recommendations h2 {
+    color: #92400e;
+    margin-bottom: 1rem;
+  }
+
+  .recommendations ul {
+    margin: 0;
+    padding-left: 1.5rem;
+  }
+
+  .recommendations li {
+    color: #78350f;
+    margin-bottom: 0.5rem;
+  }
+
+  .image-section {
+    padding: 3rem 0;
+  }
+
+  .safe-section {
+    background: #f0fdf4;
+  }
+
+  .warning-section {
+    background: #fefce8;
+  }
+
+  .section-note {
+    color: var(--color-text-light);
+    margin-bottom: 2rem;
+  }
+
+  .image-section h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  .image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .image-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .image-card.safe {
+    border: 2px solid #22c55e;
+  }
+
+  .image-card.warning {
+    border: 2px solid #f59e0b;
+  }
+
+  .image-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+  }
+
+  .image-info {
+    padding: 1rem;
+  }
+
+  .image-info strong {
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .image-info .source {
+    display: block;
+    color: #22c55e;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .image-info .note {
+    display: block;
+    color: #f59e0b;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .image-info code {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: #666;
+    word-break: break-all;
+  }
+
+  @media (max-width: 768px) {
+    .summary-cards {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+</style>
