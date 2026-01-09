@@ -1,0 +1,564 @@
+---
+import PreviewLayout from '../../layouts/PreviewLayout.astro';
+
+const title = "Change Requests | Island Goodes Admin";
+const description = "Track content changes and fixes needed";
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="requests-hero">
+    <div class="container">
+      <div class="hero-content">
+        <a href="/admin" class="back-link">&larr; Back to Admin</a>
+        <h1>Change Requests</h1>
+        <p>Track images, text, and content that need to be updated</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="requests-section">
+    <div class="container">
+      <!-- Add New Request -->
+      <div class="add-request-card">
+        <h2>Add New Request</h2>
+        <form id="addRequestForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="requestType">Type</label>
+              <select id="requestType" required>
+                <option value="">Select type...</option>
+                <option value="image">Image Change</option>
+                <option value="text">Text/Content Change</option>
+                <option value="bug">Bug/Error Fix</option>
+                <option value="feature">New Feature</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="requestPage">Page/Location</label>
+              <input type="text" id="requestPage" placeholder="e.g. Home page, Hilo Bay Room, Gallery" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="requestDescription">Description *</label>
+            <textarea id="requestDescription" rows="3" placeholder="Describe what needs to be changed or fixed..." required></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="requestPriority">Priority</label>
+              <select id="requestPriority">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+                <option value="urgent">Urgent</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="requestedBy">Requested By</label>
+              <input type="text" id="requestedBy" placeholder="Your name" />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Add Request</button>
+        </form>
+      </div>
+
+      <!-- Filter Controls -->
+      <div class="filter-controls">
+        <div class="filter-group">
+          <label>Show:</label>
+          <select id="statusFilter">
+            <option value="pending">Pending Only</option>
+            <option value="all">All Requests</option>
+            <option value="completed">Completed Only</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Sort by:</label>
+          <select id="sortBy">
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="priority">Priority</option>
+          </select>
+        </div>
+        <button id="clearCompleted" class="btn btn-outline btn-small">Clear Completed</button>
+      </div>
+
+      <!-- Request List -->
+      <div id="requestList" class="request-list">
+        <div class="empty-state">No change requests yet. Add one above!</div>
+      </div>
+    </div>
+  </section>
+</PreviewLayout>
+
+<style>
+  .requests-hero {
+    background: var(--gradient-primary);
+    color: #fff;
+    padding: 8rem 2rem 3rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: rgba(255,255,255,0.7);
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover { color: #fff; }
+
+  .requests-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-content > p {
+    opacity: 0.9;
+  }
+
+  .requests-section {
+    padding: 2rem;
+    background: var(--color-bg-alt);
+    min-height: 60vh;
+  }
+
+  .add-request-card {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+  }
+
+  .add-request-card h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.375rem;
+    font-size: 0.875rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.9375rem;
+    transition: border-color 0.2s;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .filter-controls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .filter-group label {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+  }
+
+  .filter-group select {
+    padding: 0.5rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    background: #fff;
+  }
+
+  .btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+  }
+
+  .request-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--color-text-light);
+    background: #fff;
+    border-radius: 16px;
+  }
+
+  .request-item {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+  }
+
+  .request-item:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+
+  .request-item.completed {
+    opacity: 0.6;
+    background: #f8f8f8;
+  }
+
+  .request-item.completed .request-description {
+    text-decoration: line-through;
+  }
+
+  .request-checkbox {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    accent-color: var(--color-primary);
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+  }
+
+  .request-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .request-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .request-type {
+    padding: 0.25rem 0.625rem;
+    border-radius: 50px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .request-type.image { background: #DBEAFE; color: #1D4ED8; }
+  .request-type.text { background: #FEF3C7; color: #D97706; }
+  .request-type.bug { background: #FEE2E2; color: #DC2626; }
+  .request-type.feature { background: #D1FAE5; color: #059669; }
+  .request-type.other { background: #E5E7EB; color: #4B5563; }
+
+  .request-priority {
+    padding: 0.25rem 0.625rem;
+    border-radius: 50px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .request-priority.low { background: #E5E7EB; color: #4B5563; }
+  .request-priority.medium { background: #FEF3C7; color: #D97706; }
+  .request-priority.high { background: #FED7AA; color: #C2410C; }
+  .request-priority.urgent { background: #FEE2E2; color: #DC2626; }
+
+  .request-page {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+
+  .request-description {
+    color: var(--color-text);
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+  }
+
+  .request-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+
+  .request-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .action-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    background: var(--color-bg-alt);
+    color: var(--color-text-light);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .action-btn:hover {
+    background: #e0e0e0;
+    color: var(--color-text);
+  }
+
+  .action-btn.delete:hover {
+    background: #FEE2E2;
+    color: #DC2626;
+  }
+
+  @media (max-width: 768px) {
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+    .filter-controls {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .request-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+<script>
+  const SESSION_KEY = 'islandgoodes_admin_session';
+  const REQUESTS_KEY = 'islandgoodes_change_requests';
+  const ACTIVITY_LOG_KEY = 'islandgoodes_activity_log';
+
+  // Check session
+  function getSession() {
+    try {
+      const stored = sessionStorage.getItem(SESSION_KEY);
+      return stored ? JSON.parse(stored) : null;
+    } catch { return null; }
+  }
+
+  if (!getSession()) {
+    window.location.href = '/admin';
+  }
+
+  function logActivity(type: string, action: string, details?: string) {
+    try {
+      const session = getSession();
+      const adminName = session?.fullName || session?.username || 'Unknown';
+      const log = JSON.parse(localStorage.getItem(ACTIVITY_LOG_KEY) || '[]');
+      log.push({ type, action, details, admin: adminName, timestamp: new Date().toISOString() });
+      if (log.length > 500) log.shift();
+      localStorage.setItem(ACTIVITY_LOG_KEY, JSON.stringify(log));
+    } catch (e) { console.error('Failed to log activity:', e); }
+  }
+
+  interface ChangeRequest {
+    id: number;
+    type: string;
+    page: string;
+    description: string;
+    priority: string;
+    requestedBy: string;
+    status: 'pending' | 'completed';
+    created: string;
+    completedAt?: string;
+  }
+
+  function getRequests(): ChangeRequest[] {
+    try {
+      return JSON.parse(localStorage.getItem(REQUESTS_KEY) || '[]');
+    } catch { return []; }
+  }
+
+  function saveRequests(requests: ChangeRequest[]) {
+    localStorage.setItem(REQUESTS_KEY, JSON.stringify(requests));
+  }
+
+  function formatDate(dateStr: string): string {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  function renderRequests() {
+    const container = document.getElementById('requestList');
+    if (!container) return;
+
+    const statusFilter = (document.getElementById('statusFilter') as HTMLSelectElement).value;
+    const sortBy = (document.getElementById('sortBy') as HTMLSelectElement).value;
+
+    let requests = getRequests();
+
+    // Filter
+    if (statusFilter === 'pending') {
+      requests = requests.filter(r => r.status === 'pending');
+    } else if (statusFilter === 'completed') {
+      requests = requests.filter(r => r.status === 'completed');
+    }
+
+    // Sort
+    if (sortBy === 'newest') {
+      requests.sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime());
+    } else if (sortBy === 'oldest') {
+      requests.sort((a, b) => new Date(a.created).getTime() - new Date(b.created).getTime());
+    } else if (sortBy === 'priority') {
+      const priorityOrder = { urgent: 0, high: 1, medium: 2, low: 3 };
+      requests.sort((a, b) => (priorityOrder[a.priority as keyof typeof priorityOrder] || 3) - (priorityOrder[b.priority as keyof typeof priorityOrder] || 3));
+    }
+
+    if (requests.length === 0) {
+      container.innerHTML = '<div class="empty-state">No change requests found.</div>';
+      return;
+    }
+
+    container.innerHTML = requests.map(req => `
+      <div class="request-item ${req.status}" data-id="${req.id}">
+        <input type="checkbox" class="request-checkbox" ${req.status === 'completed' ? 'checked' : ''} />
+        <div class="request-content">
+          <div class="request-header">
+            <span class="request-type ${req.type}">${req.type}</span>
+            <span class="request-priority ${req.priority}">${req.priority}</span>
+            ${req.page ? `<span class="request-page">${req.page}</span>` : ''}
+          </div>
+          <div class="request-description">${req.description}</div>
+          <div class="request-meta">
+            <span>Added ${formatDate(req.created)}</span>
+            ${req.requestedBy ? `<span>by ${req.requestedBy}</span>` : ''}
+            ${req.completedAt ? `<span>Completed ${formatDate(req.completedAt)}</span>` : ''}
+          </div>
+        </div>
+        <div class="request-actions">
+          <button class="action-btn delete" title="Delete" data-id="${req.id}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3,6 5,6 21,6"/>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    `).join('');
+
+    // Attach event handlers
+    container.querySelectorAll('.request-checkbox').forEach(checkbox => {
+      checkbox.addEventListener('change', (e) => {
+        const item = (e.target as HTMLElement).closest('.request-item');
+        const id = parseInt(item?.getAttribute('data-id') || '0');
+        toggleComplete(id, (e.target as HTMLInputElement).checked);
+      });
+    });
+
+    container.querySelectorAll('.action-btn.delete').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = parseInt((e.currentTarget as HTMLElement).getAttribute('data-id') || '0');
+        deleteRequest(id);
+      });
+    });
+  }
+
+  function toggleComplete(id: number, completed: boolean) {
+    const requests = getRequests();
+    const request = requests.find(r => r.id === id);
+    if (request) {
+      request.status = completed ? 'completed' : 'pending';
+      request.completedAt = completed ? new Date().toISOString() : undefined;
+      saveRequests(requests);
+      logActivity('roadmap', completed ? 'Completed change request' : 'Reopened change request', request.description);
+      renderRequests();
+    }
+  }
+
+  function deleteRequest(id: number) {
+    if (!confirm('Delete this request?')) return;
+    const requests = getRequests().filter(r => r.id !== id);
+    saveRequests(requests);
+    logActivity('roadmap', 'Deleted change request');
+    renderRequests();
+  }
+
+  // Add new request
+  document.getElementById('addRequestForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const type = (document.getElementById('requestType') as HTMLSelectElement).value;
+    const page = (document.getElementById('requestPage') as HTMLInputElement).value;
+    const description = (document.getElementById('requestDescription') as HTMLTextAreaElement).value;
+    const priority = (document.getElementById('requestPriority') as HTMLSelectElement).value;
+    const requestedBy = (document.getElementById('requestedBy') as HTMLInputElement).value || getSession()?.fullName || 'Unknown';
+
+    if (!type || !description) {
+      alert('Please fill in the required fields');
+      return;
+    }
+
+    const requests = getRequests();
+    const newRequest: ChangeRequest = {
+      id: Date.now(),
+      type,
+      page,
+      description,
+      priority,
+      requestedBy,
+      status: 'pending',
+      created: new Date().toISOString()
+    };
+
+    requests.push(newRequest);
+    saveRequests(requests);
+    logActivity('roadmap', 'Added change request', `${type}: ${description.substring(0, 50)}...`);
+
+    // Reset form
+    (document.getElementById('addRequestForm') as HTMLFormElement).reset();
+    renderRequests();
+    alert('Request added!');
+  });
+
+  // Filter/sort change handlers
+  document.getElementById('statusFilter')?.addEventListener('change', renderRequests);
+  document.getElementById('sortBy')?.addEventListener('change', renderRequests);
+
+  // Clear completed
+  document.getElementById('clearCompleted')?.addEventListener('click', () => {
+    if (!confirm('Delete all completed requests?')) return;
+    const requests = getRequests().filter(r => r.status !== 'completed');
+    saveRequests(requests);
+    logActivity('roadmap', 'Cleared completed requests');
+    renderRequests();
+  });
+
+  // Initial render
+  renderRequests();
+</script>
