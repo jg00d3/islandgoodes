@@ -1,8 +1,120 @@
 ---
 import PreviewLayout from '../../layouts/PreviewLayout.astro';
 
-const title = "Image Audit - Copyright Review";
-const description = "Review all images on the site for copyright compliance";
+const title = "Copyright Audit - Images & Text";
+const description = "Review all images and text content for copyright compliance";
+
+// TEXT CONTENT AUDIT
+const textContentSafe = [
+  {
+    category: "Room Descriptions",
+    pages: ["/rooms/hilo-bay", "/rooms/orchid", "/rooms/mauna-kea", "/rooms/ginger"],
+    status: "Original",
+    note: "Written specifically for Island Goodes describing your own property"
+  },
+  {
+    category: "Property Information",
+    pages: ["/property", "/amenities", "/pets"],
+    status: "Original",
+    note: "Describes your own property, amenities, and pets - 100% original"
+  },
+  {
+    category: "Policies & Booking",
+    pages: ["/policies", "/book", "/contact"],
+    status: "Original",
+    note: "Your own business policies and contact information"
+  },
+  {
+    category: "Attraction Facts",
+    pages: ["/guide/attractions"],
+    status: "Factual (Not Copyrightable)",
+    note: "Facts like 'Rainbow Falls is 80 feet tall' or 'Akaka Falls is 442 feet' are public information"
+  },
+  {
+    category: "Location Distances",
+    pages: ["/guide/attractions", "/guide/beaches", "/guide/food"],
+    status: "Factual (Not Copyrightable)",
+    note: "Distances like '10 min from Island Goodes' are factual measurements"
+  },
+  {
+    category: "Restaurant Names & Info",
+    pages: ["/guide/food"],
+    status: "Factual (Not Copyrightable)",
+    note: "Restaurant names, cuisines, and general descriptions are factual information"
+  },
+  {
+    category: "Beach Descriptions",
+    pages: ["/guide/beaches"],
+    status: "Original + Factual",
+    note: "Combines factual info (location, features) with original travel tips"
+  },
+  {
+    category: "Activity Descriptions",
+    pages: ["/guide/activities"],
+    status: "Original + Factual",
+    note: "Original recommendations combined with factual activity information"
+  }
+];
+
+const textContentBlog = [
+  {
+    title: "Best Poke in Hilo",
+    page: "/blog/best-poke-hilo",
+    status: "Original",
+    note: "Original article with local recommendations"
+  },
+  {
+    title: "Uncle Robert's Night Market",
+    page: "/blog/uncle-roberts-night-market",
+    status: "Original",
+    note: "Original guide based on local knowledge"
+  },
+  {
+    title: "Hilo Farmers Market Guide",
+    page: "/blog/hilo-farmers-market",
+    status: "Original",
+    note: "Original visitor guide with tips"
+  },
+  {
+    title: "Swimming Holes Near Hilo",
+    page: "/blog/swimming-holes-hilo",
+    status: "Original",
+    note: "Original article with local swimming spots"
+  },
+  {
+    title: "Hawaii Volcanoes National Park",
+    page: "/blog/hawaii-volcanoes-national-park",
+    status: "Original + Factual",
+    note: "Original tips combined with factual park information"
+  },
+  {
+    title: "Hamakua Coast Waterfalls",
+    page: "/blog/hamakua-coast-waterfalls",
+    status: "Original + Factual",
+    note: "Original driving guide with factual waterfall info"
+  },
+  {
+    title: "Manta Ray Night Dive",
+    page: "/blog/manta-ray-night-dive",
+    status: "Original",
+    note: "Original activity guide"
+  },
+  {
+    title: "Kona Coffee Farm Tours",
+    page: "/blog/kona-coffee-tours",
+    status: "Original",
+    note: "Original tour recommendations"
+  }
+];
+
+const textGuidelines = [
+  "Factual information (heights, distances, hours, prices) is NOT copyrightable",
+  "Restaurant/business names and basic info are factual - safe to use",
+  "General travel advice ('go early to avoid crowds') is common knowledge",
+  "DO NOT copy word-for-word from Lonely Planet, Fodor's, TripAdvisor, etc.",
+  "Unique creative phrasing from other sites IS protected - avoid copying",
+  "When in doubt, rewrite in your own words"
+];
 
 // Images provided by owner (from CLAUDES PICTURES folder) - SAFE
 const ownerImages = [
@@ -89,24 +201,78 @@ const recommendations = [
 <PreviewLayout title={title} description={description}>
   <section class="audit-header">
     <div class="container">
-      <h1>Image Copyright Audit</h1>
-      <p class="subtitle">Review all images for copyright compliance</p>
+      <h1>Copyright Audit</h1>
+      <p class="subtitle">Review all images and text content for copyright compliance</p>
       <div class="summary-cards">
         <div class="summary-card safe">
           <span class="count">{ownerImages.length}</span>
-          <span class="label">Owner Photos (Safe)</span>
+          <span class="label">Owner Photos</span>
         </div>
         <div class="summary-card warning">
           <span class="count">{unknownImages.length}</span>
-          <span class="label">Need Review</span>
+          <span class="label">Images to Review</span>
+        </div>
+        <div class="summary-card safe">
+          <span class="count">{textContentSafe.length + textContentBlog.length}</span>
+          <span class="label">Text Sections (Safe)</span>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- TEXT CONTENT AUDIT -->
+  <section class="text-audit">
+    <div class="container">
+      <h2>Text Content Audit</h2>
+      <div class="text-guidelines">
+        <h3>Text Copyright Guidelines</h3>
+        <ul>
+          {textGuidelines.map(g => <li>{g}</li>)}
+        </ul>
+      </div>
+
+      <h3>Page Content - All Safe</h3>
+      <div class="text-grid">
+        {textContentSafe.map(item => (
+          <div class="text-card safe">
+            <h4>{item.category}</h4>
+            <span class={`status-badge ${item.status.includes('Original') ? 'original' : 'factual'}`}>
+              {item.status}
+            </span>
+            <p class="text-note">{item.note}</p>
+            <div class="text-pages">
+              {item.pages.map(p => <code>{p}</code>)}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <h3>Blog Articles - All Original</h3>
+      <div class="text-grid">
+        {textContentBlog.map(item => (
+          <div class="text-card safe">
+            <h4>{item.title}</h4>
+            <span class={`status-badge ${item.status.includes('Original') ? 'original' : 'factual'}`}>
+              {item.status}
+            </span>
+            <p class="text-note">{item.note}</p>
+            <code>{item.page}</code>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- IMAGE AUDIT HEADER -->
+  <section class="image-audit-header">
+    <div class="container">
+      <h2>Image Audit</h2>
+    </div>
+  </section>
+
   <section class="recommendations">
     <div class="container">
-      <h2>Recommendations</h2>
+      <h3>Image Recommendations</h3>
       <ul>
         {recommendations.map(rec => <li>{rec}</li>)}
       </ul>
@@ -295,10 +461,130 @@ const recommendations = [
     word-break: break-all;
   }
 
+  /* Text Audit Styles */
+  .text-audit {
+    padding: 3rem 0;
+    background: #f8fafc;
+  }
+
+  .text-audit h2 {
+    margin-bottom: 1.5rem;
+    color: var(--color-text);
+  }
+
+  .text-audit h3 {
+    margin: 2rem 0 1rem;
+    color: var(--color-text);
+    font-size: 1.25rem;
+  }
+
+  .text-guidelines {
+    background: #e0f2fe;
+    border: 2px solid #0ea5e9;
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .text-guidelines h3 {
+    margin: 0 0 1rem;
+    color: #0369a1;
+  }
+
+  .text-guidelines ul {
+    margin: 0;
+    padding-left: 1.5rem;
+  }
+
+  .text-guidelines li {
+    color: #0c4a6e;
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+  }
+
+  .text-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .text-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  .text-card.safe {
+    border-left: 4px solid #22c55e;
+  }
+
+  .text-card h4 {
+    margin: 0 0 0.75rem;
+    color: var(--color-text);
+    font-size: 1.1rem;
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .status-badge.original {
+    background: #dcfce7;
+    color: #166534;
+  }
+
+  .status-badge.factual {
+    background: #e0f2fe;
+    color: #0369a1;
+  }
+
+  .text-note {
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+  }
+
+  .text-pages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .text-pages code,
+  .text-card > code {
+    background: #f1f5f9;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: #475569;
+  }
+
+  .image-audit-header {
+    background: #f1f5f9;
+    padding: 2rem;
+    border-bottom: 2px solid #e2e8f0;
+  }
+
+  .image-audit-header h2 {
+    margin: 0;
+    color: var(--color-text);
+  }
+
   @media (max-width: 768px) {
     .summary-cards {
       flex-direction: column;
       align-items: center;
+    }
+    .text-grid {
+      grid-template-columns: 1fr;
     }
   }
 </style>
