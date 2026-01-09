@@ -320,10 +320,6 @@ const description = "Island Goodes is an adults-only accommodation near Hilo wit
 
   <!-- CTA SECTION -->
   <section class="cta-section">
-    <div class="cta-background">
-      <img src="/images/hero-ocean-view.jpg" alt="Ocean view" loading="lazy" decoding="async" />
-    </div>
-    <div class="cta-overlay"></div>
     <div class="cta-content">
       <h2>Ready for Paradise?</h2>
       <p>Book direct for the best rates and personal service</p>
@@ -850,33 +846,12 @@ const description = "Island Goodes is an adults-only accommodation near Hilo wit
 
   /* CTA */
   .cta-section {
-    position: relative;
     padding: var(--section-padding) 2rem;
-    min-height: 400px;
+    min-height: 300px;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-  }
-
-  .cta-background {
-    position: absolute;
-    inset: 0;
-    z-index: -2;
-  }
-
-  .cta-background img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .cta-overlay {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
     background: var(--gradient-primary);
-    opacity: 0.9;
   }
 
   .cta-content {
