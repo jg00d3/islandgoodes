@@ -41,7 +41,8 @@
       "Bash(git pull:*)",
       "Bash(node scripts/process-all-images.mjs:*)",
       "Bash(find:*)",
-      "Bash(uniq:*)"
+      "Bash(uniq:*)",
+      "Bash(node -e:*)"
     ]
   }
 }
