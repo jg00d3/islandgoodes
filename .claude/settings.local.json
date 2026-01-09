@@ -38,7 +38,10 @@
       "WebFetch(domain:www.pexels.com)",
       "Bash(git config:*)",
       "Bash(node scripts/optimize-images.mjs:*)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Bash(node scripts/process-all-images.mjs:*)",
+      "Bash(find:*)",
+      "Bash(uniq:*)"
     ]
   }
 }
