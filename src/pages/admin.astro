@@ -1329,7 +1329,16 @@ const description = "Analytics dashboard for Island Goodes.";
   function getAdmins() {
     try {
       const stored = localStorage.getItem(ADMIN_STORAGE_KEY);
-      if (stored) return JSON.parse(stored);
+      if (stored) {
+        const admins = JSON.parse(stored);
+        // Ensure default superadmin always exists
+        const hasJeremiah = admins.some((a: any) => a.username === 'jeremiah');
+        if (!hasJeremiah) {
+          admins.unshift(DEFAULT_ADMIN);
+          localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(admins));
+        }
+        return admins;
+      }
       // First time: initialize with default admin
       localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify([DEFAULT_ADMIN]));
       return [DEFAULT_ADMIN];
