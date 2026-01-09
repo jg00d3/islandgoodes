@@ -368,11 +368,42 @@ const description = "Manage admin accounts with email 2FA";
 
   .admin-badge {
     padding: 0.25rem 0.75rem;
-    background: var(--color-secondary);
-    color: #1a1a1a;
+    background: var(--color-bg-alt);
+    color: var(--color-text-light);
     border-radius: 50px;
     font-size: 0.75rem;
     font-weight: 600;
+  }
+
+  .admin-badge.superadmin {
+    background: var(--color-secondary);
+    color: #1a1a1a;
+  }
+
+  .you-badge {
+    padding: 0.25rem 0.5rem;
+    background: var(--color-primary);
+    color: #fff;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+  }
+
+  .admin-item.current-user {
+    border: 2px solid var(--color-primary);
+  }
+
+  .permission-notice {
+    text-align: center;
+    padding: 2rem;
+    background: var(--color-bg-alt);
+    border-radius: 12px;
+    color: var(--color-text-light);
+  }
+
+  .permission-notice p {
+    margin: 0.5rem 0;
   }
 
   .admin-actions {
@@ -552,20 +583,37 @@ const description = "Manage admin accounts with email 2FA";
 </style>
 
 <script>
-  const ADMIN_PASSWORD = 'islandgoodes2024';
+  // ============================================
+  // USER MANAGEMENT - Shares session with main admin
+  // Only superadmins can add/remove users
+  // ============================================
+
   const ADMIN_STORAGE_KEY = 'islandgoodes_admins';
   const SECURITY_STORAGE_KEY = 'islandgoodes_security';
-  const SESSION_KEY = 'islandgoodes_user_session';
+  const SESSION_KEY = 'islandgoodes_admin_session'; // Same as main admin!
   const ACTIVITY_LOG_KEY = 'islandgoodes_activity_log';
+
+  // Get current session (shared with main admin)
+  function getSession() {
+    try {
+      const stored = sessionStorage.getItem(SESSION_KEY);
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  }
 
   function logActivity(type: string, action: string, details?: string) {
     try {
+      const session = getSession();
+      const adminName = session?.fullName || session?.username || 'Unknown';
+
       const log = JSON.parse(localStorage.getItem(ACTIVITY_LOG_KEY) || '[]');
       log.push({
         type,
         action,
         details,
-        admin: 'admin',
+        admin: adminName,
         timestamp: new Date().toISOString()
       });
       if (log.length > 500) log.shift();
@@ -575,30 +623,24 @@ const description = "Manage admin accounts with email 2FA";
     }
   }
 
-  // Default admin user
+  // Default super admin - Jeremiah Goode (can create other admins)
   const DEFAULT_ADMIN = {
     id: 1,
-    username: 'admin',
-    email: 'goode@gmail.com',
-    passwordHash: btoa('islandgoodes2024'), // Simple encoding (use proper hashing in production)
-    role: 'owner',
+    username: 'jeremiah',
+    email: 'sysadmroot@gmail.com',
+    passwordHash: btoa('islandgoodes2024'),
+    role: 'superadmin',
+    fullName: 'Jeremiah Goode',
     created: new Date().toISOString()
   };
-
-  let currentVerificationCode: string = '';
-  let currentEmail: string = '';
 
   // Initialize admins
   function getAdmins() {
     try {
       const stored = localStorage.getItem(ADMIN_STORAGE_KEY);
-      if (stored) {
-        return JSON.parse(stored);
-      }
-      // Initialize with default admin
-      const admins = [DEFAULT_ADMIN];
-      localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(admins));
-      return admins;
+      if (stored) return JSON.parse(stored);
+      localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify([DEFAULT_ADMIN]));
+      return [DEFAULT_ADMIN];
     } catch {
       return [DEFAULT_ADMIN];
     }
@@ -621,140 +663,25 @@ const description = "Manage admin accounts with email 2FA";
     localStorage.setItem(SECURITY_STORAGE_KEY, JSON.stringify(settings));
   }
 
-  // Generate 6-digit verification code
-  function generateCode(): string {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-  }
-
-  // Mask email for display
-  function maskEmail(email: string): string {
-    const [user, domain] = email.split('@');
-    const masked = user.charAt(0) + '***' + user.charAt(user.length - 1);
-    return `${masked}@${domain}`;
-  }
-
-  // Send verification code via Formspree (or show in console for testing)
-  async function sendVerificationCode(email: string, code: string): Promise<boolean> {
-    console.log(`[2FA] Verification code for ${email}: ${code}`);
-
-    // In production, send via email service
-    // For now, we'll use a simple alert (in real app, use Formspree or email API)
-    try {
-      // Attempt to send via Formspree (optional - will work if configured)
-      const response = await fetch('https://formspree.io/f/xpwzgvqk', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: email,
-          subject: 'Island Goodes Admin Verification Code',
-          message: `Your verification code is: ${code}\n\nThis code expires in 10 minutes.`
-        })
-      });
-
-      if (response.ok) {
-        return true;
-      }
-    } catch (e) {
-      console.log('Formspree not configured, showing code in alert');
-    }
-
-    // Fallback: Show code (for demo/testing)
-    alert(`Verification Code: ${code}\n\n(In production, this would be sent to ${email})`);
-    return true;
+  // Check if current user is superadmin
+  function isSuperAdmin(): boolean {
+    const session = getSession();
+    return session?.role === 'superadmin';
   }
 
   // DOM Elements
   const authGate = document.getElementById('authGate');
   const dashboard = document.getElementById('dashboard');
-  const step1 = document.getElementById('step1');
-  const step2 = document.getElementById('step2');
-  const passwordForm = document.getElementById('passwordForm');
-  const codeForm = document.getElementById('codeForm');
-  const passwordError = document.getElementById('passwordError');
-  const codeError = document.getElementById('codeError');
-  const emailDisplay = document.getElementById('emailDisplay');
 
-  // Check if already authenticated
-  if (sessionStorage.getItem(SESSION_KEY) === 'authenticated') {
+  // Check if logged in via main admin page
+  const session = getSession();
+  if (session) {
+    // Already logged in - go straight to dashboard
     showDashboard();
+  } else {
+    // Not logged in - redirect to main admin login
+    window.location.href = '/admin';
   }
-
-  // Step 1: Password verification
-  passwordForm?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const password = (document.getElementById('password') as HTMLInputElement)?.value;
-
-    // Check password against all admins
-    const admins = getAdmins();
-    const admin = admins.find((a: any) => atob(a.passwordHash) === password);
-
-    if (admin || password === ADMIN_PASSWORD) {
-      const settings = getSecuritySettings();
-      const targetEmail = admin?.email || 'goode@gmail.com';
-
-      if (settings.require2FA) {
-        // Generate and send 2FA code
-        currentVerificationCode = generateCode();
-        currentEmail = targetEmail;
-
-        await sendVerificationCode(targetEmail, currentVerificationCode);
-
-        if (emailDisplay) emailDisplay.textContent = maskEmail(targetEmail);
-        if (step1) step1.style.display = 'none';
-        if (step2) step2.style.display = 'block';
-
-        // Focus first code input
-        (document.querySelector('.code-input') as HTMLInputElement)?.focus();
-      } else {
-        // Skip 2FA
-        sessionStorage.setItem(SESSION_KEY, 'authenticated');
-        showDashboard();
-      }
-    } else {
-      if (passwordError) passwordError.textContent = 'Incorrect password';
-    }
-  });
-
-  // Code input auto-advance
-  document.querySelectorAll('.code-input').forEach((input, index) => {
-    input.addEventListener('input', function(e) {
-      const target = e.target as HTMLInputElement;
-      const value = target.value;
-
-      if (value.length === 1 && index < 5) {
-        const next = document.querySelector(`.code-input[data-index="${index + 1}"]`) as HTMLInputElement;
-        next?.focus();
-      }
-    });
-
-    input.addEventListener('keydown', function(e) {
-      const target = e.target as HTMLInputElement;
-      if (e.key === 'Backspace' && target.value === '' && index > 0) {
-        const prev = document.querySelector(`.code-input[data-index="${index - 1}"]`) as HTMLInputElement;
-        prev?.focus();
-      }
-    });
-  });
-
-  // Step 2: Code verification
-  codeForm?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const inputs = document.querySelectorAll('.code-input');
-    const code = Array.from(inputs).map((i: any) => i.value).join('');
-
-    if (code === currentVerificationCode) {
-      sessionStorage.setItem(SESSION_KEY, 'authenticated');
-      showDashboard();
-    } else {
-      if (codeError) codeError.textContent = 'Invalid verification code';
-    }
-  });
-
-  // Resend code
-  document.getElementById('resendCode')?.addEventListener('click', async () => {
-    currentVerificationCode = generateCode();
-    await sendVerificationCode(currentEmail, currentVerificationCode);
-  });
 
   // Show dashboard
   function showDashboard() {
@@ -770,33 +697,58 @@ const description = "Manage admin accounts with email 2FA";
     if (!container) return;
 
     const admins = getAdmins();
+    const canManageUsers = isSuperAdmin();
+    const currentSession = getSession();
 
-    container.innerHTML = admins.map((admin: any) => `
-      <div class="admin-item">
-        <div class="admin-info">
-          <div class="admin-avatar">${admin.username.charAt(0).toUpperCase()}</div>
-          <div class="admin-details">
-            <strong>${admin.username}</strong>
-            <span>${admin.email}</span>
+    container.innerHTML = admins.map((admin: any) => {
+      const roleLabel = admin.role === 'superadmin' ? 'Super Admin' : 'Admin';
+      const isCurrentUser = admin.id === currentSession?.id;
+      const canDelete = canManageUsers && admin.role !== 'superadmin' && !isCurrentUser;
+
+      return `
+        <div class="admin-item ${isCurrentUser ? 'current-user' : ''}">
+          <div class="admin-info">
+            <div class="admin-avatar">${(admin.fullName || admin.username).charAt(0).toUpperCase()}</div>
+            <div class="admin-details">
+              <strong>${admin.fullName || admin.username}</strong>
+              <span>${admin.email}</span>
+            </div>
+            <span class="admin-badge ${admin.role === 'superadmin' ? 'superadmin' : ''}">${roleLabel}</span>
+            ${isCurrentUser ? '<span class="you-badge">You</span>' : ''}
           </div>
-          ${admin.role === 'owner' ? '<span class="admin-badge">Owner</span>' : ''}
+          <div class="admin-actions">
+            ${canDelete ? `
+              <button class="btn-icon danger" onclick="removeAdmin(${admin.id})" title="Remove Admin">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3,6 5,6 21,6"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+              </button>
+            ` : ''}
+          </div>
         </div>
-        <div class="admin-actions">
-          ${admin.role !== 'owner' ? `
-            <button class="btn-icon danger" onclick="removeAdmin(${admin.id})" title="Remove Admin">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="3,6 5,6 21,6"/>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-              </svg>
-            </button>
-          ` : ''}
+      `;
+    }).join('');
+
+    // Hide add form if not superadmin
+    const addForm = document.querySelector('.add-admin-form') as HTMLElement;
+    if (addForm && !canManageUsers) {
+      addForm.innerHTML = `
+        <div class="permission-notice">
+          <p><strong>Super Admin Required</strong></p>
+          <p>Only super admins (like Jeremiah) can add or remove admin users.</p>
         </div>
-      </div>
-    `).join('');
+      `;
+    }
   }
 
   // Remove admin (expose to window for onclick)
   (window as any).removeAdmin = function(id: number) {
+    if (!isSuperAdmin()) {
+      alert('Only super admins can remove users.');
+      return;
+    }
+
     if (!confirm('Are you sure you want to remove this admin?')) return;
 
     const admins = getAdmins();
@@ -810,6 +762,12 @@ const description = "Manage admin accounts with email 2FA";
   // Add admin form
   document.getElementById('addAdminForm')?.addEventListener('submit', (e) => {
     e.preventDefault();
+
+    // Only superadmins can add users
+    if (!isSuperAdmin()) {
+      alert('Only super admins can add new users.');
+      return;
+    }
 
     const username = (document.getElementById('newUsername') as HTMLInputElement)?.value;
     const email = (document.getElementById('newEmail') as HTMLInputElement)?.value;
@@ -841,30 +799,31 @@ const description = "Manage admin accounts with email 2FA";
       return;
     }
 
-    // Add new admin
+    // Add new admin (regular admin, not superadmin)
     const newAdmin = {
       id: Date.now(),
-      username,
+      username: username.toLowerCase(),
+      fullName: username, // Use username as display name initially
       email,
       passwordHash: btoa(password),
-      role: 'admin',
+      role: 'admin', // Regular admin, not superadmin
       created: new Date().toISOString()
     };
 
     admins.push(newAdmin);
     saveAdmins(admins);
-    logActivity('user', 'Admin user added', username);
+    logActivity('user', 'Admin user added', `${username} (${email})`);
 
     // Clear form
     (document.getElementById('addAdminForm') as HTMLFormElement)?.reset();
 
-    if (addSuccess) addSuccess.textContent = `Admin "${username}" added successfully!`;
+    if (addSuccess) addSuccess.textContent = `Admin "${username}" added successfully! They can now log in at /admin`;
 
     renderAdminList();
 
     setTimeout(() => {
       if (addSuccess) addSuccess.textContent = '';
-    }, 3000);
+    }, 5000);
   });
 
   // Load security settings

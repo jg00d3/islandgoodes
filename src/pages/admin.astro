@@ -6,22 +6,52 @@ const description = "Analytics dashboard for Island Goodes.";
 ---
 
 <PreviewLayout title={title} description={description}>
-  <!-- Password Gate -->
+  <!-- Login Gate -->
   <div id="loginGate" class="login-gate">
     <div class="login-card">
-      <div class="login-icon">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-        </svg>
+      <!-- Step 1: Username/Password -->
+      <div id="loginStep1" class="login-step">
+        <div class="login-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <h1>Admin Dashboard</h1>
+        <p>Sign in with your admin credentials</p>
+        <form id="loginForm">
+          <input type="text" id="username" placeholder="Username" autocomplete="username" required />
+          <input type="password" id="password" placeholder="Password" autocomplete="current-password" required />
+          <button type="submit" class="btn btn-primary">Continue</button>
+        </form>
+        <p id="loginError" class="error-message"></p>
       </div>
-      <h1>Admin Dashboard</h1>
-      <p>Enter password to access analytics</p>
-      <form id="loginForm">
-        <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
-        <button type="submit" class="btn btn-primary">Login</button>
-      </form>
-      <p id="loginError" class="error-message"></p>
+
+      <!-- Step 2: Email 2FA -->
+      <div id="loginStep2" class="login-step" style="display: none;">
+        <div class="login-icon success">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+        </div>
+        <h1>Check Your Email</h1>
+        <p>Enter the 6-digit code sent to <strong id="emailDisplay"></strong></p>
+        <form id="codeForm">
+          <div class="code-inputs">
+            <input type="text" maxlength="1" class="code-input" data-index="0" inputmode="numeric" />
+            <input type="text" maxlength="1" class="code-input" data-index="1" inputmode="numeric" />
+            <input type="text" maxlength="1" class="code-input" data-index="2" inputmode="numeric" />
+            <input type="text" maxlength="1" class="code-input" data-index="3" inputmode="numeric" />
+            <input type="text" maxlength="1" class="code-input" data-index="4" inputmode="numeric" />
+            <input type="text" maxlength="1" class="code-input" data-index="5" inputmode="numeric" />
+          </div>
+          <button type="submit" class="btn btn-primary">Verify & Login</button>
+        </form>
+        <p id="codeError" class="error-message"></p>
+        <button id="resendCode" class="resend-btn">Resend Code</button>
+        <button id="backToLogin" class="back-btn">← Back to Login</button>
+      </div>
     </div>
   </div>
 
@@ -379,6 +409,49 @@ const description = "Analytics dashboard for Island Goodes.";
       </div>
     </section>
 
+    <!-- Known Limitations / Incomplete Features -->
+    <section class="limitations-section">
+      <div class="container">
+        <div class="limitations-card">
+          <h2>Known Limitations</h2>
+          <p>These features are not fully implemented yet. Review this list when planning work.</p>
+          <div class="limitations-grid">
+            <div class="limitation-item critical">
+              <span class="limitation-status">Not Working</span>
+              <strong>Email 2FA</strong>
+              <p>2FA codes show in popup, not emailed. Need to set up EmailJS account.</p>
+            </div>
+            <div class="limitation-item critical">
+              <span class="limitation-status">Not Working</span>
+              <strong>Image Manager</strong>
+              <p>Can only view images. No actual upload/crop/rotate functionality. Must manually edit files.</p>
+            </div>
+            <div class="limitation-item warning">
+              <span class="limitation-status">Partial</span>
+              <strong>Site Settings Toggles</strong>
+              <p>Settings save to localStorage but don't actually enable/disable features on the site.</p>
+            </div>
+            <div class="limitation-item warning">
+              <span class="limitation-status">Partial</span>
+              <strong>Password Change</strong>
+              <p>Admins cannot change their passwords after account creation.</p>
+            </div>
+            <div class="limitation-item info">
+              <span class="limitation-status">Missing</span>
+              <strong>Welcome Emails</strong>
+              <p>No email sent when creating new admin accounts with credentials.</p>
+            </div>
+            <div class="limitation-item info">
+              <span class="limitation-status">Missing</span>
+              <strong>Session Timeout</strong>
+              <p>Session timeout setting exists but isn't enforced - sessions don't auto-expire.</p>
+            </div>
+          </div>
+          <p class="limitations-note">To fix these, ask Claude to implement them properly or check the roadmap for planned work.</p>
+        </div>
+      </div>
+    </section>
+
     <!-- Setup Instructions (shown if no data) -->
     <section id="setupInstructions" class="setup-section" style="display: none;">
       <div class="container">
@@ -493,6 +566,12 @@ const description = "Analytics dashboard for Island Goodes.";
     gap: 1rem;
   }
 
+  #loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
   #loginForm input {
     padding: 1rem;
     border: 2px solid var(--color-bg-alt);
@@ -504,6 +583,60 @@ const description = "Analytics dashboard for Island Goodes.";
   #loginForm input:focus {
     outline: none;
     border-color: var(--color-primary);
+  }
+
+  .login-icon.success {
+    background: #ECFDF5;
+    color: #059669;
+  }
+
+  .code-inputs {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  .code-input {
+    width: 45px;
+    height: 55px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    border: 2px solid var(--color-bg-alt);
+    border-radius: 10px;
+  }
+
+  .code-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background: var(--color-primary-subtle);
+  }
+
+  #codeForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .resend-btn, .back-btn {
+    background: none;
+    border: none;
+    color: var(--color-primary);
+    cursor: pointer;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    text-decoration: underline;
+  }
+
+  .resend-btn:hover, .back-btn:hover {
+    color: var(--color-primary-dark);
+  }
+
+  .back-btn {
+    text-decoration: none;
+    opacity: 0.7;
+    margin-top: 1rem;
   }
 
   .error-message {
@@ -786,6 +919,99 @@ const description = "Analytics dashboard for Island Goodes.";
     padding: 2rem;
   }
 
+  /* Limitations Section */
+  .limitations-section {
+    padding: 2rem;
+    background: #fff;
+  }
+
+  .limitations-card {
+    background: #FEF3C7;
+    border-radius: 16px;
+    padding: 2rem;
+    border-left: 4px solid #D97706;
+  }
+
+  .limitations-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #92400E;
+  }
+
+  .limitations-card > p {
+    color: #92400E;
+    margin-bottom: 1.5rem;
+  }
+
+  .limitations-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .limitation-item {
+    background: #fff;
+    padding: 1rem;
+    border-radius: 10px;
+    border-left: 3px solid #ccc;
+  }
+
+  .limitation-item.critical {
+    border-left-color: #DC2626;
+  }
+
+  .limitation-item.warning {
+    border-left-color: #D97706;
+  }
+
+  .limitation-item.info {
+    border-left-color: #2563EB;
+  }
+
+  .limitation-status {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.125rem 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+  }
+
+  .limitation-item.critical .limitation-status {
+    background: #FEE2E2;
+    color: #DC2626;
+  }
+
+  .limitation-item.warning .limitation-status {
+    background: #FEF3C7;
+    color: #D97706;
+  }
+
+  .limitation-item.info .limitation-status {
+    background: #DBEAFE;
+    color: #2563EB;
+  }
+
+  .limitation-item strong {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--color-text);
+  }
+
+  .limitation-item p {
+    font-size: 0.8125rem;
+    color: var(--color-text-light);
+    margin: 0;
+  }
+
+  .limitations-note {
+    font-size: 0.875rem;
+    color: #92400E;
+    margin: 0;
+  }
+
   /* Setup Section */
   .setup-section {
     padding: 2rem;
@@ -1060,6 +1286,9 @@ const description = "Analytics dashboard for Island Goodes.";
     .tools-grid {
       grid-template-columns: 1fr;
     }
+    .limitations-grid {
+      grid-template-columns: 1fr;
+    }
   }
 
   @media (max-width: 768px) {
@@ -1079,37 +1308,268 @@ const description = "Analytics dashboard for Island Goodes.";
 </style>
 
 <script>
-  // Password: islandgoodes2024 (hashed check)
-  const ADMIN_PASSWORD = 'islandgoodes2024';
+  // ============================================
+  // ADMIN AUTHENTICATION SYSTEM
+  // Uses stored admin users with email 2FA
+  // ============================================
+
   const API_BASE = '/.netlify/functions/analytics';
+  const ADMIN_STORAGE_KEY = 'islandgoodes_admins';
+  const SESSION_KEY = 'islandgoodes_admin_session';
+  const SECURITY_KEY = 'islandgoodes_security';
+
+  // EmailJS configuration (free tier: 200 emails/month)
+  // You need to set up an account at emailjs.com and get these values
+  const EMAILJS_SERVICE_ID = 'service_islandgoodes'; // Create this in EmailJS
+  const EMAILJS_TEMPLATE_ID = 'template_2fa_code';    // Create this template
+  const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';       // Get from EmailJS dashboard
+
+  // Default super admin (first time setup)
+  const DEFAULT_ADMIN = {
+    id: 1,
+    username: 'jeremiah',
+    email: 'sysadmroot@gmail.com',
+    passwordHash: btoa('islandgoodes2024'),
+    role: 'superadmin',
+    fullName: 'Jeremiah Goode',
+    created: new Date().toISOString()
+  };
+
+  // State
+  let currentAdmin: any = null;
+  let verificationCode: string = '';
+  let codeExpiry: number = 0;
+
+  // Get admins from localStorage
+  function getAdmins() {
+    try {
+      const stored = localStorage.getItem(ADMIN_STORAGE_KEY);
+      if (stored) return JSON.parse(stored);
+      // First time: initialize with default admin
+      localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify([DEFAULT_ADMIN]));
+      return [DEFAULT_ADMIN];
+    } catch {
+      return [DEFAULT_ADMIN];
+    }
+  }
+
+  // Get security settings
+  function getSecuritySettings() {
+    try {
+      const stored = localStorage.getItem(SECURITY_KEY);
+      return stored ? JSON.parse(stored) : { require2FA: true, sessionTimeout: 30 };
+    } catch {
+      return { require2FA: true, sessionTimeout: 30 };
+    }
+  }
+
+  // Get current session
+  function getSession() {
+    try {
+      const stored = sessionStorage.getItem(SESSION_KEY);
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  // Set session
+  function setSession(admin: any) {
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({
+      id: admin.id,
+      username: admin.username,
+      fullName: admin.fullName || admin.username,
+      role: admin.role,
+      loginTime: new Date().toISOString()
+    }));
+  }
+
+  // Generate 6-digit code
+  function generateCode(): string {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  }
+
+  // Mask email for display
+  function maskEmail(email: string): string {
+    const [user, domain] = email.split('@');
+    return user.charAt(0) + '***' + user.charAt(user.length - 1) + '@' + domain;
+  }
+
+  // Send 2FA code via EmailJS (real email sending)
+  async function send2FACode(email: string, code: string, adminName: string): Promise<boolean> {
+    console.log(`[2FA] Sending code ${code} to ${email}`);
+
+    // Check if EmailJS is configured
+    if (EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
+      // EmailJS not configured - show alert with instructions
+      alert(`⚠️ EMAIL NOT CONFIGURED\n\nYour verification code is: ${code}\n\nTo enable real email 2FA:\n1. Sign up at emailjs.com (free)\n2. Create a service & template\n3. Update the constants in admin.astro\n\nFor now, use this code to login.`);
+      return true;
+    }
+
+    try {
+      // Load EmailJS dynamically if not loaded
+      if (!(window as any).emailjs) {
+        await new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+        (window as any).emailjs.init(EMAILJS_PUBLIC_KEY);
+      }
+
+      // Send email
+      await (window as any).emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        to_email: email,
+        to_name: adminName,
+        verification_code: code,
+        expiry_minutes: '10'
+      });
+
+      return true;
+    } catch (error) {
+      console.error('EmailJS error:', error);
+      // Fallback to alert
+      alert(`Email sending failed. Your verification code is: ${code}`);
+      return true;
+    }
+  }
 
   // DOM Elements
   const loginGate = document.getElementById('loginGate');
   const dashboard = document.getElementById('dashboard');
+  const loginStep1 = document.getElementById('loginStep1');
+  const loginStep2 = document.getElementById('loginStep2');
   const loginForm = document.getElementById('loginForm');
+  const codeForm = document.getElementById('codeForm');
   const loginError = document.getElementById('loginError');
-  const passwordInput = document.getElementById('password');
+  const codeError = document.getElementById('codeError');
+  const emailDisplay = document.getElementById('emailDisplay');
 
-  // Check if already logged in
-  if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+  // Check existing session
+  const session = getSession();
+  if (session) {
+    currentAdmin = session;
     showDashboard();
   }
 
-  // Login handler
-  loginForm?.addEventListener('submit', (e) => {
+  // Step 1: Username/Password login
+  loginForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (passwordInput?.value === ADMIN_PASSWORD) {
-      sessionStorage.setItem('adminLoggedIn', 'true');
+    const username = (document.getElementById('username') as HTMLInputElement)?.value.toLowerCase();
+    const password = (document.getElementById('password') as HTMLInputElement)?.value;
+
+    if (loginError) loginError.textContent = '';
+
+    // Find admin by username
+    const admins = getAdmins();
+    const admin = admins.find((a: any) => a.username.toLowerCase() === username);
+
+    if (!admin) {
+      if (loginError) loginError.textContent = 'Username not found';
+      return;
+    }
+
+    // Check password
+    if (atob(admin.passwordHash) !== password) {
+      if (loginError) loginError.textContent = 'Incorrect password';
+      return;
+    }
+
+    // Store current admin for step 2
+    currentAdmin = admin;
+
+    // Check if 2FA is required
+    const settings = getSecuritySettings();
+    if (settings.require2FA) {
+      // Generate and send 2FA code
+      verificationCode = generateCode();
+      codeExpiry = Date.now() + (10 * 60 * 1000); // 10 minutes
+
+      const sent = await send2FACode(admin.email, verificationCode, admin.fullName || admin.username);
+      if (!sent) {
+        if (loginError) loginError.textContent = 'Failed to send verification code';
+        return;
+      }
+
+      // Show step 2
+      if (emailDisplay) emailDisplay.textContent = maskEmail(admin.email);
+      if (loginStep1) loginStep1.style.display = 'none';
+      if (loginStep2) loginStep2.style.display = 'block';
+
+      // Focus first code input
+      (document.querySelector('.code-input') as HTMLInputElement)?.focus();
+    } else {
+      // Skip 2FA
+      setSession(admin);
+      showDashboard();
+    }
+  });
+
+  // Code input auto-advance
+  document.querySelectorAll('.code-input').forEach((input, index) => {
+    input.addEventListener('input', (e) => {
+      const target = e.target as HTMLInputElement;
+      if (target.value.length === 1 && index < 5) {
+        const next = document.querySelector(`.code-input[data-index="${index + 1}"]`) as HTMLInputElement;
+        next?.focus();
+      }
+    });
+
+    input.addEventListener('keydown', (e) => {
+      const target = e.target as HTMLInputElement;
+      if (e.key === 'Backspace' && target.value === '' && index > 0) {
+        const prev = document.querySelector(`.code-input[data-index="${index - 1}"]`) as HTMLInputElement;
+        prev?.focus();
+      }
+    });
+  });
+
+  // Step 2: Verify 2FA code
+  codeForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const inputs = document.querySelectorAll('.code-input');
+    const enteredCode = Array.from(inputs).map((i: any) => i.value).join('');
+
+    if (codeError) codeError.textContent = '';
+
+    // Check code expiry
+    if (Date.now() > codeExpiry) {
+      if (codeError) codeError.textContent = 'Code expired. Please request a new one.';
+      return;
+    }
+
+    // Verify code
+    if (enteredCode === verificationCode) {
+      setSession(currentAdmin);
       showDashboard();
     } else {
-      if (loginError) loginError.textContent = 'Incorrect password';
-      passwordInput?.focus();
+      if (codeError) codeError.textContent = 'Invalid verification code';
     }
+  });
+
+  // Resend code
+  document.getElementById('resendCode')?.addEventListener('click', async () => {
+    if (!currentAdmin) return;
+    verificationCode = generateCode();
+    codeExpiry = Date.now() + (10 * 60 * 1000);
+    await send2FACode(currentAdmin.email, verificationCode, currentAdmin.fullName || currentAdmin.username);
+  });
+
+  // Back to login
+  document.getElementById('backToLogin')?.addEventListener('click', () => {
+    currentAdmin = null;
+    verificationCode = '';
+    if (loginStep1) loginStep1.style.display = 'block';
+    if (loginStep2) loginStep2.style.display = 'none';
+    // Clear code inputs
+    document.querySelectorAll('.code-input').forEach((i: any) => i.value = '');
   });
 
   // Logout handler
   document.getElementById('logout')?.addEventListener('click', () => {
-    sessionStorage.removeItem('adminLoggedIn');
+    sessionStorage.removeItem(SESSION_KEY);
     location.reload();
   });
 
@@ -1121,8 +1581,13 @@ const description = "Analytics dashboard for Island Goodes.";
   function showDashboard() {
     if (loginGate) loginGate.style.display = 'none';
     if (dashboard) dashboard.style.display = 'block';
+
+    // Get logged in admin name for activity log
+    const session = getSession();
+    const adminName = session?.fullName || session?.username || 'Unknown';
+
     // Log successful login
-    logActivity('login', 'Admin dashboard accessed', 'Successful login');
+    logActivity('login', 'Admin dashboard accessed', `Logged in as ${adminName}`);
     loadAllData();
     // Refresh realtime every 30 seconds
     setInterval(loadRealtimeData, 30000);
@@ -1519,12 +1984,16 @@ const description = "Analytics dashboard for Island Goodes.";
 
   function logActivity(type: string, action: string, details?: string) {
     try {
+      // Get actual logged-in admin name from session
+      const session = getSession();
+      const adminName = session?.fullName || session?.username || 'Unknown';
+
       const log = JSON.parse(localStorage.getItem(ACTIVITY_LOG_KEY) || '[]');
       log.push({
         type,
         action,
         details,
-        admin: 'admin', // In production, get from session
+        admin: adminName,
         timestamp: new Date().toISOString()
       });
       // Keep last 500 entries
@@ -1604,7 +2073,7 @@ const description = "Analytics dashboard for Island Goodes.";
   };
 
   // If already logged in, init settings now
-  if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+  if (getSession()) {
     initSettingsToggles();
   }
 </script>
