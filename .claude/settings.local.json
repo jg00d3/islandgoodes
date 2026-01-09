@@ -42,7 +42,9 @@
       "Bash(node scripts/process-all-images.mjs:*)",
       "Bash(find:*)",
       "Bash(uniq:*)",
-      "Bash(node -e:*)"
+      "Bash(node -e:*)",
+      "Bash(node scripts/fix-rotated-images.mjs:*)",
+      "Bash(node scripts/fix-all-rotated.mjs:*)"
     ]
   }
 }
