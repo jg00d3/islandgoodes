@@ -31,6 +31,34 @@ const rooms = [
     images: ['room.jpg', 'room2.jpg', 'sitting.jpg', 'bathroom.jpg', 'closet.jpg', 'closet2.jpg', 'coffee.jpg', 'ac.jpg', 'ornament.jpg']
   }
 ];
+
+// Gallery image configurations
+const galleryCategories = [
+  {
+    id: 'property',
+    name: 'Property & Grounds',
+    path: '/images/property/',
+    images: ['pool.jpg', 'pool2.jpg', 'pool3.jpg', 'hot-tub.jpg', 'hot-tub2.jpg', 'garden.jpg', 'garden2.jpg', 'tropical-plants.jpg', 'laundry.jpg', 'hosts.jpg', 'hosts2.jpg', 'prudy.jpg', 'prudy-jasper.jpg', 'miss-kitty.jpg', 'coconut-jake.jpg', 'sleep-number.jpg', 'sleep-number2.jpg', 'kitchenette.jpg', 'kitchenette2.jpg']
+  },
+  {
+    id: 'scenery',
+    name: 'Views & Scenery',
+    path: '/images/scenery/',
+    images: ['hilo-bay.jpg', 'hilo-bay2.jpg', 'ocean-view.jpg', 'ocean-view2.jpg', 'island-goodes-view.jpg', 'turtles.jpg']
+  },
+  {
+    id: 'attractions',
+    name: 'Attractions',
+    path: '/images/attractions/',
+    images: ['akaka-falls.jpg', 'akaka-falls2.jpg', 'akaka-falls3.jpg', 'rainbow-falls.jpg', 'volcano.jpg', 'volcano-lava.jpg', 'volcano-looming.jpg', 'waipio-valley.jpg', 'liliuokalani-gardens.jpg', 'panaewa-zoo.jpg', 'tsunami-museum.jpg', 'lyman-museum.jpg', 'donkey.jpg', 'horse.jpg', 'helicopter.jpg', 'kayaking.jpg', 'zipline.jpg']
+  },
+  {
+    id: 'beaches',
+    name: 'Beaches',
+    path: '/images/beaches/',
+    images: ['richardsons.jpg', 'carlsmith.jpg']
+  }
+];
 ---
 
 <PreviewLayout title={title} description={description}>
@@ -152,10 +180,30 @@ const rooms = [
     </div>
   </section>
 
+  <!-- Bulk Action Toolbar (sticky) -->
+  <div id="bulkToolbar" class="bulk-toolbar" style="display: none;">
+    <div class="container">
+      <div class="bulk-content">
+        <span id="selectedCount">0 images selected</span>
+        <div class="bulk-actions">
+          <button id="selectAllBtn" class="bulk-btn">Select All</button>
+          <button id="deselectAllBtn" class="bulk-btn">Deselect All</button>
+          <button id="deleteSelectedBtn" class="bulk-btn danger">Mark for Deletion</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Room Images -->
   <section class="rooms-section">
     <div class="container">
-      <h2>Room Images</h2>
+      <div class="section-header-row">
+        <h2>Room Images</h2>
+        <label class="select-mode-toggle">
+          <input type="checkbox" id="selectModeToggle" />
+          <span>Selection Mode</span>
+        </label>
+      </div>
       <div class="tabs">
         {rooms.map((room, index) => (
           <button class={`tab ${index === 0 ? 'active' : ''}`} data-room={room.id}>
@@ -174,7 +222,57 @@ const rooms = [
           <div class="image-grid">
             {room.images.map(img => (
               <div class="image-card" data-src={`${room.path}${img}`} data-name={img}>
+                <input type="checkbox" class="image-checkbox" />
                 <img src={`${room.path}${img}`} alt={`${room.name} - ${img}`} loading="lazy" />
+                <div class="image-overlay">
+                  <span class="image-name">{img}</span>
+                  <div class="image-actions">
+                    <button class="action-btn edit-btn" title="Edit Image">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                      </svg>
+                    </button>
+                    <button class="action-btn copy-btn" title="Copy Path">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Gallery Images -->
+  <section class="gallery-section">
+    <div class="container">
+      <h2>Gallery & Property Images</h2>
+      <div class="tabs gallery-tabs">
+        {galleryCategories.map((cat, index) => (
+          <button class={`tab ${index === 0 ? 'active' : ''}`} data-gallery={cat.id}>
+            {cat.name}
+            <span class="count">{cat.images.length}</span>
+          </button>
+        ))}
+      </div>
+
+      {galleryCategories.map((cat, index) => (
+        <div class={`gallery-panel ${index === 0 ? 'active' : ''}`} data-gallery={cat.id}>
+          <div class="panel-header">
+            <h3>{cat.name}</h3>
+            <span class="path">{cat.path}</span>
+          </div>
+          <div class="image-grid">
+            {cat.images.map(img => (
+              <div class="image-card" data-src={`${cat.path}${img}`} data-name={img}>
+                <input type="checkbox" class="image-checkbox" />
+                <img src={`${cat.path}${img}`} alt={`${cat.name} - ${img}`} loading="lazy" />
                 <div class="image-overlay">
                   <span class="image-name">{img}</span>
                   <div class="image-actions">
@@ -246,6 +344,139 @@ const rooms = [
     font-size: 0.875rem;
     margin-bottom: 1rem;
     transition: color 0.2s;
+  }
+
+  /* Bulk Action Toolbar */
+  .bulk-toolbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #1a1a1a;
+    color: #fff;
+    padding: 1rem 0;
+    z-index: 1000;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+  }
+
+  .bulk-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .bulk-actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .bulk-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 6px;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+  }
+
+  .bulk-btn:hover {
+    background: rgba(255,255,255,0.1);
+  }
+
+  .bulk-btn.danger {
+    background: #DC2626;
+    border-color: #DC2626;
+  }
+
+  .bulk-btn.danger:hover {
+    background: #B91C1C;
+  }
+
+  /* Selection Mode */
+  .section-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .select-mode-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+  }
+
+  .select-mode-toggle input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+
+  .image-checkbox {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    z-index: 10;
+    display: none;
+    accent-color: var(--color-primary);
+  }
+
+  .select-mode .image-checkbox {
+    display: block;
+  }
+
+  .image-card.selected {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .image-card.marked-delete {
+    opacity: 0.5;
+    outline: 3px solid #DC2626;
+    outline-offset: 2px;
+  }
+
+  .image-card.marked-delete::after {
+    content: "MARKED FOR DELETION";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(220, 38, 38, 0.8);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  /* Gallery Section */
+  .gallery-section {
+    padding: 2rem;
+    background: #fff;
+  }
+
+  .gallery-section h2 {
+    margin-bottom: 1.5rem;
+  }
+
+  .gallery-tabs {
+    margin-bottom: 1.5rem;
+  }
+
+  .gallery-panel {
+    display: none;
+  }
+
+  .gallery-panel.active {
+    display: block;
   }
 
   .back-link:hover { color: #fff; }
@@ -705,15 +936,146 @@ const rooms = [
   const canvas = document.getElementById('editorCanvas') as HTMLCanvasElement;
   const ctx = canvas?.getContext('2d');
 
-  // Tab switching
-  document.querySelectorAll('.tab').forEach(tab => {
+  // Tab switching for rooms
+  document.querySelectorAll('.tab[data-room]').forEach(tab => {
     tab.addEventListener('click', () => {
       const roomId = (tab as HTMLElement).dataset.room;
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab[data-room]').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       document.querySelectorAll('.room-panel').forEach(p => p.classList.remove('active'));
       document.querySelector(`.room-panel[data-room="${roomId}"]`)?.classList.add('active');
     });
+  });
+
+  // Tab switching for gallery
+  document.querySelectorAll('.tab[data-gallery]').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const galleryId = (tab as HTMLElement).dataset.gallery;
+      document.querySelectorAll('.tab[data-gallery]').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelectorAll('.gallery-panel').forEach(p => p.classList.remove('active'));
+      document.querySelector(`.gallery-panel[data-gallery="${galleryId}"]`)?.classList.add('active');
+    });
+  });
+
+  // ============================================
+  // SELECTION MODE & BULK ACTIONS
+  // ============================================
+  const DELETION_KEY = 'islandgoodes_images_to_delete';
+  let selectMode = false;
+
+  const selectModeToggle = document.getElementById('selectModeToggle') as HTMLInputElement;
+  const bulkToolbar = document.getElementById('bulkToolbar');
+  const selectedCountEl = document.getElementById('selectedCount');
+
+  // Load marked-for-deletion from localStorage
+  function getMarkedImages(): string[] {
+    try {
+      return JSON.parse(localStorage.getItem(DELETION_KEY) || '[]');
+    } catch { return []; }
+  }
+
+  function saveMarkedImages(images: string[]) {
+    localStorage.setItem(DELETION_KEY, JSON.stringify(images));
+  }
+
+  // Apply marked-delete styling on load
+  function applyMarkedDeleteStyling() {
+    const marked = getMarkedImages();
+    document.querySelectorAll('.image-card').forEach(card => {
+      const src = (card as HTMLElement).dataset.src || '';
+      if (marked.includes(src)) {
+        card.classList.add('marked-delete');
+      }
+    });
+  }
+  applyMarkedDeleteStyling();
+
+  // Toggle selection mode
+  selectModeToggle?.addEventListener('change', () => {
+    selectMode = selectModeToggle.checked;
+    document.querySelectorAll('.rooms-section, .gallery-section').forEach(section => {
+      section.classList.toggle('select-mode', selectMode);
+    });
+    if (bulkToolbar) {
+      bulkToolbar.style.display = selectMode ? 'block' : 'none';
+    }
+    updateSelectedCount();
+  });
+
+  // Checkbox change handler
+  document.querySelectorAll('.image-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', (e) => {
+      e.stopPropagation();
+      const card = (checkbox as HTMLElement).closest('.image-card');
+      if ((checkbox as HTMLInputElement).checked) {
+        card?.classList.add('selected');
+      } else {
+        card?.classList.remove('selected');
+      }
+      updateSelectedCount();
+    });
+
+    // Prevent card click when clicking checkbox
+    checkbox.addEventListener('click', (e) => e.stopPropagation());
+  });
+
+  function updateSelectedCount() {
+    const count = document.querySelectorAll('.image-checkbox:checked').length;
+    if (selectedCountEl) {
+      selectedCountEl.textContent = `${count} image${count !== 1 ? 's' : ''} selected`;
+    }
+  }
+
+  // Select All
+  document.getElementById('selectAllBtn')?.addEventListener('click', () => {
+    document.querySelectorAll('.image-checkbox').forEach(checkbox => {
+      (checkbox as HTMLInputElement).checked = true;
+      (checkbox as HTMLElement).closest('.image-card')?.classList.add('selected');
+    });
+    updateSelectedCount();
+  });
+
+  // Deselect All
+  document.getElementById('deselectAllBtn')?.addEventListener('click', () => {
+    document.querySelectorAll('.image-checkbox').forEach(checkbox => {
+      (checkbox as HTMLInputElement).checked = false;
+      (checkbox as HTMLElement).closest('.image-card')?.classList.remove('selected');
+    });
+    updateSelectedCount();
+  });
+
+  // Mark for Deletion
+  document.getElementById('deleteSelectedBtn')?.addEventListener('click', () => {
+    const selected = document.querySelectorAll('.image-checkbox:checked');
+    if (selected.length === 0) {
+      alert('No images selected');
+      return;
+    }
+
+    const confirmMsg = `Mark ${selected.length} image(s) for deletion?\n\nThese images will be highlighted in red. To actually remove them, you'll need to delete the files from the repository.`;
+    if (!confirm(confirmMsg)) return;
+
+    const marked = getMarkedImages();
+    const newlyMarked: string[] = [];
+
+    selected.forEach(checkbox => {
+      const card = (checkbox as HTMLElement).closest('.image-card') as HTMLElement;
+      const src = card?.dataset.src;
+      if (src && !marked.includes(src)) {
+        marked.push(src);
+        newlyMarked.push(src);
+      }
+      card?.classList.add('marked-delete');
+      (checkbox as HTMLInputElement).checked = false;
+      card?.classList.remove('selected');
+    });
+
+    saveMarkedImages(marked);
+    updateSelectedCount();
+    logActivity('image', `Marked ${newlyMarked.length} images for deletion`, newlyMarked.join(', '));
+
+    alert(`${newlyMarked.length} image(s) marked for deletion.\n\nTo complete deletion:\n1. Delete these files from the repository\n2. Run "npm run build" and redeploy`);
   });
 
   // Open editor for existing images
@@ -727,9 +1089,19 @@ const rooms = [
     });
   });
 
-  // Also open on card click
+  // Also open on card click (but not in selection mode)
   document.querySelectorAll('.image-card').forEach(card => {
-    card.addEventListener('click', () => {
+    card.addEventListener('click', (e) => {
+      if (selectMode) {
+        // In selection mode, toggle the checkbox
+        const checkbox = card.querySelector('.image-checkbox') as HTMLInputElement;
+        if (checkbox) {
+          checkbox.checked = !checkbox.checked;
+          card.classList.toggle('selected', checkbox.checked);
+          updateSelectedCount();
+        }
+        return;
+      }
       const src = (card as HTMLElement).dataset.src;
       const name = (card as HTMLElement).dataset.name || 'image.jpg';
       if (src) openEditor(src, name);
