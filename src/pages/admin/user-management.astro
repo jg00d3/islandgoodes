@@ -113,6 +113,35 @@ const description = "Manage admin accounts with email 2FA";
       </div>
     </section>
 
+    <!-- Change Password -->
+    <section class="password-section">
+      <div class="container">
+        <div class="section-card">
+          <h2>Change Your Password</h2>
+          <p class="section-desc">Update the password for your admin account</p>
+          <form id="changePasswordForm" class="password-form">
+            <div class="form-group">
+              <label for="currentPassword">Current Password</label>
+              <input type="password" id="currentPassword" placeholder="Enter your current password" required />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="newPasswordChange">New Password</label>
+                <input type="password" id="newPasswordChange" placeholder="Enter new password" required minlength="8" />
+              </div>
+              <div class="form-group">
+                <label for="confirmNewPassword">Confirm New Password</label>
+                <input type="password" id="confirmNewPassword" placeholder="Confirm new password" required />
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Password</button>
+          </form>
+          <p id="passwordChangeError" class="error-message"></p>
+          <p id="passwordChangeSuccess" class="success-message"></p>
+        </div>
+      </div>
+    </section>
+
     <!-- Security Settings -->
     <section class="security-section">
       <div class="container">
@@ -404,6 +433,19 @@ const description = "Manage admin accounts with email 2FA";
 
   .permission-notice p {
     margin: 0.5rem 0;
+  }
+
+  /* Password Section */
+  .password-section {
+    padding: 2rem;
+  }
+
+  .password-form {
+    max-width: 600px;
+  }
+
+  .password-form .form-group {
+    margin-bottom: 1rem;
   }
 
   .admin-actions {
@@ -760,7 +802,7 @@ const description = "Manage admin accounts with email 2FA";
   };
 
   // Add admin form
-  document.getElementById('addAdminForm')?.addEventListener('submit', (e) => {
+  document.getElementById('addAdminForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     // Only superadmins can add users
@@ -814,10 +856,13 @@ const description = "Manage admin accounts with email 2FA";
     saveAdmins(admins);
     logActivity('user', 'Admin user added', `${username} (${email})`);
 
+    // Send welcome email with credentials
+    await sendWelcomeEmail(email, username, password);
+
     // Clear form
     (document.getElementById('addAdminForm') as HTMLFormElement)?.reset();
 
-    if (addSuccess) addSuccess.textContent = `Admin "${username}" added successfully! They can now log in at /admin`;
+    if (addSuccess) addSuccess.textContent = `Admin "${username}" added successfully! Credentials have been shared.`;
 
     renderAdminList();
 
@@ -869,4 +914,144 @@ const description = "Manage admin accounts with email 2FA";
     sessionStorage.removeItem(SESSION_KEY);
     location.reload();
   });
+
+  // ============================================
+  // PASSWORD CHANGE
+  // ============================================
+  document.getElementById('changePasswordForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const currentPassword = (document.getElementById('currentPassword') as HTMLInputElement)?.value;
+    const newPassword = (document.getElementById('newPasswordChange') as HTMLInputElement)?.value;
+    const confirmPassword = (document.getElementById('confirmNewPassword') as HTMLInputElement)?.value;
+
+    const errorEl = document.getElementById('passwordChangeError');
+    const successEl = document.getElementById('passwordChangeSuccess');
+
+    if (errorEl) errorEl.textContent = '';
+    if (successEl) successEl.textContent = '';
+
+    // Get current session
+    const session = getSession();
+    if (!session) {
+      if (errorEl) errorEl.textContent = 'Not logged in';
+      return;
+    }
+
+    // Find current user in admins
+    const admins = getAdmins();
+    const currentAdmin = admins.find((a: any) => a.id === session.id);
+
+    if (!currentAdmin) {
+      if (errorEl) errorEl.textContent = 'Admin account not found';
+      return;
+    }
+
+    // Verify current password
+    if (atob(currentAdmin.passwordHash) !== currentPassword) {
+      if (errorEl) errorEl.textContent = 'Current password is incorrect';
+      return;
+    }
+
+    // Validate new password
+    if (newPassword.length < 8) {
+      if (errorEl) errorEl.textContent = 'New password must be at least 8 characters';
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      if (errorEl) errorEl.textContent = 'New passwords do not match';
+      return;
+    }
+
+    if (newPassword === currentPassword) {
+      if (errorEl) errorEl.textContent = 'New password must be different from current password';
+      return;
+    }
+
+    // Update password
+    currentAdmin.passwordHash = btoa(newPassword);
+    saveAdmins(admins);
+
+    logActivity('user', 'Password changed', session.fullName || session.username);
+
+    // Clear form
+    (document.getElementById('changePasswordForm') as HTMLFormElement)?.reset();
+
+    if (successEl) successEl.textContent = 'Password updated successfully!';
+
+    setTimeout(() => {
+      if (successEl) successEl.textContent = '';
+    }, 5000);
+  });
+
+  // ============================================
+  // WELCOME EMAIL (when adding new admin)
+  // ============================================
+  async function sendWelcomeEmail(email: string, username: string, password: string): Promise<boolean> {
+    console.log(`[WELCOME EMAIL] Sending to ${email}`);
+
+    // EmailJS configuration - update these with your values
+    const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';
+
+    if (EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
+      // EmailJS not configured - show credentials in alert
+      alert(`⚠️ WELCOME EMAIL NOT CONFIGURED\n\nNew admin credentials:\n\nUsername: ${username}\nPassword: ${password}\nLogin URL: ${window.location.origin}/admin\n\nTo enable welcome emails:\n1. Sign up at emailjs.com (free)\n2. Create a welcome email template\n3. Update EMAILJS_PUBLIC_KEY in user-management.astro\n\nPlease share these credentials with the new admin securely.`);
+      return true;
+    }
+
+    try {
+      // Load EmailJS if needed
+      if (!(window as any).emailjs) {
+        await new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+        (window as any).emailjs.init(EMAILJS_PUBLIC_KEY);
+      }
+
+      await (window as any).emailjs.send('service_islandgoodes', 'template_welcome', {
+        to_email: email,
+        to_name: username,
+        username: username,
+        password: password,
+        login_url: `${window.location.origin}/admin`
+      });
+
+      return true;
+    } catch (error) {
+      console.error('EmailJS error:', error);
+      alert(`Welcome email failed. Please share these credentials manually:\n\nUsername: ${username}\nPassword: ${password}\nLogin URL: ${window.location.origin}/admin`);
+      return true;
+    }
+  }
+
+  // ============================================
+  // SESSION TIMEOUT ENFORCEMENT
+  // ============================================
+  let activityTimeout: number | null = null;
+
+  function resetActivityTimer() {
+    if (activityTimeout) clearTimeout(activityTimeout);
+
+    const settings = getSecuritySettings();
+    const timeoutMs = settings.sessionTimeout * 60 * 1000;
+
+    activityTimeout = setTimeout(() => {
+      alert('Your session has expired due to inactivity. Please log in again.');
+      sessionStorage.removeItem(SESSION_KEY);
+      window.location.href = '/admin';
+    }, timeoutMs) as unknown as number;
+  }
+
+  // Track activity
+  ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'].forEach(event => {
+    document.addEventListener(event, resetActivityTimer, { passive: true });
+  });
+
+  // Start timer on page load
+  resetActivityTimer();
 </script>

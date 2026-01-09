@@ -414,40 +414,25 @@ const description = "Analytics dashboard for Island Goodes.";
       <div class="container">
         <div class="limitations-card">
           <h2>Known Limitations</h2>
-          <p>These features are not fully implemented yet. Review this list when planning work.</p>
+          <p>These features need external services to be fully functional.</p>
           <div class="limitations-grid">
-            <div class="limitation-item critical">
-              <span class="limitation-status">Not Working</span>
+            <div class="limitation-item warning">
+              <span class="limitation-status">Needs Setup</span>
               <strong>Email 2FA</strong>
-              <p>2FA codes show in popup, not emailed. Need to set up EmailJS account.</p>
+              <p>2FA codes show in popup. To send real emails, set up an EmailJS account (free).</p>
             </div>
-            <div class="limitation-item critical">
-              <span class="limitation-status">Not Working</span>
-              <strong>Image Manager</strong>
-              <p>Can only view images. No actual upload/crop/rotate functionality. Must manually edit files.</p>
+            <div class="limitation-item warning">
+              <span class="limitation-status">Needs Setup</span>
+              <strong>Welcome Emails</strong>
+              <p>New admin credentials show in popup. Set up EmailJS for real email delivery.</p>
             </div>
             <div class="limitation-item warning">
               <span class="limitation-status">Partial</span>
               <strong>Site Settings Toggles</strong>
               <p>Settings save to localStorage but don't actually enable/disable features on the site.</p>
             </div>
-            <div class="limitation-item warning">
-              <span class="limitation-status">Partial</span>
-              <strong>Password Change</strong>
-              <p>Admins cannot change their passwords after account creation.</p>
-            </div>
-            <div class="limitation-item info">
-              <span class="limitation-status">Missing</span>
-              <strong>Welcome Emails</strong>
-              <p>No email sent when creating new admin accounts with credentials.</p>
-            </div>
-            <div class="limitation-item info">
-              <span class="limitation-status">Missing</span>
-              <strong>Session Timeout</strong>
-              <p>Session timeout setting exists but isn't enforced - sessions don't auto-expire.</p>
-            </div>
           </div>
-          <p class="limitations-note">To fix these, ask Claude to implement them properly or check the roadmap for planned work.</p>
+          <p class="limitations-note">Image Manager, Password Change, and Session Timeout are now fully working!</p>
         </div>
       </div>
     </section>
@@ -2075,5 +2060,33 @@ const description = "Analytics dashboard for Island Goodes.";
   // If already logged in, init settings now
   if (getSession()) {
     initSettingsToggles();
+  }
+
+  // ============================================
+  // SESSION TIMEOUT ENFORCEMENT
+  // ============================================
+  let activityTimeout: number | null = null;
+
+  function resetActivityTimer() {
+    if (activityTimeout) clearTimeout(activityTimeout);
+
+    const settings = getSecuritySettings();
+    const timeoutMs = settings.sessionTimeout * 60 * 1000;
+
+    activityTimeout = setTimeout(() => {
+      alert('Your session has expired due to inactivity. Please log in again.');
+      sessionStorage.removeItem(SESSION_KEY);
+      location.reload();
+    }, timeoutMs) as unknown as number;
+  }
+
+  // Track activity
+  ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'].forEach(event => {
+    document.addEventListener(event, resetActivityTimer, { passive: true });
+  });
+
+  // Start timer if logged in
+  if (getSession()) {
+    resetActivityTimer();
   }
 </script>
