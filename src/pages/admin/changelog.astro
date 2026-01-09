@@ -1,0 +1,307 @@
+---
+import PreviewLayout from '../../layouts/PreviewLayout.astro';
+
+const title = "Changelog | Island Goodes Admin";
+const description = "Version history and release notes";
+
+const CURRENT_VERSION = "2.1.0";
+const RELEASE_DATE = "January 9, 2026";
+
+const changelog = [
+  {
+    version: "2.1.0",
+    date: "January 9, 2026",
+    type: "Feature Release",
+    changes: [
+      { type: "added", text: "Interactive world map for visitor analytics" },
+      { type: "added", text: "Admin user management with email 2FA" },
+      { type: "added", text: "Changelog tracking system" },
+      { type: "added", text: "Future roadmap planning page" },
+      { type: "added", text: "Website review report integration" },
+      { type: "added", text: "Admin link in footer" },
+      { type: "fixed", text: "All attraction images now display correctly" },
+      { type: "fixed", text: "Hilo Farmers Market shows pineapples instead of oranges" },
+    ]
+  },
+  {
+    version: "2.0.5",
+    date: "January 9, 2026",
+    type: "Bug Fix",
+    changes: [
+      { type: "fixed", text: "Fixed rotated images in all room galleries" },
+      { type: "fixed", text: "Pets page now shows actual pet photos" },
+      { type: "fixed", text: "Activities page images updated" },
+      { type: "added", text: "Copyright audit page for images and text" },
+    ]
+  },
+  {
+    version: "2.0.4",
+    date: "January 8, 2026",
+    type: "Content Update",
+    changes: [
+      { type: "added", text: "New attraction images from owner photos" },
+      { type: "added", text: "Blog images replaced with owner photos" },
+      { type: "fixed", text: "Duplicate images removed from galleries" },
+    ]
+  },
+  {
+    version: "2.0.3",
+    date: "January 7, 2026",
+    type: "Bug Fix",
+    changes: [
+      { type: "fixed", text: "Image rotation issues on property photos" },
+      { type: "improved", text: "Image optimization pipeline" },
+    ]
+  },
+  {
+    version: "2.0.2",
+    date: "January 6, 2026",
+    type: "Enhancement",
+    changes: [
+      { type: "added", text: "Google Analytics 4 integration with consent" },
+      { type: "added", text: "Admin analytics dashboard" },
+      { type: "added", text: "Site settings toggles" },
+    ]
+  },
+  {
+    version: "2.0.1",
+    date: "January 5, 2026",
+    type: "Bug Fix",
+    changes: [
+      { type: "fixed", text: "Mobile navigation issues" },
+      { type: "fixed", text: "Footer link styling" },
+    ]
+  },
+  {
+    version: "2.0.0",
+    date: "January 4, 2026",
+    type: "Major Release",
+    changes: [
+      { type: "added", text: "Complete website redesign with modern UI" },
+      { type: "added", text: "New Astro 5.x architecture" },
+      { type: "added", text: "Destination Guide section" },
+      { type: "added", text: "Blog with local recommendations" },
+      { type: "added", text: "Live chat widget (Tawk.to)" },
+      { type: "added", text: "Weather and volcano camera widgets" },
+      { type: "added", text: "Multi-language support" },
+      { type: "improved", text: "SEO optimization with structured data" },
+      { type: "improved", text: "Image lazy loading and optimization" },
+    ]
+  },
+  {
+    version: "1.0.0",
+    date: "December 2025",
+    type: "Initial Release",
+    changes: [
+      { type: "added", text: "Original website launch" },
+      { type: "added", text: "Basic room listings" },
+      { type: "added", text: "Contact form" },
+      { type: "added", text: "Photo gallery" },
+    ]
+  }
+];
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="changelog-hero">
+    <div class="container">
+      <div class="hero-content">
+        <a href="/admin" class="back-link">&larr; Back to Admin</a>
+        <h1>Changelog</h1>
+        <p>Version history and release notes for Island Goodes website</p>
+        <div class="current-version">
+          <span class="version-badge">Current: v{CURRENT_VERSION}</span>
+          <span class="release-date">Released {RELEASE_DATE}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="changelog-section">
+    <div class="container">
+      {changelog.map((release, index) => (
+        <div class={`release-card ${index === 0 ? 'latest' : ''}`}>
+          <div class="release-header">
+            <div class="release-info">
+              <h2>v{release.version}</h2>
+              <span class="release-type">{release.type}</span>
+            </div>
+            <span class="release-date">{release.date}</span>
+          </div>
+          <ul class="change-list">
+            {release.changes.map(change => (
+              <li class={`change-item ${change.type}`}>
+                <span class="change-badge">{change.type}</span>
+                {change.text}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+</PreviewLayout>
+
+<style>
+  .changelog-hero {
+    background: var(--gradient-primary);
+    color: #fff;
+    padding: 8rem 2rem 3rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: rgba(255,255,255,0.7);
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover {
+    color: #fff;
+  }
+
+  .changelog-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-content > p {
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+  }
+
+  .current-version {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .version-badge {
+    background: var(--color-secondary);
+    color: #1a1a1a;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+
+  .current-version .release-date {
+    opacity: 0.8;
+    font-size: 0.9375rem;
+  }
+
+  .changelog-section {
+    padding: 3rem 2rem;
+    background: var(--color-bg-alt);
+  }
+
+  .release-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+
+  .release-card.latest {
+    border: 2px solid var(--color-primary);
+  }
+
+  .release-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .release-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .release-info h2 {
+    font-size: 1.5rem;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .release-type {
+    background: var(--color-bg-alt);
+    color: var(--color-text-light);
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .release-date {
+    color: var(--color-text-light);
+    font-size: 0.9375rem;
+  }
+
+  .change-list {
+    list-style: none;
+  }
+
+  .change-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-bg-alt);
+    font-size: 0.9375rem;
+    color: var(--color-text);
+    line-height: 1.5;
+  }
+
+  .change-item:last-child {
+    border-bottom: none;
+  }
+
+  .change-badge {
+    flex-shrink: 0;
+    padding: 0.125rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    min-width: 60px;
+    text-align: center;
+  }
+
+  .change-item.added .change-badge {
+    background: #DCFCE7;
+    color: #166534;
+  }
+
+  .change-item.fixed .change-badge {
+    background: #FEF3C7;
+    color: #92400E;
+  }
+
+  .change-item.improved .change-badge {
+    background: #E0F2FE;
+    color: #0369A1;
+  }
+
+  .change-item.removed .change-badge {
+    background: #FEE2E2;
+    color: #DC2626;
+  }
+
+  @media (max-width: 768px) {
+    .release-header {
+      flex-direction: column;
+    }
+    .changelog-hero {
+      padding: 6rem 1.5rem 2rem;
+    }
+  }
+</style>

@@ -171,6 +171,116 @@ const description = "Analytics dashboard for Island Goodes.";
       </div>
     </section>
 
+    <!-- Admin Tools -->
+    <section class="tools-section">
+      <div class="container">
+        <div class="tools-card">
+          <h2>Admin Tools</h2>
+          <p>Quick access to site management and audit tools.</p>
+          <div class="tools-grid">
+            <a href="/admin/image-audit" class="tool-item">
+              <div class="tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21,15 16,10 5,21"/>
+                </svg>
+              </div>
+              <div class="tool-info">
+                <strong>Copyright Audit</strong>
+                <p>Review images & text for copyright compliance</p>
+              </div>
+              <svg class="tool-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9,18 15,12 9,6"/>
+              </svg>
+            </a>
+            <a href="/admin/user-management" class="tool-item">
+              <div class="tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+              </div>
+              <div class="tool-info">
+                <strong>Admin Users</strong>
+                <p>Manage admin accounts and 2FA settings</p>
+              </div>
+              <svg class="tool-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9,18 15,12 9,6"/>
+              </svg>
+            </a>
+            <a href="/admin/website-review" class="tool-item">
+              <div class="tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14,2 14,8 20,8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10,9 9,9 8,9"/>
+                </svg>
+              </div>
+              <div class="tool-info">
+                <strong>Website Review</strong>
+                <p>Full site audit and recommendations report</p>
+              </div>
+              <svg class="tool-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9,18 15,12 9,6"/>
+              </svg>
+            </a>
+            <a href="/admin/changelog" class="tool-item">
+              <div class="tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 8v4l3 3"/>
+                  <circle cx="12" cy="12" r="10"/>
+                </svg>
+              </div>
+              <div class="tool-info">
+                <strong>Changelog</strong>
+                <p>Version history and release notes</p>
+              </div>
+              <svg class="tool-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9,18 15,12 9,6"/>
+              </svg>
+            </a>
+            <a href="/admin/roadmap" class="tool-item">
+              <div class="tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="12,2 2,7 12,12 22,7 12,2"/>
+                  <polyline points="2,17 12,22 22,17"/>
+                  <polyline points="2,12 12,17 22,12"/>
+                </svg>
+              </div>
+              <div class="tool-info">
+                <strong>Future Roadmap</strong>
+                <p>Planned features and improvements</p>
+              </div>
+              <svg class="tool-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9,18 15,12 9,6"/>
+              </svg>
+            </a>
+            <a href="/admin/image-manager" class="tool-item">
+              <div class="tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21,15 16,10 5,21"/>
+                </svg>
+              </div>
+              <div class="tool-info">
+                <strong>Image Manager</strong>
+                <p>Add, remove, crop & rotate room photos</p>
+              </div>
+              <svg class="tool-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9,18 15,12 9,6"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Site Settings -->
     <section class="settings-section">
       <div class="container">
@@ -311,6 +421,10 @@ const description = "Analytics dashboard for Island Goodes.";
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Leaflet.js for World Map -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <style>
   /* Login Gate */
@@ -540,12 +654,18 @@ const description = "Analytics dashboard for Island Goodes.";
 
   /* World Map */
   .world-map {
-    height: 300px;
+    height: 350px;
     background: var(--color-bg-alt);
     border-radius: 12px;
     position: relative;
     overflow: hidden;
     margin-bottom: 1rem;
+  }
+
+  .world-map .leaflet-container {
+    height: 100%;
+    width: 100%;
+    border-radius: 12px;
   }
 
   .map-loading {
@@ -555,6 +675,29 @@ const description = "Analytics dashboard for Island Goodes.";
     align-items: center;
     justify-content: center;
     color: var(--color-text-light);
+  }
+
+  .visitor-marker {
+    background: var(--color-primary);
+    border: 3px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  .marker-popup {
+    text-align: center;
+    font-family: var(--font-body);
+  }
+
+  .marker-popup strong {
+    font-size: 1.1rem;
+    color: var(--color-primary);
+  }
+
+  .marker-popup .visitor-count {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text);
   }
 
   .country-list {
@@ -695,6 +838,84 @@ const description = "Analytics dashboard for Island Goodes.";
     color: var(--color-primary);
   }
 
+  /* Tools Section */
+  .tools-section {
+    padding: 2rem;
+    background: #fff;
+  }
+
+  .tools-card {
+    background: var(--color-bg-alt);
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  .tools-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .tools-card > p {
+    color: var(--color-text-light);
+    margin-bottom: 1.5rem;
+  }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .tool-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: #fff;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: var(--transition-fast);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+
+  .tool-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+
+  .tool-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--color-primary-subtle);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    flex-shrink: 0;
+  }
+
+  .tool-info {
+    flex: 1;
+  }
+
+  .tool-info strong {
+    display: block;
+    color: var(--color-text);
+    margin-bottom: 0.25rem;
+  }
+
+  .tool-info p {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    margin: 0;
+  }
+
+  .tool-arrow {
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+  }
+
   /* Settings Section */
   .settings-section {
     padding: 2rem;
@@ -816,6 +1037,9 @@ const description = "Analytics dashboard for Island Goodes.";
       grid-column: span 1;
     }
     .settings-grid {
+      grid-template-columns: 1fr;
+    }
+    .tools-grid {
       grid-template-columns: 1fr;
     }
   }
@@ -987,6 +1211,60 @@ const description = "Analytics dashboard for Island Goodes.";
     });
   }
 
+  // Country coordinates for mapping
+  const countryCoords: Record<string, [number, number]> = {
+    'US': [39.8283, -98.5795],
+    'CA': [56.1304, -106.3468],
+    'GB': [55.3781, -3.4360],
+    'DE': [51.1657, 10.4515],
+    'FR': [46.6034, 1.8883],
+    'JP': [36.2048, 138.2529],
+    'AU': [-25.2744, 133.7751],
+    'NZ': [-40.9006, 174.8860],
+    'CN': [35.8617, 104.1954],
+    'KR': [35.9078, 127.7669],
+    'IN': [20.5937, 78.9629],
+    'BR': [-14.2350, -51.9253],
+    'MX': [23.6345, -102.5528],
+    'IT': [41.8719, 12.5674],
+    'ES': [40.4637, -3.7492],
+    'NL': [52.1326, 5.2913],
+    'PH': [12.8797, 121.7740],
+    'SG': [1.3521, 103.8198],
+    'TH': [15.8700, 100.9925],
+    'ID': [-0.7893, 113.9213],
+    'MY': [4.2105, 101.9758],
+    'VN': [14.0583, 108.2772],
+    'HK': [22.3193, 114.1694],
+    'TW': [23.6978, 120.9605],
+    'RU': [61.5240, 105.3188],
+    'ZA': [-30.5595, 22.9375],
+    'AE': [23.4241, 53.8478],
+    'SA': [23.8859, 45.0792],
+    'SE': [60.1282, 18.6435],
+    'NO': [60.4720, 8.4689],
+    'DK': [56.2639, 9.5018],
+    'FI': [61.9241, 25.7482],
+    'PL': [51.9194, 19.1451],
+    'AT': [47.5162, 14.5501],
+    'CH': [46.8182, 8.2275],
+    'BE': [50.5039, 4.4699],
+    'IE': [53.1424, -7.6921],
+    'PT': [39.3999, -8.2245],
+    'GR': [39.0742, 21.8243],
+    'IL': [31.0461, 34.8516],
+    'AR': [-38.4161, -63.6167],
+    'CL': [-35.6751, -71.5430],
+    'CO': [4.5709, -74.2973],
+    'PE': [-9.1900, -75.0152],
+    'GU': [13.4443, 144.7937],
+    'HI': [19.8968, -155.5828], // Hawaii (for reference)
+    'PR': [18.2208, -66.5901],
+    'VI': [18.3358, -64.8963],
+  };
+
+  let worldMap: any = null;
+
   async function loadCountriesData() {
     const data = await fetchAnalytics('countries');
     if (!data?.countries) return;
@@ -1012,23 +1290,88 @@ const description = "Analytics dashboard for Island Goodes.";
       `;
     }).join('');
 
-    // Update map placeholder with summary
-    if (mapEl) {
-      const topCountries = data.countries.slice(0, 5);
-      mapEl.innerHTML = `
-        <div style="padding: 2rem; text-align: center;">
-          <h4 style="margin-bottom: 1rem; color: var(--color-text);">Top Visitor Locations</h4>
-          <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
-            ${topCountries.map((c: any, i: number) => `
-              <div style="text-align: center;">
-                <div style="font-size: 3rem;">${getCountryFlag(c.countryCode)}</div>
-                <div style="font-weight: 600; margin-top: 0.5rem;">${c.country}</div>
-                <div style="color: var(--color-primary); font-size: 1.25rem; font-weight: 700;">${c.users}</div>
-              </div>
-            `).join('')}
-          </div>
+    // Create interactive Leaflet map
+    if (mapEl && typeof L !== 'undefined') {
+      mapEl.innerHTML = '<div id="leafletMap" style="height: 100%; width: 100%;"></div>';
+
+      // Initialize map centered on Pacific (shows Hawaii nicely)
+      if (worldMap) {
+        worldMap.remove();
+      }
+
+      worldMap = L.map('leafletMap', {
+        center: [20, -155], // Center near Hawaii
+        zoom: 2,
+        minZoom: 1,
+        maxZoom: 8,
+        scrollWheelZoom: true,
+        zoomControl: true
+      });
+
+      // Add a nice tile layer (CartoDB Voyager - clean and modern)
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+      }).addTo(worldMap);
+
+      // Add marker for Island Goodes location (Hilo, Hawaii)
+      const hiloMarker = L.circleMarker([19.7297, -155.0900], {
+        radius: 12,
+        fillColor: '#C5A572',
+        color: '#fff',
+        weight: 3,
+        opacity: 1,
+        fillOpacity: 0.9
+      }).addTo(worldMap);
+
+      hiloMarker.bindPopup(`
+        <div class="marker-popup">
+          <strong>Island Goodes</strong><br>
+          <span style="color: #666;">Hilo, Hawaii</span><br>
+          <span style="font-size: 0.8rem; color: var(--color-secondary);">Your Property</span>
         </div>
-      `;
+      `);
+
+      // Add markers for each country with visitors
+      data.countries.forEach((country: any) => {
+        const coords = countryCoords[country.countryCode];
+        if (coords) {
+          const users = parseInt(country.users);
+          // Size based on visitor count (min 8, max 25)
+          const radius = Math.min(25, Math.max(8, 8 + (users * 2)));
+
+          const marker = L.circleMarker(coords, {
+            radius: radius,
+            fillColor: '#1B6B5A',
+            color: '#fff',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+          }).addTo(worldMap);
+
+          marker.bindPopup(`
+            <div class="marker-popup">
+              <div style="font-size: 2rem;">${getCountryFlag(country.countryCode)}</div>
+              <strong>${country.country}</strong><br>
+              <span class="visitor-count">${country.users}</span><br>
+              <span style="color: #666; font-size: 0.8rem;">visitors</span>
+            </div>
+          `);
+        }
+      });
+
+      // Fit bounds to show all markers with padding
+      const allCoords = data.countries
+        .map((c: any) => countryCoords[c.countryCode])
+        .filter(Boolean);
+
+      if (allCoords.length > 0) {
+        // Add Hawaii to the bounds
+        allCoords.push([19.7297, -155.0900]);
+        const bounds = L.latLngBounds(allCoords);
+        worldMap.fitBounds(bounds, { padding: [30, 30], maxZoom: 5 });
+      }
     }
   }
 

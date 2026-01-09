@@ -214,6 +214,10 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
         </a>
       </div>
       <p>&copy; {new Date().getFullYear()} Island Goodes. All rights reserved. Adults 18+ only.</p>
+      <div class="footer-meta">
+        <span class="version">v2.1.0</span>
+        <a href="/admin" class="admin-link">Admin</a>
+      </div>
     </div>
   </footer>
 
@@ -762,6 +766,30 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
     text-align: center;
     font-size: 0.875rem;
     color: rgba(255,255,255,0.5);
+  }
+
+  .footer-meta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.75rem;
+  }
+
+  .version {
+    color: rgba(255,255,255,0.4);
+    font-size: 0.75rem;
+    font-family: monospace;
+  }
+
+  .admin-link {
+    color: rgba(255,255,255,0.3);
+    font-size: 0.75rem;
+    transition: var(--transition-fast);
+  }
+
+  .admin-link:hover {
+    color: rgba(255,255,255,0.6);
   }
 
   /* Newsletter Form */
