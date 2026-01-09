@@ -81,6 +81,11 @@ const description = "Manage admin accounts with email 2FA";
             <!-- Dynamically populated -->
           </div>
 
+          <div class="reset-section">
+            <button id="resetAdmins" class="btn btn-outline btn-small">Reset to Default Admin</button>
+            <span class="reset-note">Removes all admins and resets to just Jeremiah (superadmin)</span>
+          </div>
+
           <div class="add-admin-form">
             <h3>Add New Admin</h3>
             <form id="addAdminForm">
@@ -382,7 +387,8 @@ const description = "Manage admin accounts with email 2FA";
   .admin-avatar {
     width: 45px;
     height: 45px;
-    background: var(--color-primary);
+    min-width: 45px;
+    background: var(--color-primary, #1B6B5A);
     color: #fff;
     border-radius: 50%;
     display: flex;
@@ -390,6 +396,27 @@ const description = "Manage admin accounts with email 2FA";
     justify-content: center;
     font-weight: 700;
     font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .reset-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #FEF3C7;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+  }
+
+  .reset-note {
+    font-size: 0.8125rem;
+    color: #92400E;
+  }
+
+  .btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
   }
 
   .admin-details strong {
@@ -970,6 +997,27 @@ const description = "Manage admin accounts with email 2FA";
   document.getElementById('logout')?.addEventListener('click', () => {
     sessionStorage.removeItem(SESSION_KEY);
     location.reload();
+  });
+
+  // Reset admins to default
+  document.getElementById('resetAdmins')?.addEventListener('click', () => {
+    if (!confirm('This will remove ALL admin accounts and reset to just the default superadmin (Jeremiah Goode).\n\nYou will be logged out. Continue?')) {
+      return;
+    }
+
+    // Clear admin data
+    localStorage.removeItem(ADMIN_STORAGE_KEY);
+
+    // Re-initialize with just the default admin
+    localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify([DEFAULT_ADMIN]));
+
+    // Log the action
+    logActivity('user', 'Admin accounts reset to default', 'All accounts removed');
+
+    // Clear session and redirect to login
+    sessionStorage.removeItem(SESSION_KEY);
+    alert('Admin accounts have been reset. You will now be redirected to login.');
+    window.location.href = '/admin';
   });
 
   // ============================================
