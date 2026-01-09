@@ -188,7 +188,8 @@ const galleryCategories = [
         <div class="bulk-actions">
           <button id="selectAllBtn" class="bulk-btn">Select All</button>
           <button id="deselectAllBtn" class="bulk-btn">Deselect All</button>
-          <button id="deleteSelectedBtn" class="bulk-btn danger">Mark for Deletion</button>
+          <button id="restoreSelectedBtn" class="bulk-btn restore">Restore Selected</button>
+          <button id="deleteSelectedBtn" class="bulk-btn danger">Delete Selected</button>
         </div>
       </div>
     </div>
@@ -392,6 +393,15 @@ const galleryCategories = [
 
   .bulk-btn.danger:hover {
     background: #B91C1C;
+  }
+
+  .bulk-btn.restore {
+    background: #059669;
+    border-color: #059669;
+  }
+
+  .bulk-btn.restore:hover {
+    background: #047857;
   }
 
   /* Selection Mode */
@@ -1045,7 +1055,7 @@ const galleryCategories = [
     updateSelectedCount();
   });
 
-  // Mark for Deletion
+  // Delete Selected - immediately hides from site
   document.getElementById('deleteSelectedBtn')?.addEventListener('click', () => {
     const selected = document.querySelectorAll('.image-checkbox:checked');
     if (selected.length === 0) {
@@ -1053,7 +1063,7 @@ const galleryCategories = [
       return;
     }
 
-    const confirmMsg = `Mark ${selected.length} image(s) for deletion?\n\nThese images will be highlighted in red. To actually remove them, you'll need to delete the files from the repository.`;
+    const confirmMsg = `Delete ${selected.length} image(s)?\n\nThese images will be immediately hidden from the public site.`;
     if (!confirm(confirmMsg)) return;
 
     const marked = getMarkedImages();
@@ -1073,9 +1083,42 @@ const galleryCategories = [
 
     saveMarkedImages(marked);
     updateSelectedCount();
-    logActivity('image', `Marked ${newlyMarked.length} images for deletion`, newlyMarked.join(', '));
+    logActivity('image', `Deleted ${newlyMarked.length} images`, newlyMarked.join(', '));
 
-    alert(`${newlyMarked.length} image(s) marked for deletion.\n\nTo complete deletion:\n1. Delete these files from the repository\n2. Run "npm run build" and redeploy`);
+    alert(`${newlyMarked.length} image(s) deleted!\n\nThey are now hidden from the public site. You can restore them anytime from this page.`);
+  });
+
+  // Restore Selected - brings back deleted images
+  document.getElementById('restoreSelectedBtn')?.addEventListener('click', () => {
+    const selected = document.querySelectorAll('.image-checkbox:checked');
+    if (selected.length === 0) {
+      alert('No images selected');
+      return;
+    }
+
+    let marked = getMarkedImages();
+    let restoredCount = 0;
+
+    selected.forEach(checkbox => {
+      const card = (checkbox as HTMLElement).closest('.image-card') as HTMLElement;
+      const src = card?.dataset.src;
+      if (src && marked.includes(src)) {
+        marked = marked.filter(m => m !== src);
+        card?.classList.remove('marked-delete');
+        restoredCount++;
+      }
+      (checkbox as HTMLInputElement).checked = false;
+      card?.classList.remove('selected');
+    });
+
+    if (restoredCount > 0) {
+      saveMarkedImages(marked);
+      logActivity('image', `Restored ${restoredCount} images`, 'Images are now visible on the site again');
+      alert(`${restoredCount} image(s) restored!\n\nThey are now visible on the public site again.`);
+    } else {
+      alert('No deleted images were selected to restore.');
+    }
+    updateSelectedCount();
   });
 
   // Open editor for existing images

@@ -1381,5 +1381,42 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
   });
 </script>
 <script is:inline src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<!-- Hide deleted images from admin Image Manager -->
+<script is:inline>
+(function() {
+  try {
+    const DELETION_KEY = 'islandgoodes_images_to_delete';
+    const deleted = JSON.parse(localStorage.getItem(DELETION_KEY) || '[]');
+    if (deleted.length === 0) return;
+
+    // Hide any img elements with src matching deleted paths
+    document.querySelectorAll('img').forEach(function(img) {
+      const src = img.getAttribute('src');
+      if (src && deleted.includes(src)) {
+        // Hide the image and its parent container if it's a gallery item
+        var parent = img.closest('.gallery-item, .image-card, .room-image, .slide');
+        if (parent) {
+          parent.style.display = 'none';
+        } else {
+          img.style.display = 'none';
+        }
+      }
+    });
+
+    // Also hide background images
+    document.querySelectorAll('[style*="background"]').forEach(function(el) {
+      var style = el.getAttribute('style') || '';
+      deleted.forEach(function(path) {
+        if (style.includes(path)) {
+          el.style.display = 'none';
+        }
+      });
+    });
+  } catch (e) {
+    console.log('Image filter error:', e);
+  }
+})();
+</script>
 </body>
 </html>
