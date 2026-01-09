@@ -86,23 +86,30 @@ const description = "Manage admin accounts with email 2FA";
             <form id="addAdminForm">
               <div class="form-row">
                 <div class="form-group">
-                  <label for="newUsername">Username</label>
-                  <input type="text" id="newUsername" placeholder="Enter username" required />
+                  <label for="newFullName">Full Name</label>
+                  <input type="text" id="newFullName" placeholder="e.g. Garvin Goode" required />
                 </div>
                 <div class="form-group">
-                  <label for="newEmail">Email (for 2FA)</label>
-                  <input type="email" id="newEmail" placeholder="Enter email address" required />
+                  <label for="newUsername">Username</label>
+                  <input type="text" id="newUsername" placeholder="e.g. garvin" required />
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group">
-                  <label for="newPassword">Password</label>
-                  <input type="password" id="newPassword" placeholder="Enter password" required minlength="8" />
+                  <label for="newEmail">Email (for 2FA)</label>
+                  <input type="email" id="newEmail" placeholder="Enter email address" required />
                 </div>
+                <div class="form-group">
+                  <label for="newPassword">Password</label>
+                  <input type="password" id="newPassword" placeholder="Min 8 characters" required minlength="8" />
+                </div>
+              </div>
+              <div class="form-row">
                 <div class="form-group">
                   <label for="confirmPassword">Confirm Password</label>
                   <input type="password" id="confirmPassword" placeholder="Confirm password" required />
                 </div>
+                <div class="form-group"></div>
               </div>
               <button type="submit" class="btn btn-primary">Add Admin</button>
             </form>
@@ -676,11 +683,20 @@ const description = "Manage admin accounts with email 2FA";
     created: new Date().toISOString()
   };
 
-  // Initialize admins
+  // Initialize admins - ensure default superadmin always exists
   function getAdmins() {
     try {
       const stored = localStorage.getItem(ADMIN_STORAGE_KEY);
-      if (stored) return JSON.parse(stored);
+      if (stored) {
+        const admins = JSON.parse(stored);
+        // Ensure default superadmin always exists
+        const hasJeremiah = admins.some((a: any) => a.username === 'jeremiah');
+        if (!hasJeremiah) {
+          admins.unshift(DEFAULT_ADMIN);
+          localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(admins));
+        }
+        return admins;
+      }
       localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify([DEFAULT_ADMIN]));
       return [DEFAULT_ADMIN];
     } catch {
@@ -744,8 +760,9 @@ const description = "Manage admin accounts with email 2FA";
 
     container.innerHTML = admins.map((admin: any) => {
       const roleLabel = admin.role === 'superadmin' ? 'Super Admin' : 'Admin';
-      const isCurrentUser = admin.id === currentSession?.id;
-      const canDelete = canManageUsers && admin.role !== 'superadmin' && !isCurrentUser;
+      const isCurrentUser = admin.id === currentSession?.id || admin.username === currentSession?.username;
+      // Can delete any non-superadmin user (even yourself, though that's risky)
+      const canDelete = canManageUsers && admin.role !== 'superadmin';
 
       return `
         <div class="admin-item ${isCurrentUser ? 'current-user' : ''}">
@@ -760,7 +777,7 @@ const description = "Manage admin accounts with email 2FA";
           </div>
           <div class="admin-actions">
             ${canDelete ? `
-              <button class="btn-icon danger" onclick="removeAdmin(${admin.id})" title="Remove Admin">
+              <button class="btn-icon danger delete-admin-btn" data-admin-id="${admin.id}" title="Remove Admin">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="3,6 5,6 21,6"/>
                   <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
@@ -771,6 +788,14 @@ const description = "Manage admin accounts with email 2FA";
         </div>
       `;
     }).join('');
+
+    // Attach delete handlers
+    document.querySelectorAll('.delete-admin-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const adminId = parseInt((e.currentTarget as HTMLElement).dataset.adminId || '0');
+        if (adminId) removeAdmin(adminId);
+      });
+    });
 
     // Hide add form if not superadmin
     const addForm = document.querySelector('.add-admin-form') as HTMLElement;
@@ -784,22 +809,36 @@ const description = "Manage admin accounts with email 2FA";
     }
   }
 
-  // Remove admin (expose to window for onclick)
-  (window as any).removeAdmin = function(id: number) {
+  // Remove admin
+  function removeAdmin(id: number) {
     if (!isSuperAdmin()) {
       alert('Only super admins can remove users.');
       return;
     }
 
-    if (!confirm('Are you sure you want to remove this admin?')) return;
-
     const admins = getAdmins();
-    const removed = admins.find((a: any) => a.id === id);
+    const adminToRemove = admins.find((a: any) => a.id === id);
+
+    if (!adminToRemove) {
+      alert('Admin not found.');
+      return;
+    }
+
+    if (adminToRemove.role === 'superadmin') {
+      alert('Cannot delete the super admin account.');
+      return;
+    }
+
+    const confirmMsg = `Are you sure you want to remove "${adminToRemove.fullName || adminToRemove.username}"?\n\nThis cannot be undone.`;
+    if (!confirm(confirmMsg)) return;
+
     const filtered = admins.filter((a: any) => a.id !== id);
     saveAdmins(filtered);
-    logActivity('user', 'Admin user removed', removed?.username || 'Unknown');
+    logActivity('user', 'Admin user removed', `${adminToRemove.fullName || adminToRemove.username} (${adminToRemove.email})`);
+
+    alert(`Admin "${adminToRemove.fullName || adminToRemove.username}" has been removed.`);
     renderAdminList();
-  };
+  }
 
   // Add admin form
   document.getElementById('addAdminForm')?.addEventListener('submit', async (e) => {
@@ -811,8 +850,9 @@ const description = "Manage admin accounts with email 2FA";
       return;
     }
 
-    const username = (document.getElementById('newUsername') as HTMLInputElement)?.value;
-    const email = (document.getElementById('newEmail') as HTMLInputElement)?.value;
+    const fullName = (document.getElementById('newFullName') as HTMLInputElement)?.value.trim();
+    const username = (document.getElementById('newUsername') as HTMLInputElement)?.value.trim().toLowerCase();
+    const email = (document.getElementById('newEmail') as HTMLInputElement)?.value.trim();
     const password = (document.getElementById('newPassword') as HTMLInputElement)?.value;
     const confirm = (document.getElementById('confirmPassword') as HTMLInputElement)?.value;
 
@@ -823,6 +863,11 @@ const description = "Manage admin accounts with email 2FA";
     if (addSuccess) addSuccess.textContent = '';
 
     // Validation
+    if (!fullName || !username || !email || !password) {
+      if (addError) addError.textContent = 'All fields are required';
+      return;
+    }
+
     if (password !== confirm) {
       if (addError) addError.textContent = 'Passwords do not match';
       return;
@@ -833,20 +878,32 @@ const description = "Manage admin accounts with email 2FA";
       return;
     }
 
+    // Username validation (alphanumeric only)
+    if (!/^[a-z0-9]+$/.test(username)) {
+      if (addError) addError.textContent = 'Username can only contain letters and numbers';
+      return;
+    }
+
     const admins = getAdmins();
 
     // Check for duplicate username
-    if (admins.some((a: any) => a.username.toLowerCase() === username.toLowerCase())) {
+    if (admins.some((a: any) => a.username.toLowerCase() === username)) {
       if (addError) addError.textContent = 'Username already exists';
+      return;
+    }
+
+    // Check for duplicate email
+    if (admins.some((a: any) => a.email.toLowerCase() === email.toLowerCase())) {
+      if (addError) addError.textContent = 'Email already registered';
       return;
     }
 
     // Add new admin (regular admin, not superadmin)
     const newAdmin = {
       id: Date.now(),
-      username: username.toLowerCase(),
-      fullName: username, // Use username as display name initially
-      email,
+      username: username,
+      fullName: fullName,
+      email: email,
       passwordHash: btoa(password),
       role: 'admin', // Regular admin, not superadmin
       created: new Date().toISOString()
@@ -854,15 +911,15 @@ const description = "Manage admin accounts with email 2FA";
 
     admins.push(newAdmin);
     saveAdmins(admins);
-    logActivity('user', 'Admin user added', `${username} (${email})`);
+    logActivity('user', 'Admin user added', `${fullName} - ${username} (${email})`);
 
     // Send welcome email with credentials
-    await sendWelcomeEmail(email, username, password);
+    await sendWelcomeEmail(email, fullName, username, password);
 
     // Clear form
     (document.getElementById('addAdminForm') as HTMLFormElement)?.reset();
 
-    if (addSuccess) addSuccess.textContent = `Admin "${username}" added successfully! Credentials have been shared.`;
+    if (addSuccess) addSuccess.textContent = `Admin "${fullName}" added successfully! Credentials have been shared.`;
 
     renderAdminList();
 
@@ -988,15 +1045,15 @@ const description = "Manage admin accounts with email 2FA";
   // ============================================
   // WELCOME EMAIL (when adding new admin)
   // ============================================
-  async function sendWelcomeEmail(email: string, username: string, password: string): Promise<boolean> {
-    console.log(`[WELCOME EMAIL] Sending to ${email}`);
+  async function sendWelcomeEmail(email: string, fullName: string, username: string, password: string): Promise<boolean> {
+    console.log(`[WELCOME EMAIL] Sending to ${email} for ${fullName}`);
 
     // EmailJS configuration - update these with your values
     const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';
 
     if (EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
       // EmailJS not configured - show credentials in alert
-      alert(`⚠️ WELCOME EMAIL NOT CONFIGURED\n\nNew admin credentials:\n\nUsername: ${username}\nPassword: ${password}\nLogin URL: ${window.location.origin}/admin\n\nTo enable welcome emails:\n1. Sign up at emailjs.com (free)\n2. Create a welcome email template\n3. Update EMAILJS_PUBLIC_KEY in user-management.astro\n\nPlease share these credentials with the new admin securely.`);
+      alert(`📧 NEW ADMIN CREDENTIALS\n\nName: ${fullName}\nUsername: ${username}\nPassword: ${password}\nLogin URL: ${window.location.origin}/admin\n\n⚠️ Welcome emails are not configured yet.\nPlease share these credentials with ${fullName} securely.`);
       return true;
     }
 
@@ -1015,16 +1072,17 @@ const description = "Manage admin accounts with email 2FA";
 
       await (window as any).emailjs.send('service_islandgoodes', 'template_welcome', {
         to_email: email,
-        to_name: username,
+        to_name: fullName,
         username: username,
         password: password,
         login_url: `${window.location.origin}/admin`
       });
 
+      alert(`Welcome email sent to ${fullName} at ${email}!`);
       return true;
     } catch (error) {
       console.error('EmailJS error:', error);
-      alert(`Welcome email failed. Please share these credentials manually:\n\nUsername: ${username}\nPassword: ${password}\nLogin URL: ${window.location.origin}/admin`);
+      alert(`Welcome email failed. Please share these credentials manually:\n\nName: ${fullName}\nUsername: ${username}\nPassword: ${password}\nLogin URL: ${window.location.origin}/admin`);
       return true;
     }
   }
