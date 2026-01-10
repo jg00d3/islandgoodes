@@ -2177,12 +2177,22 @@ const description = "Analytics dashboard for Island Goodes.";
   // SESSION TIMEOUT ENFORCEMENT
   // ============================================
   let activityTimeout: number | null = null;
+  let cachedSessionTimeout = 30; // Default 30 minutes
+
+  // Load security settings once on page load
+  (async function loadSecurityTimeout() {
+    try {
+      const settings = await getSecuritySettings();
+      cachedSessionTimeout = settings.sessionTimeout || 30;
+    } catch {
+      cachedSessionTimeout = 30;
+    }
+  })();
 
   function resetActivityTimer() {
     if (activityTimeout) clearTimeout(activityTimeout);
 
-    const settings = getSecuritySettings();
-    const timeoutMs = settings.sessionTimeout * 60 * 1000;
+    const timeoutMs = cachedSessionTimeout * 60 * 1000;
 
     activityTimeout = setTimeout(() => {
       alert('Your session has expired due to inactivity. Please log in again.');
