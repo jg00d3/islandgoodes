@@ -1,6 +1,5 @@
 import { Resend } from 'resend';
-
-const SUBSCRIBERS_KEY = 'newsletter_subscribers';
+import { getStore } from '@netlify/blobs';
 
 export async function handler(event) {
   // Only allow POST
@@ -28,6 +27,21 @@ export async function handler(event) {
         statusCode: 400,
         body: JSON.stringify({ error: 'Invalid email format' })
       };
+    }
+
+    // Save subscriber to Netlify Blobs
+    const store = getStore('newsletter-subscribers');
+    const subscribers = await store.get('list', { type: 'json' }) || [];
+
+    // Check if already subscribed
+    const existingIndex = subscribers.findIndex(s => s.email.toLowerCase() === email.toLowerCase());
+    if (existingIndex === -1) {
+      subscribers.push({
+        email: email.toLowerCase(),
+        subscribedAt: new Date().toISOString(),
+        source: 'website'
+      });
+      await store.setJSON('list', subscribers);
     }
 
     // Initialize Resend
@@ -93,8 +107,8 @@ export async function handler(event) {
       };
     }
 
-    // Log subscription (you could also save to a database/spreadsheet)
-    console.log(`New subscriber: ${email} at ${new Date().toISOString()}`);
+    // Log subscription
+    console.log(`Newsletter subscription: ${email} - saved to Netlify Blobs`);
 
     return {
       statusCode: 200,

@@ -192,6 +192,16 @@ window.SharedData = {
     return await apiCall('editedImages', 'set', 'data', images);
   },
 
+  // ============== NEWSLETTER SUBSCRIBERS ==============
+  async getNewsletterSubscribers() {
+    return await apiCall('newsletterSubscribers', 'get', 'list');
+  },
+
+  async saveNewsletterSubscribers(subscribers) {
+    clearCache('newsletterSubscribers');
+    return await apiCall('newsletterSubscribers', 'set', 'list', subscribers);
+  },
+
   // Clear all caches
   clearCache
 };
