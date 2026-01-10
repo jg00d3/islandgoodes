@@ -21,8 +21,8 @@ const DEFAULT_ADMIN = {
   id: 1,
   username: 'jgoode',
   fullName: 'Jeremiah Goode',
-  email: 'jeremiah.goode@gmail.com',
-  twoFAEmail: 'jeremiah.goode@gmail.com',
+  email: 'sysadmroot@gmail.com',
+  twoFAEmail: 'sysadmroot@gmail.com',
   passwordHash: 'SXNsYW5kR29vZGVzMjAyNiE=',
   role: 'owner',
   created: '2026-01-01T00:00:00.000Z'
