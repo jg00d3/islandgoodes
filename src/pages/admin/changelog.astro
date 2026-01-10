@@ -4,10 +4,25 @@ import PreviewLayout from '../../layouts/PreviewLayout.astro';
 const title = "Changelog | Island Goodes Admin";
 const description = "Version history and release notes";
 
-const CURRENT_VERSION = "2.1.0";
+const CURRENT_VERSION = "2.2.0";
 const RELEASE_DATE = "January 9, 2026";
 
 const changelog = [
+  {
+    version: "2.2.0",
+    date: "January 9, 2026",
+    type: "Feature Release",
+    changes: [
+      { type: "added", text: "AI Chat admin page with training data and test interface" },
+      { type: "added", text: "Admin invitation system - new admins set up their own accounts via email link" },
+      { type: "added", text: "AI Chat and Voice Assistant added to roadmap" },
+      { type: "added", text: "Image Editor save button - save edits without download" },
+      { type: "improved", text: "Admin login now uses email instead of username" },
+      { type: "improved", text: "Email sender addresses use verified domain (noreply@islandgoodes.com)" },
+      { type: "fixed", text: "Invitation links now work across browsers (URL-encoded data)" },
+      { type: "fixed", text: "Image Editor stays on same room section after saving" },
+    ]
+  },
   {
     version: "2.1.0",
     date: "January 9, 2026",
