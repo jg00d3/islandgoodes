@@ -1392,12 +1392,27 @@ const galleryCategories = [
 
       logActivity('image', 'Image edited and saved', currentImageName);
 
+      // Update the image in place without reloading
+      const card = document.querySelector(`.image-card[data-src="${currentImagePath}"]`);
+      if (card) {
+        const img = card.querySelector('img');
+        if (img) {
+          img.src = dataUrl;
+          // Add edited badge if not already there
+          if (!card.querySelector('.edited-badge')) {
+            const badge = document.createElement('span');
+            badge.className = 'edited-badge';
+            badge.textContent = 'Edited';
+            card.appendChild(badge);
+          }
+        }
+      }
+
       // Close modal
       modal?.classList.remove('active');
 
-      // Show success and refresh page to show edited image
+      // Show success message
       alert('Image saved! The edited version will now show in the gallery.');
-      location.reload();
     } catch (err) {
       console.error('Save error:', err);
       alert('Could not save image. The image may be too large for browser storage. Try downloading instead.');
