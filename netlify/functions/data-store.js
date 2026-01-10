@@ -63,11 +63,30 @@ export async function handler(event, context) {
       };
     }
 
-    const store = getStore(STORES[storeName]);
+    let store;
+    try {
+      store = getStore(STORES[storeName]);
+    } catch (storeError) {
+      console.error('Failed to get store:', storeError);
+      // Return defaults if blob store fails
+      if (storeName === 'admins') {
+        return { statusCode: 200, headers, body: JSON.stringify([DEFAULT_ADMIN]) };
+      }
+      if (storeName === 'settings') {
+        return { statusCode: 200, headers, body: JSON.stringify(DEFAULT_SETTINGS) };
+      }
+      return { statusCode: 200, headers, body: JSON.stringify([]) };
+    }
 
     switch (action) {
       case 'get': {
-        const value = await store.get(key || 'data', { type: 'json' });
+        let value = null;
+        try {
+          value = await store.get(key || 'data', { type: 'json' });
+        } catch (getError) {
+          console.error('Failed to get from blob store:', getError);
+          // Return defaults on error
+        }
 
         // Return defaults if no data exists OR if admins array is empty
         if (!value || (storeName === 'admins' && Array.isArray(value) && value.length === 0)) {
@@ -111,10 +130,15 @@ export async function handler(event, context) {
     }
   } catch (error) {
     console.error('Data store error:', error);
+    console.error('Error stack:', error.stack);
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: 'Internal server error', details: error.message })
+      body: JSON.stringify({
+        error: 'Internal server error',
+        details: error.message,
+        stack: error.stack
+      })
     };
   }
 }
