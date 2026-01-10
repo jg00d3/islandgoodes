@@ -592,11 +592,14 @@ const bathroomAmenities = [
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ store: 'deletedImages', action: 'get', key: 'data' })
       });
-      if (!response.ok) return;
+      console.log('Deleted images API response status:', response.status);
+      if (!response.ok) { console.log('API response not ok'); return; }
       const deleted = await response.json();
-      if (!deleted || !Array.isArray(deleted) || deleted.length === 0) return;
+      console.log('Deleted images from API:', deleted);
+      if (!deleted || !Array.isArray(deleted) || deleted.length === 0) { console.log('No deleted images'); return; }
 
       const deletedPaths = deleted.map((d: any) => d.path || d);
+      console.log('Deleted paths:', deletedPaths);
       let hiddenCount = 0;
 
       document.querySelectorAll('.thumbnail').forEach((thumb) => {
@@ -604,8 +607,10 @@ const bathroomAmenities = [
         if (src && deletedPaths.includes(src)) {
           (thumb as HTMLElement).style.display = 'none';
           hiddenCount++;
+          console.log('Hiding thumbnail:', src);
         }
       });
+      console.log('Total hidden:', hiddenCount);
 
       // Update featured image if we hid any
       if (hiddenCount > 0) {
