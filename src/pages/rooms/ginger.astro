@@ -531,10 +531,10 @@ const bathroomAmenities = [
 
       document.querySelectorAll('.thumbnail').forEach((thumb) => {
         const src = thumb.getAttribute('data-src');
-        if (src && deletedPaths.includes(src)) thumb.classList.add('deleted');
+        if (src && deletedPaths.includes(src)) thumb.remove();
       });
 
-      const firstVisible = document.querySelector('.thumbnail:not(.deleted)') as HTMLElement;
+      const firstVisible = document.querySelector('.thumbnail') as HTMLElement;
       if (firstVisible && featuredImage) {
         const editedSrc = firstVisible.getAttribute('data-edited');
         const originalSrc = firstVisible.getAttribute('data-src');
@@ -588,7 +588,7 @@ const bathroomAmenities = [
   let isPlaying = false;
 
   function getVisibleThumbnails(): HTMLElement[] {
-    return Array.from(document.querySelectorAll('.thumbnail:not(.deleted)')) as HTMLElement[];
+    return Array.from(document.querySelectorAll('.thumbnail')) as HTMLElement[];
   }
 
   function openLightbox(index: number) {

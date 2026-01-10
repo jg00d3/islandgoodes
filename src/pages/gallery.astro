@@ -671,7 +671,7 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
         }
       }
 
-      // Hide deleted images
+      // Remove deleted images from DOM
       document.querySelectorAll('.gallery-item').forEach((item) => {
         const dataSrc = item.getAttribute('data-src');
         const img = item.querySelector('img') as HTMLImageElement;
@@ -679,7 +679,7 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
         // Check both data-src (original path) and current img src
         if ((dataSrc && deletedPaths.includes(dataSrc)) ||
             (imgSrc && !imgSrc.startsWith('data:') && deletedPaths.includes(imgSrc))) {
-          item.classList.add('hidden');
+          item.remove();
         }
       });
     } catch (e) { console.error('Error initializing gallery:', e); }

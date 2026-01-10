@@ -837,14 +837,14 @@ const bathroomAmenities = [
         });
       }
 
-      // Hide deleted images
+      // Remove deleted images from DOM
       document.querySelectorAll('.thumbnail').forEach((thumb) => {
         const src = thumb.getAttribute('data-src');
-        if (src && deletedPaths.includes(src)) thumb.classList.add('deleted');
+        if (src && deletedPaths.includes(src)) thumb.remove();
       });
 
       // Update featured image to first visible thumbnail
-      const firstVisible = document.querySelector('.thumbnail:not(.deleted)') as HTMLElement;
+      const firstVisible = document.querySelector('.thumbnail') as HTMLElement;
       if (firstVisible && featuredImage) {
         // Use edited version if available, otherwise original
         const editedSrc = firstVisible.getAttribute('data-edited');
@@ -907,7 +907,7 @@ const bathroomAmenities = [
   let isPlaying = false;
 
   function getVisibleThumbnails(): HTMLElement[] {
-    return Array.from(document.querySelectorAll('.thumbnail:not(.deleted)')) as HTMLElement[];
+    return Array.from(document.querySelectorAll('.thumbnail')) as HTMLElement[];
   }
 
   function openLightbox(index: number) {
