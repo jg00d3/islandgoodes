@@ -20,7 +20,7 @@ const description = "Analytics dashboard for Island Goodes.";
         <h1>Admin Dashboard</h1>
         <p>Sign in with your admin credentials</p>
         <form id="loginForm">
-          <input type="text" id="username" placeholder="Username" autocomplete="username" required />
+          <input type="email" id="loginEmail" placeholder="Email" autocomplete="email" required />
           <input type="password" id="password" placeholder="Password" autocomplete="current-password" required />
           <button type="submit" class="btn btn-primary">Continue</button>
         </form>
@@ -1487,21 +1487,21 @@ const description = "Analytics dashboard for Island Goodes.";
     showDashboard();
   }
 
-  // Step 1: Username/Password login
+  // Step 1: Email/Password login
   loginForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const username = (document.getElementById('username') as HTMLInputElement)?.value.toLowerCase();
+    const email = (document.getElementById('loginEmail') as HTMLInputElement)?.value.toLowerCase().trim();
     const password = (document.getElementById('password') as HTMLInputElement)?.value;
     const submitBtn = loginForm.querySelector('button[type="submit"]') as HTMLButtonElement;
 
     if (loginError) loginError.textContent = '';
 
-    // Find admin by username
+    // Find admin by email
     const admins = getAdmins();
-    const admin = admins.find((a: any) => a.username.toLowerCase() === username);
+    const admin = admins.find((a: any) => a.email.toLowerCase() === email);
 
     if (!admin) {
-      if (loginError) loginError.textContent = 'Username not found';
+      if (loginError) loginError.textContent = 'Email not found';
       return;
     }
 

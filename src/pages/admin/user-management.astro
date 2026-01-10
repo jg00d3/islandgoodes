@@ -87,36 +87,16 @@ const description = "Manage admin accounts with email 2FA";
           </div>
 
           <div class="add-admin-form">
-            <h3>Add New Admin</h3>
+            <h3>Invite New Admin</h3>
+            <p class="invite-desc">Enter their email address. They'll receive an invitation link to set up their own account.</p>
             <form id="addAdminForm">
-              <div class="form-row">
+              <div class="invite-row">
                 <div class="form-group">
-                  <label for="newFullName">Full Name</label>
-                  <input type="text" id="newFullName" placeholder="e.g. Garvin Goode" required />
-                </div>
-                <div class="form-group">
-                  <label for="newUsername">Username</label>
-                  <input type="text" id="newUsername" placeholder="e.g. garvin" required />
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="newEmail">Email (for 2FA)</label>
+                  <label for="newEmail">Email Address</label>
                   <input type="email" id="newEmail" placeholder="Enter email address" required />
                 </div>
-                <div class="form-group">
-                  <label for="newPassword">Password</label>
-                  <input type="password" id="newPassword" placeholder="Min 8 characters" required minlength="8" />
-                </div>
+                <button type="submit" class="btn btn-primary">Send Invitation</button>
               </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="confirmPassword">Confirm Password</label>
-                  <input type="password" id="confirmPassword" placeholder="Confirm password" required />
-                </div>
-                <div class="form-group"></div>
-              </div>
-              <button type="submit" class="btn btn-primary">Add Admin</button>
             </form>
             <p id="addError" class="error-message"></p>
             <p id="addSuccess" class="success-message"></p>
@@ -528,6 +508,22 @@ const description = "Manage admin accounts with email 2FA";
     margin-bottom: 1rem;
   }
 
+  .invite-row {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+  }
+
+  .invite-row .form-group {
+    flex: 1;
+  }
+
+  .invite-desc {
+    color: var(--color-text-light);
+    font-size: 0.9375rem;
+    margin-bottom: 1.5rem;
+  }
+
   .form-group {
     text-align: left;
   }
@@ -867,21 +863,42 @@ const description = "Manage admin accounts with email 2FA";
     renderAdminList();
   }
 
-  // Add admin form
+  // Pending admins storage
+  const PENDING_ADMINS_KEY = 'islandgoodes_pending_admins';
+
+  function getPendingAdmins() {
+    try {
+      return JSON.parse(localStorage.getItem(PENDING_ADMINS_KEY) || '[]');
+    } catch {
+      return [];
+    }
+  }
+
+  function savePendingAdmins(pending: any[]) {
+    localStorage.setItem(PENDING_ADMINS_KEY, JSON.stringify(pending));
+  }
+
+  function generateToken(): string {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let token = '';
+    for (let i = 0; i < 32; i++) {
+      token += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return token;
+  }
+
+  // Send invitation form
   document.getElementById('addAdminForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // Only superadmins can add users
+    // Only superadmins can invite users
     if (!isSuperAdmin()) {
-      alert('Only super admins can add new users.');
+      alert('Only super admins can invite new users.');
       return;
     }
 
-    const fullName = (document.getElementById('newFullName') as HTMLInputElement)?.value.trim();
-    const username = (document.getElementById('newUsername') as HTMLInputElement)?.value.trim().toLowerCase();
-    const email = (document.getElementById('newEmail') as HTMLInputElement)?.value.trim();
-    const password = (document.getElementById('newPassword') as HTMLInputElement)?.value;
-    const confirm = (document.getElementById('confirmPassword') as HTMLInputElement)?.value;
+    const email = (document.getElementById('newEmail') as HTMLInputElement)?.value.trim().toLowerCase();
+    const submitBtn = document.querySelector('#addAdminForm button[type="submit"]') as HTMLButtonElement;
 
     const addError = document.getElementById('addError');
     const addSuccess = document.getElementById('addSuccess');
@@ -890,69 +907,79 @@ const description = "Manage admin accounts with email 2FA";
     if (addSuccess) addSuccess.textContent = '';
 
     // Validation
-    if (!fullName || !username || !email || !password) {
-      if (addError) addError.textContent = 'All fields are required';
+    if (!email) {
+      if (addError) addError.textContent = 'Email is required';
       return;
     }
 
-    if (password !== confirm) {
-      if (addError) addError.textContent = 'Passwords do not match';
-      return;
-    }
-
-    if (password.length < 8) {
-      if (addError) addError.textContent = 'Password must be at least 8 characters';
-      return;
-    }
-
-    // Username validation (alphanumeric only)
-    if (!/^[a-z0-9]+$/.test(username)) {
-      if (addError) addError.textContent = 'Username can only contain letters and numbers';
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      if (addError) addError.textContent = 'Please enter a valid email address';
       return;
     }
 
     const admins = getAdmins();
 
-    // Check for duplicate username
-    if (admins.some((a: any) => a.username.toLowerCase() === username)) {
-      if (addError) addError.textContent = 'Username already exists';
+    // Check for duplicate email in existing admins
+    if (admins.some((a: any) => a.email.toLowerCase() === email)) {
+      if (addError) addError.textContent = 'This email is already registered as an admin';
       return;
     }
 
-    // Check for duplicate email
-    if (admins.some((a: any) => a.email.toLowerCase() === email.toLowerCase())) {
-      if (addError) addError.textContent = 'Email already registered';
+    // Check for existing pending invitation
+    const pending = getPendingAdmins();
+    const existingPending = pending.find((p: any) => p.email === email && p.expires > Date.now());
+    if (existingPending) {
+      if (addError) addError.textContent = 'An invitation has already been sent to this email';
       return;
     }
 
-    // Add new admin (regular admin, not superadmin)
-    const newAdmin = {
-      id: Date.now(),
-      username: username,
-      fullName: fullName,
+    // Generate invitation token (valid for 7 days)
+    const token = generateToken();
+    const session = getSession();
+
+    const invitation = {
       email: email,
-      passwordHash: btoa(password),
-      role: 'admin', // Regular admin, not superadmin
+      token: token,
+      expires: Date.now() + (7 * 24 * 60 * 60 * 1000), // 7 days
+      invitedBy: session?.fullName || session?.username || 'Admin',
       created: new Date().toISOString()
     };
 
-    admins.push(newAdmin);
-    saveAdmins(admins);
-    logActivity('user', 'Admin user added', `${fullName} - ${username} (${email})`);
+    // Save to pending admins
+    pending.push(invitation);
+    savePendingAdmins(pending);
 
-    // Send welcome email with credentials
-    await sendWelcomeEmail(email, fullName, username, password);
+    logActivity('user', 'Admin invitation sent', email);
+
+    // Show loading state
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+    }
+
+    // Send invitation email
+    const activationUrl = `${window.location.origin}/admin/activate?token=${token}`;
+    const sent = await sendInvitationEmail(email, activationUrl);
+
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Invitation';
+    }
 
     // Clear form
     (document.getElementById('addAdminForm') as HTMLFormElement)?.reset();
 
-    if (addSuccess) addSuccess.textContent = `Admin "${fullName}" added successfully! Credentials have been shared.`;
-
-    renderAdminList();
+    if (sent) {
+      if (addSuccess) addSuccess.textContent = `Invitation sent to ${email}! They have 7 days to complete registration.`;
+    } else {
+      if (addSuccess) addSuccess.textContent = `Invitation created. Activation link: ${activationUrl}`;
+    }
 
     setTimeout(() => {
       if (addSuccess) addSuccess.textContent = '';
-    }, 5000);
+    }, 10000);
   });
 
   // Load security settings
@@ -1091,34 +1118,30 @@ const description = "Manage admin accounts with email 2FA";
   });
 
   // ============================================
-  // WELCOME EMAIL (when adding new admin)
+  // INVITATION EMAIL (when inviting new admin)
   // Uses Resend via Netlify Function
   // ============================================
-  async function sendWelcomeEmail(email: string, fullName: string, username: string, password: string): Promise<boolean> {
-    console.log(`[WELCOME EMAIL] Sending to ${email} for ${fullName}`);
+  async function sendInvitationEmail(email: string, activationUrl: string): Promise<boolean> {
+    console.log(`[INVITATION EMAIL] Sending to ${email}`);
 
     try {
-      const response = await fetch('/.netlify/functions/send-welcome', {
+      const response = await fetch('/.netlify/functions/send-invitation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, fullName, username, password })
+        body: JSON.stringify({ email, activationUrl })
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        alert(`Welcome email sent to ${fullName} at ${email}!\n\nThey will receive their login credentials and instructions.`);
         return true;
       } else {
-        // Email failed - show credentials manually
-        console.error('Welcome email error:', data.error);
-        alert(`Welcome email could not be sent.\n\nPlease share these credentials with ${fullName} manually:\n\nUsername: ${username}\nPassword: ${password}\nLogin URL: ${window.location.origin}/admin`);
-        return true;
+        console.error('Invitation email error:', data.error);
+        return false;
       }
     } catch (error) {
-      console.error('Welcome email error:', error);
-      alert(`Welcome email could not be sent.\n\nPlease share these credentials with ${fullName} manually:\n\nUsername: ${username}\nPassword: ${password}\nLogin URL: ${window.location.origin}/admin`);
-      return true;
+      console.error('Invitation email error:', error);
+      return false;
     }
   }
 
