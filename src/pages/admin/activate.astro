@@ -203,34 +203,36 @@ const description = "Set up your Island Goodes admin account";
 </style>
 
 <script>
-  const PENDING_ADMINS_KEY = 'islandgoodes_pending_admins';
   const ADMIN_STORAGE_KEY = 'islandgoodes_admins';
 
-  // Get token from URL
+  // Get invite data from URL
   const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get('token');
+  const inviteParam = urlParams.get('invite');
 
   const invalidToken = document.getElementById('invalidToken');
   const setupForm = document.getElementById('setupForm');
   const successStep = document.getElementById('successStep');
   const formError = document.getElementById('formError');
 
-  // Check if token is valid
-  function getPendingAdmin(token: string) {
+  // Decode invitation from URL
+  interface InviteData {
+    email: string;
+    expires: number;
+    invitedBy: string;
+  }
+
+  let inviteData: InviteData | null = null;
+
+  function decodeInvite(encoded: string): InviteData | null {
     try {
-      const pending = JSON.parse(localStorage.getItem(PENDING_ADMINS_KEY) || '[]');
-      return pending.find((p: any) => p.token === token && p.expires > Date.now());
+      const decoded = JSON.parse(atob(encoded));
+      if (decoded.email && decoded.expires && decoded.expires > Date.now()) {
+        return decoded;
+      }
+      return null;
     } catch {
       return null;
     }
-  }
-
-  function removePendingAdmin(token: string) {
-    try {
-      const pending = JSON.parse(localStorage.getItem(PENDING_ADMINS_KEY) || '[]');
-      const filtered = pending.filter((p: any) => p.token !== token);
-      localStorage.setItem(PENDING_ADMINS_KEY, JSON.stringify(filtered));
-    } catch {}
   }
 
   function getAdmins() {
@@ -245,20 +247,31 @@ const description = "Set up your Island Goodes admin account";
     localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(admins));
   }
 
-  // Validate token on load
-  if (!token) {
+  // Validate invitation on load
+  if (!inviteParam) {
     if (setupForm) setupForm.style.display = 'none';
     if (invalidToken) invalidToken.style.display = 'block';
   } else {
-    const pendingAdmin = getPendingAdmin(token);
+    inviteData = decodeInvite(inviteParam);
 
-    if (!pendingAdmin) {
+    if (!inviteData) {
       if (setupForm) setupForm.style.display = 'none';
       if (invalidToken) invalidToken.style.display = 'block';
     } else {
-      // Pre-fill the email
-      const loginEmailInput = document.getElementById('loginEmail') as HTMLInputElement;
-      if (loginEmailInput) loginEmailInput.value = pendingAdmin.email;
+      // Check if email already registered
+      const admins = getAdmins();
+      if (admins.some((a: any) => a.email.toLowerCase() === inviteData!.email.toLowerCase())) {
+        if (setupForm) setupForm.style.display = 'none';
+        if (invalidToken) {
+          invalidToken.style.display = 'block';
+          invalidToken.querySelector('h1')!.textContent = 'Already Registered';
+          invalidToken.querySelector('p')!.textContent = 'This email is already registered as an admin. Please log in instead.';
+        }
+      } else {
+        // Pre-fill the email
+        const loginEmailInput = document.getElementById('loginEmail') as HTMLInputElement;
+        if (loginEmailInput) loginEmailInput.value = inviteData.email;
+      }
     }
   }
 
@@ -268,14 +281,13 @@ const description = "Set up your Island Goodes admin account";
 
     if (formError) formError.textContent = '';
 
-    const pendingAdmin = getPendingAdmin(token || '');
-    if (!pendingAdmin) {
+    if (!inviteData) {
       if (formError) formError.textContent = 'Invalid or expired activation link';
       return;
     }
 
     const fullName = (document.getElementById('fullName') as HTMLInputElement)?.value.trim();
-    const loginEmail = pendingAdmin.email;
+    const loginEmail = inviteData.email;
     const twoFAEmail = (document.getElementById('twoFAEmail') as HTMLInputElement)?.value.trim() || loginEmail;
     const password = (document.getElementById('password') as HTMLInputElement)?.value;
     const confirmPassword = (document.getElementById('confirmPassword') as HTMLInputElement)?.value;
@@ -319,14 +331,11 @@ const description = "Set up your Island Goodes admin account";
       passwordHash: btoa(password),
       role: 'admin',
       created: new Date().toISOString(),
-      invitedBy: pendingAdmin.invitedBy
+      invitedBy: inviteData.invitedBy
     };
 
     admins.push(newAdmin);
     saveAdmins(admins);
-
-    // Remove the pending invitation
-    removePendingAdmin(token || '');
 
     // Show success
     if (setupForm) setupForm.style.display = 'none';
