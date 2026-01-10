@@ -724,10 +724,10 @@ const description = "Manage admin accounts with email 2FA";
     await window.SharedData.saveSecuritySettings(settings);
   }
 
-  // Check if current user is superadmin
+  // Check if current user is superadmin or owner
   function isSuperAdmin(): boolean {
     const session = getSession();
-    return session?.role === 'superadmin';
+    return session?.role === 'superadmin' || session?.role === 'owner';
   }
 
   // DOM Elements
