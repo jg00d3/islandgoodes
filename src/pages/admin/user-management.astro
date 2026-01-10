@@ -927,14 +927,6 @@ const description = "Manage admin accounts with email 2FA";
       return;
     }
 
-    // Check for existing pending invitation
-    const pending = getPendingAdmins();
-    const existingPending = pending.find((p: any) => p.email === email && p.expires > Date.now());
-    if (existingPending) {
-      if (addError) addError.textContent = 'An invitation has already been sent to this email';
-      return;
-    }
-
     // Generate invitation data encoded in URL (valid for 7 days)
     const session = getSession();
     const expires = Date.now() + (7 * 24 * 60 * 60 * 1000); // 7 days
