@@ -914,13 +914,13 @@ const galleryCategories = [
   }
 </style>
 
+<script src="/js/shared-data.js"></script>
 <script>
   // ============================================
   // IMAGE MANAGER - Full client-side editing
   // ============================================
 
   const SESSION_KEY = 'islandgoodes_admin_session';
-  const ACTIVITY_LOG_KEY = 'islandgoodes_activity_log';
 
   // Check session
   function getSession() {
@@ -935,14 +935,9 @@ const galleryCategories = [
     window.location.href = '/admin';
   }
 
-  function logActivity(type: string, action: string, details?: string) {
+  async function logActivity(type: string, action: string, details?: string) {
     try {
-      const session = getSession();
-      const adminName = session?.fullName || session?.username || 'Unknown';
-      const log = JSON.parse(localStorage.getItem(ACTIVITY_LOG_KEY) || '[]');
-      log.push({ type, action, details, admin: adminName, timestamp: new Date().toISOString() });
-      if (log.length > 500) log.shift();
-      localStorage.setItem(ACTIVITY_LOG_KEY, JSON.stringify(log));
+      await window.SharedData.logActivity(type, action, details);
     } catch (e) { console.error('Failed to log activity:', e); }
   }
 
@@ -989,27 +984,26 @@ const galleryCategories = [
   // ============================================
   // SELECTION MODE & BULK ACTIONS
   // ============================================
-  const DELETION_KEY = 'islandgoodes_images_to_delete';
   let selectMode = false;
 
   const selectModeToggle = document.getElementById('selectModeToggle') as HTMLInputElement;
   const bulkToolbar = document.getElementById('bulkToolbar');
   const selectedCountEl = document.getElementById('selectedCount');
 
-  // Load marked-for-deletion from localStorage
-  function getMarkedImages(): string[] {
+  // Load marked-for-deletion from shared storage
+  async function getMarkedImages(): Promise<string[]> {
     try {
-      return JSON.parse(localStorage.getItem(DELETION_KEY) || '[]');
+      return await window.SharedData.getDeletedImages();
     } catch { return []; }
   }
 
-  function saveMarkedImages(images: string[]) {
-    localStorage.setItem(DELETION_KEY, JSON.stringify(images));
+  async function saveMarkedImages(images: string[]) {
+    await window.SharedData.saveDeletedImages(images);
   }
 
   // Apply marked-delete styling on load
-  function applyMarkedDeleteStyling() {
-    const marked = getMarkedImages();
+  async function applyMarkedDeleteStyling() {
+    const marked = await getMarkedImages();
     document.querySelectorAll('.image-card').forEach(card => {
       const src = (card as HTMLElement).dataset.src || '';
       if (marked.includes(src)) {
@@ -1020,10 +1014,9 @@ const galleryCategories = [
   applyMarkedDeleteStyling();
 
   // Apply edited images on load
-  function applyEditedImages() {
-    const editedKey = 'islandgoodes_edited_images';
+  async function applyEditedImages() {
     try {
-      const edited = JSON.parse(localStorage.getItem(editedKey) || '{}');
+      const edited = await window.SharedData.getEditedImages();
       document.querySelectorAll('.image-card').forEach(card => {
         const src = (card as HTMLElement).dataset.src || '';
         if (edited[src]) {
@@ -1101,7 +1094,7 @@ const galleryCategories = [
   });
 
   // Delete Selected - immediately hides from site
-  document.getElementById('deleteSelectedBtn')?.addEventListener('click', () => {
+  document.getElementById('deleteSelectedBtn')?.addEventListener('click', async () => {
     const selected = document.querySelectorAll('.image-checkbox:checked');
     if (selected.length === 0) {
       alert('No images selected');
@@ -1111,7 +1104,7 @@ const galleryCategories = [
     const confirmMsg = `Delete ${selected.length} image(s)?\n\nThese images will be immediately hidden from the public site.`;
     if (!confirm(confirmMsg)) return;
 
-    const marked = getMarkedImages();
+    const marked = await getMarkedImages();
     const newlyMarked: string[] = [];
 
     selected.forEach(checkbox => {
@@ -1126,22 +1119,22 @@ const galleryCategories = [
       card?.classList.remove('selected');
     });
 
-    saveMarkedImages(marked);
+    await saveMarkedImages(marked);
     updateSelectedCount();
-    logActivity('image', `Deleted ${newlyMarked.length} images`, newlyMarked.join(', '));
+    await logActivity('image', `Deleted ${newlyMarked.length} images`, newlyMarked.join(', '));
 
     alert(`${newlyMarked.length} image(s) deleted!\n\nThey are now hidden from the public site. You can restore them anytime from this page.`);
   });
 
   // Restore Selected - brings back deleted images
-  document.getElementById('restoreSelectedBtn')?.addEventListener('click', () => {
+  document.getElementById('restoreSelectedBtn')?.addEventListener('click', async () => {
     const selected = document.querySelectorAll('.image-checkbox:checked');
     if (selected.length === 0) {
       alert('No images selected');
       return;
     }
 
-    let marked = getMarkedImages();
+    let marked = await getMarkedImages();
     let restoredCount = 0;
 
     selected.forEach(checkbox => {
@@ -1157,8 +1150,8 @@ const galleryCategories = [
     });
 
     if (restoredCount > 0) {
-      saveMarkedImages(marked);
-      logActivity('image', `Restored ${restoredCount} images`, 'Images are now visible on the site again');
+      await saveMarkedImages(marked);
+      await logActivity('image', `Restored ${restoredCount} images`, 'Images are now visible on the site again');
       alert(`${restoredCount} image(s) restored!\n\nThey are now visible on the public site again.`);
     } else {
       alert('No deleted images were selected to restore.');
@@ -1350,7 +1343,7 @@ const galleryCategories = [
   });
 
   // Download
-  document.getElementById('downloadImage')?.addEventListener('click', () => {
+  document.getElementById('downloadImage')?.addEventListener('click', async () => {
     if (!canvas) return;
 
     // Create download link
@@ -1359,38 +1352,28 @@ const galleryCategories = [
     link.href = canvas.toDataURL('image/jpeg', 0.9);
     link.click();
 
-    logActivity('image', 'Image edited and downloaded', currentImageName);
+    await logActivity('image', 'Image edited and downloaded', currentImageName);
   });
 
-  // Save to Gallery (stores in localStorage)
-  const EDITED_IMAGES_KEY = 'islandgoodes_edited_images';
-
-  function getEditedImages() {
-    try {
-      return JSON.parse(localStorage.getItem(EDITED_IMAGES_KEY) || '{}');
-    } catch {
-      return {};
-    }
-  }
-
-  function saveEditedImage(path: string, dataUrl: string) {
-    const edited = getEditedImages();
+  // Save to Gallery (stores in shared storage)
+  async function saveEditedImage(path: string, dataUrl: string) {
+    const edited = await window.SharedData.getEditedImages();
     edited[path] = {
       dataUrl: dataUrl,
       editedAt: new Date().toISOString()
     };
-    localStorage.setItem(EDITED_IMAGES_KEY, JSON.stringify(edited));
+    await window.SharedData.saveEditedImages(edited);
   }
 
-  document.getElementById('saveToGallery')?.addEventListener('click', () => {
+  document.getElementById('saveToGallery')?.addEventListener('click', async () => {
     if (!canvas || !currentImagePath) return;
 
     try {
-      // Save the edited image to localStorage
+      // Save the edited image to shared storage
       const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-      saveEditedImage(currentImagePath, dataUrl);
+      await saveEditedImage(currentImagePath, dataUrl);
 
-      logActivity('image', 'Image edited and saved', currentImageName);
+      await logActivity('image', 'Image edited and saved', currentImageName);
 
       // Update the image in place without reloading
       const card = document.querySelector(`.image-card[data-src="${currentImagePath}"]`);
@@ -1461,7 +1444,7 @@ const galleryCategories = [
     if (fileInput.files) handleFiles(fileInput.files);
   });
 
-  function handleFiles(files: FileList) {
+  async function handleFiles(files: FileList) {
     if (!uploadQueue) return;
 
     uploadQueue.classList.add('has-items');
@@ -1501,6 +1484,6 @@ const galleryCategories = [
       reader.readAsDataURL(file);
     });
 
-    logActivity('image', 'Images uploaded for editing', `${files.length} file(s)`);
+    await logActivity('image', 'Images uploaded for editing', `${files.length} file(s)`);
   }
 </script>

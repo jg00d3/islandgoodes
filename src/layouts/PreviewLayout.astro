@@ -1357,6 +1357,7 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
   }
 </style>
 
+<script src="/js/shared-data.js"></script>
 <script>
   // Mobile menu toggle
   document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
@@ -1405,10 +1406,10 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
   })();
 
   // Lightbox functionality - respects admin settings
-  (function() {
+  (async function() {
     // Check if lightbox is enabled
     try {
-      const settings = JSON.parse(localStorage.getItem('islandgoodes_settings') || '{}');
+      const settings = window.SharedData ? await window.SharedData.getSettings() : {};
       if (settings.lightboxEnabled === false) {
         document.getElementById('lightbox')?.remove();
         return;
@@ -1481,10 +1482,10 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
   })();
 
   // Share buttons functionality - respects admin settings
-  (function() {
+  (async function() {
     // Check if share buttons are enabled
     try {
-      const settings = JSON.parse(localStorage.getItem('islandgoodes_settings') || '{}');
+      const settings = window.SharedData ? await window.SharedData.getSettings() : {};
       if (settings.shareEnabled === false) {
         document.getElementById('shareButtons')?.remove();
         return;
@@ -1602,11 +1603,14 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
 
 <!-- Live Chat (Tawk.to) - Only loads if enabled in admin settings -->
 <script is:inline>
-  (function(){
+  (async function(){
     // Check if chat is enabled in settings
     try {
-      const settings = JSON.parse(localStorage.getItem('islandgoodes_settings') || '{}');
-      if (settings.chatEnabled === false) return; // Skip loading if explicitly disabled
+      // Wait for SharedData to be available
+      if (window.SharedData) {
+        const settings = await window.SharedData.getSettings();
+        if (settings.chatEnabled === false) return;
+      }
     } catch(e) {}
 
     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
@@ -1631,13 +1635,15 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
   }
 
   // Language selector functionality - respects admin settings
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', async function() {
     // Check if language selector is enabled
     try {
-      const settings = JSON.parse(localStorage.getItem('islandgoodes_settings') || '{}');
-      if (settings.languageEnabled === false) {
-        document.querySelector('.lang-selector')?.remove();
-        return;
+      if (window.SharedData) {
+        const settings = await window.SharedData.getSettings();
+        if (settings.languageEnabled === false) {
+          document.querySelector('.lang-selector')?.remove();
+          return;
+        }
       }
     } catch(e) {}
 
@@ -1743,12 +1749,16 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
 </script>
 <script is:inline src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-<!-- Hide deleted images from admin Image Manager -->
+<!-- Hide deleted images from admin Image Manager (uses shared storage) -->
 <script is:inline>
-(function() {
+(async function() {
   try {
-    const DELETION_KEY = 'islandgoodes_images_to_delete';
-    const deleted = JSON.parse(localStorage.getItem(DELETION_KEY) || '[]');
+    // Wait for SharedData to be available
+    if (typeof SharedData === 'undefined') return;
+
+    const deletedImages = await SharedData.getDeletedImages() || [];
+    // Extract paths from deleted images array
+    const deleted = Array.isArray(deletedImages) ? deletedImages.map(img => img.path || img) : [];
     if (deleted.length === 0) return;
 
     // Hide any img elements with src matching deleted paths

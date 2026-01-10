@@ -492,46 +492,27 @@ const defaultRoadmap = [
   }
 </style>
 
+<script src="/js/shared-data.js"></script>
 <script define:vars={{ defaultRoadmap }}>
-  const ROADMAP_KEY = 'islandgoodes_roadmap';
-  const ACTIVITY_LOG_KEY = 'islandgoodes_activity_log';
-
-  function logActivity(type, action, details) {
+  async function getRoadmap() {
     try {
-      const log = JSON.parse(localStorage.getItem(ACTIVITY_LOG_KEY) || '[]');
-      log.push({
-        type,
-        action,
-        details,
-        admin: 'admin',
-        timestamp: new Date().toISOString()
-      });
-      if (log.length > 500) log.shift();
-      localStorage.setItem(ACTIVITY_LOG_KEY, JSON.stringify(log));
-    } catch (e) {
-      console.error('Failed to log activity:', e);
-    }
-  }
-
-  function getRoadmap() {
-    try {
-      const stored = localStorage.getItem(ROADMAP_KEY);
-      if (stored) {
-        return JSON.parse(stored);
+      const stored = await window.SharedData.getRoadmap();
+      if (stored && stored.length > 0) {
+        return stored;
       }
-      localStorage.setItem(ROADMAP_KEY, JSON.stringify(defaultRoadmap));
+      await window.SharedData.saveRoadmap(defaultRoadmap);
       return defaultRoadmap;
     } catch {
       return defaultRoadmap;
     }
   }
 
-  function saveRoadmap(items) {
-    localStorage.setItem(ROADMAP_KEY, JSON.stringify(items));
+  async function saveRoadmap(items) {
+    await window.SharedData.saveRoadmap(items);
   }
 
-  function renderRoadmap(filter = 'all') {
-    const items = getRoadmap();
+  async function renderRoadmap(filter = 'all') {
+    const items = await getRoadmap();
 
     const containers = {
       'in-progress': document.getElementById('inProgressItems'),
@@ -586,21 +567,21 @@ const defaultRoadmap = [
   }
 
   // Delete item
-  window.deleteItem = function(id) {
+  window.deleteItem = async function(id) {
     if (!confirm('Delete this item?')) return;
-    const items = getRoadmap();
+    const items = await getRoadmap();
     const deleted = items.find(item => item.id === id);
     const filtered = items.filter(item => item.id !== id);
-    saveRoadmap(filtered);
-    logActivity('roadmap', 'Roadmap item deleted', deleted?.title || 'Unknown item');
-    renderRoadmap(currentFilter);
+    await saveRoadmap(filtered);
+    await window.SharedData.logActivity('roadmap', 'Roadmap item deleted', deleted?.title || 'Unknown item');
+    await renderRoadmap(currentFilter);
   };
 
   // Add item
-  document.getElementById('addItemForm')?.addEventListener('submit', (e) => {
+  document.getElementById('addItemForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const items = getRoadmap();
+    const items = await getRoadmap();
     const newItem = {
       id: Date.now(),
       title: document.getElementById('itemTitle').value,
@@ -611,20 +592,20 @@ const defaultRoadmap = [
     };
 
     items.push(newItem);
-    saveRoadmap(items);
-    logActivity('roadmap', 'Roadmap item added', newItem.title);
+    await saveRoadmap(items);
+    await window.SharedData.logActivity('roadmap', 'Roadmap item added', newItem.title);
     e.target.reset();
-    renderRoadmap(currentFilter);
+    await renderRoadmap(currentFilter);
   });
 
   // Filter buttons
   let currentFilter = 'all';
   document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async () => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       currentFilter = btn.dataset.filter;
-      renderRoadmap(currentFilter);
+      await renderRoadmap(currentFilter);
     });
   });
 

@@ -216,13 +216,11 @@ const description = "Admin activity and change history";
   }
 </style>
 
+<script src="/js/shared-data.js"></script>
 <script>
-  const ACTIVITY_LOG_KEY = 'islandgoodes_activity_log';
-
-  function getActivityLog() {
+  async function getActivityLog() {
     try {
-      const stored = localStorage.getItem(ACTIVITY_LOG_KEY);
-      return stored ? JSON.parse(stored) : [];
+      return await window.SharedData.getActivityLog();
     } catch {
       return [];
     }
@@ -268,11 +266,11 @@ const description = "Admin activity and change history";
     return icons[type] || icons.settings;
   }
 
-  function renderLog(filter = 'all') {
+  async function renderLog(filter = 'all') {
     const container = document.getElementById('logEntries');
     if (!container) return;
 
-    const log = getActivityLog();
+    const log = await getActivityLog();
     const filtered = filter === 'all' ? log : log.filter((e: any) => e.type === filter);
 
     if (filtered.length === 0) {
@@ -304,16 +302,16 @@ const description = "Admin activity and change history";
   }
 
   // Filter change
-  document.getElementById('typeFilter')?.addEventListener('change', (e) => {
+  document.getElementById('typeFilter')?.addEventListener('change', async (e) => {
     const filter = (e.target as HTMLSelectElement).value;
-    renderLog(filter);
+    await renderLog(filter);
   });
 
   // Clear log
-  document.getElementById('clearLog')?.addEventListener('click', () => {
+  document.getElementById('clearLog')?.addEventListener('click', async () => {
     if (confirm('Are you sure you want to clear all activity logs?')) {
-      localStorage.removeItem(ACTIVITY_LOG_KEY);
-      renderLog();
+      await window.SharedData.clearActivityLog();
+      await renderLog();
     }
   });
 

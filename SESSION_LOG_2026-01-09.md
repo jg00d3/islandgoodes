@@ -1,6 +1,6 @@
 # Island Goodes Website Development - Session Log
 ## Date: January 9, 2026
-## Version: 2.1.0 → 2.2.0
+## Version: 2.1.0 → 2.2.0 → 2.3.0
 
 ---
 
@@ -110,14 +110,43 @@ Where JSON contains: `{ email, expires, invitedBy }`
 
 ---
 
+### 9. Critical Fix: Shared Storage for Multi-Admin Support (v2.3.0)
+**Problem:** All admin data was stored in localStorage, which is browser-specific. This meant:
+- Change requests submitted by one admin couldn't be seen by others
+- Image edits/deletions didn't show on the live site
+- Admin accounts weren't visible across browsers
+- Activity logs were per-browser
+- Site settings weren't synchronized
+
+**Solution:** Created shared storage using Netlify Blobs:
+- Created `netlify/functions/data-store.js` - Backend API using @netlify/blobs
+- Created `public/js/shared-data.js` - Client-side SharedData API with caching
+- Converted all 10 localStorage keys to shared storage:
+  - admins, settings, changeRequests, activityLog, roadmap
+  - aiTraining, securitySettings, pendingAdmins, deletedImages, editedImages
+
+**Files Updated:**
+- `src/pages/admin.astro` - Async SharedData for login, settings
+- `src/pages/admin/user-management.astro` - Async SharedData for admins, security
+- `src/pages/admin/change-requests.astro` - Async SharedData for change requests
+- `src/pages/admin/activity-log.astro` - Async SharedData for activity log
+- `src/pages/admin/roadmap.astro` - Async SharedData for roadmap items
+- `src/pages/admin/ai-chat.astro` - Async SharedData for AI settings
+- `src/pages/admin/image-manager.astro` - Async SharedData for deleted/edited images
+- `src/pages/admin/activate.astro` - Async SharedData for admin creation
+- `src/layouts/PreviewLayout.astro` - Async SharedData for settings and deleted images
+
+---
+
 ## Pending Items
-1. Test invitation system with Garvin (goode.garvin@gmail.com)
-2. Add ANTHROPIC_API_KEY to Netlify environment for AI chat
-3. Add AI chat widget to main website (future)
-4. Research voice assistant integration (future)
+1. Add ANTHROPIC_API_KEY to Netlify environment for AI chat
+2. Add AI chat widget to main website (future)
+3. Research voice assistant integration (future)
+4. Add volcano cameras A, B, C to home page
 
 ---
 
 ## Version History
 - Started session: v2.1.0
-- Ended session: v2.2.0
+- v2.2.0: AI Chat, Invitation System, Email fixes
+- v2.3.0: Critical fix - Shared storage for multi-admin support

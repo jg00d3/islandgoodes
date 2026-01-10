@@ -4,10 +4,25 @@ import PreviewLayout from '../../layouts/PreviewLayout.astro';
 const title = "Changelog | Island Goodes Admin";
 const description = "Version history and release notes";
 
-const CURRENT_VERSION = "2.2.0";
+const CURRENT_VERSION = "2.3.0";
 const RELEASE_DATE = "January 9, 2026";
 
 const changelog = [
+  {
+    version: "2.3.0",
+    date: "January 9, 2026",
+    type: "Critical Fix",
+    changes: [
+      { type: "fixed", text: "All admin data now shared between admins using Netlify Blobs storage" },
+      { type: "fixed", text: "Change requests visible to all admins (was only visible to submitter)" },
+      { type: "fixed", text: "Image edits/deletions now apply to live site for all admins" },
+      { type: "fixed", text: "Activity logs shared across all admin sessions" },
+      { type: "fixed", text: "Admin user accounts visible to all admins" },
+      { type: "fixed", text: "Site settings synchronized across all admins" },
+      { type: "added", text: "Shared data API using Netlify Blobs for persistent storage" },
+      { type: "improved", text: "All localStorage data migrated to server-side shared storage" },
+    ]
+  },
   {
     version: "2.2.0",
     date: "January 9, 2026",

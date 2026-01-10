@@ -654,16 +654,19 @@ const description = "Manage admin accounts with email 2FA";
   }
 </style>
 
+<script src="/js/shared-data.js"></script>
 <script>
   // ============================================
   // USER MANAGEMENT - Shares session with main admin
   // Only superadmins can add/remove users
+  // Uses Netlify Blobs for shared storage
   // ============================================
 
-  const ADMIN_STORAGE_KEY = 'islandgoodes_admins';
-  const SECURITY_STORAGE_KEY = 'islandgoodes_security';
-  const SESSION_KEY = 'islandgoodes_admin_session'; // Same as main admin!
-  const ACTIVITY_LOG_KEY = 'islandgoodes_activity_log';
+  const SESSION_KEY = 'islandgoodes_admin_session';
+
+  // Caches for sync access
+  let adminsCache: any[] = [];
+  let securitySettingsCache: any = { require2FA: true, sessionTimeout: 30 };
 
   // Get current session (shared with main admin)
   function getSession() {
@@ -675,73 +678,50 @@ const description = "Manage admin accounts with email 2FA";
     }
   }
 
-  function logActivity(type: string, action: string, details?: string) {
+  async function logActivity(type: string, action: string, details?: string) {
     try {
-      const session = getSession();
-      const adminName = session?.fullName || session?.username || 'Unknown';
-
-      const log = JSON.parse(localStorage.getItem(ACTIVITY_LOG_KEY) || '[]');
-      log.push({
-        type,
-        action,
-        details,
-        admin: adminName,
-        timestamp: new Date().toISOString()
-      });
-      if (log.length > 500) log.shift();
-      localStorage.setItem(ACTIVITY_LOG_KEY, JSON.stringify(log));
+      await window.SharedData.logActivity(type, action, details);
     } catch (e) {
       console.error('Failed to log activity:', e);
     }
   }
 
-  // Default super admin - Jeremiah Goode (can create other admins)
-  const DEFAULT_ADMIN = {
-    id: 1,
-    username: 'jeremiah',
-    email: 'sysadmroot@gmail.com',
-    passwordHash: btoa('islandgoodes2024'),
-    role: 'superadmin',
-    fullName: 'Jeremiah Goode',
-    created: new Date().toISOString()
-  };
-
-  // Initialize admins - ensure default superadmin always exists
-  function getAdmins() {
+  // Get admins from shared storage
+  async function getAdmins() {
     try {
-      const stored = localStorage.getItem(ADMIN_STORAGE_KEY);
-      if (stored) {
-        const admins = JSON.parse(stored);
-        // Ensure default superadmin always exists
-        const hasJeremiah = admins.some((a: any) => a.username === 'jeremiah');
-        if (!hasJeremiah) {
-          admins.unshift(DEFAULT_ADMIN);
-          localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(admins));
-        }
-        return admins;
-      }
-      localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify([DEFAULT_ADMIN]));
-      return [DEFAULT_ADMIN];
-    } catch {
-      return [DEFAULT_ADMIN];
+      const admins = await window.SharedData.getAdmins();
+      adminsCache = admins;
+      return admins;
+    } catch (error) {
+      console.error('Failed to get admins:', error);
+      return adminsCache;
     }
   }
 
-  function saveAdmins(admins: any[]) {
-    localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(admins));
+  function getAdminsSync() {
+    return adminsCache;
   }
 
-  function getSecuritySettings() {
+  async function saveAdmins(admins: any[]) {
+    adminsCache = admins;
+    await window.SharedData.saveAdmins(admins);
+  }
+
+  async function getSecuritySettings() {
     try {
-      const stored = localStorage.getItem(SECURITY_STORAGE_KEY);
-      return stored ? JSON.parse(stored) : { require2FA: true, sessionTimeout: 30 };
+      const settings = await window.SharedData.getSecuritySettings();
+      securitySettingsCache = settings && Object.keys(settings).length > 0
+        ? settings
+        : { require2FA: true, sessionTimeout: 30 };
+      return securitySettingsCache;
     } catch {
-      return { require2FA: true, sessionTimeout: 30 };
+      return securitySettingsCache;
     }
   }
 
-  function saveSecuritySettings(settings: any) {
-    localStorage.setItem(SECURITY_STORAGE_KEY, JSON.stringify(settings));
+  async function saveSecuritySettings(settings: any) {
+    securitySettingsCache = settings;
+    await window.SharedData.saveSecuritySettings(settings);
   }
 
   // Check if current user is superadmin
@@ -773,11 +753,11 @@ const description = "Manage admin accounts with email 2FA";
   }
 
   // Render admin list
-  function renderAdminList() {
+  async function renderAdminList() {
     const container = document.getElementById('adminList');
     if (!container) return;
 
-    const admins = getAdmins();
+    const admins = await getAdmins();
     const canManageUsers = isSuperAdmin();
     const currentSession = getSession();
 
@@ -833,13 +813,13 @@ const description = "Manage admin accounts with email 2FA";
   }
 
   // Remove admin
-  function removeAdmin(id: number) {
+  async function removeAdmin(id: number) {
     if (!isSuperAdmin()) {
       alert('Only super admins can remove users.');
       return;
     }
 
-    const admins = getAdmins();
+    const admins = await getAdmins();
     const adminToRemove = admins.find((a: any) => a.id === id);
 
     if (!adminToRemove) {
@@ -856,26 +836,25 @@ const description = "Manage admin accounts with email 2FA";
     if (!confirm(confirmMsg)) return;
 
     const filtered = admins.filter((a: any) => a.id !== id);
-    saveAdmins(filtered);
-    logActivity('user', 'Admin user removed', `${adminToRemove.fullName || adminToRemove.username} (${adminToRemove.email})`);
+    await saveAdmins(filtered);
+    await logActivity('user', 'Admin user removed', `${adminToRemove.fullName || adminToRemove.username} (${adminToRemove.email})`);
 
     alert(`Admin "${adminToRemove.fullName || adminToRemove.username}" has been removed.`);
-    renderAdminList();
+    await renderAdminList();
   }
 
-  // Pending admins storage
-  const PENDING_ADMINS_KEY = 'islandgoodes_pending_admins';
-
-  function getPendingAdmins() {
+  // Pending admins - no longer needed since we encode data in URL
+  // Kept for backward compatibility but uses shared storage
+  async function getPendingAdmins() {
     try {
-      return JSON.parse(localStorage.getItem(PENDING_ADMINS_KEY) || '[]');
+      return await window.SharedData.getPendingAdmins();
     } catch {
       return [];
     }
   }
 
-  function savePendingAdmins(pending: any[]) {
-    localStorage.setItem(PENDING_ADMINS_KEY, JSON.stringify(pending));
+  async function savePendingAdmins(pending: any[]) {
+    await window.SharedData.savePendingAdmins(pending);
   }
 
   function generateToken(): string {
@@ -919,10 +898,10 @@ const description = "Manage admin accounts with email 2FA";
       return;
     }
 
-    const admins = getAdmins();
+    const admins = await getAdmins();
 
     // Check for duplicate email in existing admins
-    if (admins.some((a: any) => a.email.toLowerCase() === email)) {
+    if (admins.some((a: any) => a.email?.toLowerCase() === email)) {
       if (addError) addError.textContent = 'This email is already registered as an admin';
       return;
     }
@@ -939,7 +918,7 @@ const description = "Manage admin accounts with email 2FA";
       invitedBy: invitedBy
     }));
 
-    logActivity('user', 'Admin invitation sent', email);
+    await logActivity('user', 'Admin invitation sent', email);
 
     // Show loading state
     if (submitBtn) {
@@ -971,8 +950,8 @@ const description = "Manage admin accounts with email 2FA";
   });
 
   // Load security settings
-  function loadSecuritySettings() {
-    const settings = getSecuritySettings();
+  async function loadSecuritySettings() {
+    const settings = await getSecuritySettings();
 
     const toggle2FA = document.getElementById('toggle2FA') as HTMLInputElement;
     const sessionTimeout = document.getElementById('sessionTimeout') as HTMLSelectElement;
@@ -981,19 +960,19 @@ const description = "Manage admin accounts with email 2FA";
     if (sessionTimeout) sessionTimeout.value = settings.sessionTimeout.toString();
 
     // Add event listeners
-    toggle2FA?.addEventListener('change', () => {
-      const current = getSecuritySettings();
+    toggle2FA?.addEventListener('change', async () => {
+      const current = await getSecuritySettings();
       current.require2FA = toggle2FA.checked;
-      saveSecuritySettings(current);
-      logActivity('settings', `Email 2FA ${toggle2FA.checked ? 'enabled' : 'disabled'}`, 'Security setting changed');
+      await saveSecuritySettings(current);
+      await logActivity('settings', `Email 2FA ${toggle2FA.checked ? 'enabled' : 'disabled'}`, 'Security setting changed');
       showSecurityStatus();
     });
 
-    sessionTimeout?.addEventListener('change', () => {
-      const current = getSecuritySettings();
+    sessionTimeout?.addEventListener('change', async () => {
+      const current = await getSecuritySettings();
       current.sessionTimeout = parseInt(sessionTimeout.value);
-      saveSecuritySettings(current);
-      logActivity('settings', `Session timeout changed to ${sessionTimeout.value} minutes`, 'Security setting changed');
+      await saveSecuritySettings(current);
+      await logActivity('settings', `Session timeout changed to ${sessionTimeout.value} minutes`, 'Security setting changed');
       showSecurityStatus();
     });
   }
@@ -1015,19 +994,28 @@ const description = "Manage admin accounts with email 2FA";
   });
 
   // Reset admins to default
-  document.getElementById('resetAdmins')?.addEventListener('click', () => {
+  document.getElementById('resetAdmins')?.addEventListener('click', async () => {
     if (!confirm('This will remove ALL admin accounts and reset to just the default superadmin (Jeremiah Goode).\n\nYou will be logged out. Continue?')) {
       return;
     }
 
-    // Clear admin data
-    localStorage.removeItem(ADMIN_STORAGE_KEY);
+    // Default admin for reset
+    const DEFAULT_ADMIN = {
+      id: 1,
+      username: 'jgoode',
+      fullName: 'Jeremiah Goode',
+      email: 'jeremiah.goode@gmail.com',
+      twoFAEmail: 'jeremiah.goode@gmail.com',
+      passwordHash: 'SXNsYW5kR29vZGVzMjAyNiE=',
+      role: 'owner',
+      created: '2026-01-01T00:00:00.000Z'
+    };
 
     // Re-initialize with just the default admin
-    localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify([DEFAULT_ADMIN]));
+    await saveAdmins([DEFAULT_ADMIN]);
 
     // Log the action
-    logActivity('user', 'Admin accounts reset to default', 'All accounts removed');
+    await logActivity('user', 'Admin accounts reset to default', 'All accounts removed');
 
     // Clear session and redirect to login
     sessionStorage.removeItem(SESSION_KEY);
@@ -1038,7 +1026,7 @@ const description = "Manage admin accounts with email 2FA";
   // ============================================
   // PASSWORD CHANGE
   // ============================================
-  document.getElementById('changePasswordForm')?.addEventListener('submit', (e) => {
+  document.getElementById('changePasswordForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const currentPassword = (document.getElementById('currentPassword') as HTMLInputElement)?.value;
@@ -1059,7 +1047,7 @@ const description = "Manage admin accounts with email 2FA";
     }
 
     // Find current user in admins
-    const admins = getAdmins();
+    const admins = await getAdmins();
     const currentAdmin = admins.find((a: any) => a.id === session.id);
 
     if (!currentAdmin) {
@@ -1091,9 +1079,9 @@ const description = "Manage admin accounts with email 2FA";
 
     // Update password
     currentAdmin.passwordHash = btoa(newPassword);
-    saveAdmins(admins);
+    await saveAdmins(admins);
 
-    logActivity('user', 'Password changed', session.fullName || session.username);
+    await logActivity('user', 'Password changed', session.fullName || session.username);
 
     // Clear form
     (document.getElementById('changePasswordForm') as HTMLFormElement)?.reset();

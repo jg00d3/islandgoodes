@@ -202,9 +202,8 @@ const description = "Set up your Island Goodes admin account";
   }
 </style>
 
+<script src="/js/shared-data.js"></script>
 <script>
-  const ADMIN_STORAGE_KEY = 'islandgoodes_admins';
-
   // Get invite data from URL
   const urlParams = new URLSearchParams(window.location.search);
   const inviteParam = urlParams.get('invite');
@@ -235,48 +234,38 @@ const description = "Set up your Island Goodes admin account";
     }
   }
 
-  function getAdmins() {
-    try {
-      return JSON.parse(localStorage.getItem(ADMIN_STORAGE_KEY) || '[]');
-    } catch {
-      return [];
-    }
-  }
-
-  function saveAdmins(admins: any[]) {
-    localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(admins));
-  }
-
-  // Validate invitation on load
-  if (!inviteParam) {
-    if (setupForm) setupForm.style.display = 'none';
-    if (invalidToken) invalidToken.style.display = 'block';
-  } else {
-    inviteData = decodeInvite(inviteParam);
-
-    if (!inviteData) {
+  // Validate invitation on load (async IIFE)
+  (async function initActivation() {
+    if (!inviteParam) {
       if (setupForm) setupForm.style.display = 'none';
       if (invalidToken) invalidToken.style.display = 'block';
     } else {
-      // Check if email already registered
-      const admins = getAdmins();
-      if (admins.some((a: any) => a.email.toLowerCase() === inviteData!.email.toLowerCase())) {
+      inviteData = decodeInvite(inviteParam);
+
+      if (!inviteData) {
         if (setupForm) setupForm.style.display = 'none';
-        if (invalidToken) {
-          invalidToken.style.display = 'block';
-          invalidToken.querySelector('h1')!.textContent = 'Already Registered';
-          invalidToken.querySelector('p')!.textContent = 'This email is already registered as an admin. Please log in instead.';
-        }
+        if (invalidToken) invalidToken.style.display = 'block';
       } else {
-        // Pre-fill the email
-        const loginEmailInput = document.getElementById('loginEmail') as HTMLInputElement;
-        if (loginEmailInput) loginEmailInput.value = inviteData.email;
+        // Check if email already registered
+        const admins = await window.SharedData.getAdmins();
+        if (admins.some((a: any) => a.email.toLowerCase() === inviteData!.email.toLowerCase())) {
+          if (setupForm) setupForm.style.display = 'none';
+          if (invalidToken) {
+            invalidToken.style.display = 'block';
+            invalidToken.querySelector('h1')!.textContent = 'Already Registered';
+            invalidToken.querySelector('p')!.textContent = 'This email is already registered as an admin. Please log in instead.';
+          }
+        } else {
+          // Pre-fill the email
+          const loginEmailInput = document.getElementById('loginEmail') as HTMLInputElement;
+          if (loginEmailInput) loginEmailInput.value = inviteData.email;
+        }
       }
     }
-  }
+  })();
 
   // Handle form submission
-  document.getElementById('activateForm')?.addEventListener('submit', (e) => {
+  document.getElementById('activateForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     if (formError) formError.textContent = '';
@@ -315,7 +304,7 @@ const description = "Set up your Island Goodes admin account";
     }
 
     // Check if email already exists in admins
-    const admins = getAdmins();
+    const admins = await window.SharedData.getAdmins();
     if (admins.some((a: any) => a.email.toLowerCase() === loginEmail.toLowerCase())) {
       if (formError) formError.textContent = 'An account with this email already exists';
       return;
@@ -335,7 +324,7 @@ const description = "Set up your Island Goodes admin account";
     };
 
     admins.push(newAdmin);
-    saveAdmins(admins);
+    await window.SharedData.saveAdmins(admins);
 
     // Show success
     if (setupForm) setupForm.style.display = 'none';

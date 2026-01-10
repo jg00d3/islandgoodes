@@ -1324,16 +1324,16 @@ const description = "Analytics dashboard for Island Goodes.";
   }
 </style>
 
+<script src="/js/shared-data.js"></script>
 <script>
   // ============================================
   // ADMIN AUTHENTICATION SYSTEM
   // Uses stored admin users with email 2FA
+  // Data is stored in Netlify Blobs (shared across all admins)
   // ============================================
 
   const API_BASE = '/.netlify/functions/analytics';
-  const ADMIN_STORAGE_KEY = 'islandgoodes_admins';
   const SESSION_KEY = 'islandgoodes_admin_session';
-  const SECURITY_KEY = 'islandgoodes_security';
   const TRUSTED_DEVICE_KEY = 'islandgoodes_trusted_device';
   const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
 
@@ -1341,48 +1341,35 @@ const description = "Analytics dashboard for Island Goodes.";
   const SEND_2FA_URL = '/.netlify/functions/send-2fa';
   const VERIFY_2FA_URL = '/.netlify/functions/verify-2fa';
 
-  // Default super admin (first time setup)
-  const DEFAULT_ADMIN = {
-    id: 1,
-    username: 'jeremiah',
-    email: 'sysadmroot@gmail.com',
-    passwordHash: btoa('islandgoodes2024'),
-    role: 'superadmin',
-    fullName: 'Jeremiah Goode',
-    created: new Date().toISOString()
-  };
-
   // State
   let currentAdmin: any = null;
   let verificationToken: string = '';  // Token from server for verification
+  let adminsCache: any[] = [];  // Cached admins for sync access after load
 
-  // Get admins from localStorage
-  function getAdmins() {
+  // Get admins from shared storage (async)
+  async function getAdmins() {
     try {
-      const stored = localStorage.getItem(ADMIN_STORAGE_KEY);
-      if (stored) {
-        const admins = JSON.parse(stored);
-        // Ensure default superadmin always exists
-        const hasJeremiah = admins.some((a: any) => a.username === 'jeremiah');
-        if (!hasJeremiah) {
-          admins.unshift(DEFAULT_ADMIN);
-          localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(admins));
-        }
-        return admins;
-      }
-      // First time: initialize with default admin
-      localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify([DEFAULT_ADMIN]));
-      return [DEFAULT_ADMIN];
-    } catch {
-      return [DEFAULT_ADMIN];
+      const admins = await window.SharedData.getAdmins();
+      adminsCache = admins;
+      return admins;
+    } catch (error) {
+      console.error('Failed to get admins:', error);
+      return adminsCache.length > 0 ? adminsCache : [];
     }
   }
 
-  // Get security settings
-  function getSecuritySettings() {
+  // Sync version for places that can't be async (uses cache)
+  function getAdminsSync() {
+    return adminsCache;
+  }
+
+  // Get security settings from shared storage (async)
+  async function getSecuritySettings() {
     try {
-      const stored = localStorage.getItem(SECURITY_KEY);
-      return stored ? JSON.parse(stored) : { require2FA: true, sessionTimeout: 30 };
+      const settings = await window.SharedData.getSecuritySettings();
+      return settings && Object.keys(settings).length > 0
+        ? settings
+        : { require2FA: true, sessionTimeout: 30 };
     } catch {
       return { require2FA: true, sessionTimeout: 30 };
     }
@@ -1513,18 +1500,32 @@ const description = "Analytics dashboard for Island Goodes.";
 
     if (loginError) loginError.textContent = '';
 
-    // Find admin by email
-    const admins = getAdmins();
-    const admin = admins.find((a: any) => a.email.toLowerCase() === email);
+    // Show loading state while fetching admins
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Checking...';
+    }
+
+    // Find admin by email (from shared storage)
+    const admins = await getAdmins();
+    const admin = admins.find((a: any) => a.email?.toLowerCase() === email);
 
     if (!admin) {
       if (loginError) loginError.textContent = 'Email not found';
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Continue';
+      }
       return;
     }
 
     // Check password
     if (atob(admin.passwordHash) !== password) {
       if (loginError) loginError.textContent = 'Incorrect password';
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Continue';
+      }
       return;
     }
 
@@ -1532,7 +1533,7 @@ const description = "Analytics dashboard for Island Goodes.";
     currentAdmin = admin;
 
     // Check if 2FA is required
-    const settings = getSecuritySettings();
+    const settings = await getSecuritySettings();
     if (settings.require2FA) {
       // Check if this device is already trusted (2FA verified within 7 days)
       if (isDeviceTrusted(admin.email)) {
@@ -2084,34 +2085,16 @@ const description = "Analytics dashboard for Island Goodes.";
     return String.fromCodePoint(...codePoints);
   }
 
-  // Activity Logging
-  const ACTIVITY_LOG_KEY = 'islandgoodes_activity_log';
-
-  function logActivity(type: string, action: string, details?: string) {
+  // Activity Logging (uses shared storage)
+  async function logActivity(type: string, action: string, details?: string) {
     try {
-      // Get actual logged-in admin name from session
-      const session = getSession();
-      const adminName = session?.fullName || session?.username || 'Unknown';
-
-      const log = JSON.parse(localStorage.getItem(ACTIVITY_LOG_KEY) || '[]');
-      log.push({
-        type,
-        action,
-        details,
-        admin: adminName,
-        timestamp: new Date().toISOString()
-      });
-      // Keep last 500 entries
-      if (log.length > 500) log.shift();
-      localStorage.setItem(ACTIVITY_LOG_KEY, JSON.stringify(log));
+      await window.SharedData.logActivity(type, action, details);
     } catch (e) {
       console.error('Failed to log activity:', e);
     }
   }
 
-  // Site Settings Management
-  const SETTINGS_KEY = 'islandgoodes_settings';
-
+  // Site Settings Management (uses shared storage)
   const settingsConfig = {
     toggleChat: { key: 'chatEnabled', default: true },
     toggleLightbox: { key: 'lightboxEnabled', default: true },
@@ -2121,21 +2104,29 @@ const description = "Analytics dashboard for Island Goodes.";
     toggleLanguage: { key: 'languageEnabled', default: true }
   };
 
-  function loadSettings() {
+  let settingsCache: Record<string, boolean> = {};
+
+  async function loadSettings() {
     try {
-      const stored = localStorage.getItem(SETTINGS_KEY);
-      return stored ? JSON.parse(stored) : {};
+      const settings = await window.SharedData.getSettings();
+      settingsCache = settings || {};
+      return settingsCache;
     } catch {
-      return {};
+      return settingsCache;
     }
   }
 
-  function saveSettings(settings: Record<string, boolean>) {
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  function loadSettingsSync() {
+    return settingsCache;
   }
 
-  function initSettingsToggles() {
-    const settings = loadSettings();
+  async function saveSettings(settings: Record<string, boolean>) {
+    settingsCache = settings;
+    await window.SharedData.saveSettings(settings);
+  }
+
+  async function initSettingsToggles() {
+    const settings = await loadSettings();
 
     // Initialize toggle states from saved settings
     Object.entries(settingsConfig).forEach(([toggleId, config]) => {
@@ -2146,14 +2137,14 @@ const description = "Analytics dashboard for Island Goodes.";
         toggle.checked = isEnabled;
 
         // Add change listener
-        toggle.addEventListener('change', () => {
-          const currentSettings = loadSettings();
+        toggle.addEventListener('change', async () => {
+          const currentSettings = loadSettingsSync();
           currentSettings[config.key] = toggle.checked;
-          saveSettings(currentSettings);
+          await saveSettings(currentSettings);
           showSettingsStatus();
           // Log the change
           const settingName = config.key.replace('Enabled', '');
-          logActivity('settings', `${settingName} ${toggle.checked ? 'enabled' : 'disabled'}`, `Changed ${config.key} to ${toggle.checked}`);
+          await logActivity('settings', `${settingName} ${toggle.checked ? 'enabled' : 'disabled'}`, `Changed ${config.key} to ${toggle.checked}`);
         });
       }
     });

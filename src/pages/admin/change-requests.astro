@@ -353,10 +353,9 @@ const description = "Track content changes and fixes needed";
   }
 </style>
 
+<script src="/js/shared-data.js"></script>
 <script>
   const SESSION_KEY = 'islandgoodes_admin_session';
-  const REQUESTS_KEY = 'islandgoodes_change_requests';
-  const ACTIVITY_LOG_KEY = 'islandgoodes_activity_log';
 
   // Check session
   function getSession() {
@@ -370,14 +369,9 @@ const description = "Track content changes and fixes needed";
     window.location.href = '/admin';
   }
 
-  function logActivity(type: string, action: string, details?: string) {
+  async function logActivity(type: string, action: string, details?: string) {
     try {
-      const session = getSession();
-      const adminName = session?.fullName || session?.username || 'Unknown';
-      const log = JSON.parse(localStorage.getItem(ACTIVITY_LOG_KEY) || '[]');
-      log.push({ type, action, details, admin: adminName, timestamp: new Date().toISOString() });
-      if (log.length > 500) log.shift();
-      localStorage.setItem(ACTIVITY_LOG_KEY, JSON.stringify(log));
+      await window.SharedData.logActivity(type, action, details);
     } catch (e) { console.error('Failed to log activity:', e); }
   }
 
@@ -393,14 +387,14 @@ const description = "Track content changes and fixes needed";
     completedAt?: string;
   }
 
-  function getRequests(): ChangeRequest[] {
+  async function getRequests(): Promise<ChangeRequest[]> {
     try {
-      return JSON.parse(localStorage.getItem(REQUESTS_KEY) || '[]');
+      return await window.SharedData.getChangeRequests();
     } catch { return []; }
   }
 
-  function saveRequests(requests: ChangeRequest[]) {
-    localStorage.setItem(REQUESTS_KEY, JSON.stringify(requests));
+  async function saveRequests(requests: ChangeRequest[]) {
+    await window.SharedData.saveChangeRequests(requests);
   }
 
   function formatDate(dateStr: string): string {
@@ -414,14 +408,14 @@ const description = "Track content changes and fixes needed";
     });
   }
 
-  function renderRequests() {
+  async function renderRequests() {
     const container = document.getElementById('requestList');
     if (!container) return;
 
     const statusFilter = (document.getElementById('statusFilter') as HTMLSelectElement).value;
     const sortBy = (document.getElementById('sortBy') as HTMLSelectElement).value;
 
-    let requests = getRequests();
+    let requests = await getRequests();
 
     // Filter
     if (statusFilter === 'pending') {
@@ -489,28 +483,28 @@ const description = "Track content changes and fixes needed";
     });
   }
 
-  function toggleComplete(id: number, completed: boolean) {
-    const requests = getRequests();
+  async function toggleComplete(id: number, completed: boolean) {
+    const requests = await getRequests();
     const request = requests.find(r => r.id === id);
     if (request) {
       request.status = completed ? 'completed' : 'pending';
       request.completedAt = completed ? new Date().toISOString() : undefined;
-      saveRequests(requests);
-      logActivity('roadmap', completed ? 'Completed change request' : 'Reopened change request', request.description);
-      renderRequests();
+      await saveRequests(requests);
+      await logActivity('roadmap', completed ? 'Completed change request' : 'Reopened change request', request.description);
+      await renderRequests();
     }
   }
 
-  function deleteRequest(id: number) {
+  async function deleteRequest(id: number) {
     if (!confirm('Delete this request?')) return;
-    const requests = getRequests().filter(r => r.id !== id);
-    saveRequests(requests);
-    logActivity('roadmap', 'Deleted change request');
-    renderRequests();
+    const requests = (await getRequests()).filter(r => r.id !== id);
+    await saveRequests(requests);
+    await logActivity('roadmap', 'Deleted change request');
+    await renderRequests();
   }
 
   // Add new request
-  document.getElementById('addRequestForm')?.addEventListener('submit', (e) => {
+  document.getElementById('addRequestForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const type = (document.getElementById('requestType') as HTMLSelectElement).value;
@@ -524,7 +518,7 @@ const description = "Track content changes and fixes needed";
       return;
     }
 
-    const requests = getRequests();
+    const requests = await getRequests();
     const newRequest: ChangeRequest = {
       id: Date.now(),
       type,
@@ -537,12 +531,12 @@ const description = "Track content changes and fixes needed";
     };
 
     requests.push(newRequest);
-    saveRequests(requests);
-    logActivity('roadmap', 'Added change request', `${type}: ${description.substring(0, 50)}...`);
+    await saveRequests(requests);
+    await logActivity('roadmap', 'Added change request', `${type}: ${description.substring(0, 50)}...`);
 
     // Reset form
     (document.getElementById('addRequestForm') as HTMLFormElement).reset();
-    renderRequests();
+    await renderRequests();
     alert('Request added!');
   });
 
@@ -551,12 +545,12 @@ const description = "Track content changes and fixes needed";
   document.getElementById('sortBy')?.addEventListener('change', renderRequests);
 
   // Clear completed
-  document.getElementById('clearCompleted')?.addEventListener('click', () => {
+  document.getElementById('clearCompleted')?.addEventListener('click', async () => {
     if (!confirm('Delete all completed requests?')) return;
-    const requests = getRequests().filter(r => r.status !== 'completed');
-    saveRequests(requests);
-    logActivity('roadmap', 'Cleared completed requests');
-    renderRequests();
+    const requests = (await getRequests()).filter(r => r.status !== 'completed');
+    await saveRequests(requests);
+    await logActivity('roadmap', 'Cleared completed requests');
+    await renderRequests();
   });
 
   // Initial render

@@ -816,10 +816,9 @@ const description = "Configure and test the AI chat assistant for visitor intera
   }
 </style>
 
+<script src="/js/shared-data.js"></script>
 <script>
   const SESSION_KEY = 'islandgoodes_admin_session';
-  const SETTINGS_KEY = 'islandgoodes_settings';
-  const AI_TRAINING_KEY = 'islandgoodes_ai_training';
 
   // Check authentication
   function getSession() {
@@ -837,30 +836,30 @@ const description = "Configure and test the AI chat assistant for visitor intera
     document.getElementById('dashboard')!.style.display = 'block';
   }
 
-  // Settings management
-  function getSettings() {
+  // Settings management (using SharedData API)
+  async function getSettings() {
     try {
-      return JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+      return await window.SharedData.getSettings() || {};
     } catch {
       return {};
     }
   }
 
-  function saveSettings(settings: any) {
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  async function saveSettings(settings: any) {
+    await window.SharedData.saveSettings(settings);
   }
 
-  // Training data management
-  function getTrainingData() {
+  // Training data management (using SharedData API)
+  async function getTrainingData() {
     try {
-      return JSON.parse(localStorage.getItem(AI_TRAINING_KEY) || '{}');
+      return await window.SharedData.getAITraining() || {};
     } catch {
       return {};
     }
   }
 
-  function saveTrainingData(data: any) {
-    localStorage.setItem(AI_TRAINING_KEY, JSON.stringify(data));
+  async function saveTrainingData(data: any) {
+    await window.SharedData.saveAITraining(data);
   }
 
   // Default training data
@@ -927,19 +926,24 @@ A: You can book directly on our website at islandgoodes.com/book or call us at 8
   const toggle = document.getElementById('toggleAIChat') as HTMLInputElement;
   const toggleLabel = document.getElementById('toggleLabel');
   const statusText = document.getElementById('statusText');
-  const settings = getSettings();
 
-  if (toggle) {
-    toggle.checked = settings.aiChatEnabled || false;
-    updateToggleUI();
+  async function initToggle() {
+    const settings = await getSettings();
 
-    toggle.addEventListener('change', () => {
-      const current = getSettings();
-      current.aiChatEnabled = toggle.checked;
-      saveSettings(current);
+    if (toggle) {
+      toggle.checked = settings.aiChatEnabled || false;
       updateToggleUI();
-    });
+
+      toggle.addEventListener('change', async () => {
+        const current = await getSettings();
+        current.aiChatEnabled = toggle.checked;
+        await saveSettings(current);
+        updateToggleUI();
+      });
+    }
   }
+
+  initToggle();
 
   function updateToggleUI() {
     if (toggle?.checked) {
@@ -964,26 +968,31 @@ A: You can book directly on our website at islandgoodes.com/book or call us at 8
   }
 
   // Load training data
-  const training = getTrainingData();
   const propertyInfo = document.getElementById('propertyInfo') as HTMLTextAreaElement;
   const locationInfo = document.getElementById('locationInfo') as HTMLTextAreaElement;
   const faqInfo = document.getElementById('faqInfo') as HTMLTextAreaElement;
   const toneInfo = document.getElementById('toneInfo') as HTMLTextAreaElement;
 
-  if (propertyInfo) propertyInfo.value = training.propertyInfo || '';
-  if (locationInfo) locationInfo.value = training.locationInfo || '';
-  if (faqInfo) faqInfo.value = training.faqInfo || '';
-  if (toneInfo) toneInfo.value = training.toneInfo || '';
+  async function initTrainingData() {
+    const training = await getTrainingData();
+
+    if (propertyInfo) propertyInfo.value = training.propertyInfo || '';
+    if (locationInfo) locationInfo.value = training.locationInfo || '';
+    if (faqInfo) faqInfo.value = training.faqInfo || '';
+    if (toneInfo) toneInfo.value = training.toneInfo || '';
+  }
+
+  initTrainingData();
 
   // Save training data
-  document.getElementById('saveTraining')?.addEventListener('click', () => {
+  document.getElementById('saveTraining')?.addEventListener('click', async () => {
     const data = {
       propertyInfo: propertyInfo?.value || '',
       locationInfo: locationInfo?.value || '',
       faqInfo: faqInfo?.value || '',
       toneInfo: toneInfo?.value || ''
     };
-    saveTrainingData(data);
+    await saveTrainingData(data);
 
     const saved = document.getElementById('trainingSaved');
     if (saved) {
@@ -993,14 +1002,14 @@ A: You can book directly on our website at islandgoodes.com/book or call us at 8
   });
 
   // Load defaults
-  document.getElementById('loadDefaults')?.addEventListener('click', () => {
+  document.getElementById('loadDefaults')?.addEventListener('click', async () => {
     if (confirm('This will replace all training data with defaults. Continue?')) {
       if (propertyInfo) propertyInfo.value = defaultTraining.propertyInfo;
       if (locationInfo) locationInfo.value = defaultTraining.locationInfo;
       if (faqInfo) faqInfo.value = defaultTraining.faqInfo;
       if (toneInfo) toneInfo.value = defaultTraining.toneInfo;
 
-      saveTrainingData(defaultTraining);
+      await saveTrainingData(defaultTraining);
 
       const saved = document.getElementById('trainingSaved');
       if (saved) {
@@ -1041,12 +1050,13 @@ A: You can book directly on our website at islandgoodes.com/book or call us at 8
     }
 
     try {
+      const training = await getTrainingData();
       const response = await fetch('/.netlify/functions/ai-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message,
-          training: getTrainingData()
+          training
         })
       });
 
