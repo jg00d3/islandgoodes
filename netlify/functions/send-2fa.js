@@ -44,7 +44,7 @@ export async function handler(event) {
 
     // Send email
     const { data, error } = await resend.emails.send({
-      from: 'Island Goodes <noreply@islandgoodes.com>',
+      from: 'Island Goodes <onboarding@resend.dev>',
       to: [email],
       subject: 'Your Island Goodes Admin Login Code',
       html: `
