@@ -164,14 +164,30 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
     </div>
   </section>
 
-  <!-- Lightbox -->
+  <!-- Lightbox with Slideshow -->
   <div class="lightbox" id="lightbox">
     <button class="lightbox-close" id="lightboxClose">&times;</button>
     <button class="lightbox-prev" id="lightboxPrev">&#10094;</button>
     <button class="lightbox-next" id="lightboxNext">&#10095;</button>
+    <div class="lightbox-controls">
+      <button class="slideshow-btn" id="slideshowToggle" title="Play slideshow">
+        <svg class="play-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="5 3 19 12 5 21 5 3"/>
+        </svg>
+        <svg class="pause-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+          <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
+        </svg>
+      </button>
+      <select class="speed-select" id="speedSelect" title="Slideshow speed">
+        <option value="5000">Slow</option>
+        <option value="3000" selected>Medium</option>
+        <option value="1500">Fast</option>
+      </select>
+    </div>
     <div class="lightbox-content">
       <img src="" alt="" id="lightboxImg" />
       <p class="lightbox-caption" id="lightboxCaption"></p>
+      <p class="lightbox-counter" id="lightboxCounter"></p>
     </div>
   </div>
 </PreviewLayout>
@@ -478,11 +494,80 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
     right: 1rem;
   }
 
+  .lightbox-counter {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+  }
+
+  .lightbox-controls {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    z-index: 10001;
+  }
+
+  .slideshow-btn {
+    background: var(--color-primary);
+    border: none;
+    color: #fff;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s, transform 0.2s;
+  }
+
+  .slideshow-btn:hover {
+    background: var(--color-primary-dark);
+    transform: scale(1.1);
+  }
+
+  .slideshow-btn.playing {
+    background: var(--color-secondary);
+    color: #1a1a1a;
+  }
+
+  .speed-select {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+
+  .speed-select option {
+    background: #333;
+    color: #fff;
+  }
+
   @media (max-width: 768px) {
     .lightbox-prev,
     .lightbox-next {
       padding: 0.5rem;
       font-size: 1.5rem;
+    }
+
+    .lightbox-controls {
+      bottom: 1rem;
+      padding: 0.5rem 1rem;
+    }
+
+    .slideshow-btn {
+      width: 40px;
+      height: 40px;
     }
   }
 </style>
@@ -594,7 +679,7 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
         // Check both data-src (original path) and current img src
         if ((dataSrc && deletedPaths.includes(dataSrc)) ||
             (imgSrc && !imgSrc.startsWith('data:') && deletedPaths.includes(imgSrc))) {
-          (item as HTMLElement).style.display = 'none';
+          item.classList.add('hidden');
         }
       });
     } catch (e) { console.error('Error initializing gallery:', e); }
@@ -626,17 +711,62 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg') as HTMLImageElement;
   const lightboxCaption = document.getElementById('lightboxCaption');
+  const lightboxCounter = document.getElementById('lightboxCounter');
   const lightboxClose = document.getElementById('lightboxClose');
   const lightboxPrev = document.getElementById('lightboxPrev');
   const lightboxNext = document.getElementById('lightboxNext');
+  const slideshowToggle = document.getElementById('slideshowToggle');
+  const speedSelect = document.getElementById('speedSelect') as HTMLSelectElement;
+  const playIcon = slideshowToggle?.querySelector('.play-icon') as HTMLElement;
+  const pauseIcon = slideshowToggle?.querySelector('.pause-icon') as HTMLElement;
 
   let currentIndex = 0;
   let visibleImages: HTMLElement[] = [];
+  let slideshowInterval: ReturnType<typeof setInterval> | null = null;
+  let isPlaying = false;
 
   function updateVisibleImages() {
     visibleImages = Array.from(galleryItems).filter(
       item => !item.classList.contains('hidden')
     ) as HTMLElement[];
+  }
+
+  function updateCounter() {
+    if (lightboxCounter) {
+      lightboxCounter.textContent = `${currentIndex + 1} / ${visibleImages.length}`;
+    }
+  }
+
+  function startSlideshow() {
+    if (isPlaying) return;
+    isPlaying = true;
+    const speed = parseInt(speedSelect?.value || '3000');
+    slideshowInterval = setInterval(() => {
+      showNext();
+    }, speed);
+    slideshowToggle?.classList.add('playing');
+    if (playIcon) playIcon.style.display = 'none';
+    if (pauseIcon) pauseIcon.style.display = 'block';
+  }
+
+  function stopSlideshow() {
+    if (!isPlaying) return;
+    isPlaying = false;
+    if (slideshowInterval) {
+      clearInterval(slideshowInterval);
+      slideshowInterval = null;
+    }
+    slideshowToggle?.classList.remove('playing');
+    if (playIcon) playIcon.style.display = 'block';
+    if (pauseIcon) pauseIcon.style.display = 'none';
+  }
+
+  function toggleSlideshow() {
+    if (isPlaying) {
+      stopSlideshow();
+    } else {
+      startSlideshow();
+    }
   }
 
   function openLightbox(index: number) {
@@ -652,11 +782,13 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
     if (lightboxCaption) {
       lightboxCaption.textContent = img?.alt || '';
     }
+    updateCounter();
     lightbox?.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
 
   function closeLightbox() {
+    stopSlideshow();
     lightbox?.classList.remove('active');
     document.body.style.overflow = '';
   }
@@ -672,6 +804,7 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
     if (lightboxCaption) {
       lightboxCaption.textContent = img?.alt || '';
     }
+    updateCounter();
   }
 
   function showNext() {
@@ -685,6 +818,7 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
     if (lightboxCaption) {
       lightboxCaption.textContent = img?.alt || '';
     }
+    updateCounter();
   }
 
   // Click handlers
@@ -699,6 +833,15 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
   lightboxClose?.addEventListener('click', closeLightbox);
   lightboxPrev?.addEventListener('click', showPrev);
   lightboxNext?.addEventListener('click', showNext);
+  slideshowToggle?.addEventListener('click', toggleSlideshow);
+
+  // Speed change - restart slideshow with new speed if playing
+  speedSelect?.addEventListener('change', () => {
+    if (isPlaying) {
+      stopSlideshow();
+      startSlideshow();
+    }
+  });
 
   // Close on background click
   lightbox?.addEventListener('click', (e) => {
@@ -714,5 +857,9 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
     if (e.key === 'Escape') closeLightbox();
     if (e.key === 'ArrowLeft') showPrev();
     if (e.key === 'ArrowRight') showNext();
+    if (e.key === ' ') {
+      e.preventDefault();
+      toggleSlideshow();
+    }
   });
 </script>

@@ -235,6 +235,33 @@ const bathroomAmenities = [
       </div>
     </div>
   </section>
+
+  <!-- Lightbox with Slideshow -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose">&times;</button>
+    <button class="lightbox-prev" id="lightboxPrev">&#10094;</button>
+    <button class="lightbox-next" id="lightboxNext">&#10095;</button>
+    <div class="lightbox-controls">
+      <button class="slideshow-btn" id="slideshowToggle" title="Play slideshow">
+        <svg class="play-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="5 3 19 12 5 21 5 3"/>
+        </svg>
+        <svg class="pause-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+          <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
+        </svg>
+      </button>
+      <select class="speed-select" id="speedSelect" title="Slideshow speed">
+        <option value="5000">Slow</option>
+        <option value="3000" selected>Medium</option>
+        <option value="1500">Fast</option>
+      </select>
+    </div>
+    <div class="lightbox-content">
+      <img src="" alt="" id="lightboxImg" />
+      <p class="lightbox-caption" id="lightboxCaption"></p>
+      <p class="lightbox-counter" id="lightboxCounter"></p>
+    </div>
+  </div>
 </PreviewLayout>
 
 <style>
@@ -315,6 +342,12 @@ const bathroomAmenities = [
   .main-image img {
     width: 100%;
     height: auto;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .main-image img:hover {
+    opacity: 0.9;
   }
 
   .thumbnail-grid {
@@ -342,6 +375,10 @@ const bathroomAmenities = [
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
+  }
+
+  .thumbnail.deleted {
+    display: none !important;
   }
 
   .quick-info {
@@ -581,6 +618,157 @@ const bathroomAmenities = [
       grid-template-columns: 1fr;
     }
   }
+
+  /* Lightbox with Slideshow */
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox.active {
+    display: flex;
+  }
+
+  .lightbox-content {
+    max-width: 90vw;
+    max-height: 90vh;
+    text-align: center;
+  }
+
+  .lightbox-content img {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+
+  .lightbox-caption {
+    color: #fff;
+    margin-top: 1rem;
+    font-size: 1rem;
+  }
+
+  .lightbox-counter {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 3rem;
+    cursor: pointer;
+    z-index: 10001;
+    line-height: 1;
+  }
+
+  .lightbox-close:hover {
+    color: var(--color-secondary);
+  }
+
+  .lightbox-prev,
+  .lightbox-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    padding: 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.3s;
+  }
+
+  .lightbox-prev:hover,
+  .lightbox-next:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .lightbox-prev { left: 1rem; }
+  .lightbox-next { right: 1rem; }
+
+  .lightbox-controls {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    z-index: 10001;
+  }
+
+  .slideshow-btn {
+    background: var(--color-primary);
+    border: none;
+    color: #fff;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s, transform 0.2s;
+  }
+
+  .slideshow-btn:hover {
+    background: var(--color-primary-dark);
+    transform: scale(1.1);
+  }
+
+  .slideshow-btn.playing {
+    background: var(--color-secondary);
+    color: #1a1a1a;
+  }
+
+  .speed-select {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+
+  .speed-select option {
+    background: #333;
+    color: #fff;
+  }
+
+  @media (max-width: 768px) {
+    .lightbox-prev,
+    .lightbox-next {
+      padding: 0.5rem;
+      font-size: 1.5rem;
+    }
+
+    .lightbox-controls {
+      bottom: 1rem;
+      padding: 0.5rem 1rem;
+    }
+
+    .slideshow-btn {
+      width: 40px;
+      height: 40px;
+    }
+  }
 </style>
 
 <script>
@@ -652,13 +840,11 @@ const bathroomAmenities = [
       // Hide deleted images
       document.querySelectorAll('.thumbnail').forEach((thumb) => {
         const src = thumb.getAttribute('data-src');
-        if (src && deletedPaths.includes(src)) {
-          (thumb as HTMLElement).style.display = 'none';
-        }
+        if (src && deletedPaths.includes(src)) thumb.classList.add('deleted');
       });
 
       // Update featured image to first visible thumbnail
-      const firstVisible = document.querySelector('.thumbnail:not([style*="display: none"])') as HTMLElement;
+      const firstVisible = document.querySelector('.thumbnail:not(.deleted)') as HTMLElement;
       if (firstVisible && featuredImage) {
         // Use edited version if available, otherwise original
         const editedSrc = firstVisible.getAttribute('data-edited');
@@ -699,4 +885,140 @@ const bathroomAmenities = [
 
   // Set first thumbnail as active (will be updated by initializeGallery)
   thumbnails[0]?.classList.add('active');
+
+  // ============================================
+  // LIGHTBOX WITH SLIDESHOW
+  // ============================================
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg') as HTMLImageElement;
+  const lightboxCaption = document.getElementById('lightboxCaption');
+  const lightboxCounter = document.getElementById('lightboxCounter');
+  const lightboxClose = document.getElementById('lightboxClose');
+  const lightboxPrev = document.getElementById('lightboxPrev');
+  const lightboxNext = document.getElementById('lightboxNext');
+  const slideshowToggle = document.getElementById('slideshowToggle');
+  const speedSelect = document.getElementById('speedSelect') as HTMLSelectElement;
+  const playIcon = slideshowToggle?.querySelector('.play-icon') as HTMLElement;
+  const pauseIcon = slideshowToggle?.querySelector('.pause-icon') as HTMLElement;
+
+  let currentLightboxIndex = 0;
+  let visibleThumbnails: HTMLElement[] = [];
+  let slideshowInterval: number | null = null;
+  let isPlaying = false;
+
+  function getVisibleThumbnails(): HTMLElement[] {
+    return Array.from(document.querySelectorAll('.thumbnail:not(.deleted)')) as HTMLElement[];
+  }
+
+  function openLightbox(index: number) {
+    visibleThumbnails = getVisibleThumbnails();
+    currentLightboxIndex = index;
+    updateLightboxImage();
+    lightbox?.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox?.classList.remove('active');
+    document.body.style.overflow = '';
+    stopSlideshow();
+  }
+
+  function updateLightboxImage() {
+    const thumb = visibleThumbnails[currentLightboxIndex];
+    if (!thumb) return;
+
+    const editedSrc = thumb.getAttribute('data-edited');
+    const originalSrc = thumb.getAttribute('data-src');
+    const alt = thumb.getAttribute('data-alt');
+
+    if (lightboxImg) {
+      lightboxImg.src = editedSrc || originalSrc || '';
+      lightboxImg.alt = alt || '';
+    }
+    if (lightboxCaption) {
+      lightboxCaption.textContent = alt || '';
+    }
+    if (lightboxCounter) {
+      lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${visibleThumbnails.length}`;
+    }
+  }
+
+  function showPrevImage() {
+    currentLightboxIndex = (currentLightboxIndex - 1 + visibleThumbnails.length) % visibleThumbnails.length;
+    updateLightboxImage();
+  }
+
+  function showNextImage() {
+    currentLightboxIndex = (currentLightboxIndex + 1) % visibleThumbnails.length;
+    updateLightboxImage();
+  }
+
+  function startSlideshow() {
+    if (isPlaying) return;
+    isPlaying = true;
+    slideshowToggle?.classList.add('playing');
+    if (playIcon) playIcon.style.display = 'none';
+    if (pauseIcon) pauseIcon.style.display = 'block';
+
+    const speed = parseInt(speedSelect?.value || '3000');
+    slideshowInterval = window.setInterval(showNextImage, speed);
+  }
+
+  function stopSlideshow() {
+    if (!isPlaying) return;
+    isPlaying = false;
+    slideshowToggle?.classList.remove('playing');
+    if (playIcon) playIcon.style.display = 'block';
+    if (pauseIcon) pauseIcon.style.display = 'none';
+
+    if (slideshowInterval) {
+      clearInterval(slideshowInterval);
+      slideshowInterval = null;
+    }
+  }
+
+  function toggleSlideshow() {
+    if (isPlaying) {
+      stopSlideshow();
+    } else {
+      startSlideshow();
+    }
+  }
+
+  // Open lightbox on featured image click
+  featuredImage?.addEventListener('click', () => {
+    visibleThumbnails = getVisibleThumbnails();
+    const activeThumb = document.querySelector('.thumbnail.active') as HTMLElement;
+    const index = activeThumb ? visibleThumbnails.indexOf(activeThumb) : 0;
+    openLightbox(index >= 0 ? index : 0);
+  });
+
+  // Lightbox controls
+  lightboxClose?.addEventListener('click', closeLightbox);
+  lightboxPrev?.addEventListener('click', showPrevImage);
+  lightboxNext?.addEventListener('click', showNextImage);
+  slideshowToggle?.addEventListener('click', toggleSlideshow);
+
+  // Speed change - restart slideshow if playing
+  speedSelect?.addEventListener('change', () => {
+    if (isPlaying) {
+      stopSlideshow();
+      startSlideshow();
+    }
+  });
+
+  // Close on background click
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox?.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') showPrevImage();
+    if (e.key === 'ArrowRight') showNextImage();
+    if (e.key === ' ') { e.preventDefault(); toggleSlideshow(); }
+  });
 </script>
