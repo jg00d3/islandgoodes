@@ -1,0 +1,1129 @@
+---
+import PreviewLayout from '../../layouts/PreviewLayout.astro';
+
+const title = "AI Chat Assistant | Island Goodes Admin";
+const description = "Configure and test the AI chat assistant for visitor interactions";
+---
+
+<PreviewLayout title={title} description={description}>
+  <div id="authCheck"></div>
+
+  <div id="dashboard" class="dashboard" style="display: none;">
+    <section class="dashboard-hero">
+      <div class="container">
+        <div class="hero-header">
+          <div>
+            <h1>AI Chat Assistant</h1>
+            <p>Intelligent visitor support powered by AI</p>
+          </div>
+          <div class="hero-actions">
+            <a href="/admin" class="btn btn-outline">Back to Dashboard</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Status & Toggle -->
+    <section class="status-section">
+      <div class="container">
+        <div class="status-card">
+          <div class="status-header">
+            <div class="status-info">
+              <h2>Chat Status</h2>
+              <p id="statusText" class="status-text">AI Chat is currently disabled on the website</p>
+            </div>
+            <div class="status-toggle">
+              <label class="toggle-switch large">
+                <input type="checkbox" id="toggleAIChat" />
+                <span class="toggle-slider"></span>
+              </label>
+              <span id="toggleLabel" class="toggle-label">Disabled</span>
+            </div>
+          </div>
+          <div class="status-note">
+            <span class="note-icon">i</span>
+            <span>When enabled, visitors will see a chat bubble in the bottom-right corner of the website.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="info-section">
+      <div class="container">
+        <div class="info-card">
+          <h2>How It Works</h2>
+
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="info-icon">1</div>
+              <div class="info-content">
+                <h3>Visitor Asks a Question</h3>
+                <p>A visitor clicks the chat bubble and types a question like "What's included in the rate?" or "How far is the beach?"</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon">2</div>
+              <div class="info-content">
+                <h3>AI Processes the Question</h3>
+                <p>The question is sent to our AI assistant (powered by Claude) along with your custom training data about Island Goodes.</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon">3</div>
+              <div class="info-content">
+                <h3>Personalized Response</h3>
+                <p>The AI generates a helpful, accurate response based on your property information, policies, and local knowledge.</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon">4</div>
+              <div class="info-content">
+                <h3>Escalation Option</h3>
+                <p>If the AI can't help, visitors can easily contact you directly via phone or the contact form.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Training Data -->
+    <section class="training-section">
+      <div class="container">
+        <div class="training-card">
+          <div class="training-header">
+            <h2>Training Data</h2>
+            <p>This information teaches the AI about Island Goodes. Edit to customize responses.</p>
+          </div>
+
+          <div class="training-form">
+            <div class="form-group">
+              <label for="propertyInfo">Property Information</label>
+              <textarea id="propertyInfo" rows="6" placeholder="Describe your property, rooms, amenities..."></textarea>
+              <span class="field-hint">Include: room types, rates, amenities, check-in/out times, policies</span>
+            </div>
+
+            <div class="form-group">
+              <label for="locationInfo">Location & Attractions</label>
+              <textarea id="locationInfo" rows="6" placeholder="Describe your location, nearby attractions..."></textarea>
+              <span class="field-hint">Include: distance to airport, beaches, restaurants, Hawaii Volcanoes National Park</span>
+            </div>
+
+            <div class="form-group">
+              <label for="faqInfo">Common Questions & Answers</label>
+              <textarea id="faqInfo" rows="6" placeholder="Q: Is Island Goodes adults only?&#10;A: Yes, all guests must be 18 or older..."></textarea>
+              <span class="field-hint">Format: Q: Question here\nA: Answer here (one per line pair)</span>
+            </div>
+
+            <div class="form-group">
+              <label for="toneInfo">Personality & Tone</label>
+              <textarea id="toneInfo" rows="3" placeholder="Friendly, warm, Hawaiian hospitality..."></textarea>
+              <span class="field-hint">How should the AI sound? Casual, professional, use Hawaiian words?</span>
+            </div>
+
+            <div class="training-actions">
+              <button id="saveTraining" class="btn btn-primary">Save Training Data</button>
+              <button id="loadDefaults" class="btn btn-outline">Load Defaults</button>
+            </div>
+            <p id="trainingSaved" class="success-message"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Test Chat -->
+    <section class="test-section">
+      <div class="container">
+        <div class="test-card">
+          <div class="test-header">
+            <h2>Test Chat</h2>
+            <p>Try the AI assistant before enabling it on the website. This works even when the chat is disabled.</p>
+          </div>
+
+          <div class="chat-container">
+            <div id="chatMessages" class="chat-messages">
+              <div class="chat-message assistant">
+                <div class="message-avatar">AI</div>
+                <div class="message-content">
+                  <p>Aloha! I'm the Island Goodes assistant. Ask me anything about the property, rates, local attractions, or your upcoming stay!</p>
+                </div>
+              </div>
+            </div>
+
+            <form id="chatForm" class="chat-input-form">
+              <input type="text" id="chatInput" placeholder="Type a question..." autocomplete="off" />
+              <button type="submit" class="btn btn-primary" id="sendBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="22" y1="2" x2="11" y2="13"/>
+                  <polygon points="22,2 15,22 11,13 2,9 22,2"/>
+                </svg>
+              </button>
+            </form>
+          </div>
+
+          <div class="test-suggestions">
+            <span>Try asking:</span>
+            <button class="suggestion-btn" data-question="What's included in the rate?">What's included?</button>
+            <button class="suggestion-btn" data-question="Is Island Goodes adults only?">Adults only?</button>
+            <button class="suggestion-btn" data-question="How far is the beach?">Beach distance?</button>
+            <button class="suggestion-btn" data-question="What's nearby?">Nearby attractions?</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- API Setup -->
+    <section class="setup-section">
+      <div class="container">
+        <div class="setup-card">
+          <h2>API Setup</h2>
+          <p>The AI chat requires an API key to function. This is configured in Netlify.</p>
+
+          <div class="setup-status" id="apiStatus">
+            <div class="status-indicator checking">
+              <span class="status-dot"></span>
+              <span>Checking API status...</span>
+            </div>
+          </div>
+
+          <div class="setup-steps">
+            <h3>Setup Instructions</h3>
+            <ol>
+              <li>
+                <strong>Get an API Key</strong>
+                <p>Sign up at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> to get a Claude API key. New accounts get free credits.</p>
+              </li>
+              <li>
+                <strong>Add to Netlify</strong>
+                <p>Go to Netlify → Site Settings → Environment Variables → Add:</p>
+                <code>ANTHROPIC_API_KEY = sk-ant-...</code>
+              </li>
+              <li>
+                <strong>Redeploy</strong>
+                <p>Trigger a new deploy for the environment variable to take effect.</p>
+              </li>
+            </ol>
+          </div>
+
+          <div class="pricing-info">
+            <h3>Pricing</h3>
+            <p>Claude API pricing is usage-based. Typical costs for a vacation rental:</p>
+            <ul>
+              <li><strong>~$0.01-0.03</strong> per conversation</li>
+              <li><strong>~$5-15/month</strong> for moderate traffic</li>
+              <li>Free tier available for testing</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</PreviewLayout>
+
+<style>
+  .dashboard-hero {
+    background: var(--gradient-primary);
+    color: #fff;
+    padding: 8rem 2rem 2rem;
+  }
+
+  .hero-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .dashboard-hero h1 {
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .dashboard-hero p {
+    opacity: 0.9;
+  }
+
+  /* Status Section */
+  .status-section {
+    padding: 2rem;
+    background: var(--color-bg-alt);
+  }
+
+  .status-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  .status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .status-info h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .status-text {
+    color: var(--color-text-light);
+  }
+
+  .status-text.enabled {
+    color: #059669;
+    font-weight: 600;
+  }
+
+  .status-toggle {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .toggle-label {
+    font-weight: 600;
+    color: var(--color-text-light);
+  }
+
+  .toggle-label.enabled {
+    color: #059669;
+  }
+
+  .toggle-switch.large {
+    width: 64px;
+    height: 34px;
+  }
+
+  .toggle-switch.large .toggle-slider:before {
+    height: 28px;
+    width: 28px;
+  }
+
+  .toggle-switch.large input:checked + .toggle-slider:before {
+    transform: translateX(30px);
+  }
+
+  .status-note {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: #F0F9FF;
+    border-radius: 8px;
+    color: #0369A1;
+    font-size: 0.9375rem;
+  }
+
+  .note-icon {
+    width: 24px;
+    height: 24px;
+    background: #0369A1;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.875rem;
+    flex-shrink: 0;
+  }
+
+  /* Info Section */
+  .info-section {
+    padding: 2rem;
+  }
+
+  .info-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  .info-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .info-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--color-bg-alt);
+    border-radius: 12px;
+  }
+
+  .info-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--color-primary);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  .info-content h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-body);
+  }
+
+  .info-content p {
+    font-size: 0.9375rem;
+    color: var(--color-text-light);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* Training Section */
+  .training-section {
+    padding: 2rem;
+    background: var(--color-bg-alt);
+  }
+
+  .training-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  .training-header {
+    margin-bottom: 2rem;
+  }
+
+  .training-header h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .training-header p {
+    color: var(--color-text-light);
+  }
+
+  .training-form .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .training-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+  }
+
+  .training-form textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--color-bg-alt);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.9375rem;
+    resize: vertical;
+    transition: border-color 0.2s;
+  }
+
+  .training-form textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .field-hint {
+    display: block;
+    font-size: 0.8125rem;
+    color: var(--color-text-light);
+    margin-top: 0.5rem;
+  }
+
+  .training-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .success-message {
+    color: #059669;
+    margin-top: 1rem;
+  }
+
+  /* Test Section */
+  .test-section {
+    padding: 2rem;
+  }
+
+  .test-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  .test-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .test-header h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .test-header p {
+    color: var(--color-text-light);
+  }
+
+  .chat-container {
+    border: 2px solid var(--color-bg-alt);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .chat-messages {
+    height: 350px;
+    overflow-y: auto;
+    padding: 1.5rem;
+    background: #FAFAFA;
+  }
+
+  .chat-message {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .chat-message.user {
+    flex-direction: row-reverse;
+  }
+
+  .message-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .chat-message.assistant .message-avatar {
+    background: var(--color-primary);
+    color: #fff;
+  }
+
+  .chat-message.user .message-avatar {
+    background: var(--color-secondary);
+    color: #1a1a1a;
+  }
+
+  .message-content {
+    max-width: 80%;
+    padding: 0.875rem 1.25rem;
+    border-radius: 16px;
+    line-height: 1.5;
+  }
+
+  .chat-message.assistant .message-content {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+  }
+
+  .chat-message.user .message-content {
+    background: var(--color-primary);
+    color: #fff;
+  }
+
+  .message-content p {
+    margin: 0;
+  }
+
+  .chat-input-form {
+    display: flex;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: #fff;
+    border-top: 1px solid var(--color-bg-alt);
+  }
+
+  .chat-input-form input {
+    flex: 1;
+    padding: 0.875rem 1rem;
+    border: 2px solid var(--color-bg-alt);
+    border-radius: 50px;
+    font-size: 1rem;
+  }
+
+  .chat-input-form input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .chat-input-form button {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .test-suggestions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .test-suggestions span {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+  }
+
+  .suggestion-btn {
+    padding: 0.5rem 1rem;
+    background: var(--color-bg-alt);
+    border: none;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .suggestion-btn:hover {
+    background: var(--color-primary-subtle);
+    color: var(--color-primary);
+  }
+
+  /* Setup Section */
+  .setup-section {
+    padding: 2rem;
+    background: var(--color-bg-alt);
+  }
+
+  .setup-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  .setup-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .setup-card > p {
+    color: var(--color-text-light);
+    margin-bottom: 1.5rem;
+  }
+
+  .setup-status {
+    padding: 1rem;
+    background: var(--color-bg-alt);
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+
+  .status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ccc;
+  }
+
+  .status-indicator.checking .status-dot {
+    background: #F59E0B;
+    animation: pulse 1s infinite;
+  }
+
+  .status-indicator.connected .status-dot {
+    background: #10B981;
+  }
+
+  .status-indicator.error .status-dot {
+    background: #EF4444;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .setup-steps {
+    margin-bottom: 2rem;
+  }
+
+  .setup-steps h3 {
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+    font-family: var(--font-body);
+  }
+
+  .setup-steps ol {
+    padding-left: 1.5rem;
+  }
+
+  .setup-steps li {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .setup-steps li strong {
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .setup-steps li p {
+    color: var(--color-text-light);
+    margin: 0;
+    font-size: 0.9375rem;
+  }
+
+  .setup-steps code {
+    display: inline-block;
+    background: #1a1a1a;
+    color: #10B981;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+  }
+
+  .setup-steps a {
+    color: var(--color-primary);
+  }
+
+  .pricing-info {
+    padding: 1.5rem;
+    background: #ECFDF5;
+    border-radius: 12px;
+    border-left: 4px solid #10B981;
+  }
+
+  .pricing-info h3 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    color: #065F46;
+    font-family: var(--font-body);
+  }
+
+  .pricing-info p {
+    color: #065F46;
+    margin-bottom: 0.75rem;
+  }
+
+  .pricing-info ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: #065F46;
+  }
+
+  .pricing-info li {
+    margin-bottom: 0.25rem;
+  }
+
+  /* Toggle Switch */
+  .toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+
+  .toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: #ccc;
+    transition: 0.3s;
+    border-radius: 28px;
+  }
+
+  .toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    transition: 0.3s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  .toggle-switch input:checked + .toggle-slider {
+    background: var(--color-primary);
+  }
+
+  .toggle-switch input:checked + .toggle-slider:before {
+    transform: translateX(24px);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero-header {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .status-header {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .training-actions {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<script>
+  const SESSION_KEY = 'islandgoodes_admin_session';
+  const SETTINGS_KEY = 'islandgoodes_settings';
+  const AI_TRAINING_KEY = 'islandgoodes_ai_training';
+
+  // Check authentication
+  function getSession() {
+    try {
+      return sessionStorage.getItem(SESSION_KEY) ? JSON.parse(sessionStorage.getItem(SESSION_KEY)!) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  const session = getSession();
+  if (!session) {
+    window.location.href = '/admin';
+  } else {
+    document.getElementById('dashboard')!.style.display = 'block';
+  }
+
+  // Settings management
+  function getSettings() {
+    try {
+      return JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+    } catch {
+      return {};
+    }
+  }
+
+  function saveSettings(settings: any) {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  }
+
+  // Training data management
+  function getTrainingData() {
+    try {
+      return JSON.parse(localStorage.getItem(AI_TRAINING_KEY) || '{}');
+    } catch {
+      return {};
+    }
+  }
+
+  function saveTrainingData(data: any) {
+    localStorage.setItem(AI_TRAINING_KEY, JSON.stringify(data));
+  }
+
+  // Default training data
+  const defaultTraining = {
+    propertyInfo: `Island Goodes is an adults-only (18+) vacation rental located in Papaikou, Hawaii, just 7 miles from Hilo International Airport (about 12 minutes).
+
+We offer comfortable oceanview accommodations with the following amenities:
+- Free WiFi
+- Free parking
+- Hot tub (shared)
+- BBQ grill
+- Beautiful tropical garden
+
+Check-in: 3:00 PM
+Check-out: 11:00 AM
+Minimum stay: 2 nights
+
+Our rates vary by season:
+- Low season (Nov-Mar): Starting at $149/night
+- High season (Apr-Oct): Starting at $179/night
+- Extended stay discounts available (10-55% off for longer stays)`,
+
+    locationInfo: `Location: 27-2365 Hawaii Belt Rd, Papaikou, HI 96781
+
+Nearby attractions:
+- Hawaii Volcanoes National Park: 45 minutes
+- Rainbow Falls: 15 minutes
+- Akaka Falls: 20 minutes
+- Downtown Hilo: 10 minutes
+- Richardson Beach: 20 minutes
+- Honoli'i Beach (surfing): 10 minutes
+- Mauna Kea summit: 1 hour
+
+Local restaurants we recommend:
+- Cafe Pesto (Hilo)
+- Moon & Turtle
+- Hilo Bay Cafe
+- Ken's House of Pancakes (24hr)
+
+We're located on the beautiful Hamakua Coast, known for lush tropical rainforests and stunning ocean views.`,
+
+    faqInfo: `Q: Is Island Goodes adults only?
+A: Yes, all guests must be 18 years or older. This allows us to maintain a peaceful, quiet atmosphere.
+
+Q: Is there a pool?
+A: We have a relaxing hot tub rather than a pool. It's perfect for unwinding after a day of exploring!
+
+Q: What's the cancellation policy?
+A: All bookings are non-refundable, but we offer a 1-year voucher to rebook if you need to cancel.
+
+Q: Are pets allowed?
+A: We don't allow guest pets, but we have friendly resident cats - Miss Kitty and Coconut Jake!
+
+Q: Is breakfast included?
+A: Breakfast is not included, but you have access to a kitchenette and we're close to great local restaurants.
+
+Q: How do I book?
+A: You can book directly on our website at islandgoodes.com/book or call us at 808-964-2291.`,
+
+    toneInfo: `Friendly, warm Hawaiian hospitality. Use "Aloha" as a greeting. Be helpful and informative. Occasionally use Hawaiian words like "Mahalo" (thank you). Keep responses concise but complete. Always be encouraging about visiting the Big Island.`
+  };
+
+  // Initialize toggle state
+  const toggle = document.getElementById('toggleAIChat') as HTMLInputElement;
+  const toggleLabel = document.getElementById('toggleLabel');
+  const statusText = document.getElementById('statusText');
+  const settings = getSettings();
+
+  if (toggle) {
+    toggle.checked = settings.aiChatEnabled || false;
+    updateToggleUI();
+
+    toggle.addEventListener('change', () => {
+      const current = getSettings();
+      current.aiChatEnabled = toggle.checked;
+      saveSettings(current);
+      updateToggleUI();
+    });
+  }
+
+  function updateToggleUI() {
+    if (toggle?.checked) {
+      if (toggleLabel) {
+        toggleLabel.textContent = 'Enabled';
+        toggleLabel.classList.add('enabled');
+      }
+      if (statusText) {
+        statusText.textContent = 'AI Chat is enabled on the website';
+        statusText.classList.add('enabled');
+      }
+    } else {
+      if (toggleLabel) {
+        toggleLabel.textContent = 'Disabled';
+        toggleLabel.classList.remove('enabled');
+      }
+      if (statusText) {
+        statusText.textContent = 'AI Chat is currently disabled on the website';
+        statusText.classList.remove('enabled');
+      }
+    }
+  }
+
+  // Load training data
+  const training = getTrainingData();
+  const propertyInfo = document.getElementById('propertyInfo') as HTMLTextAreaElement;
+  const locationInfo = document.getElementById('locationInfo') as HTMLTextAreaElement;
+  const faqInfo = document.getElementById('faqInfo') as HTMLTextAreaElement;
+  const toneInfo = document.getElementById('toneInfo') as HTMLTextAreaElement;
+
+  if (propertyInfo) propertyInfo.value = training.propertyInfo || '';
+  if (locationInfo) locationInfo.value = training.locationInfo || '';
+  if (faqInfo) faqInfo.value = training.faqInfo || '';
+  if (toneInfo) toneInfo.value = training.toneInfo || '';
+
+  // Save training data
+  document.getElementById('saveTraining')?.addEventListener('click', () => {
+    const data = {
+      propertyInfo: propertyInfo?.value || '',
+      locationInfo: locationInfo?.value || '',
+      faqInfo: faqInfo?.value || '',
+      toneInfo: toneInfo?.value || ''
+    };
+    saveTrainingData(data);
+
+    const saved = document.getElementById('trainingSaved');
+    if (saved) {
+      saved.textContent = 'Training data saved successfully!';
+      setTimeout(() => { saved.textContent = ''; }, 3000);
+    }
+  });
+
+  // Load defaults
+  document.getElementById('loadDefaults')?.addEventListener('click', () => {
+    if (confirm('This will replace all training data with defaults. Continue?')) {
+      if (propertyInfo) propertyInfo.value = defaultTraining.propertyInfo;
+      if (locationInfo) locationInfo.value = defaultTraining.locationInfo;
+      if (faqInfo) faqInfo.value = defaultTraining.faqInfo;
+      if (toneInfo) toneInfo.value = defaultTraining.toneInfo;
+
+      saveTrainingData(defaultTraining);
+
+      const saved = document.getElementById('trainingSaved');
+      if (saved) {
+        saved.textContent = 'Default training data loaded!';
+        setTimeout(() => { saved.textContent = ''; }, 3000);
+      }
+    }
+  });
+
+  // Test chat functionality
+  const chatForm = document.getElementById('chatForm');
+  const chatInput = document.getElementById('chatInput') as HTMLInputElement;
+  const chatMessages = document.getElementById('chatMessages');
+  const sendBtn = document.getElementById('sendBtn') as HTMLButtonElement;
+
+  function addMessage(content: string, isUser: boolean) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${isUser ? 'user' : 'assistant'}`;
+    messageDiv.innerHTML = `
+      <div class="message-avatar">${isUser ? 'You' : 'AI'}</div>
+      <div class="message-content">
+        <p>${content}</p>
+      </div>
+    `;
+    chatMessages?.appendChild(messageDiv);
+    chatMessages?.scrollTo(0, chatMessages.scrollHeight);
+  }
+
+  async function sendMessage(message: string) {
+    if (!message.trim()) return;
+
+    addMessage(message, true);
+    chatInput.value = '';
+
+    if (sendBtn) {
+      sendBtn.disabled = true;
+      sendBtn.innerHTML = '<span class="loading-spinner"></span>';
+    }
+
+    try {
+      const response = await fetch('/.netlify/functions/ai-chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message,
+          training: getTrainingData()
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.response) {
+        addMessage(data.response, false);
+      } else {
+        addMessage(data.error || 'Sorry, I encountered an error. Please try again.', false);
+      }
+    } catch (error) {
+      console.error('Chat error:', error);
+      addMessage('Sorry, I couldn\'t connect to the AI service. Please check that the API is configured.', false);
+    }
+
+    if (sendBtn) {
+      sendBtn.disabled = false;
+      sendBtn.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22,2 15,22 11,13 2,9 22,2"/>
+        </svg>
+      `;
+    }
+  }
+
+  chatForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    sendMessage(chatInput?.value || '');
+  });
+
+  // Suggestion buttons
+  document.querySelectorAll('.suggestion-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const question = (btn as HTMLElement).dataset.question;
+      if (question) sendMessage(question);
+    });
+  });
+
+  // Check API status
+  async function checkApiStatus() {
+    const statusEl = document.getElementById('apiStatus');
+    if (!statusEl) return;
+
+    try {
+      const response = await fetch('/.netlify/functions/ai-chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'test', checkOnly: true })
+      });
+
+      const data = await response.json();
+
+      if (data.configured) {
+        statusEl.innerHTML = `
+          <div class="status-indicator connected">
+            <span class="status-dot"></span>
+            <span>API Connected - Ready to use</span>
+          </div>
+        `;
+      } else {
+        statusEl.innerHTML = `
+          <div class="status-indicator error">
+            <span class="status-dot"></span>
+            <span>API Not Configured - Follow setup instructions below</span>
+          </div>
+        `;
+      }
+    } catch {
+      statusEl.innerHTML = `
+        <div class="status-indicator error">
+          <span class="status-dot"></span>
+          <span>Could not check API status</span>
+        </div>
+      `;
+    }
+  }
+
+  checkApiStatus();
+</script>
