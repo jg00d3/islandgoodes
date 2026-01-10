@@ -133,7 +133,7 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
 
       <div class="gallery-grid">
         {galleryImages.map((image) => (
-          <div class="gallery-item" data-category={image.category}>
+          <div class="gallery-item" data-category={image.category} data-src={image.src}>
             <img src={image.src} alt={image.alt} loading="lazy" />
             <div class="gallery-overlay">
               <span class="category">{image.category}</span>
@@ -488,12 +488,12 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
 </style>
 
 <script>
-  // Apply custom image order and hide deleted images
+  // Apply custom image order, edited images, and hide deleted images
   (async function initializeGallery() {
     const galleryGrid = document.querySelector('.gallery-grid');
 
     try {
-      const [deletedResponse, orderResponse] = await Promise.all([
+      const [deletedResponse, orderResponse, editedResponse] = await Promise.all([
         fetch('/.netlify/functions/data-store', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -503,12 +503,31 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ store: 'imageOrder', action: 'get', key: 'data' })
+        }),
+        fetch('/.netlify/functions/data-store', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ store: 'editedImages', action: 'get', key: 'data' })
         })
       ]);
 
       const deleted = deletedResponse.ok ? await deletedResponse.json() : [];
       const imageOrder = orderResponse.ok ? await orderResponse.json() : {};
+      const editedImages = editedResponse.ok ? await editedResponse.json() : {};
       const deletedPaths = Array.isArray(deleted) ? deleted.map((d: any) => d.path || d) : [];
+
+      // Apply edited images (rotated, cropped, etc.) - this also affects lightbox
+      if (editedImages && Object.keys(editedImages).length > 0) {
+        document.querySelectorAll('.gallery-item').forEach((item) => {
+          const img = item.querySelector('img') as HTMLImageElement;
+          if (img) {
+            const src = img.src.replace(window.location.origin, '');
+            if (editedImages[src]) {
+              img.src = editedImages[src].dataUrl;
+            }
+          }
+        });
+      }
 
       // Apply custom order per category (gallery categories are stored as gallery-<category>)
       if (galleryGrid && Object.keys(imageOrder).length > 0) {
@@ -532,13 +551,22 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
             item.getAttribute('data-category') === category
           );
 
-          // Create a map of src to item
+          // Create a map of original src to item (we stored original path in data attribute)
           const itemMap = new Map<string, HTMLElement>();
           categoryItems.forEach(item => {
-            const img = item.querySelector('img') as HTMLImageElement;
-            if (img) {
-              const src = img.src.replace(window.location.origin, '');
-              itemMap.set(src, item);
+            // Use data-src if available, otherwise extract from current img src
+            const dataSrc = item.getAttribute('data-src');
+            if (dataSrc) {
+              itemMap.set(dataSrc, item);
+            } else {
+              const img = item.querySelector('img') as HTMLImageElement;
+              if (img) {
+                const src = img.src.replace(window.location.origin, '');
+                // For edited images, src will be a data URL, so we need original path
+                if (!src.startsWith('data:')) {
+                  itemMap.set(src, item);
+                }
+              }
             }
           });
 
@@ -550,10 +578,9 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
 
           // Append items not in the saved order
           categoryItems.forEach(item => {
-            const img = item.querySelector('img') as HTMLImageElement;
-            if (img) {
-              const src = img.src.replace(window.location.origin, '');
-              if (!customOrder.includes(src)) galleryGrid.appendChild(item);
+            const dataSrc = item.getAttribute('data-src');
+            if (dataSrc && !customOrder.includes(dataSrc)) {
+              galleryGrid.appendChild(item);
             }
           });
         }
@@ -561,8 +588,12 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
 
       // Hide deleted images
       document.querySelectorAll('.gallery-item').forEach((item) => {
+        const dataSrc = item.getAttribute('data-src');
         const img = item.querySelector('img') as HTMLImageElement;
-        if (img && deletedPaths.includes(img.src.replace(window.location.origin, ''))) {
+        const imgSrc = img ? img.src.replace(window.location.origin, '') : '';
+        // Check both data-src (original path) and current img src
+        if ((dataSrc && deletedPaths.includes(dataSrc)) ||
+            (imgSrc && !imgSrc.startsWith('data:') && deletedPaths.includes(imgSrc))) {
           (item as HTMLElement).style.display = 'none';
         }
       });

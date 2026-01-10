@@ -306,13 +306,13 @@ const bathroomAmenities = [
 </style>
 
 <script>
-  // Apply custom image order and hide deleted images
+  // Apply custom image order, edited images, and hide deleted images
   (async function initializeGallery() {
     const thumbnailGrid = document.querySelector('.thumbnail-grid');
     const featuredImage = document.getElementById('featured-image') as HTMLImageElement;
 
     try {
-      const [deletedResponse, orderResponse] = await Promise.all([
+      const [deletedResponse, orderResponse, editedResponse] = await Promise.all([
         fetch('/.netlify/functions/data-store', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -322,13 +322,31 @@ const bathroomAmenities = [
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ store: 'imageOrder', action: 'get', key: 'data' })
+        }),
+        fetch('/.netlify/functions/data-store', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ store: 'editedImages', action: 'get', key: 'data' })
         })
       ]);
 
       const deleted = deletedResponse.ok ? await deletedResponse.json() : [];
       const imageOrder = orderResponse.ok ? await orderResponse.json() : {};
+      const editedImages = editedResponse.ok ? await editedResponse.json() : {};
       const deletedPaths = Array.isArray(deleted) ? deleted.map((d: any) => d.path || d) : [];
       const customOrder = imageOrder['mauna-kea'] || [];
+
+      // Apply edited images (rotated, cropped, etc.)
+      if (editedImages && Object.keys(editedImages).length > 0) {
+        document.querySelectorAll('.thumbnail').forEach((thumb) => {
+          const src = thumb.getAttribute('data-src');
+          if (src && editedImages[src]) {
+            const img = thumb.querySelector('img') as HTMLImageElement;
+            if (img) img.src = editedImages[src].dataUrl;
+            thumb.setAttribute('data-edited', editedImages[src].dataUrl);
+          }
+        });
+      }
 
       if (customOrder.length > 0 && thumbnailGrid) {
         const thumbnails = Array.from(thumbnailGrid.querySelectorAll('.thumbnail')) as HTMLElement[];
@@ -349,9 +367,11 @@ const bathroomAmenities = [
 
       const firstVisible = document.querySelector('.thumbnail:not([style*="display: none"])') as HTMLElement;
       if (firstVisible && featuredImage) {
-        const src = firstVisible.getAttribute('data-src');
+        const editedSrc = firstVisible.getAttribute('data-edited');
+        const originalSrc = firstVisible.getAttribute('data-src');
         const alt = firstVisible.getAttribute('data-alt');
-        if (src) { featuredImage.src = src; featuredImage.alt = alt || ''; }
+        featuredImage.src = editedSrc || originalSrc || '';
+        featuredImage.alt = alt || '';
         document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
         firstVisible.classList.add('active');
       }
@@ -364,10 +384,11 @@ const bathroomAmenities = [
 
   thumbnails.forEach((thumb) => {
     thumb.addEventListener('click', () => {
-      const src = thumb.getAttribute('data-src');
+      const editedSrc = thumb.getAttribute('data-edited');
+      const originalSrc = thumb.getAttribute('data-src');
       const alt = thumb.getAttribute('data-alt');
-      if (src && featuredImage) {
-        featuredImage.src = src;
+      if (featuredImage) {
+        featuredImage.src = editedSrc || originalSrc || '';
         featuredImage.alt = alt || '';
       }
       thumbnails.forEach(t => t.classList.remove('active'));
