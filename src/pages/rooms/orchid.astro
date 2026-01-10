@@ -445,38 +445,56 @@ const bathroomAmenities = [
 </style>
 
 <script>
-  // Hide deleted images - fetch directly from API
-  (async function hideDeletedImages() {
+  // Apply custom image order and hide deleted images
+  (async function initializeGallery() {
+    const thumbnailGrid = document.querySelector('.thumbnail-grid');
+    const featuredImage = document.getElementById('featured-image') as HTMLImageElement;
+
     try {
-      const response = await fetch('/.netlify/functions/data-store', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ store: 'deletedImages', action: 'get', key: 'data' })
-      });
-      if (!response.ok) return;
-      const deleted = await response.json();
-      if (!deleted || !Array.isArray(deleted) || deleted.length === 0) return;
-      const deletedPaths = deleted.map((d: any) => d.path || d);
-      let hiddenCount = 0;
+      const [deletedResponse, orderResponse] = await Promise.all([
+        fetch('/.netlify/functions/data-store', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ store: 'deletedImages', action: 'get', key: 'data' })
+        }),
+        fetch('/.netlify/functions/data-store', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ store: 'imageOrder', action: 'get', key: 'data' })
+        })
+      ]);
+
+      const deleted = deletedResponse.ok ? await deletedResponse.json() : [];
+      const imageOrder = orderResponse.ok ? await orderResponse.json() : {};
+      const deletedPaths = Array.isArray(deleted) ? deleted.map((d: any) => d.path || d) : [];
+      const customOrder = imageOrder['orchid'] || [];
+
+      if (customOrder.length > 0 && thumbnailGrid) {
+        const thumbnails = Array.from(thumbnailGrid.querySelectorAll('.thumbnail')) as HTMLElement[];
+        const thumbMap = new Map(thumbnails.map(t => [t.getAttribute('data-src'), t]));
+        customOrder.forEach((src: string) => {
+          const thumb = thumbMap.get(src);
+          if (thumb) thumbnailGrid.appendChild(thumb);
+        });
+        thumbnails.forEach(thumb => {
+          if (!customOrder.includes(thumb.getAttribute('data-src'))) thumbnailGrid.appendChild(thumb);
+        });
+      }
+
       document.querySelectorAll('.thumbnail').forEach((thumb) => {
         const src = thumb.getAttribute('data-src');
-        if (src && deletedPaths.includes(src)) {
-          (thumb as HTMLElement).style.display = 'none';
-          hiddenCount++;
-        }
+        if (src && deletedPaths.includes(src)) (thumb as HTMLElement).style.display = 'none';
       });
-      if (hiddenCount > 0) {
-        const firstVisible = document.querySelector('.thumbnail:not([style*="display: none"])') as HTMLElement;
-        if (firstVisible) {
-          const featuredImage = document.getElementById('featured-image') as HTMLImageElement;
-          const src = firstVisible.getAttribute('data-src');
-          const alt = firstVisible.getAttribute('data-alt');
-          if (featuredImage && src) { featuredImage.src = src; featuredImage.alt = alt || ''; }
-          document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
-          firstVisible.classList.add('active');
-        }
+
+      const firstVisible = document.querySelector('.thumbnail:not([style*="display: none"])') as HTMLElement;
+      if (firstVisible && featuredImage) {
+        const src = firstVisible.getAttribute('data-src');
+        const alt = firstVisible.getAttribute('data-alt');
+        if (src) { featuredImage.src = src; featuredImage.alt = alt || ''; }
+        document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+        firstVisible.classList.add('active');
       }
-    } catch (e) { console.error('Error hiding deleted images:', e); }
+    } catch (e) { console.error('Error initializing gallery:', e); }
   })();
 
   const thumbnails = document.querySelectorAll('.thumbnail');

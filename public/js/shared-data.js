@@ -212,6 +212,18 @@ window.SharedData = {
     return await apiCall('contactInquiries', 'set', 'list', inquiries);
   },
 
+  // ============== IMAGE ORDER ==============
+  // Stores custom image order per room/gallery category
+  // Format: { 'hilo-bay': ['path1', 'path2', ...], 'gallery-scenery': [...] }
+  async getImageOrder() {
+    return await apiCall('imageOrder', 'get');
+  },
+
+  async saveImageOrder(order) {
+    clearCache('imageOrder');
+    return await apiCall('imageOrder', 'set', 'data', order);
+  },
+
   // Clear all caches
   clearCache
 };

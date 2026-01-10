@@ -16,7 +16,8 @@ const STORES = {
   deletedImages: 'deleted-images',
   editedImages: 'edited-images',
   newsletterSubscribers: 'newsletter-subscribers',
-  contactInquiries: 'contact-inquiries'
+  contactInquiries: 'contact-inquiries',
+  imageOrder: 'image-order'
 };
 
 // Default admin (only used on first setup)
@@ -88,10 +89,8 @@ export async function handler(event, context) {
     switch (action) {
       case 'get': {
         let value = null;
-        console.log(`GET: store=${storeName}, key=${key || 'data'}`);
         try {
           value = await store.get(key || 'data', { type: 'json' });
-          console.log(`GET result for ${storeName}:`, JSON.stringify(value));
         } catch (getError) {
           console.error('Failed to get from blob store:', getError);
           // Return defaults on error
@@ -112,7 +111,7 @@ export async function handler(event, context) {
             return { statusCode: 200, headers, body: JSON.stringify([]) };
           }
           if (storeName === 'editedImages' || storeName === 'aiTraining' ||
-              storeName === 'securitySettings') {
+              storeName === 'securitySettings' || storeName === 'imageOrder') {
             return { statusCode: 200, headers, body: JSON.stringify({}) };
           }
         }

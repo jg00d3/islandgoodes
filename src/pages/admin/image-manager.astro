@@ -212,10 +212,24 @@ const galleryCategories = [
     <div class="container">
       <div class="section-header-row">
         <h2>Room Images</h2>
-        <label class="select-mode-toggle">
-          <input type="checkbox" id="selectModeToggle" />
-          <span>Selection Mode</span>
-        </label>
+        <div style="display: flex; align-items: center;">
+          <label class="select-mode-toggle">
+            <input type="checkbox" id="selectModeToggle" />
+            <span>Selection Mode</span>
+          </label>
+          <label class="select-mode-toggle reorder-mode-toggle">
+            <input type="checkbox" id="reorderModeToggle" />
+            <span>Reorder Mode</span>
+          </label>
+          <button id="saveOrderBtn" class="save-order-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+              <polyline points="17 21 17 13 7 13 7 21"/>
+              <polyline points="7 3 7 8 15 8"/>
+            </svg>
+            Save Order
+          </button>
+        </div>
       </div>
       <div class="tabs">
         {rooms.map((room, index) => (
@@ -232,10 +246,11 @@ const galleryCategories = [
             <h3>{room.name}</h3>
             <span class="path">{room.path}</span>
           </div>
-          <div class="image-grid">
-            {room.images.map(img => (
-              <div class="image-card" data-src={`${room.path}${img}`} data-name={img}>
+          <div class="image-grid" data-room-id={room.id}>
+            {room.images.map((img, idx) => (
+              <div class="image-card" data-src={`${room.path}${img}`} data-name={img} draggable="false">
                 <input type="checkbox" class="image-checkbox" />
+                <span class="reorder-badge">{idx + 1}</span>
                 <img src={`${room.path}${img}`} alt={`${room.name} - ${img}`} loading="lazy" />
                 <div class="image-overlay">
                   <span class="image-name">{img}</span>
@@ -281,10 +296,11 @@ const galleryCategories = [
             <h3>{cat.name}</h3>
             <span class="path">{cat.path}</span>
           </div>
-          <div class="image-grid">
-            {cat.images.map(img => (
-              <div class="image-card" data-src={`${cat.path}${img}`} data-name={img}>
+          <div class="image-grid" data-gallery-id={cat.id}>
+            {cat.images.map((img, idx) => (
+              <div class="image-card" data-src={`${cat.path}${img}`} data-name={img} draggable="false">
                 <input type="checkbox" class="image-checkbox" />
+                <span class="reorder-badge">{idx + 1}</span>
                 <img src={`${cat.path}${img}`} alt={`${cat.name} - ${img}`} loading="lazy" />
                 <div class="image-overlay">
                   <span class="image-name">{img}</span>
@@ -491,6 +507,77 @@ const galleryCategories = [
     color: #fff;
     font-size: 0.75rem;
     font-weight: 700;
+  }
+
+  /* Reorder Mode */
+  .reorder-mode .image-card {
+    cursor: grab;
+  }
+
+  .reorder-mode .image-card:active {
+    cursor: grabbing;
+  }
+
+  .reorder-mode .image-card.dragging {
+    opacity: 0.5;
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  }
+
+  .reorder-mode .image-card.drag-over {
+    border: 3px dashed var(--color-primary);
+    background: var(--color-primary-subtle);
+  }
+
+  .reorder-mode .image-overlay {
+    display: none !important;
+  }
+
+  .reorder-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--color-primary);
+    color: #fff;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    z-index: 10;
+  }
+
+  .reorder-mode .reorder-badge {
+    display: flex;
+  }
+
+  .save-order-btn {
+    display: none;
+    margin-left: 1rem;
+    background: #10B981;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .save-order-btn:hover {
+    background: #059669;
+  }
+
+  .save-order-btn.visible {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .reorder-mode-toggle {
+    margin-left: 1rem;
   }
 
   /* Gallery Section */
@@ -1538,4 +1625,201 @@ const galleryCategories = [
 
     await logActivity('image', 'Images uploaded for editing', `${files.length} file(s)`);
   }
+
+  // ============================================
+  // IMAGE REORDERING (DRAG & DROP)
+  // ============================================
+  let reorderMode = false;
+  let hasUnsavedOrder = false;
+  let draggedElement: HTMLElement | null = null;
+
+  const reorderModeToggle = document.getElementById('reorderModeToggle') as HTMLInputElement;
+  const saveOrderBtn = document.getElementById('saveOrderBtn');
+
+  // Toggle reorder mode
+  reorderModeToggle?.addEventListener('change', () => {
+    reorderMode = reorderModeToggle.checked;
+
+    // Disable selection mode if reorder mode is enabled
+    if (reorderMode && selectModeToggle?.checked) {
+      selectModeToggle.checked = false;
+      selectMode = false;
+      document.querySelectorAll('.rooms-section, .gallery-section').forEach(section => {
+        section.classList.remove('select-mode');
+      });
+      if (bulkToolbar) bulkToolbar.style.display = 'none';
+    }
+
+    // Toggle reorder mode classes
+    document.querySelectorAll('.rooms-section, .gallery-section').forEach(section => {
+      section.classList.toggle('reorder-mode', reorderMode);
+    });
+
+    // Enable/disable draggable on image cards
+    document.querySelectorAll('.image-card').forEach(card => {
+      (card as HTMLElement).draggable = reorderMode;
+    });
+
+    // Show/hide save button
+    if (saveOrderBtn) {
+      saveOrderBtn.classList.toggle('visible', reorderMode && hasUnsavedOrder);
+    }
+  });
+
+  // Update order badges after reordering
+  function updateOrderBadges(grid: HTMLElement) {
+    const cards = grid.querySelectorAll('.image-card');
+    cards.forEach((card, idx) => {
+      const badge = card.querySelector('.reorder-badge');
+      if (badge) badge.textContent = String(idx + 1);
+    });
+  }
+
+  // Get current order for a grid
+  function getGridOrder(grid: HTMLElement): string[] {
+    return Array.from(grid.querySelectorAll('.image-card'))
+      .map(card => (card as HTMLElement).dataset.src || '');
+  }
+
+  // Drag and drop handlers for image cards
+  document.querySelectorAll('.image-card').forEach(card => {
+    card.addEventListener('dragstart', (e) => {
+      if (!reorderMode) return;
+      draggedElement = card as HTMLElement;
+      (card as HTMLElement).classList.add('dragging');
+      (e as DragEvent).dataTransfer?.setData('text/plain', (card as HTMLElement).dataset.src || '');
+    });
+
+    card.addEventListener('dragend', () => {
+      if (!reorderMode) return;
+      (card as HTMLElement).classList.remove('dragging');
+      document.querySelectorAll('.image-card').forEach(c => c.classList.remove('drag-over'));
+      draggedElement = null;
+    });
+
+    card.addEventListener('dragover', (e) => {
+      if (!reorderMode || !draggedElement) return;
+      e.preventDefault();
+      (card as HTMLElement).classList.add('drag-over');
+    });
+
+    card.addEventListener('dragleave', () => {
+      if (!reorderMode) return;
+      (card as HTMLElement).classList.remove('drag-over');
+    });
+
+    card.addEventListener('drop', (e) => {
+      if (!reorderMode || !draggedElement) return;
+      e.preventDefault();
+      (card as HTMLElement).classList.remove('drag-over');
+
+      const targetCard = card as HTMLElement;
+      const grid = targetCard.closest('.image-grid');
+
+      if (grid && draggedElement !== targetCard) {
+        // Get positions
+        const allCards = Array.from(grid.querySelectorAll('.image-card'));
+        const draggedIndex = allCards.indexOf(draggedElement);
+        const targetIndex = allCards.indexOf(targetCard);
+
+        // Reorder DOM
+        if (draggedIndex < targetIndex) {
+          targetCard.parentNode?.insertBefore(draggedElement, targetCard.nextSibling);
+        } else {
+          targetCard.parentNode?.insertBefore(draggedElement, targetCard);
+        }
+
+        // Update badges
+        updateOrderBadges(grid as HTMLElement);
+
+        // Mark as having unsaved changes
+        hasUnsavedOrder = true;
+        if (saveOrderBtn) saveOrderBtn.classList.add('visible');
+      }
+    });
+  });
+
+  // Save order button
+  saveOrderBtn?.addEventListener('click', async () => {
+    try {
+      const imageOrder = await window.SharedData.getImageOrder() || {};
+
+      // Save order for each room grid
+      document.querySelectorAll('.image-grid[data-room-id]').forEach(grid => {
+        const roomId = (grid as HTMLElement).dataset.roomId;
+        if (roomId) {
+          imageOrder[roomId] = getGridOrder(grid as HTMLElement);
+        }
+      });
+
+      // Save order for each gallery grid
+      document.querySelectorAll('.image-grid[data-gallery-id]').forEach(grid => {
+        const galleryId = (grid as HTMLElement).dataset.galleryId;
+        if (galleryId) {
+          imageOrder[`gallery-${galleryId}`] = getGridOrder(grid as HTMLElement);
+        }
+      });
+
+      await window.SharedData.saveImageOrder(imageOrder);
+      await logActivity('image', 'Image order updated', 'Custom image order saved');
+
+      hasUnsavedOrder = false;
+      saveOrderBtn.classList.remove('visible');
+      alert('Image order saved! The new order will appear on the live site.');
+    } catch (err) {
+      console.error('Failed to save image order:', err);
+      alert('Failed to save image order. Please try again.');
+    }
+  });
+
+  // Load saved order on page load
+  async function applySavedOrder() {
+    try {
+      const imageOrder = await window.SharedData.getImageOrder();
+      if (!imageOrder || Object.keys(imageOrder).length === 0) return;
+
+      // Apply order to room grids
+      document.querySelectorAll('.image-grid[data-room-id]').forEach(grid => {
+        const roomId = (grid as HTMLElement).dataset.roomId;
+        if (roomId && imageOrder[roomId]) {
+          reorderGrid(grid as HTMLElement, imageOrder[roomId]);
+        }
+      });
+
+      // Apply order to gallery grids
+      document.querySelectorAll('.image-grid[data-gallery-id]').forEach(grid => {
+        const galleryId = (grid as HTMLElement).dataset.galleryId;
+        if (galleryId && imageOrder[`gallery-${galleryId}`]) {
+          reorderGrid(grid as HTMLElement, imageOrder[`gallery-${galleryId}`]);
+        }
+      });
+    } catch (err) {
+      console.error('Failed to load saved image order:', err);
+    }
+  }
+
+  function reorderGrid(grid: HTMLElement, order: string[]) {
+    const cards = Array.from(grid.querySelectorAll('.image-card')) as HTMLElement[];
+    const cardMap = new Map(cards.map(card => [card.dataset.src, card]));
+
+    // Reorder based on saved order
+    order.forEach(src => {
+      const card = cardMap.get(src);
+      if (card) {
+        grid.appendChild(card);
+      }
+    });
+
+    // Append any cards not in the saved order (new images)
+    cards.forEach(card => {
+      if (!order.includes(card.dataset.src || '')) {
+        grid.appendChild(card);
+      }
+    });
+
+    updateOrderBadges(grid);
+  }
+
+  // Apply saved order on load
+  applySavedOrder();
 </script>

@@ -488,25 +488,85 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
 </style>
 
 <script>
-  // Hide deleted images - fetch directly from API
-  (async function hideDeletedImages() {
+  // Apply custom image order and hide deleted images
+  (async function initializeGallery() {
+    const galleryGrid = document.querySelector('.gallery-grid');
+
     try {
-      const response = await fetch('/.netlify/functions/data-store', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ store: 'deletedImages', action: 'get', key: 'data' })
-      });
-      if (!response.ok) return;
-      const deleted = await response.json();
-      if (!deleted || !Array.isArray(deleted) || deleted.length === 0) return;
-      const deletedPaths = deleted.map((d: any) => d.path || d);
+      const [deletedResponse, orderResponse] = await Promise.all([
+        fetch('/.netlify/functions/data-store', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ store: 'deletedImages', action: 'get', key: 'data' })
+        }),
+        fetch('/.netlify/functions/data-store', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ store: 'imageOrder', action: 'get', key: 'data' })
+        })
+      ]);
+
+      const deleted = deletedResponse.ok ? await deletedResponse.json() : [];
+      const imageOrder = orderResponse.ok ? await orderResponse.json() : {};
+      const deletedPaths = Array.isArray(deleted) ? deleted.map((d: any) => d.path || d) : [];
+
+      // Apply custom order per category (gallery categories are stored as gallery-<category>)
+      if (galleryGrid && Object.keys(imageOrder).length > 0) {
+        const categoryMap: { [key: string]: string } = {
+          'scenery': 'gallery-scenery',
+          'attractions': 'gallery-attractions',
+          'beaches': 'gallery-beaches'
+        };
+
+        // Get all gallery items and group by category
+        const allItems = Array.from(galleryGrid.querySelectorAll('.gallery-item')) as HTMLElement[];
+
+        // For each category with custom order, sort those items
+        for (const [category, orderKey] of Object.entries(categoryMap)) {
+          const customOrder = imageOrder[orderKey] || [];
+          if (customOrder.length === 0) continue;
+
+          // Get items in this category
+          const categoryItems = allItems.filter(item =>
+            item.getAttribute('data-category')?.toLowerCase() === category.charAt(0).toUpperCase() + category.slice(1) ||
+            item.getAttribute('data-category') === category
+          );
+
+          // Create a map of src to item
+          const itemMap = new Map<string, HTMLElement>();
+          categoryItems.forEach(item => {
+            const img = item.querySelector('img') as HTMLImageElement;
+            if (img) {
+              const src = img.src.replace(window.location.origin, '');
+              itemMap.set(src, item);
+            }
+          });
+
+          // Reorder items based on saved order
+          customOrder.forEach((src: string) => {
+            const item = itemMap.get(src);
+            if (item) galleryGrid.appendChild(item);
+          });
+
+          // Append items not in the saved order
+          categoryItems.forEach(item => {
+            const img = item.querySelector('img') as HTMLImageElement;
+            if (img) {
+              const src = img.src.replace(window.location.origin, '');
+              if (!customOrder.includes(src)) galleryGrid.appendChild(item);
+            }
+          });
+        }
+      }
+
+      // Hide deleted images
       document.querySelectorAll('.gallery-item').forEach((item) => {
         const img = item.querySelector('img') as HTMLImageElement;
         if (img && deletedPaths.includes(img.src.replace(window.location.origin, ''))) {
           (item as HTMLElement).style.display = 'none';
         }
       });
-    } catch (e) { console.error('Error hiding deleted images:', e); }
+    } catch (e) { console.error('Error initializing gallery:', e); }
   })();
 
   // Filter functionality

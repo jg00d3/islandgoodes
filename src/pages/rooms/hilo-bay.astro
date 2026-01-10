@@ -584,51 +584,76 @@ const bathroomAmenities = [
 </style>
 
 <script>
-  // Hide deleted images - fetch directly from API
-  (async function hideDeletedImages() {
+  // Apply custom image order and hide deleted images
+  (async function initializeGallery() {
+    const thumbnailGrid = document.querySelector('.thumbnail-grid');
+    const featuredImage = document.getElementById('featured-image') as HTMLImageElement;
+    const mainImageContainer = document.querySelector('.main-image');
+
     try {
-      const response = await fetch('/.netlify/functions/data-store', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ store: 'deletedImages', action: 'get', key: 'data', data: null })
-      });
-      console.log('Deleted images API response status:', response.status);
-      if (!response.ok) { console.log('API response not ok'); return; }
-      const deleted = await response.json();
-      console.log('Deleted images from API:', deleted);
-      if (!deleted || !Array.isArray(deleted) || deleted.length === 0) { console.log('No deleted images'); return; }
+      // Fetch both deleted images and custom order
+      const [deletedResponse, orderResponse] = await Promise.all([
+        fetch('/.netlify/functions/data-store', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ store: 'deletedImages', action: 'get', key: 'data', data: null })
+        }),
+        fetch('/.netlify/functions/data-store', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ store: 'imageOrder', action: 'get', key: 'data', data: null })
+        })
+      ]);
 
-      const deletedPaths = deleted.map((d: any) => d.path || d);
-      console.log('Deleted paths:', deletedPaths);
+      const deleted = deletedResponse.ok ? await deletedResponse.json() : [];
+      const imageOrder = orderResponse.ok ? await orderResponse.json() : {};
+
+      const deletedPaths = Array.isArray(deleted) ? deleted.map((d: any) => d.path || d) : [];
+      const customOrder = imageOrder['hilo-bay'] || [];
+
+      // Apply custom order if it exists
+      if (customOrder.length > 0 && thumbnailGrid) {
+        const thumbnails = Array.from(thumbnailGrid.querySelectorAll('.thumbnail')) as HTMLElement[];
+        const thumbMap = new Map(thumbnails.map(t => [t.getAttribute('data-src'), t]));
+
+        // Reorder based on saved order
+        customOrder.forEach((src: string) => {
+          const thumb = thumbMap.get(src);
+          if (thumb) thumbnailGrid.appendChild(thumb);
+        });
+
+        // Append any thumbnails not in the saved order
+        thumbnails.forEach(thumb => {
+          if (!customOrder.includes(thumb.getAttribute('data-src'))) {
+            thumbnailGrid.appendChild(thumb);
+          }
+        });
+      }
+
+      // Hide deleted images
       let hiddenCount = 0;
-
       document.querySelectorAll('.thumbnail').forEach((thumb) => {
         const src = thumb.getAttribute('data-src');
         if (src && deletedPaths.includes(src)) {
           (thumb as HTMLElement).style.display = 'none';
           hiddenCount++;
-          console.log('Hiding thumbnail:', src);
         }
       });
-      console.log('Total hidden:', hiddenCount);
 
-      // Update featured image if we hid any
-      if (hiddenCount > 0) {
-        const firstVisible = document.querySelector('.thumbnail:not([style*="display: none"])') as HTMLElement;
-        if (firstVisible) {
-          const featuredImage = document.getElementById('featured-image') as HTMLImageElement;
-          const src = firstVisible.getAttribute('data-src');
-          const alt = firstVisible.getAttribute('data-alt');
-          if (featuredImage && src) {
-            featuredImage.src = src;
-            featuredImage.alt = alt || '';
-          }
-          document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
-          firstVisible.classList.add('active');
+      // Update featured image to first visible thumbnail
+      const firstVisible = document.querySelector('.thumbnail:not([style*="display: none"])') as HTMLElement;
+      if (firstVisible && featuredImage) {
+        const src = firstVisible.getAttribute('data-src');
+        const alt = firstVisible.getAttribute('data-alt');
+        if (src) {
+          featuredImage.src = src;
+          featuredImage.alt = alt || '';
         }
+        document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+        firstVisible.classList.add('active');
       }
     } catch (e) {
-      console.error('Error hiding deleted images:', e);
+      console.error('Error initializing gallery:', e);
     }
   })();
 
@@ -653,6 +678,6 @@ const bathroomAmenities = [
     });
   });
 
-  // Set first thumbnail as active
+  // Set first thumbnail as active (will be updated by initializeGallery)
   thumbnails[0]?.classList.add('active');
 </script>
