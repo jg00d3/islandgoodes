@@ -590,7 +590,7 @@ const bathroomAmenities = [
       const response = await fetch('/.netlify/functions/data-store', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ store: 'deletedImages', action: 'get', key: 'data' })
+        body: JSON.stringify({ store: 'deletedImages', action: 'get', key: 'data', data: null })
       });
       console.log('Deleted images API response status:', response.status);
       if (!response.ok) { console.log('API response not ok'); return; }

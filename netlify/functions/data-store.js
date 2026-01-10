@@ -81,8 +81,10 @@ export async function handler(event, context) {
     switch (action) {
       case 'get': {
         let value = null;
+        console.log(`GET: store=${storeName}, key=${key || 'data'}`);
         try {
           value = await store.get(key || 'data', { type: 'json' });
+          console.log(`GET result for ${storeName}:`, JSON.stringify(value));
         } catch (getError) {
           console.error('Failed to get from blob store:', getError);
           // Return defaults on error
@@ -112,8 +114,15 @@ export async function handler(event, context) {
       }
 
       case 'set': {
-        await store.setJSON(key || 'data', data);
-        return { statusCode: 200, headers, body: JSON.stringify({ success: true }) };
+        console.log(`SET: store=${storeName}, key=${key || 'data'}, data=`, JSON.stringify(data));
+        try {
+          await store.setJSON(key || 'data', data);
+          console.log(`SET success for ${storeName}`);
+          return { statusCode: 200, headers, body: JSON.stringify({ success: true }) };
+        } catch (setError) {
+          console.error(`SET failed for ${storeName}:`, setError);
+          return { statusCode: 500, headers, body: JSON.stringify({ error: 'Failed to save', details: setError.message }) };
+        }
       }
 
       case 'delete': {
