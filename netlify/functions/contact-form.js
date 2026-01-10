@@ -33,7 +33,7 @@ export async function handler(event) {
 
     // Send notification to Island Goodes
     const { data: notifyData, error: notifyError } = await resend.emails.send({
-      from: 'Island Goodes Website <onboarding@resend.dev>',
+      from: 'Island Goodes Website (No Reply) <onboarding@resend.dev>',
       to: ['sysadmroot@gmail.com'], // Your notification email
       replyTo: email,
       subject: `New Contact Form: ${name}`,
@@ -88,7 +88,7 @@ export async function handler(event) {
 
     // Send confirmation to the visitor
     const { data: confirmData, error: confirmError } = await resend.emails.send({
-      from: 'Island Goodes <onboarding@resend.dev>',
+      from: 'Island Goodes (No Reply) <onboarding@resend.dev>',
       to: [email],
       subject: 'Thank you for contacting Island Goodes!',
       html: `
