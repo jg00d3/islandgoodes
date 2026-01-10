@@ -1430,22 +1430,18 @@ const galleryCategories = [
     }
 
     try {
-      const deleted = await window.SharedData.getDeletedImages() || [];
-      if (!deleted.some((d: any) => (d.path || d) === currentImagePath)) {
-        deleted.push({
-          path: currentImagePath,
-          name: currentImageName,
-          deletedAt: new Date().toISOString()
-        });
-        await window.SharedData.saveDeletedImages(deleted);
+      const marked = await getMarkedImages();
+      if (!marked.includes(currentImagePath)) {
+        marked.push(currentImagePath);
+        await saveMarkedImages(marked);
       }
 
       await logActivity('image', 'Image deleted', currentImageName);
 
-      // Hide the image card
+      // Mark the image card as deleted (same as bulk delete)
       const card = document.querySelector(`.image-card[data-src="${currentImagePath}"]`);
       if (card) {
-        (card as HTMLElement).style.display = 'none';
+        card.classList.add('marked-delete');
       }
 
       // Close modal

@@ -305,31 +305,37 @@ const bathroomAmenities = [
   @media (max-width: 768px) { .quick-info { grid-template-columns: repeat(2, 1fr); } .thumbnail-grid { grid-template-columns: repeat(3, 1fr); } .amenities-grid { grid-template-columns: 1fr; } }
 </style>
 
-<script is:inline src="/js/shared-data.js"></script>
 <script>
-  // Hide deleted images from shared storage
+  // Hide deleted images - fetch directly from API
   (async function hideDeletedImages() {
     try {
-      if (typeof SharedData === 'undefined') return;
-      const deleted = await SharedData.getDeletedImages();
-      if (!deleted || !Array.isArray(deleted)) return;
+      const response = await fetch('/.netlify/functions/data-store', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ store: 'deletedImages', action: 'get', key: 'data' })
+      });
+      if (!response.ok) return;
+      const deleted = await response.json();
+      if (!deleted || !Array.isArray(deleted) || deleted.length === 0) return;
       const deletedPaths = deleted.map((d: any) => d.path || d);
+      let hiddenCount = 0;
       document.querySelectorAll('.thumbnail').forEach((thumb) => {
         const src = thumb.getAttribute('data-src');
         if (src && deletedPaths.includes(src)) {
           (thumb as HTMLElement).style.display = 'none';
+          hiddenCount++;
         }
       });
-      const firstVisible = document.querySelector('.thumbnail:not([style*="display: none"])') as HTMLElement;
-      if (firstVisible) {
-        const featuredImage = document.getElementById('featured-image') as HTMLImageElement;
-        const src = firstVisible.getAttribute('data-src');
-        const alt = firstVisible.getAttribute('data-alt');
-        if (featuredImage && src) {
-          featuredImage.src = src;
-          featuredImage.alt = alt || '';
+      if (hiddenCount > 0) {
+        const firstVisible = document.querySelector('.thumbnail:not([style*="display: none"])') as HTMLElement;
+        if (firstVisible) {
+          const featuredImage = document.getElementById('featured-image') as HTMLImageElement;
+          const src = firstVisible.getAttribute('data-src');
+          const alt = firstVisible.getAttribute('data-alt');
+          if (featuredImage && src) { featuredImage.src = src; featuredImage.alt = alt || ''; }
+          document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+          firstVisible.classList.add('active');
         }
-        firstVisible.classList.add('active');
       }
     } catch (e) { console.error('Error hiding deleted images:', e); }
   })();
