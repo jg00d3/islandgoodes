@@ -1092,45 +1092,32 @@ const description = "Manage admin accounts with email 2FA";
 
   // ============================================
   // WELCOME EMAIL (when adding new admin)
+  // Uses Resend via Netlify Function
   // ============================================
   async function sendWelcomeEmail(email: string, fullName: string, username: string, password: string): Promise<boolean> {
     console.log(`[WELCOME EMAIL] Sending to ${email} for ${fullName}`);
 
-    // EmailJS configuration - update these with your values
-    const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';
-
-    if (EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
-      // EmailJS not configured - show credentials in alert
-      alert(`📧 NEW ADMIN CREDENTIALS\n\nName: ${fullName}\nUsername: ${username}\nPassword: ${password}\nLogin URL: ${window.location.origin}/admin\n\n⚠️ Welcome emails are not configured yet.\nPlease share these credentials with ${fullName} securely.`);
-      return true;
-    }
-
     try {
-      // Load EmailJS if needed
-      if (!(window as any).emailjs) {
-        await new Promise((resolve, reject) => {
-          const script = document.createElement('script');
-          script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
-          script.onload = resolve;
-          script.onerror = reject;
-          document.head.appendChild(script);
-        });
-        (window as any).emailjs.init(EMAILJS_PUBLIC_KEY);
-      }
-
-      await (window as any).emailjs.send('service_islandgoodes', 'template_welcome', {
-        to_email: email,
-        to_name: fullName,
-        username: username,
-        password: password,
-        login_url: `${window.location.origin}/admin`
+      const response = await fetch('/.netlify/functions/send-welcome', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, fullName, username, password })
       });
 
-      alert(`Welcome email sent to ${fullName} at ${email}!`);
-      return true;
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(`Welcome email sent to ${fullName} at ${email}!\n\nThey will receive their login credentials and instructions.`);
+        return true;
+      } else {
+        // Email failed - show credentials manually
+        console.error('Welcome email error:', data.error);
+        alert(`Welcome email could not be sent.\n\nPlease share these credentials with ${fullName} manually:\n\nUsername: ${username}\nPassword: ${password}\nLogin URL: ${window.location.origin}/admin`);
+        return true;
+      }
     } catch (error) {
-      console.error('EmailJS error:', error);
-      alert(`Welcome email failed. Please share these credentials manually:\n\nName: ${fullName}\nUsername: ${username}\nPassword: ${password}\nLogin URL: ${window.location.origin}/admin`);
+      console.error('Welcome email error:', error);
+      alert(`Welcome email could not be sent.\n\nPlease share these credentials with ${fullName} manually:\n\nUsername: ${username}\nPassword: ${password}\nLogin URL: ${window.location.origin}/admin`);
       return true;
     }
   }
