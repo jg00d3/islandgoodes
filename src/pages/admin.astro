@@ -1317,6 +1317,8 @@ const description = "Analytics dashboard for Island Goodes.";
   const ADMIN_STORAGE_KEY = 'islandgoodes_admins';
   const SESSION_KEY = 'islandgoodes_admin_session';
   const SECURITY_KEY = 'islandgoodes_security';
+  const TRUSTED_DEVICE_KEY = 'islandgoodes_trusted_device';
+  const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
 
   // 2FA via Resend (Netlify Functions)
   const SEND_2FA_URL = '/.netlify/functions/send-2fa';
@@ -1367,6 +1369,31 @@ const description = "Analytics dashboard for Island Goodes.";
     } catch {
       return { require2FA: true, sessionTimeout: 30 };
     }
+  }
+
+  // Check if this device is trusted (2FA verified within 7 days)
+  function isDeviceTrusted(email: string): boolean {
+    try {
+      const stored = localStorage.getItem(TRUSTED_DEVICE_KEY);
+      if (!stored) return false;
+      const trusted = JSON.parse(stored);
+      // Check if this email has a valid trust token
+      if (trusted.email === email && trusted.expires > Date.now()) {
+        return true;
+      }
+      return false;
+    } catch {
+      return false;
+    }
+  }
+
+  // Set device as trusted for 7 days
+  function setDeviceTrusted(email: string) {
+    localStorage.setItem(TRUSTED_DEVICE_KEY, JSON.stringify({
+      email: email,
+      expires: Date.now() + SEVEN_DAYS_MS,
+      created: new Date().toISOString()
+    }));
   }
 
   // Get current session
@@ -1490,6 +1517,14 @@ const description = "Analytics dashboard for Island Goodes.";
     // Check if 2FA is required
     const settings = getSecuritySettings();
     if (settings.require2FA) {
+      // Check if this device is already trusted (2FA verified within 7 days)
+      if (isDeviceTrusted(admin.email)) {
+        console.log('[2FA] Device is trusted, skipping 2FA');
+        setSession(admin);
+        showDashboard();
+        return;
+      }
+
       // Show loading state
       if (submitBtn) {
         submitBtn.disabled = true;
@@ -1574,6 +1609,8 @@ const description = "Analytics dashboard for Island Goodes.";
     }
 
     if (result.success) {
+      // Set device as trusted for 7 days
+      setDeviceTrusted(currentAdmin.email);
       setSession(currentAdmin);
       showDashboard();
     } else {
