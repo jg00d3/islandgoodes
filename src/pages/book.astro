@@ -14,6 +14,20 @@ const description = "Book your stay at Island Goodes, an adults-only oceanview a
       </div>
     </div>
 
+    <div class="language-notice" id="languageNotice">
+      <span class="notice-icon">🌐</span>
+      <span class="notice-text">
+        <span lang="en">Use the language selector on the booking form below to translate.</span>
+        <span lang="ja">下の予約フォームの言語セレクターをご利用ください。</span>
+        <span lang="zh">请使用下方预订表格上的语言选择器进行翻译。</span>
+        <span lang="ko">아래 예약 양식의 언어 선택기를 사용하세요.</span>
+        <span lang="de">Verwenden Sie die Sprachauswahl im Buchungsformular unten.</span>
+        <span lang="fr">Utilisez le sélecteur de langue sur le formulaire de réservation ci-dessous.</span>
+        <span lang="es">Use el selector de idioma en el formulario de reserva a continuación.</span>
+      </span>
+      <button class="notice-close" id="noticeClose" aria-label="Close">&times;</button>
+    </div>
+
     <div class="iframe-container">
       <div class="iframe-loading" id="iframeLoading">
         <div class="spinner"></div>
@@ -140,4 +154,120 @@ const description = "Book your stay at Island Goodes, an adults-only oceanview a
       height: calc(100vh - 140px);
     }
   }
+
+  /* Language Notice */
+  .language-notice {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-bottom: 1px solid #bae6fd;
+    padding: 0.75rem 2rem;
+    font-size: 0.9375rem;
+    color: #0369a1;
+  }
+
+  .language-notice.hidden {
+    display: none;
+  }
+
+  .notice-icon {
+    font-size: 1.25rem;
+  }
+
+  .notice-text {
+    flex: 1;
+  }
+
+  .notice-text span {
+    display: none;
+  }
+
+  .notice-text span:first-child {
+    display: inline;
+  }
+
+  .notice-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #0369a1;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    opacity: 0.7;
+  }
+
+  .notice-close:hover {
+    opacity: 1;
+  }
+
+  @media (max-width: 768px) {
+    .language-notice {
+      padding: 0.625rem 1rem;
+      font-size: 0.875rem;
+    }
+  }
 </style>
+
+<script>
+  // Show the appropriate language notice based on Google Translate selection
+  (function() {
+    const notice = document.getElementById('languageNotice');
+    const closeBtn = document.getElementById('noticeClose');
+
+    // Check if user dismissed the notice
+    if (sessionStorage.getItem('langNoticeDismissed')) {
+      notice?.classList.add('hidden');
+      return;
+    }
+
+    // Close button
+    closeBtn?.addEventListener('click', function() {
+      notice?.classList.add('hidden');
+      sessionStorage.setItem('langNoticeDismissed', 'true');
+    });
+
+    // Update shown language based on current page language
+    function updateNoticeLanguage() {
+      const htmlLang = document.documentElement.lang || 'en';
+      const langMap: Record<string, string> = {
+        'ja': 'ja', 'zh-CN': 'zh', 'zh-TW': 'zh', 'ko': 'ko',
+        'de': 'de', 'fr': 'fr', 'es': 'es'
+      };
+
+      const targetLang = langMap[htmlLang] || 'en';
+      const textContainer = document.querySelector('.notice-text');
+
+      if (textContainer) {
+        // Hide all spans
+        textContainer.querySelectorAll('span').forEach(span => {
+          span.style.display = 'none';
+        });
+        // Show the matching one
+        const targetSpan = textContainer.querySelector(`span[lang="${targetLang}"]`);
+        if (targetSpan) {
+          (targetSpan as HTMLElement).style.display = 'inline';
+        } else {
+          // Fallback to English
+          const enSpan = textContainer.querySelector('span[lang="en"]');
+          if (enSpan) (enSpan as HTMLElement).style.display = 'inline';
+        }
+      }
+    }
+
+    // Initial check
+    updateNoticeLanguage();
+
+    // Watch for language changes
+    const observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.attributeName === 'lang' || mutation.attributeName === 'class') {
+          updateNoticeLanguage();
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, { attributes: true });
+  })();
+</script>
