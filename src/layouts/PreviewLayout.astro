@@ -142,6 +142,7 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
             <button class="lang-option" data-lang="de">Deutsch</button>
             <button class="lang-option" data-lang="fr">Français</button>
             <button class="lang-option" data-lang="es">Español</button>
+            <button class="lang-option lang-more" id="langMoreBtn">More...</button>
           </div>
         </li>
         <li><a href="/book" class="btn btn-primary">Book Now</a></li>
@@ -221,6 +222,118 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
       </div>
     </div>
   </footer>
+
+  <!-- Language Modal -->
+  <div class="lang-modal" id="langModal">
+    <div class="lang-modal-content">
+      <div class="lang-modal-header">
+        <h3>Select Language</h3>
+        <button class="lang-modal-close" id="langModalClose">&times;</button>
+      </div>
+      <div class="lang-modal-search">
+        <input type="text" id="langSearch" placeholder="Search languages..." />
+      </div>
+      <div class="lang-modal-grid" id="langGrid">
+        <button class="lang-grid-option" data-lang="en">English</button>
+        <button class="lang-grid-option" data-lang="af">Afrikaans</button>
+        <button class="lang-grid-option" data-lang="sq">Albanian</button>
+        <button class="lang-grid-option" data-lang="ar">العربية (Arabic)</button>
+        <button class="lang-grid-option" data-lang="hy">Armenian</button>
+        <button class="lang-grid-option" data-lang="az">Azerbaijani</button>
+        <button class="lang-grid-option" data-lang="eu">Basque</button>
+        <button class="lang-grid-option" data-lang="be">Belarusian</button>
+        <button class="lang-grid-option" data-lang="bn">Bengali</button>
+        <button class="lang-grid-option" data-lang="bs">Bosnian</button>
+        <button class="lang-grid-option" data-lang="bg">Bulgarian</button>
+        <button class="lang-grid-option" data-lang="ca">Catalan</button>
+        <button class="lang-grid-option" data-lang="ceb">Cebuano</button>
+        <button class="lang-grid-option" data-lang="zh-CN">中文 (Chinese)</button>
+        <button class="lang-grid-option" data-lang="zh-TW">繁體中文 (Traditional)</button>
+        <button class="lang-grid-option" data-lang="hr">Croatian</button>
+        <button class="lang-grid-option" data-lang="cs">Czech</button>
+        <button class="lang-grid-option" data-lang="da">Danish</button>
+        <button class="lang-grid-option" data-lang="nl">Dutch</button>
+        <button class="lang-grid-option" data-lang="eo">Esperanto</button>
+        <button class="lang-grid-option" data-lang="et">Estonian</button>
+        <button class="lang-grid-option" data-lang="fil">Filipino</button>
+        <button class="lang-grid-option" data-lang="fi">Finnish</button>
+        <button class="lang-grid-option" data-lang="fr">Français (French)</button>
+        <button class="lang-grid-option" data-lang="gl">Galician</button>
+        <button class="lang-grid-option" data-lang="ka">Georgian</button>
+        <button class="lang-grid-option" data-lang="de">Deutsch (German)</button>
+        <button class="lang-grid-option" data-lang="el">Greek</button>
+        <button class="lang-grid-option" data-lang="gu">Gujarati</button>
+        <button class="lang-grid-option" data-lang="ht">Haitian Creole</button>
+        <button class="lang-grid-option" data-lang="haw">Hawaiian</button>
+        <button class="lang-grid-option" data-lang="he">Hebrew</button>
+        <button class="lang-grid-option" data-lang="hi">हिन्दी (Hindi)</button>
+        <button class="lang-grid-option" data-lang="hu">Hungarian</button>
+        <button class="lang-grid-option" data-lang="is">Icelandic</button>
+        <button class="lang-grid-option" data-lang="id">Indonesian</button>
+        <button class="lang-grid-option" data-lang="ga">Irish</button>
+        <button class="lang-grid-option" data-lang="it">Italiano (Italian)</button>
+        <button class="lang-grid-option" data-lang="ja">日本語 (Japanese)</button>
+        <button class="lang-grid-option" data-lang="jv">Javanese</button>
+        <button class="lang-grid-option" data-lang="kn">Kannada</button>
+        <button class="lang-grid-option" data-lang="kk">Kazakh</button>
+        <button class="lang-grid-option" data-lang="km">Khmer</button>
+        <button class="lang-grid-option" data-lang="ko">한국어 (Korean)</button>
+        <button class="lang-grid-option" data-lang="ku">Kurdish</button>
+        <button class="lang-grid-option" data-lang="ky">Kyrgyz</button>
+        <button class="lang-grid-option" data-lang="lo">Lao</button>
+        <button class="lang-grid-option" data-lang="la">Latin</button>
+        <button class="lang-grid-option" data-lang="lv">Latvian</button>
+        <button class="lang-grid-option" data-lang="lt">Lithuanian</button>
+        <button class="lang-grid-option" data-lang="lb">Luxembourgish</button>
+        <button class="lang-grid-option" data-lang="mk">Macedonian</button>
+        <button class="lang-grid-option" data-lang="mg">Malagasy</button>
+        <button class="lang-grid-option" data-lang="ms">Malay</button>
+        <button class="lang-grid-option" data-lang="ml">Malayalam</button>
+        <button class="lang-grid-option" data-lang="mt">Maltese</button>
+        <button class="lang-grid-option" data-lang="mi">Maori</button>
+        <button class="lang-grid-option" data-lang="mr">Marathi</button>
+        <button class="lang-grid-option" data-lang="mn">Mongolian</button>
+        <button class="lang-grid-option" data-lang="my">Myanmar</button>
+        <button class="lang-grid-option" data-lang="ne">Nepali</button>
+        <button class="lang-grid-option" data-lang="no">Norwegian</button>
+        <button class="lang-grid-option" data-lang="ps">Pashto</button>
+        <button class="lang-grid-option" data-lang="fa">Persian</button>
+        <button class="lang-grid-option" data-lang="pl">Polish</button>
+        <button class="lang-grid-option" data-lang="pt">Português (Portuguese)</button>
+        <button class="lang-grid-option" data-lang="pa">Punjabi</button>
+        <button class="lang-grid-option" data-lang="ro">Romanian</button>
+        <button class="lang-grid-option" data-lang="ru">Русский (Russian)</button>
+        <button class="lang-grid-option" data-lang="sm">Samoan</button>
+        <button class="lang-grid-option" data-lang="gd">Scottish Gaelic</button>
+        <button class="lang-grid-option" data-lang="sr">Serbian</button>
+        <button class="lang-grid-option" data-lang="st">Sesotho</button>
+        <button class="lang-grid-option" data-lang="sn">Shona</button>
+        <button class="lang-grid-option" data-lang="sd">Sindhi</button>
+        <button class="lang-grid-option" data-lang="si">Sinhala</button>
+        <button class="lang-grid-option" data-lang="sk">Slovak</button>
+        <button class="lang-grid-option" data-lang="sl">Slovenian</button>
+        <button class="lang-grid-option" data-lang="so">Somali</button>
+        <button class="lang-grid-option" data-lang="es">Español (Spanish)</button>
+        <button class="lang-grid-option" data-lang="su">Sundanese</button>
+        <button class="lang-grid-option" data-lang="sw">Swahili</button>
+        <button class="lang-grid-option" data-lang="sv">Swedish</button>
+        <button class="lang-grid-option" data-lang="tg">Tajik</button>
+        <button class="lang-grid-option" data-lang="ta">Tamil</button>
+        <button class="lang-grid-option" data-lang="te">Telugu</button>
+        <button class="lang-grid-option" data-lang="th">ไทย (Thai)</button>
+        <button class="lang-grid-option" data-lang="tr">Turkish</button>
+        <button class="lang-grid-option" data-lang="uk">Ukrainian</button>
+        <button class="lang-grid-option" data-lang="ur">Urdu</button>
+        <button class="lang-grid-option" data-lang="uz">Uzbek</button>
+        <button class="lang-grid-option" data-lang="vi">Tiếng Việt (Vietnamese)</button>
+        <button class="lang-grid-option" data-lang="cy">Welsh</button>
+        <button class="lang-grid-option" data-lang="xh">Xhosa</button>
+        <button class="lang-grid-option" data-lang="yi">Yiddish</button>
+        <button class="lang-grid-option" data-lang="yo">Yoruba</button>
+        <button class="lang-grid-option" data-lang="zu">Zulu</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Image Lightbox -->
   <div class="lightbox" id="lightbox">
@@ -490,6 +603,115 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
   .lang-option:hover {
     background: var(--color-bg-alt);
     color: var(--color-primary);
+  }
+
+  .lang-more {
+    border-top: 1px solid #eee;
+    margin-top: 0.25rem;
+    padding-top: 0.5rem;
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  /* Language Modal */
+  .lang-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .lang-modal.show {
+    display: flex;
+  }
+
+  .lang-modal-content {
+    background: #fff;
+    border-radius: 16px;
+    max-width: 700px;
+    width: 100%;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .lang-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #eee;
+  }
+
+  .lang-modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--color-text);
+  }
+
+  .lang-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.75rem;
+    cursor: pointer;
+    color: #999;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .lang-modal-close:hover {
+    color: var(--color-text);
+  }
+
+  .lang-modal-search {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #eee;
+  }
+
+  .lang-modal-search input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+
+  .lang-modal-search input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .lang-modal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.5rem;
+    padding: 1.5rem;
+    overflow-y: auto;
+  }
+
+  .lang-grid-option {
+    padding: 0.75rem 1rem;
+    background: var(--color-bg-alt);
+    border: 1px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-align: left;
+    transition: all 0.2s;
+  }
+
+  .lang-grid-option:hover {
+    background: var(--color-primary);
+    color: #fff;
+  }
+
+  .lang-grid-option.hidden {
+    display: none;
   }
 
   /* Hide Google Translate banner */
@@ -1434,23 +1656,88 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
       langDropdown?.classList.remove('show');
     });
 
-    // Handle language selection
-    document.querySelectorAll('.lang-option').forEach(function(btn) {
+    // Handle language selection from dropdown
+    document.querySelectorAll('.lang-option:not(.lang-more)').forEach(function(btn) {
       btn.addEventListener('click', function() {
-        const lang = this.dataset.lang;
-        const select = document.querySelector('.goog-te-combo');
-
-        if (select) {
-          select.value = lang;
-          select.dispatchEvent(new Event('change'));
-        }
-
-        // Update label
-        const labels = { 'en': 'EN', 'ja': 'JP', 'zh-CN': '中', 'ko': '한', 'de': 'DE', 'fr': 'FR', 'es': 'ES' };
-        if (langLabel) langLabel.textContent = labels[lang] || 'EN';
-
+        selectLanguage(this.dataset.lang);
         langDropdown?.classList.remove('show');
       });
+    });
+
+    // Language modal elements
+    const langModal = document.getElementById('langModal');
+    const langModalClose = document.getElementById('langModalClose');
+    const langMoreBtn = document.getElementById('langMoreBtn');
+    const langSearch = document.getElementById('langSearch');
+
+    // Open modal on "More..." click
+    langMoreBtn?.addEventListener('click', function() {
+      langDropdown?.classList.remove('show');
+      langModal?.classList.add('show');
+      langSearch?.focus();
+      document.body.style.overflow = 'hidden';
+    });
+
+    // Close modal
+    function closeLangModal() {
+      langModal?.classList.remove('show');
+      document.body.style.overflow = '';
+      if (langSearch) langSearch.value = '';
+      // Reset search filter
+      document.querySelectorAll('.lang-grid-option').forEach(function(btn) {
+        btn.classList.remove('hidden');
+      });
+    }
+
+    langModalClose?.addEventListener('click', closeLangModal);
+    langModal?.addEventListener('click', function(e) {
+      if (e.target === langModal) closeLangModal();
+    });
+
+    // Handle language selection from modal grid
+    document.querySelectorAll('.lang-grid-option').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        selectLanguage(this.dataset.lang);
+        closeLangModal();
+      });
+    });
+
+    // Search functionality
+    langSearch?.addEventListener('input', function() {
+      const query = this.value.toLowerCase();
+      document.querySelectorAll('.lang-grid-option').forEach(function(btn) {
+        const text = btn.textContent.toLowerCase();
+        const lang = btn.dataset.lang.toLowerCase();
+        if (text.includes(query) || lang.includes(query)) {
+          btn.classList.remove('hidden');
+        } else {
+          btn.classList.add('hidden');
+        }
+      });
+    });
+
+    // Shared function to select a language
+    function selectLanguage(lang) {
+      const select = document.querySelector('.goog-te-combo');
+      if (select) {
+        select.value = lang;
+        select.dispatchEvent(new Event('change'));
+      }
+
+      // Update label with language code
+      const labels = {
+        'en': 'EN', 'ja': 'JP', 'zh-CN': '中', 'zh-TW': '繁', 'ko': '한',
+        'de': 'DE', 'fr': 'FR', 'es': 'ES', 'it': 'IT', 'pt': 'PT',
+        'ru': 'RU', 'ar': 'ع', 'hi': 'हि', 'th': 'ไท', 'vi': 'VI'
+      };
+      if (langLabel) langLabel.textContent = labels[lang] || lang.toUpperCase().slice(0,2);
+    }
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && langModal?.classList.contains('show')) {
+        closeLangModal();
+      }
     });
   });
 </script>
