@@ -1,5 +1,8 @@
 import { getStore } from "@netlify/blobs";
 
+// Netlify Blobs configuration
+const SITE_ID = "347c1eb9-e6b5-4736-b000-f6908c1f85fc";
+
 // All shared data stores
 const STORES = {
   admins: 'admins',
@@ -65,7 +68,11 @@ export async function handler(event, context) {
 
     let store;
     try {
-      store = getStore(STORES[storeName]);
+      store = getStore({
+        name: STORES[storeName],
+        siteID: SITE_ID,
+        token: process.env.NETLIFY_AUTH_TOKEN
+      });
     } catch (storeError) {
       console.error('Failed to get store:', storeError);
       // Return defaults if blob store fails
