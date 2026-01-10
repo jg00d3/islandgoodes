@@ -583,7 +583,41 @@ const bathroomAmenities = [
   }
 </style>
 
+<script is:inline src="/js/shared-data.js"></script>
 <script>
+  // Hide deleted images from shared storage
+  (async function hideDeletedImages() {
+    try {
+      if (typeof SharedData === 'undefined') return;
+      const deleted = await SharedData.getDeletedImages();
+      if (!deleted || !Array.isArray(deleted)) return;
+
+      const deletedPaths = deleted.map((d: any) => d.path || d);
+
+      document.querySelectorAll('.thumbnail').forEach((thumb) => {
+        const src = thumb.getAttribute('data-src');
+        if (src && deletedPaths.includes(src)) {
+          (thumb as HTMLElement).style.display = 'none';
+        }
+      });
+
+      // Update featured image if first visible thumbnail exists
+      const firstVisible = document.querySelector('.thumbnail:not([style*="display: none"])') as HTMLElement;
+      if (firstVisible) {
+        const featuredImage = document.getElementById('featured-image') as HTMLImageElement;
+        const src = firstVisible.getAttribute('data-src');
+        const alt = firstVisible.getAttribute('data-alt');
+        if (featuredImage && src) {
+          featuredImage.src = src;
+          featuredImage.alt = alt || '';
+        }
+        firstVisible.classList.add('active');
+      }
+    } catch (e) {
+      console.error('Error hiding deleted images:', e);
+    }
+  })();
+
   // Thumbnail gallery functionality
   const thumbnails = document.querySelectorAll('.thumbnail');
   const featuredImage = document.getElementById('featured-image') as HTMLImageElement;

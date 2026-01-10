@@ -135,7 +135,16 @@ const galleryCategories = [
         </div>
       </div>
       <div class="editor-footer">
-        <button id="resetImage" class="btn btn-outline">Reset</button>
+        <div class="editor-left-actions">
+          <button id="resetImage" class="btn btn-outline">Reset</button>
+          <button id="deleteFromEditor" class="btn btn-danger">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3,6 5,6 21,6"/>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+            Delete Image
+          </button>
+        </div>
         <div class="editor-actions">
           <button id="saveToGallery" class="btn btn-primary">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -662,6 +671,16 @@ const galleryCategories = [
   }
 
   .editor-actions { display: flex; gap: 1rem; }
+  .editor-left-actions { display: flex; gap: 1rem; }
+
+  .btn-danger {
+    background: #DC2626;
+    color: #fff;
+    border: none;
+  }
+  .btn-danger:hover {
+    background: #B91C1C;
+  }
 
   .btn svg { margin-right: 0.5rem; vertical-align: middle; }
 
@@ -1399,6 +1418,43 @@ const galleryCategories = [
     } catch (err) {
       console.error('Save error:', err);
       alert('Could not save image. The image may be too large for browser storage. Try downloading instead.');
+    }
+  });
+
+  // Delete image from editor
+  document.getElementById('deleteFromEditor')?.addEventListener('click', async () => {
+    if (!currentImagePath) return;
+
+    if (!confirm(`Are you sure you want to delete this image?\n\n${currentImageName}\n\nThis will hide it from the live site.`)) {
+      return;
+    }
+
+    try {
+      const deleted = await window.SharedData.getDeletedImages() || [];
+      if (!deleted.some((d: any) => (d.path || d) === currentImagePath)) {
+        deleted.push({
+          path: currentImagePath,
+          name: currentImageName,
+          deletedAt: new Date().toISOString()
+        });
+        await window.SharedData.saveDeletedImages(deleted);
+      }
+
+      await logActivity('image', 'Image deleted', currentImageName);
+
+      // Hide the image card
+      const card = document.querySelector(`.image-card[data-src="${currentImagePath}"]`);
+      if (card) {
+        (card as HTMLElement).style.display = 'none';
+      }
+
+      // Close modal
+      modal?.classList.remove('active');
+
+      alert('Image deleted! It will no longer show on the live site.');
+    } catch (err) {
+      console.error('Delete error:', err);
+      alert('Could not delete image. Please try again.');
     }
   });
 

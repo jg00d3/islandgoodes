@@ -46,7 +46,8 @@
       "Bash(node scripts/fix-rotated-images.mjs:*)",
       "Bash(node scripts/fix-all-rotated.mjs:*)",
       "Bash(netlify status:*)",
-      "Bash(nslookup:*)"
+      "Bash(nslookup:*)",
+      "Bash(git -c credential.helper='!gh auth git-credential' push origin master)"
     ]
   }
 }

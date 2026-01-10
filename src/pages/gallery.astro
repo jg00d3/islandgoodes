@@ -487,7 +487,24 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
   }
 </style>
 
+<script is:inline src="/js/shared-data.js"></script>
 <script>
+  // Hide deleted images from shared storage
+  (async function hideDeletedImages() {
+    try {
+      if (typeof SharedData === 'undefined') return;
+      const deleted = await SharedData.getDeletedImages();
+      if (!deleted || !Array.isArray(deleted)) return;
+      const deletedPaths = deleted.map((d: any) => d.path || d);
+      document.querySelectorAll('.gallery-item').forEach((item) => {
+        const img = item.querySelector('img') as HTMLImageElement;
+        if (img && deletedPaths.includes(img.src.replace(window.location.origin, ''))) {
+          (item as HTMLElement).style.display = 'none';
+        }
+      });
+    } catch (e) { console.error('Error hiding deleted images:', e); }
+  })();
+
   // Filter functionality
   const filterBtns = document.querySelectorAll('.filter-btn');
   const galleryItems = document.querySelectorAll('.gallery-item');
