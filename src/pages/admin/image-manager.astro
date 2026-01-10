@@ -137,13 +137,21 @@ const galleryCategories = [
       <div class="editor-footer">
         <button id="resetImage" class="btn btn-outline">Reset</button>
         <div class="editor-actions">
-          <button id="downloadImage" class="btn btn-primary">
+          <button id="saveToGallery" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+              <polyline points="17 21 17 13 7 13 7 21"/>
+              <polyline points="7 3 7 8 15 8"/>
+            </svg>
+            Save Changes
+          </button>
+          <button id="downloadImage" class="btn btn-outline">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
               <polyline points="7 10 12 15 17 10"/>
               <line x1="12" y1="15" x2="12" y2="3"/>
             </svg>
-            Download Edited Image
+            Download
           </button>
         </div>
       </div>
@@ -447,6 +455,20 @@ const galleryCategories = [
     opacity: 0.5;
     outline: 3px solid #DC2626;
     outline-offset: 2px;
+  }
+
+  .edited-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: #10B981;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    z-index: 10;
   }
 
   .image-card.marked-delete::after {
@@ -936,6 +958,7 @@ const galleryCategories = [
   let cropStart = { x: 0, y: 0 };
   let cropEnd = { x: 0, y: 0 };
   let currentImageName = '';
+  let currentImagePath = '';
 
   const modal = document.getElementById('editorModal');
   const canvas = document.getElementById('editorCanvas') as HTMLCanvasElement;
@@ -995,6 +1018,33 @@ const galleryCategories = [
     });
   }
   applyMarkedDeleteStyling();
+
+  // Apply edited images on load
+  function applyEditedImages() {
+    const editedKey = 'islandgoodes_edited_images';
+    try {
+      const edited = JSON.parse(localStorage.getItem(editedKey) || '{}');
+      document.querySelectorAll('.image-card').forEach(card => {
+        const src = (card as HTMLElement).dataset.src || '';
+        if (edited[src]) {
+          const img = card.querySelector('img');
+          if (img) {
+            img.src = edited[src].dataUrl;
+            // Add edited badge
+            if (!card.querySelector('.edited-badge')) {
+              const badge = document.createElement('span');
+              badge.className = 'edited-badge';
+              badge.textContent = 'Edited';
+              card.appendChild(badge);
+            }
+          }
+        }
+      });
+    } catch (err) {
+      console.error('Error loading edited images:', err);
+    }
+  }
+  applyEditedImages();
 
   // Toggle selection mode
   selectModeToggle?.addEventListener('change', () => {
@@ -1162,6 +1212,7 @@ const galleryCategories = [
   // Open editor
   function openEditor(src: string, name: string) {
     currentImageName = name;
+    currentImagePath = src;
     currentRotation = 0;
     flipH = false;
     flipV = false;
@@ -1309,6 +1360,48 @@ const galleryCategories = [
     link.click();
 
     logActivity('image', 'Image edited and downloaded', currentImageName);
+  });
+
+  // Save to Gallery (stores in localStorage)
+  const EDITED_IMAGES_KEY = 'islandgoodes_edited_images';
+
+  function getEditedImages() {
+    try {
+      return JSON.parse(localStorage.getItem(EDITED_IMAGES_KEY) || '{}');
+    } catch {
+      return {};
+    }
+  }
+
+  function saveEditedImage(path: string, dataUrl: string) {
+    const edited = getEditedImages();
+    edited[path] = {
+      dataUrl: dataUrl,
+      editedAt: new Date().toISOString()
+    };
+    localStorage.setItem(EDITED_IMAGES_KEY, JSON.stringify(edited));
+  }
+
+  document.getElementById('saveToGallery')?.addEventListener('click', () => {
+    if (!canvas || !currentImagePath) return;
+
+    try {
+      // Save the edited image to localStorage
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+      saveEditedImage(currentImagePath, dataUrl);
+
+      logActivity('image', 'Image edited and saved', currentImageName);
+
+      // Close modal
+      modal?.classList.remove('active');
+
+      // Show success and refresh page to show edited image
+      alert('Image saved! The edited version will now show in the gallery.');
+      location.reload();
+    } catch (err) {
+      console.error('Save error:', err);
+      alert('Could not save image. The image may be too large for browser storage. Try downloading instead.');
+    }
   });
 
   // Close editor
