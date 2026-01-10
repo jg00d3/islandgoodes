@@ -1,7 +1,7 @@
 {
   "name": "islandgoodes",
   "type": "module",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "description": "Island Goodes B&B - Oceanview Bed & Breakfast in Hilo, Hawaii",
   "scripts": {
     "dev": "astro dev",

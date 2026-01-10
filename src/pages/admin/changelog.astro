@@ -4,10 +4,20 @@ import PreviewLayout from '../../layouts/PreviewLayout.astro';
 const title = "Changelog | Island Goodes Admin";
 const description = "Version history and release notes";
 
-const CURRENT_VERSION = "2.3.3";
-const RELEASE_DATE = "January 9, 2026";
+const CURRENT_VERSION = "2.3.4";
+const RELEASE_DATE = "January 10, 2026";
 
 const changelog = [
+  {
+    version: "2.3.4",
+    date: "January 10, 2026",
+    type: "Bug Fix",
+    changes: [
+      { type: "fixed", text: "Activity log message now correctly states data is shared across all admins" },
+      { type: "fixed", text: "Reset to Default Admin now uses correct email (sysadmroot@gmail.com)" },
+      { type: "improved", text: "Complete code review of all admin pages for async/await and localStorage issues" },
+    ]
+  },
   {
     version: "2.3.3",
     date: "January 9, 2026",
