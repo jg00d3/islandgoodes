@@ -194,10 +194,11 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
       <div class="footer-cta">
         <h4>Stay Updated</h4>
         <p>Get travel tips and special offers</p>
-        <form action="https://formspree.io/f/xpwzgvqk" method="POST" class="newsletter-form">
-          <input type="email" name="email" placeholder="Your email" required />
+        <form id="newsletterForm" class="newsletter-form">
+          <input type="email" id="newsletterEmail" name="email" placeholder="Your email" required />
           <button type="submit" class="btn btn-primary">Subscribe</button>
         </form>
+        <p id="newsletterMessage" class="newsletter-message"></p>
         <a href="/book" class="btn btn-secondary footer-book-btn">Book Now</a>
       </div>
     </div>
@@ -823,6 +824,20 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
     text-align: center;
   }
 
+  .newsletter-message {
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+
+  .newsletter-message.success {
+    color: #4ade80;
+  }
+
+  .newsletter-message.error {
+    color: #f87171;
+  }
+
   /* Footer Social */
   .footer-social {
     display: flex;
@@ -1300,6 +1315,65 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
       navigator.clipboard.writeText(window.location.href).then(function() {
         alert('Link copied to clipboard!');
       });
+    });
+  })();
+
+  // Newsletter subscription
+  (function() {
+    const form = document.getElementById('newsletterForm');
+    const emailInput = document.getElementById('newsletterEmail');
+    const message = document.getElementById('newsletterMessage');
+
+    form?.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const email = emailInput?.value;
+      const btn = form.querySelector('button');
+
+      if (!email) return;
+
+      // Show loading state
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Subscribing...';
+      }
+      if (message) {
+        message.textContent = '';
+        message.className = 'newsletter-message';
+      }
+
+      try {
+        const response = await fetch('/.netlify/functions/newsletter-subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          if (message) {
+            message.textContent = 'Subscribed! Check your email.';
+            message.className = 'newsletter-message success';
+          }
+          if (emailInput) emailInput.value = '';
+        } else {
+          if (message) {
+            message.textContent = data.error || 'Something went wrong.';
+            message.className = 'newsletter-message error';
+          }
+        }
+      } catch (err) {
+        if (message) {
+          message.textContent = 'Network error. Please try again.';
+          message.className = 'newsletter-message error';
+        }
+      }
+
+      // Reset button
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = 'Subscribe';
+      }
     });
   })();
 </script>

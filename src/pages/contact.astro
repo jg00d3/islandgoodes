@@ -78,8 +78,7 @@ const description = "Contact Island Goodes in Hilo, Hawaii. Call 808-964-2291 or
             <h2>Send a Message</h2>
             <p>Have a question? We typically respond within 24 hours.</p>
           </div>
-          <form class="contact-form" action="https://formspree.io/f/xojvbgld" method="POST">
-            <input type="hidden" name="_next" value="https://www.islandgoodes.com/thank-you" />
+          <form id="contactForm" class="contact-form">
             <div class="form-row">
               <div class="form-group">
                 <label for="name">Name *</label>
@@ -105,6 +104,7 @@ const description = "Contact Island Goodes in Hilo, Hawaii. Call 808-964-2291 or
               <textarea id="message" name="message" rows="5" required placeholder="How can we help you?"></textarea>
             </div>
             <button type="submit" class="btn btn-primary btn-large btn-block">Send Message</button>
+            <p id="formMessage" class="form-message"></p>
           </form>
         </div>
       </div>
@@ -470,4 +470,88 @@ const description = "Contact Island Goodes in Hilo, Hawaii. Call 808-964-2291 or
       padding: 1.5rem;
     }
   }
+
+  .form-message {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    display: none;
+  }
+
+  .form-message.success {
+    display: block;
+    background: rgba(74, 222, 128, 0.1);
+    color: #16a34a;
+    border: 1px solid rgba(74, 222, 128, 0.3);
+  }
+
+  .form-message.error {
+    display: block;
+    background: rgba(248, 113, 113, 0.1);
+    color: #dc2626;
+    border: 1px solid rgba(248, 113, 113, 0.3);
+  }
 </style>
+
+<script>
+  const form = document.getElementById('contactForm');
+  const message = document.getElementById('formMessage');
+
+  form?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const btn = form.querySelector('button[type="submit"]');
+    const formData = {
+      name: (document.getElementById('name') as HTMLInputElement)?.value,
+      email: (document.getElementById('email') as HTMLInputElement)?.value,
+      phone: (document.getElementById('phone') as HTMLInputElement)?.value,
+      dates: (document.getElementById('dates') as HTMLInputElement)?.value,
+      message: (document.getElementById('message') as HTMLTextAreaElement)?.value
+    };
+
+    // Show loading state
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+    }
+    if (message) {
+      message.className = 'form-message';
+      message.textContent = '';
+    }
+
+    try {
+      const response = await fetch('/.netlify/functions/contact-form', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        if (message) {
+          message.textContent = data.message || 'Message sent! We\'ll get back to you soon.';
+          message.className = 'form-message success';
+        }
+        form.reset();
+      } else {
+        if (message) {
+          message.textContent = data.error || 'Something went wrong. Please try again.';
+          message.className = 'form-message error';
+        }
+      }
+    } catch (err) {
+      if (message) {
+        message.textContent = 'Network error. Please try again.';
+        message.className = 'form-message error';
+      }
+    }
+
+    // Reset button
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = 'Send Message';
+    }
+  });
+</script>
