@@ -1508,10 +1508,14 @@ const description = "Analytics dashboard for Island Goodes.";
 
     // Find admin by email (from shared storage)
     const admins = await getAdmins();
+    console.log('[LOGIN DEBUG] Admins loaded:', admins);
+    console.log('[LOGIN DEBUG] Looking for email:', email);
     const admin = admins.find((a: any) => a.email?.toLowerCase() === email);
+    console.log('[LOGIN DEBUG] Found admin:', admin);
 
     if (!admin) {
-      if (loginError) loginError.textContent = 'Email not found';
+      console.error('[LOGIN DEBUG] No admin found. Available emails:', admins.map((a: any) => a.email));
+      if (loginError) loginError.textContent = 'Email not found. Check console for debug info.';
       if (submitBtn) {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Continue';
