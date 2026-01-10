@@ -69,8 +69,8 @@ export async function handler(event, context) {
       case 'get': {
         const value = await store.get(key || 'data', { type: 'json' });
 
-        // Return defaults if no data exists
-        if (!value) {
+        // Return defaults if no data exists OR if admins array is empty
+        if (!value || (storeName === 'admins' && Array.isArray(value) && value.length === 0)) {
           if (storeName === 'admins') {
             return { statusCode: 200, headers, body: JSON.stringify([DEFAULT_ADMIN]) };
           }
