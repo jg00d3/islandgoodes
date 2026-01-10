@@ -35,7 +35,7 @@ export async function handler(event) {
 
     // Send welcome/confirmation email
     const { data, error } = await resend.emails.send({
-      from: 'Island Goodes (No Reply) <onboarding@resend.dev>',
+      from: 'Island Goodes (No Reply) <noreply@islandgoodes.com>',
       to: [email],
       subject: 'Welcome to Island Goodes Updates!',
       html: `
