@@ -1,6 +1,6 @@
 # Island Goodes Website Development - Session Log
 ## Date: January 9, 2026
-## Version: 2.1.0 → 2.2.0 → 2.3.0
+## Version: 2.1.0 → 2.2.0 → 2.3.0 → 2.3.1
 
 ---
 
@@ -138,11 +138,21 @@ Where JSON contains: `{ email, expires, invitedBy }`
 
 ---
 
+### 10. Additional Volcano Cameras (v2.3.1)
+Added USGS V2cam and V3cam to the Live Island Views section on home page:
+- V1cam (existing): Northwest rim of Halema'uma'u crater
+- V2cam (new): Northeast rim of the caldera - YouTube ID: Gd2Tm5jblbE
+- V3cam (new): South rim of Halema'uma'u crater - YouTube ID: BqmpkUdMtyA
+- Mauna Kea StarCam (existing): Subaru Telescope
+
+Note: B1cam only provides still images, not a YouTube livestream.
+
+---
+
 ## Pending Items
 1. Add ANTHROPIC_API_KEY to Netlify environment for AI chat
 2. Add AI chat widget to main website (future)
 3. Research voice assistant integration (future)
-4. Add volcano cameras A, B, C to home page
 
 ---
 
@@ -150,3 +160,4 @@ Where JSON contains: `{ email, expires, invitedBy }`
 - Started session: v2.1.0
 - v2.2.0: AI Chat, Invitation System, Email fixes
 - v2.3.0: Critical fix - Shared storage for multi-admin support
+- v2.3.1: Added V2cam and V3cam volcano cameras

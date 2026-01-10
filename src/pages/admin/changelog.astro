@@ -4,10 +4,20 @@ import PreviewLayout from '../../layouts/PreviewLayout.astro';
 const title = "Changelog | Island Goodes Admin";
 const description = "Version history and release notes";
 
-const CURRENT_VERSION = "2.3.0";
+const CURRENT_VERSION = "2.3.1";
 const RELEASE_DATE = "January 9, 2026";
 
 const changelog = [
+  {
+    version: "2.3.1",
+    date: "January 9, 2026",
+    type: "Enhancement",
+    changes: [
+      { type: "added", text: "Kilauea V2cam - northeast rim view of the caldera" },
+      { type: "added", text: "Kilauea V3cam - south rim view of Halema'uma'u" },
+      { type: "improved", text: "Now showing all three USGS volcano cameras plus Mauna Kea StarCam" },
+    ]
+  },
   {
     version: "2.3.0",
     date: "January 9, 2026",
