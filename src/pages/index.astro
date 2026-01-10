@@ -992,13 +992,14 @@ const description = "Island Goodes is an adults-only accommodation near Hilo wit
 </style>
 
 <script>
-  // Check admin settings for homepage widgets
-  (function() {
+  // Check admin settings for homepage widgets (uses shared storage)
+  (async function() {
     try {
-      const settings = JSON.parse(localStorage.getItem('islandgoodes_settings') || '{}');
+      if (typeof SharedData === 'undefined') return;
+      const settings = await SharedData.getSettings() || {};
 
       // Hide weather widget if disabled
-      if (settings.weatherEnabled === false) {
+      if (settings.weatherWidgetEnabled === false) {
         document.getElementById('weatherWidget')?.remove();
       }
 

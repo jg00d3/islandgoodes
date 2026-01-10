@@ -4,10 +4,20 @@ import PreviewLayout from '../../layouts/PreviewLayout.astro';
 const title = "Changelog | Island Goodes Admin";
 const description = "Version history and release notes";
 
-const CURRENT_VERSION = "2.3.2";
+const CURRENT_VERSION = "2.3.3";
 const RELEASE_DATE = "January 9, 2026";
 
 const changelog = [
+  {
+    version: "2.3.3",
+    date: "January 9, 2026",
+    type: "Enhancement",
+    changes: [
+      { type: "added", text: "Contact form inquiries now saved to persistent storage" },
+      { type: "added", text: "Admin API to view contact inquiries" },
+      { type: "fixed", text: "Home page settings now read from shared storage (not localStorage)" },
+    ]
+  },
   {
     version: "2.3.2",
     date: "January 9, 2026",

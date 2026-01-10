@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import { getStore } from '@netlify/blobs';
 
 export async function handler(event) {
   // Only allow POST
@@ -27,6 +28,21 @@ export async function handler(event) {
         body: JSON.stringify({ error: 'Invalid email format' })
       };
     }
+
+    // Save inquiry to Netlify Blobs
+    const store = getStore('contact-inquiries');
+    const inquiries = await store.get('list', { type: 'json' }) || [];
+    inquiries.push({
+      id: Date.now(),
+      name,
+      email,
+      phone: phone || null,
+      dates: dates || null,
+      message,
+      submittedAt: new Date().toISOString(),
+      status: 'new'
+    });
+    await store.setJSON('list', inquiries);
 
     // Initialize Resend
     const resend = new Resend(process.env.RESEND_API_KEY);

@@ -12,7 +12,8 @@ const STORES = {
   pendingAdmins: 'pending-admins',
   deletedImages: 'deleted-images',
   editedImages: 'edited-images',
-  newsletterSubscribers: 'newsletter-subscribers'
+  newsletterSubscribers: 'newsletter-subscribers',
+  contactInquiries: 'contact-inquiries'
 };
 
 // Default admin (only used on first setup)
@@ -78,7 +79,8 @@ export async function handler(event, context) {
           }
           if (storeName === 'changeRequests' || storeName === 'activityLog' ||
               storeName === 'roadmap' || storeName === 'pendingAdmins' ||
-              storeName === 'deletedImages' || storeName === 'newsletterSubscribers') {
+              storeName === 'deletedImages' || storeName === 'newsletterSubscribers' ||
+              storeName === 'contactInquiries') {
             return { statusCode: 200, headers, body: JSON.stringify([]) };
           }
           if (storeName === 'editedImages' || storeName === 'aiTraining' ||

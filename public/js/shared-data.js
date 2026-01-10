@@ -202,6 +202,16 @@ window.SharedData = {
     return await apiCall('newsletterSubscribers', 'set', 'list', subscribers);
   },
 
+  // ============== CONTACT INQUIRIES ==============
+  async getContactInquiries() {
+    return await apiCall('contactInquiries', 'get', 'list');
+  },
+
+  async saveContactInquiries(inquiries) {
+    clearCache('contactInquiries');
+    return await apiCall('contactInquiries', 'set', 'list', inquiries);
+  },
+
   // Clear all caches
   clearCache
 };
