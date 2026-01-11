@@ -53,7 +53,8 @@
       "Bash(git checkout:*)",
       "Bash(grep:*)",
       "Bash(xargs:*)",
-      "Bash(npx netlify deploy:*)"
+      "Bash(npx netlify deploy:*)",
+      "Bash(git -c \"credential.https://github.com.helper=!gh auth git-credential\" push origin master)"
     ]
   }
 }

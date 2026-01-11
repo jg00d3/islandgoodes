@@ -1427,10 +1427,15 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
     let currentIndex = 0;
 
     // Make images in galleries clickable
-    document.querySelectorAll('.room-gallery img, .gallery-grid img, [data-lightbox] img').forEach((img, index) => {
+    // EXCLUDE: thumbnail-grid images (room pages have their own lightbox)
+    // EXCLUDE: images inside links (they should navigate, not open lightbox)
+    document.querySelectorAll('.gallery-grid img, [data-lightbox] img').forEach((img, index) => {
+      // Skip if inside a link or thumbnail grid
+      if (img.closest('a') || img.closest('.thumbnail-grid') || img.closest('.thumbnail')) return;
+
       img.style.cursor = 'pointer';
       img.addEventListener('click', function() {
-        const gallery = this.closest('.room-gallery, .gallery-grid, [data-lightbox]');
+        const gallery = this.closest('.gallery-grid, [data-lightbox]');
         if (gallery) {
           currentImages = Array.from(gallery.querySelectorAll('img'));
           currentIndex = currentImages.indexOf(this);
