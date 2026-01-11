@@ -867,13 +867,19 @@ const bathroomAmenities = [
     if (index < 0 || index >= totalImages) return;
     currentIndex = index;
 
-    const img = imageData[index];
+    // Get the thumbnail element to check for edited image
+    const thumb = allThumbnails[index];
+    const editedSrc = thumb?.getAttribute('data-edited');
+    const originalSrc = imageData[index].src;
+    const alt = imageData[index].alt;
+
     if (lightboxImg) {
-      lightboxImg.src = img.src;
-      lightboxImg.alt = img.alt;
+      // Use edited image if available, otherwise original
+      lightboxImg.src = editedSrc || originalSrc;
+      lightboxImg.alt = alt;
     }
     if (lightboxCaption) {
-      lightboxCaption.textContent = img.alt;
+      lightboxCaption.textContent = alt;
     }
     if (lightboxCounter) {
       lightboxCounter.textContent = `${index + 1} / ${totalImages}`;
