@@ -33,8 +33,13 @@ const rooms = [
 ];
 
 // Gallery image configurations
-// Note: Property/site images (pool, hot-tub, pets, etc.) are now in /images/site/ and protected from deletion
 const galleryCategories = [
+  {
+    id: 'property',
+    name: 'Property',
+    path: '/images/property/',
+    images: ['pool.jpg', 'hot-tub.jpg', 'garden.jpg', 'garden2.jpg', 'tropical-plants.jpg', 'laundry.jpg', 'hosts.jpg', 'coconut-jake.jpg', 'miss-kitty.jpg', 'prudy.jpg', 'prudy-jasper.jpg']
+  },
   {
     id: 'scenery',
     name: 'Views & Scenery',
@@ -45,7 +50,7 @@ const galleryCategories = [
     id: 'attractions',
     name: 'Attractions',
     path: '/images/attractions/',
-    images: ['akaka-falls.jpg', 'akaka-falls2.jpg', 'akaka-falls3.jpg', 'rainbow-falls.jpg', 'volcano.jpg', 'volcano-lava.jpg', 'volcano-looming.jpg', 'waipio-valley.jpg', 'liliuokalani-gardens.jpg', 'panaewa-zoo.jpg', 'tsunami-museum.jpg', 'lyman-museum.jpg', 'donkey.jpg', 'horse.jpg', 'helicopter.jpg', 'kayaking.jpg', 'zipline.jpg']
+    images: ['akaka-falls.jpg', 'akaka-falls2.jpg', 'rainbow-falls.jpg', 'volcano.jpg', 'volcano-lava.jpg', 'volcano-looming.jpg', 'waipio-valley.jpg', 'liliuokalani-gardens.jpg', 'panaewa-zoo.jpg', 'tsunami-museum.jpg', 'lyman-museum.jpg', 'donkey.jpg', 'horse.jpg', 'helicopter.jpg', 'kayaking.jpg', 'zipline.jpg']
   },
   {
     id: 'beaches',

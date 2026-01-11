@@ -113,7 +113,6 @@ const bathroomAmenities = [
             </div>
             <p class="price-note">Plus 17.97% Hawaii tax</p>
             <a href="/book" class="btn btn-primary btn-large btn-block">Book This Room</a>
-            <a href="https://my.matterport.com/show/?m=zrMG54r6RUx&sr=-.31,-.36&ss=53" class="btn btn-outline btn-large btn-block" target="_blank" rel="noopener">View 3D Tour</a>
             <p class="call-option">Or call: <a href="tel:+18089642291">808-964-2291</a></p>
           </div>
 
@@ -383,23 +382,24 @@ const bathroomAmenities = [
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
     border: none;
     color: #fff;
     font-size: 2rem;
-    padding: 1rem;
+    padding: 1rem 1.25rem;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 8px;
     transition: background 0.3s;
+    z-index: 10001;
   }
 
   .lightbox-prev:hover,
   .lightbox-next:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.3);
   }
 
-  .lightbox-prev { left: 1rem; }
-  .lightbox-next { right: 1rem; }
+  .lightbox-prev { left: 1.5rem; }
+  .lightbox-next { right: 1.5rem; }
 
   .lightbox-controls {
     position: absolute;
@@ -599,7 +599,8 @@ const bathroomAmenities = [
   let isPlaying = false;
 
   function getVisibleThumbnails(): HTMLElement[] {
-    return Array.from(document.querySelectorAll('.thumbnail')) as HTMLElement[];
+    // Only select thumbnails within the thumbnail grid, excluding any hidden ones
+    return Array.from(document.querySelectorAll('.thumbnail-grid .thumbnail:not(.deleted)')) as HTMLElement[];
   }
 
   function openLightbox(index: number) {
@@ -681,9 +682,9 @@ const bathroomAmenities = [
   // Open lightbox on featured image click
   featuredImage?.addEventListener('click', () => {
     visibleThumbnails = getVisibleThumbnails();
-    const activeThumb = document.querySelector('.thumbnail.active') as HTMLElement;
+    const activeThumb = document.querySelector('.thumbnail-grid .thumbnail.active') as HTMLElement;
     const index = activeThumb ? visibleThumbnails.indexOf(activeThumb) : 0;
-    openLightbox(index >= 0 ? index : 0);
+    openLightbox(Math.max(0, index));
   });
 
   // Lightbox controls
