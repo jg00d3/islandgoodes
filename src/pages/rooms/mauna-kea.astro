@@ -394,27 +394,32 @@ const bathroomAmenities = [
 
   .lightbox-prev,
   .lightbox-next {
-    position: absolute;
+    position: fixed;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.15);
-    border: none;
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid rgba(255, 255, 255, 0.5);
     color: #fff;
-    font-size: 2rem;
-    padding: 1rem 1.25rem;
+    font-size: 2.5rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    border-radius: 8px;
-    transition: background 0.3s;
+    border-radius: 50%;
+    transition: all 0.3s;
     z-index: 10001;
   }
 
   .lightbox-prev:hover,
   .lightbox-next:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.8);
+    border-color: #fff;
   }
 
-  .lightbox-prev { left: 1.5rem; }
-  .lightbox-next { right: 1.5rem; }
+  .lightbox-prev { left: 20px; }
+  .lightbox-next { right: 20px; }
 
   .lightbox-controls {
     position: absolute;
@@ -573,25 +578,17 @@ const bathroomAmenities = [
     } catch (e) { console.error('Error initializing gallery:', e); }
   })();
 
-  const thumbnails = document.querySelectorAll('.thumbnail');
   const featuredImage = document.getElementById('featured-image') as HTMLImageElement;
   const mainImageContainer = document.querySelector('.main-image');
+  const thumbnailGrid = document.querySelector('.thumbnail-grid');
+  let currentActiveSrc = '';
 
-  thumbnails.forEach((thumb) => {
-    thumb.addEventListener('click', () => {
-      const editedSrc = thumb.getAttribute('data-edited');
-      const originalSrc = thumb.getAttribute('data-src');
-      const alt = thumb.getAttribute('data-alt');
-      if (featuredImage) {
-        featuredImage.src = editedSrc || originalSrc || '';
-        featuredImage.alt = alt || '';
-      }
-      thumbnails.forEach(t => t.classList.remove('active'));
-      thumb.classList.add('active');
-      mainImageContainer?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  });
-  thumbnails[0]?.classList.add('active');
+  // Set first thumbnail as active initially
+  const firstThumb = document.querySelector('.thumbnail-grid .thumbnail') as HTMLElement;
+  if (firstThumb) {
+    firstThumb.classList.add('active');
+    currentActiveSrc = firstThumb.getAttribute('data-src') || '';
+  }
 
   // ============================================
   // LIGHTBOX WITH SLIDESHOW
@@ -694,12 +691,27 @@ const bathroomAmenities = [
     }
   }
 
-  // Open lightbox on featured image click
-  featuredImage?.addEventListener('click', () => {
+  // Single click on thumbnail opens lightbox at that image
+  thumbnailGrid?.addEventListener('click', (e) => {
+    const thumb = (e.target as HTMLElement).closest('.thumbnail') as HTMLElement;
+    if (!thumb) return;
+
+    // First update the featured image (existing behavior)
+    const editedSrc = thumb.getAttribute('data-edited');
+    const originalSrc = thumb.getAttribute('data-src');
+    const alt = thumb.getAttribute('data-alt');
+    if (featuredImage) {
+      featuredImage.src = editedSrc || originalSrc || '';
+      featuredImage.alt = alt || '';
+    }
+    document.querySelectorAll('.thumbnail-grid .thumbnail').forEach(t => t.classList.remove('active'));
+    thumb.classList.add('active');
+    currentActiveSrc = originalSrc || '';
+
+    // Then open lightbox at this thumbnail
     visibleThumbnails = getVisibleThumbnails();
-    const activeThumb = document.querySelector('.thumbnail-grid .thumbnail.active') as HTMLElement;
-    const index = activeThumb ? visibleThumbnails.indexOf(activeThumb) : 0;
-    openLightbox(Math.max(0, index));
+    const index = visibleThumbnails.findIndex(t => t.getAttribute('data-src') === originalSrc);
+    openLightbox(index >= 0 ? index : 0);
   });
 
   // Lightbox controls
