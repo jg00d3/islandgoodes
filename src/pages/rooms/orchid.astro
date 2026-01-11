@@ -120,7 +120,7 @@ const bathroomAmenities = [
             </div>
             <p class="price-note">Plus 17.97% Hawaii tax</p>
             <a href="/book" class="btn btn-primary btn-large btn-block">Book This Room</a>
-            <a href="/tour?room=orchid" class="btn btn-outline btn-large btn-block">View 3D Tour</a>
+            <a href="/tour?room=ginger" class="btn btn-outline btn-large btn-block">View 3D Tour</a>
             <p class="call-option">Or call: <a href="tel:+18089642291">808-964-2291</a></p>
           </div>
 
@@ -625,7 +625,7 @@ const bathroomAmenities = [
 
 <script>
   // ============================================
-  // SIMPLE LIGHTBOX - NO ASYNC COMPLICATIONS
+  // SIMPLE LIGHTBOX WITH EDITED IMAGE SUPPORT
   // ============================================
 
   // Get DOM elements
@@ -659,6 +659,36 @@ const bathroomAmenities = [
   if (allThumbnails.length > 0) {
     allThumbnails[0].classList.add('active');
   }
+
+  // Load and apply edited images (rotated, cropped, etc.)
+  (async function loadEditedImages() {
+    try {
+      if (typeof SharedData !== 'undefined') {
+        const editedImages = await SharedData.getEditedImages() || {};
+        if (editedImages && Object.keys(editedImages).length > 0) {
+          allThumbnails.forEach((thumb, index) => {
+            const originalSrc = thumb.getAttribute('data-src');
+            if (originalSrc && editedImages[originalSrc]) {
+              const editedSrc = editedImages[originalSrc].dataUrl;
+              // Update thumbnail image
+              const img = thumb.querySelector('img') as HTMLImageElement;
+              if (img) img.src = editedSrc;
+              // Update imageData for lightbox
+              imageData[index].src = editedSrc;
+              // Store edited src on element
+              thumb.setAttribute('data-edited', editedSrc);
+            }
+          });
+          // Update featured image if first image was edited
+          if (featuredImage && imageData[0]) {
+            featuredImage.src = imageData[0].src;
+          }
+        }
+      }
+    } catch (e) {
+      console.log('Could not load edited images:', e);
+    }
+  })();
 
   function showImage(index: number) {
     if (index < 0 || index >= totalImages) return;

@@ -1634,7 +1634,8 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
   function googleTranslateElementInit() {
     new google.translate.TranslateElement({
       pageLanguage: 'en',
-      includedLanguages: 'en,ja,zh-CN,ko,de,fr,es',
+      // Include all languages shown in the language modal
+      includedLanguages: 'af,ar,az,be,bg,bn,bs,ca,ceb,cs,cy,da,de,el,en,eo,es,et,eu,fa,fi,fil,fr,ga,gd,gl,gu,haw,he,hi,hr,ht,hu,hy,id,is,it,ja,jv,ka,kk,km,kn,ko,ku,ky,la,lb,lo,lt,lv,mg,mi,mk,ml,mn,mr,ms,mt,my,ne,nl,no,pa,pl,ps,pt,ro,ru,sd,si,sk,sl,sm,sn,so,sq,sr,st,su,sv,sw,ta,te,tg,th,tr,uk,ur,uz,vi,xh,yi,yo,zh-CN,zh-TW,zu',
       autoDisplay: false
     }, 'google_translate_element');
   }

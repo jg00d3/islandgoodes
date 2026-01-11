@@ -8,7 +8,7 @@ const description = "Take a virtual 3D tour of Island Goodes, an adults-only oce
 const roomPositions: Record<string, { ss: string; sr: string; name: string }> = {
   'hilo-bay': { ss: '16', sr: '-1.95,1.23', name: 'Hilo Bay Room' },
   'mauna-kea': { ss: '58', sr: '-1.45,1.13', name: 'Mauna Kea Room' },
-  'orchid': { ss: '14', sr: '-1.91,1.2', name: 'Orchid Room' },
+  'ginger': { ss: '14', sr: '-1.91,1.2', name: 'Ginger Room' },
   'property': { ss: '1', sr: '0,0', name: 'Full Property Tour' }
 };
 
@@ -30,7 +30,7 @@ const matterportId = 'zrMG54r6RUx';
           <select id="roomSelect" class="room-select">
             <option value="property">Full Property</option>
             <option value="hilo-bay">Hilo Bay Room</option>
-            <option value="orchid">Orchid Room</option>
+            <option value="ginger">Ginger Room</option>
             <option value="mauna-kea">Mauna Kea Room</option>
           </select>
           <a href="/book" class="btn btn-primary btn-small">Book Now</a>
@@ -257,8 +257,8 @@ const matterportId = 'zrMG54r6RUx';
   // Get room position data
   const position = roomPositions[room] || roomPositions['property'];
 
-  // Build Matterport URL
-  const matterportUrl = `https://my.matterport.com/show/?m=${matterportId}&ss=${position.ss}&sr=${position.sr}`;
+  // Build Matterport URL with auto-play
+  const matterportUrl = `https://my.matterport.com/show/?m=${matterportId}&ss=${position.ss}&sr=${position.sr}&play=1&qs=1`;
 
   // Set iframe src
   const iframe = document.getElementById('tourFrame');
@@ -281,7 +281,7 @@ const matterportId = 'zrMG54r6RUx';
     select.addEventListener('change', function() {
       const newRoom = this.value;
       const newPosition = roomPositions[newRoom] || roomPositions['property'];
-      const newUrl = `https://my.matterport.com/show/?m=${matterportId}&ss=${newPosition.ss}&sr=${newPosition.sr}`;
+      const newUrl = `https://my.matterport.com/show/?m=${matterportId}&ss=${newPosition.ss}&sr=${newPosition.sr}&play=1&qs=1`;
 
       // Show loading
       const loading = document.getElementById('iframeLoading');
