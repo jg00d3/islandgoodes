@@ -524,35 +524,64 @@ const bathroomAmenities = [
     allThumbnails[0].classList.add('active');
   }
 
-  // Load and apply edited images (rotated, cropped, etc.)
-  (async function loadEditedImages() {
+  // Wait for SharedData to load, then apply edited/deleted images
+  function waitForSharedData(callback: () => void, maxWait = 5000) {
+    const start = Date.now();
+    const check = () => {
+      if (typeof window !== 'undefined' && (window as any).SharedData) {
+        callback();
+      } else if (Date.now() - start < maxWait) {
+        setTimeout(check, 100);
+      }
+    };
+    check();
+  }
+
+  waitForSharedData(async () => {
     try {
-      if (typeof SharedData !== 'undefined') {
-        const editedImages = await SharedData.getEditedImages() || {};
-        if (editedImages && Object.keys(editedImages).length > 0) {
-          allThumbnails.forEach((thumb, index) => {
-            const originalSrc = thumb.getAttribute('data-src');
-            if (originalSrc && editedImages[originalSrc]) {
-              const editedSrc = editedImages[originalSrc].dataUrl;
-              // Update thumbnail image
-              const img = thumb.querySelector('img') as HTMLImageElement;
-              if (img) img.src = editedSrc;
-              // Update imageData for lightbox
-              imageData[index].src = editedSrc;
-              // Store edited src on element
-              thumb.setAttribute('data-edited', editedSrc);
-            }
-          });
-          // Update featured image if first image was edited
-          if (featuredImage && imageData[0]) {
-            featuredImage.src = imageData[0].src;
-          }
+      const SharedData = (window as any).SharedData;
+
+      // Load deleted images and hide them
+      const deletedImages = await SharedData.getDeletedImages() || [];
+      const deletedPaths = Array.isArray(deletedImages)
+        ? deletedImages.map((d: any) => d.path || d)
+        : [];
+
+      // Load edited images (rotated, cropped)
+      const editedImages = await SharedData.getEditedImages() || {};
+
+      // Process each thumbnail
+      allThumbnails.forEach((thumb, index) => {
+        const originalSrc = thumb.getAttribute('data-src');
+
+        // Hide deleted images
+        if (originalSrc && deletedPaths.includes(originalSrc)) {
+          thumb.style.display = 'none';
+          thumb.classList.add('deleted');
+          return;
         }
+
+        // Apply edited images
+        if (originalSrc && editedImages[originalSrc]) {
+          const editedSrc = editedImages[originalSrc].dataUrl;
+          const img = thumb.querySelector('img') as HTMLImageElement;
+          if (img) img.src = editedSrc;
+          imageData[index].src = editedSrc;
+          thumb.setAttribute('data-edited', editedSrc);
+        }
+      });
+
+      // Update featured image with first visible image
+      const firstVisible = allThumbnails.find(t => !t.classList.contains('deleted'));
+      if (firstVisible && featuredImage) {
+        const editedSrc = firstVisible.getAttribute('data-edited');
+        const originalSrc = firstVisible.getAttribute('data-src');
+        featuredImage.src = editedSrc || originalSrc || '';
       }
     } catch (e) {
-      console.log('Could not load edited images:', e);
+      console.log('Could not load image data:', e);
     }
-  })();
+  });
 
   // Update lightbox display
   function showImage(index: number) {

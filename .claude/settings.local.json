@@ -54,7 +54,8 @@
       "Bash(grep:*)",
       "Bash(xargs:*)",
       "Bash(npx netlify deploy:*)",
-      "Bash(git -c \"credential.https://github.com.helper=!gh auth git-credential\" push origin master)"
+      "Bash(git -c \"credential.https://github.com.helper=!gh auth git-credential\" push origin master)",
+      "Bash(not a clothing-optional property.\"\n- Updated: rooms/index, policies, footers\n\nImage loading fix:\n- Wait for SharedData to load before accessing edited/deleted images\n- Properly hide deleted images from thumbnails\n- Apply rotated/edited images from admin Image Manager\n- Fix race condition where scripts ran before SharedData was ready\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
     ]
   }
 }
