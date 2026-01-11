@@ -1,6 +1,8 @@
 import { Resend } from 'resend';
 import { getStore } from '@netlify/blobs';
 
+const SITE_ID = "347c1eb9-e6b5-4736-b000-f6908c1f85fc";
+
 export async function handler(event) {
   // Only allow POST
   if (event.httpMethod !== 'POST') {
@@ -31,8 +33,12 @@ export async function handler(event) {
 
     // Save inquiry to Netlify Blobs (non-blocking - don't fail if Blobs unavailable)
     try {
-      const store = getStore('contact-inquiries');
-      const inquiries = await store.get('list', { type: 'json' }) || [];
+      const store = getStore({
+        name: 'contact-inquiries',
+        siteID: SITE_ID,
+        token: process.env.NETLIFY_AUTH_TOKEN
+      });
+      const inquiries = await store.get('data', { type: 'json' }) || [];
       inquiries.push({
         id: Date.now(),
         name,
@@ -43,7 +49,7 @@ export async function handler(event) {
         submittedAt: new Date().toISOString(),
         status: 'new'
       });
-      await store.setJSON('list', inquiries);
+      await store.setJSON('data', inquiries);
     } catch (blobError) {
       console.error('Netlify Blobs error (non-fatal):', blobError);
       // Continue anyway - emails will still be sent

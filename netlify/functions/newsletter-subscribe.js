@@ -1,6 +1,8 @@
 import { Resend } from 'resend';
 import { getStore } from '@netlify/blobs';
 
+const SITE_ID = "347c1eb9-e6b5-4736-b000-f6908c1f85fc";
+
 export async function handler(event) {
   // Only allow POST
   if (event.httpMethod !== 'POST') {
@@ -31,8 +33,12 @@ export async function handler(event) {
 
     // Save subscriber to Netlify Blobs (non-blocking - don't fail if Blobs unavailable)
     try {
-      const store = getStore('newsletter-subscribers');
-      const subscribers = await store.get('list', { type: 'json' }) || [];
+      const store = getStore({
+        name: 'newsletter-subscribers',
+        siteID: SITE_ID,
+        token: process.env.NETLIFY_AUTH_TOKEN
+      });
+      const subscribers = await store.get('data', { type: 'json' }) || [];
 
       // Check if already subscribed
       const existingIndex = subscribers.findIndex(s => s.email.toLowerCase() === email.toLowerCase());
@@ -42,7 +48,7 @@ export async function handler(event) {
           subscribedAt: new Date().toISOString(),
           source: 'website'
         });
-        await store.setJSON('list', subscribers);
+        await store.setJSON('data', subscribers);
       }
     } catch (blobError) {
       console.error('Netlify Blobs error (non-fatal):', blobError);

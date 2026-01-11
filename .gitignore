@@ -26,3 +26,6 @@ pnpm-debug.log*
 .astro/
 CLAUDES PICTURES/
 CLAUDES PICTURES.zip
+
+# Local Netlify folder
+.netlify
