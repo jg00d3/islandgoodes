@@ -1,0 +1,302 @@
+---
+import PreviewLayout from '../layouts/PreviewLayout.astro';
+
+const title = "3D Virtual Tour - Island Goodes";
+const description = "Take a virtual 3D tour of Island Goodes, an adults-only oceanview accommodation near Hilo, Hawaii. Explore our rooms and property before you visit.";
+
+// Room-specific starting positions in Matterport
+const roomPositions: Record<string, { ss: string; sr: string; name: string }> = {
+  'hilo-bay': { ss: '16', sr: '-1.95,1.23', name: 'Hilo Bay Room' },
+  'mauna-kea': { ss: '58', sr: '-1.45,1.13', name: 'Mauna Kea Room' },
+  'orchid': { ss: '14', sr: '-1.91,1.2', name: 'Orchid Room' },
+  'property': { ss: '1', sr: '0,0', name: 'Full Property Tour' }
+};
+
+const matterportId = 'zrMG54r6RUx';
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="tour-page">
+    <div class="tour-bar">
+      <div class="tour-bar-content">
+        <a href="javascript:history.back()" class="back-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          Back
+        </a>
+        <span class="tour-title" id="tourTitle">3D Virtual Tour</span>
+        <div class="tour-actions">
+          <select id="roomSelect" class="room-select">
+            <option value="property">Full Property</option>
+            <option value="hilo-bay">Hilo Bay Room</option>
+            <option value="orchid">Orchid Room</option>
+            <option value="mauna-kea">Mauna Kea Room</option>
+          </select>
+          <a href="/book" class="btn btn-primary btn-small">Book Now</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="iframe-container">
+      <div class="iframe-loading" id="iframeLoading">
+        <div class="spinner"></div>
+        <p>Loading 3D tour...</p>
+      </div>
+      <iframe
+        id="tourFrame"
+        src=""
+        title="Island Goodes 3D Virtual Tour"
+        allowfullscreen
+        loading="eager"
+        onload="document.getElementById('iframeLoading').style.display='none';"
+      ></iframe>
+    </div>
+
+    <div class="tour-tips">
+      <div class="tip">
+        <span class="tip-icon">🖱️</span>
+        <span>Click and drag to look around</span>
+      </div>
+      <div class="tip">
+        <span class="tip-icon">👆</span>
+        <span>Click circles to move</span>
+      </div>
+      <div class="tip">
+        <span class="tip-icon">📱</span>
+        <span>Pinch to zoom on mobile</span>
+      </div>
+    </div>
+  </section>
+</PreviewLayout>
+
+<style>
+  .tour-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 70px;
+    background: #1a1a1a;
+  }
+
+  .tour-bar {
+    background: var(--gradient-primary);
+    color: #fff;
+    padding: 0.75rem 2rem;
+    position: sticky;
+    top: 70px;
+    z-index: 50;
+  }
+
+  .tour-bar-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .back-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255,255,255,0.8);
+    font-size: 0.9375rem;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover {
+    color: #fff;
+  }
+
+  .tour-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    flex: 1;
+    text-align: center;
+  }
+
+  .tour-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .room-select {
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 6px;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+
+  .room-select option {
+    background: #333;
+    color: #fff;
+  }
+
+  .iframe-container {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    background: #000;
+  }
+
+  .iframe-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #1a1a1a;
+    z-index: 10;
+  }
+
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(255,255,255,0.1);
+    border-top-color: var(--color-secondary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .iframe-loading p {
+    margin-top: 1rem;
+    color: rgba(255,255,255,0.7);
+  }
+
+  #tourFrame {
+    width: 100%;
+    height: calc(100vh - 170px);
+    border: none;
+    display: block;
+  }
+
+  .tour-tips {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 0.75rem 2rem;
+    background: rgba(0,0,0,0.8);
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .tip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255,255,255,0.7);
+    font-size: 0.8125rem;
+  }
+
+  .tip-icon {
+    font-size: 1rem;
+  }
+
+  /* Hide footer on tour page */
+  :global(.site-footer) {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .tour-bar {
+      padding: 0.625rem 1rem;
+    }
+
+    .tour-bar-content {
+      flex-wrap: wrap;
+    }
+
+    .tour-title {
+      order: -1;
+      flex: 100%;
+      text-align: center;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .back-link {
+      font-size: 0.875rem;
+    }
+
+    .room-select {
+      font-size: 0.8125rem;
+      padding: 0.375rem 0.75rem;
+    }
+
+    #tourFrame {
+      height: calc(100vh - 200px);
+    }
+
+    .tour-tips {
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .tip {
+      font-size: 0.75rem;
+    }
+  }
+</style>
+
+<script define:vars={{ roomPositions, matterportId }}>
+  // Get room from URL params
+  const urlParams = new URLSearchParams(window.location.search);
+  const room = urlParams.get('room') || 'property';
+
+  // Get room position data
+  const position = roomPositions[room] || roomPositions['property'];
+
+  // Build Matterport URL
+  const matterportUrl = `https://my.matterport.com/show/?m=${matterportId}&ss=${position.ss}&sr=${position.sr}`;
+
+  // Set iframe src
+  const iframe = document.getElementById('tourFrame');
+  if (iframe) {
+    iframe.src = matterportUrl;
+  }
+
+  // Update title
+  const titleEl = document.getElementById('tourTitle');
+  if (titleEl) {
+    titleEl.textContent = position.name;
+  }
+
+  // Set select value
+  const select = document.getElementById('roomSelect');
+  if (select) {
+    select.value = room;
+
+    // Handle room change
+    select.addEventListener('change', function() {
+      const newRoom = this.value;
+      const newPosition = roomPositions[newRoom] || roomPositions['property'];
+      const newUrl = `https://my.matterport.com/show/?m=${matterportId}&ss=${newPosition.ss}&sr=${newPosition.sr}`;
+
+      // Show loading
+      const loading = document.getElementById('iframeLoading');
+      if (loading) loading.style.display = 'flex';
+
+      // Update iframe
+      if (iframe) iframe.src = newUrl;
+
+      // Update title
+      if (titleEl) titleEl.textContent = newPosition.name;
+
+      // Update URL without reload
+      const pageUrl = new URL(window.location.href);
+      pageUrl.searchParams.set('room', newRoom);
+      window.history.replaceState({}, '', pageUrl);
+    });
+  }
+</script>
