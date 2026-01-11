@@ -47,7 +47,11 @@
       "Bash(node scripts/fix-all-rotated.mjs:*)",
       "Bash(netlify status:*)",
       "Bash(nslookup:*)",
-      "Bash(git -c credential.helper='!gh auth git-credential' push origin master)"
+      "Bash(git -c credential.helper='!gh auth git-credential' push origin master)",
+      "Bash(GIT_TERMINAL_PROMPT=0 git push:*)",
+      "Bash(timeout 60 git -c credential.helper= -c \"credential.https://github.com.helper=!gh auth git-credential\" push origin master)",
+      "Bash(git checkout:*)",
+      "Bash(grep:*)"
     ]
   }
 }

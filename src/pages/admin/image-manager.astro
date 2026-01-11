@@ -210,6 +210,16 @@ const galleryCategories = [
   <!-- Room Images -->
   <section class="rooms-section">
     <div class="container">
+      <!-- Slideshow Toggle -->
+      <div class="slideshow-toggle">
+        <label class="toggle-label">
+          <span>Lightbox Slideshow</span>
+          <input type="checkbox" id="slideshowToggle" />
+          <span class="toggle-switch"></span>
+          <span class="toggle-status" id="slideshowStatus">Disabled</span>
+        </label>
+      </div>
+
       <div class="section-header-row">
         <h2>Room Images</h2>
         <div style="display: flex; align-items: center;">
@@ -578,6 +588,73 @@ const galleryCategories = [
 
   .reorder-mode-toggle {
     margin-left: 1rem;
+  }
+
+  /* Slideshow Toggle */
+  .slideshow-toggle {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    display: inline-block;
+  }
+
+  .toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  .toggle-label > span:first-child {
+    color: var(--color-text);
+  }
+
+  .toggle-label input[type="checkbox"] {
+    display: none;
+  }
+
+  .toggle-switch {
+    position: relative;
+    width: 48px;
+    height: 26px;
+    background: #ccc;
+    border-radius: 13px;
+    transition: background 0.3s;
+  }
+
+  .toggle-switch::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  .toggle-label input:checked + .toggle-switch {
+    background: var(--color-primary);
+  }
+
+  .toggle-label input:checked + .toggle-switch::after {
+    transform: translateX(22px);
+  }
+
+  .toggle-status {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    min-width: 60px;
+  }
+
+  .toggle-status.enabled {
+    color: #10B981;
+    font-weight: 600;
   }
 
   /* Gallery Section */
@@ -1822,4 +1899,84 @@ const galleryCategories = [
 
   // Apply saved order on load
   applySavedOrder();
+
+  // ============================================
+  // SLIDESHOW TOGGLE
+  // ============================================
+  const slideshowToggle = document.getElementById('slideshowToggle') as HTMLInputElement;
+  const slideshowStatus = document.getElementById('slideshowStatus');
+
+  // Load slideshow setting from API
+  async function loadSlideshowSetting() {
+    try {
+      const response = await fetch('/.netlify/functions/data-store', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ store: 'settings', action: 'get', key: 'data' })
+      });
+      const result = await response.json();
+      if (result.success && result.data) {
+        const enabled = result.data.slideshowEnabled || false;
+        if (slideshowToggle) slideshowToggle.checked = enabled;
+        updateSlideshowStatus(enabled);
+      }
+    } catch (err) {
+      console.error('Failed to load slideshow setting:', err);
+    }
+  }
+
+  // Save slideshow setting to API
+  async function saveSlideshowSetting(enabled: boolean) {
+    try {
+      // First get current settings
+      const getResponse = await fetch('/.netlify/functions/data-store', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ store: 'settings', action: 'get', key: 'data' })
+      });
+      const getResult = await getResponse.json();
+      const currentSettings = (getResult.success && getResult.data) ? getResult.data : {};
+
+      // Update with new slideshow setting
+      const updatedSettings = { ...currentSettings, slideshowEnabled: enabled };
+
+      // Save back to API
+      const saveResponse = await fetch('/.netlify/functions/data-store', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ store: 'settings', action: 'set', key: 'data', value: updatedSettings })
+      });
+      const saveResult = await saveResponse.json();
+
+      if (saveResult.success) {
+        await logActivity('settings', 'Slideshow setting updated', enabled ? 'Enabled' : 'Disabled');
+      } else {
+        throw new Error('Failed to save setting');
+      }
+    } catch (err) {
+      console.error('Failed to save slideshow setting:', err);
+      alert('Failed to save slideshow setting. Please try again.');
+      // Revert toggle state
+      if (slideshowToggle) slideshowToggle.checked = !enabled;
+      updateSlideshowStatus(!enabled);
+    }
+  }
+
+  // Update status text
+  function updateSlideshowStatus(enabled: boolean) {
+    if (slideshowStatus) {
+      slideshowStatus.textContent = enabled ? 'Enabled' : 'Disabled';
+      slideshowStatus.classList.toggle('enabled', enabled);
+    }
+  }
+
+  // Handle toggle change
+  slideshowToggle?.addEventListener('change', () => {
+    const enabled = slideshowToggle.checked;
+    updateSlideshowStatus(enabled);
+    saveSlideshowSetting(enabled);
+  });
+
+  // Load setting on page load
+  loadSlideshowSetting();
 </script>

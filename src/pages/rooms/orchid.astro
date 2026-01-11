@@ -8,10 +8,7 @@ const images = [
   { src: "/images/rooms/orchid/bed.jpg", alt: "Sleep Number King Bed in Orchid Room" },
   { src: "/images/rooms/orchid/room.jpg", alt: "Orchid Room overview" },
   { src: "/images/rooms/orchid/room2.jpg", alt: "Orchid Room alternate view" },
-  { src: "/images/rooms/orchid/unit.jpg", alt: "Orchid Suite interior" },
   { src: "/images/rooms/orchid/lanai.jpg", alt: "Private lanai with ocean views" },
-  { src: "/images/rooms/orchid/living.jpg", alt: "Living area" },
-  { src: "/images/rooms/orchid/living2.jpg", alt: "Living area seating" },
   { src: "/images/rooms/orchid/living3.jpg", alt: "Living space overview" },
   { src: "/images/rooms/orchid/bathroom.jpg", alt: "Private bathroom" },
   { src: "/images/rooms/orchid/bathroom2.jpg", alt: "Bathroom vanity" },
@@ -21,21 +18,9 @@ const images = [
   { src: "/images/rooms/orchid/kitchen2.jpg", alt: "Kitchenette appliances" },
   { src: "/images/rooms/orchid/kitchen3.jpg", alt: "Kitchen counter" },
   { src: "/images/rooms/orchid/kitchen4.jpg", alt: "Kitchen storage" },
-  { src: "/images/rooms/orchid/kitchen5.jpg", alt: "Kitchen cooking area" },
-  { src: "/images/rooms/orchid/closet.jpg", alt: "Closet space" },
-  { src: "/images/rooms/orchid/closet2.jpg", alt: "Additional closet" },
-  { src: "/images/rooms/orchid/entrance.jpg", alt: "Private entrance" },
-  { src: "/images/rooms/orchid/entrance2.jpg", alt: "Entrance area" },
   { src: "/images/rooms/orchid/view1.jpg", alt: "Room view" },
-  { src: "/images/rooms/orchid/view2.jpg", alt: "Seating area" },
-  { src: "/images/rooms/orchid/view3.jpg", alt: "Living space" },
   { src: "/images/rooms/orchid/view4.jpg", alt: "Room amenities" },
-  { src: "/images/rooms/orchid/view5.jpg", alt: "Suite interior" },
-  { src: "/images/rooms/orchid/view6.jpg", alt: "Room details" },
-  { src: "/images/rooms/orchid/view7.jpg", alt: "Additional view" },
-  { src: "/images/rooms/orchid/view8.jpg", alt: "Suite features" },
   { src: "/images/rooms/orchid/view9.jpg", alt: "Room overview" },
-  { src: "/images/rooms/orchid/view10.jpg", alt: "Window view" },
   { src: "/images/rooms/orchid/view11.jpg", alt: "Ocean view" },
   { src: "/images/rooms/orchid/view12.jpg", alt: "Panoramic view" },
 ];
@@ -639,7 +624,7 @@ const bathroomAmenities = [
     const featuredImage = document.getElementById('featured-image') as HTMLImageElement;
 
     try {
-      const [deletedResponse, orderResponse, editedResponse] = await Promise.all([
+      const [deletedResponse, orderResponse, editedResponse, settingsResponse] = await Promise.all([
         fetch('/.netlify/functions/data-store', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -654,14 +639,26 @@ const bathroomAmenities = [
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ store: 'editedImages', action: 'get', key: 'data' })
+        }),
+        fetch('/.netlify/functions/data-store', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ store: 'settings', action: 'get', key: 'data' })
         })
       ]);
 
       const deleted = deletedResponse.ok ? await deletedResponse.json() : [];
       const imageOrder = orderResponse.ok ? await orderResponse.json() : {};
       const editedImages = editedResponse.ok ? await editedResponse.json() : {};
+      const settings = settingsResponse.ok ? await settingsResponse.json() : {};
       const deletedPaths = Array.isArray(deleted) ? deleted.map((d: any) => d.path || d) : [];
       const customOrder = imageOrder['orchid'] || [];
+
+      // Hide slideshow controls if slideshow is not enabled
+      if (!settings.slideshowEnabled) {
+        const controls = document.querySelector('.lightbox-controls');
+        if (controls) controls.style.display = 'none';
+      }
 
       // Apply edited images (rotated, cropped, etc.)
       if (editedImages && Object.keys(editedImages).length > 0) {

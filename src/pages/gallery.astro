@@ -578,7 +578,7 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
     const galleryGrid = document.querySelector('.gallery-grid');
 
     try {
-      const [deletedResponse, orderResponse, editedResponse] = await Promise.all([
+      const [deletedResponse, orderResponse, editedResponse, settingsResponse] = await Promise.all([
         fetch('/.netlify/functions/data-store', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -593,12 +593,24 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ store: 'editedImages', action: 'get', key: 'data' })
+        }),
+        fetch('/.netlify/functions/data-store', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ store: 'settings', action: 'get', key: 'data' })
         })
       ]);
 
       const deleted = deletedResponse.ok ? await deletedResponse.json() : [];
       const imageOrder = orderResponse.ok ? await orderResponse.json() : {};
       const editedImages = editedResponse.ok ? await editedResponse.json() : {};
+      const settings = settingsResponse.ok ? await settingsResponse.json() : {};
+
+      // Hide slideshow controls if slideshow is not enabled
+      if (!settings.slideshowEnabled) {
+        const controls = document.querySelector('.lightbox-controls');
+        if (controls) controls.style.display = 'none';
+      }
       const deletedPaths = Array.isArray(deleted) ? deleted.map((d: any) => d.path || d) : [];
 
       // Apply edited images (rotated, cropped, etc.) - this also affects lightbox

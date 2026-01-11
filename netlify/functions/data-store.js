@@ -39,7 +39,8 @@ const DEFAULT_SETTINGS = {
   tripAdvisorEnabled: true,
   announcementEnabled: false,
   announcementText: '',
-  aiChatEnabled: false
+  aiChatEnabled: false,
+  slideshowEnabled: false
 };
 
 // CORS headers
