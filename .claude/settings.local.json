@@ -52,7 +52,8 @@
       "Bash(timeout 60 git -c credential.helper= -c \"credential.https://github.com.helper=!gh auth git-credential\" push origin master)",
       "Bash(git checkout:*)",
       "Bash(grep:*)",
-      "Bash(xargs:*)"
+      "Bash(xargs:*)",
+      "Bash(npx netlify deploy:*)"
     ]
   }
 }

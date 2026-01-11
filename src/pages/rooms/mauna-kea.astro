@@ -88,8 +88,8 @@ const bathroomAmenities = [
             <img src={images[0].src} alt={images[0].alt} id="featured-image" />
           </div>
           <div class="thumbnail-grid">
-            {images.map((img) => (
-              <button class="thumbnail" data-src={img.src} data-alt={img.alt}>
+            {images.map((img, index) => (
+              <button class="thumbnail" data-index={index} data-src={img.src} data-alt={img.alt}>
                 <img src={img.src} alt={img.alt} loading="lazy" />
               </button>
             ))}
@@ -494,105 +494,12 @@ const bathroomAmenities = [
 </style>
 
 <script>
-  // Apply custom image order, edited images, and hide deleted images
-  (async function initializeGallery() {
-    const thumbnailGrid = document.querySelector('.thumbnail-grid');
-    const featuredImage = document.getElementById('featured-image') as HTMLImageElement;
+  // ============================================
+  // SIMPLE LIGHTBOX - NO ASYNC COMPLICATIONS
+  // ============================================
 
-    try {
-      const [deletedResponse, orderResponse, editedResponse, settingsResponse] = await Promise.all([
-        fetch('/.netlify/functions/data-store', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ store: 'deletedImages', action: 'get', key: 'data' })
-        }),
-        fetch('/.netlify/functions/data-store', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ store: 'imageOrder', action: 'get', key: 'data' })
-        }),
-        fetch('/.netlify/functions/data-store', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ store: 'editedImages', action: 'get', key: 'data' })
-        }),
-        fetch('/.netlify/functions/data-store', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ store: 'settings', action: 'get', key: 'data' })
-        })
-      ]);
-
-      const deleted = deletedResponse.ok ? await deletedResponse.json() : [];
-      const imageOrder = orderResponse.ok ? await orderResponse.json() : {};
-      const editedImages = editedResponse.ok ? await editedResponse.json() : {};
-      const settings = settingsResponse.ok ? await settingsResponse.json() : {};
-
-      // Hide slideshow controls if slideshow is not enabled
-      if (!settings.slideshowEnabled) {
-        const controls = document.querySelector('.lightbox-controls');
-        if (controls) controls.style.display = 'none';
-      }
-      const deletedPaths = Array.isArray(deleted) ? deleted.map((d: any) => d.path || d) : [];
-      const customOrder = imageOrder['mauna-kea'] || [];
-
-      // Apply edited images (rotated, cropped, etc.)
-      if (editedImages && Object.keys(editedImages).length > 0) {
-        document.querySelectorAll('.thumbnail').forEach((thumb) => {
-          const src = thumb.getAttribute('data-src');
-          if (src && editedImages[src]) {
-            const img = thumb.querySelector('img') as HTMLImageElement;
-            if (img) img.src = editedImages[src].dataUrl;
-            thumb.setAttribute('data-edited', editedImages[src].dataUrl);
-          }
-        });
-      }
-
-      if (customOrder.length > 0 && thumbnailGrid) {
-        const thumbnails = Array.from(thumbnailGrid.querySelectorAll('.thumbnail')) as HTMLElement[];
-        const thumbMap = new Map(thumbnails.map(t => [t.getAttribute('data-src'), t]));
-        customOrder.forEach((src: string) => {
-          const thumb = thumbMap.get(src);
-          if (thumb) thumbnailGrid.appendChild(thumb);
-        });
-        thumbnails.forEach(thumb => {
-          if (!customOrder.includes(thumb.getAttribute('data-src'))) thumbnailGrid.appendChild(thumb);
-        });
-      }
-
-      document.querySelectorAll('.thumbnail').forEach((thumb) => {
-        const src = thumb.getAttribute('data-src');
-        if (src && deletedPaths.includes(src)) thumb.remove();
-      });
-
-      const firstVisible = document.querySelector('.thumbnail') as HTMLElement;
-      if (firstVisible && featuredImage) {
-        const editedSrc = firstVisible.getAttribute('data-edited');
-        const originalSrc = firstVisible.getAttribute('data-src');
-        const alt = firstVisible.getAttribute('data-alt');
-        featuredImage.src = editedSrc || originalSrc || '';
-        featuredImage.alt = alt || '';
-        document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
-        firstVisible.classList.add('active');
-      }
-    } catch (e) { console.error('Error initializing gallery:', e); }
-  })();
-
+  // Get all elements
   const featuredImage = document.getElementById('featured-image') as HTMLImageElement;
-  const mainImageContainer = document.querySelector('.main-image');
-  const thumbnailGrid = document.querySelector('.thumbnail-grid');
-  let currentActiveSrc = '';
-
-  // Set first thumbnail as active initially
-  const firstThumb = document.querySelector('.thumbnail-grid .thumbnail') as HTMLElement;
-  if (firstThumb) {
-    firstThumb.classList.add('active');
-    currentActiveSrc = firstThumb.getAttribute('data-src') || '';
-  }
-
-  // ============================================
-  // LIGHTBOX WITH SLIDESHOW
-  // ============================================
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg') as HTMLImageElement;
   const lightboxCaption = document.getElementById('lightboxCaption');
@@ -600,133 +507,87 @@ const bathroomAmenities = [
   const lightboxClose = document.getElementById('lightboxClose');
   const lightboxPrev = document.getElementById('lightboxPrev');
   const lightboxNext = document.getElementById('lightboxNext');
-  const slideshowToggle = document.getElementById('slideshowToggle');
-  const speedSelect = document.getElementById('speedSelect') as HTMLSelectElement;
-  const playIcon = slideshowToggle?.querySelector('.play-icon') as HTMLElement;
-  const pauseIcon = slideshowToggle?.querySelector('.pause-icon') as HTMLElement;
 
-  let currentLightboxIndex = 0;
-  let visibleThumbnails: HTMLElement[] = [];
-  let slideshowInterval: number | null = null;
-  let isPlaying = false;
+  // Build image array directly from thumbnails in DOM order
+  const allThumbnails = Array.from(document.querySelectorAll('.thumbnail-grid .thumbnail')) as HTMLElement[];
+  const imageData = allThumbnails.map((thumb, i) => ({
+    src: thumb.getAttribute('data-src') || '',
+    alt: thumb.getAttribute('data-alt') || '',
+    index: i
+  }));
 
-  function getVisibleThumbnails(): HTMLElement[] {
-    // Only select thumbnails within the thumbnail grid, excluding any hidden ones
-    return Array.from(document.querySelectorAll('.thumbnail-grid .thumbnail:not(.deleted)')) as HTMLElement[];
+  let currentIndex = 0;
+  const totalImages = imageData.length;
+
+  // Mark first thumbnail as active
+  if (allThumbnails[0]) {
+    allThumbnails[0].classList.add('active');
   }
 
+  // Update lightbox display
+  function showImage(index: number) {
+    if (index < 0 || index >= totalImages) return;
+    currentIndex = index;
+
+    const img = imageData[index];
+    if (lightboxImg) {
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+    }
+    if (lightboxCaption) {
+      lightboxCaption.textContent = img.alt;
+    }
+    if (lightboxCounter) {
+      lightboxCounter.textContent = `${index + 1} / ${totalImages}`;
+    }
+  }
+
+  // Open lightbox at specific index
   function openLightbox(index: number) {
-    visibleThumbnails = getVisibleThumbnails();
-    currentLightboxIndex = index;
-    updateLightboxImage();
+    showImage(index);
     lightbox?.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
 
+  // Close lightbox
   function closeLightbox() {
     lightbox?.classList.remove('active');
     document.body.style.overflow = '';
-    stopSlideshow();
   }
 
-  function updateLightboxImage() {
-    const thumb = visibleThumbnails[currentLightboxIndex];
-    if (!thumb) return;
-
-    const editedSrc = thumb.getAttribute('data-edited');
-    const originalSrc = thumb.getAttribute('data-src');
-    const alt = thumb.getAttribute('data-alt');
-
-    if (lightboxImg) {
-      lightboxImg.src = editedSrc || originalSrc || '';
-      lightboxImg.alt = alt || '';
-    }
-    if (lightboxCaption) {
-      lightboxCaption.textContent = alt || '';
-    }
-    if (lightboxCounter) {
-      lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${visibleThumbnails.length}`;
-    }
+  // Navigation
+  function prevImage() {
+    showImage((currentIndex - 1 + totalImages) % totalImages);
   }
 
-  function showPrevImage() {
-    currentLightboxIndex = (currentLightboxIndex - 1 + visibleThumbnails.length) % visibleThumbnails.length;
-    updateLightboxImage();
+  function nextImage() {
+    showImage((currentIndex + 1) % totalImages);
   }
 
-  function showNextImage() {
-    currentLightboxIndex = (currentLightboxIndex + 1) % visibleThumbnails.length;
-    updateLightboxImage();
-  }
+  // Thumbnail click handler - use data-index directly
+  allThumbnails.forEach((thumb, index) => {
+    thumb.addEventListener('click', () => {
+      // Update featured image
+      const src = thumb.getAttribute('data-src') || '';
+      const alt = thumb.getAttribute('data-alt') || '';
+      if (featuredImage) {
+        featuredImage.src = src;
+        featuredImage.alt = alt;
+      }
 
-  function startSlideshow() {
-    if (isPlaying) return;
-    isPlaying = true;
-    slideshowToggle?.classList.add('playing');
-    if (playIcon) playIcon.style.display = 'none';
-    if (pauseIcon) pauseIcon.style.display = 'block';
+      // Update active state
+      allThumbnails.forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
 
-    const speed = parseInt(speedSelect?.value || '3000');
-    slideshowInterval = window.setInterval(showNextImage, speed);
-  }
-
-  function stopSlideshow() {
-    if (!isPlaying) return;
-    isPlaying = false;
-    slideshowToggle?.classList.remove('playing');
-    if (playIcon) playIcon.style.display = 'block';
-    if (pauseIcon) pauseIcon.style.display = 'none';
-
-    if (slideshowInterval) {
-      clearInterval(slideshowInterval);
-      slideshowInterval = null;
-    }
-  }
-
-  function toggleSlideshow() {
-    if (isPlaying) {
-      stopSlideshow();
-    } else {
-      startSlideshow();
-    }
-  }
-
-  // Single click on thumbnail opens lightbox at that image
-  thumbnailGrid?.addEventListener('click', (e) => {
-    const thumb = (e.target as HTMLElement).closest('.thumbnail') as HTMLElement;
-    if (!thumb) return;
-
-    // First update the featured image (existing behavior)
-    const editedSrc = thumb.getAttribute('data-edited');
-    const originalSrc = thumb.getAttribute('data-src');
-    const alt = thumb.getAttribute('data-alt');
-    if (featuredImage) {
-      featuredImage.src = editedSrc || originalSrc || '';
-      featuredImage.alt = alt || '';
-    }
-    document.querySelectorAll('.thumbnail-grid .thumbnail').forEach(t => t.classList.remove('active'));
-    thumb.classList.add('active');
-    currentActiveSrc = originalSrc || '';
-
-    // Then open lightbox at this thumbnail
-    visibleThumbnails = getVisibleThumbnails();
-    const index = visibleThumbnails.findIndex(t => t.getAttribute('data-src') === originalSrc);
-    openLightbox(index >= 0 ? index : 0);
+      // Open lightbox at THIS index
+      openLightbox(index);
+    });
   });
 
   // Lightbox controls
   lightboxClose?.addEventListener('click', closeLightbox);
-  lightboxPrev?.addEventListener('click', showPrevImage);
-  lightboxNext?.addEventListener('click', showNextImage);
-  slideshowToggle?.addEventListener('click', toggleSlideshow);
-
-  // Speed change - restart slideshow if playing
-  speedSelect?.addEventListener('change', () => {
-    if (isPlaying) {
-      stopSlideshow();
-      startSlideshow();
-    }
-  });
+  lightboxPrev?.addEventListener('click', prevImage);
+  lightboxNext?.addEventListener('click', nextImage);
 
   // Close on background click
   lightbox?.addEventListener('click', (e) => {
@@ -737,8 +598,11 @@ const bathroomAmenities = [
   document.addEventListener('keydown', (e) => {
     if (!lightbox?.classList.contains('active')) return;
     if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowLeft') showPrevImage();
-    if (e.key === 'ArrowRight') showNextImage();
-    if (e.key === ' ') { e.preventDefault(); toggleSlideshow(); }
+    if (e.key === 'ArrowLeft') prevImage();
+    if (e.key === 'ArrowRight') nextImage();
   });
+
+  // Hide slideshow controls (not used in simple version)
+  const slideshowControls = document.querySelector('.lightbox-controls');
+  if (slideshowControls) slideshowControls.style.display = 'none';
 </script>
