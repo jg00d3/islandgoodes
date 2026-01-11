@@ -529,33 +529,44 @@ const bathroomAmenities = [
     check();
   }
 
+  // Global storage for edited images and deleted paths
+  let editedImagesCache: Record<string, {dataUrl: string}> = {};
+  let deletedPathsCache: string[] = [];
+  let sharedDataLoaded = false;
+  let visibleIndices: number[] = []; // Track which images are visible (not deleted)
+
   waitForSharedData(async () => {
     try {
       const SharedData = (window as any).SharedData;
 
       // Load deleted images and hide them
       const deletedImages = await SharedData.getDeletedImages() || [];
-      const deletedPaths = Array.isArray(deletedImages)
+      deletedPathsCache = Array.isArray(deletedImages)
         ? deletedImages.map((d: any) => d.path || d)
         : [];
 
       // Load edited images (rotated, cropped)
-      const editedImages = await SharedData.getEditedImages() || {};
+      editedImagesCache = await SharedData.getEditedImages() || {};
+      sharedDataLoaded = true;
 
-      // Process each thumbnail
+      // Process each thumbnail and build visible indices
+      visibleIndices = [];
       allThumbnails.forEach((thumb, index) => {
         const originalSrc = thumb.getAttribute('data-src');
 
         // Hide deleted images
-        if (originalSrc && deletedPaths.includes(originalSrc)) {
+        if (originalSrc && deletedPathsCache.includes(originalSrc)) {
           thumb.style.display = 'none';
           thumb.classList.add('deleted');
           return;
         }
 
+        // Track visible images
+        visibleIndices.push(index);
+
         // Apply edited images
-        if (originalSrc && editedImages[originalSrc]) {
-          const editedSrc = editedImages[originalSrc].dataUrl;
+        if (originalSrc && editedImagesCache[originalSrc]) {
+          const editedSrc = editedImagesCache[originalSrc].dataUrl;
           const img = thumb.querySelector('img') as HTMLImageElement;
           if (img) img.src = editedSrc;
           imageData[index].src = editedSrc;
@@ -575,30 +586,116 @@ const bathroomAmenities = [
     }
   });
 
+  // Get the image source (checks edited images cache)
+  function getImageSrc(index: number): string {
+    const thumb = allThumbnails[index];
+    const originalSrc = thumb?.getAttribute('data-src') || imageData[index].src;
+
+    // Check cache for edited version
+    if (editedImagesCache[originalSrc]) {
+      return editedImagesCache[originalSrc].dataUrl;
+    }
+    // Check data-edited attribute
+    const editedAttr = thumb?.getAttribute('data-edited');
+    if (editedAttr) return editedAttr;
+
+    return originalSrc;
+  }
+
+  // Get visible images count for counter
+  function getVisibleCount(): number {
+    if (visibleIndices.length > 0) return visibleIndices.length;
+    return totalImages; // Fallback before SharedData loads
+  }
+
+  // Get position in visible array
+  function getVisiblePosition(index: number): number {
+    if (visibleIndices.length === 0) return index + 1;
+    const pos = visibleIndices.indexOf(index);
+    return pos >= 0 ? pos + 1 : index + 1;
+  }
+
   function showImage(index: number) {
+    // Skip deleted images
+    const thumb = allThumbnails[index];
+    if (thumb?.classList.contains('deleted')) {
+      // Find next visible image
+      const nextVisible = visibleIndices.find(i => i > index) || visibleIndices[0];
+      if (nextVisible !== undefined && nextVisible !== index) {
+        showImage(nextVisible);
+        return;
+      }
+    }
+
     if (index < 0 || index >= totalImages) return;
     currentIndex = index;
 
-    // Get the thumbnail element to check for edited image
-    const thumb = allThumbnails[index];
-    const editedSrc = thumb?.getAttribute('data-edited');
-    const originalSrc = imageData[index].src;
+    const src = getImageSrc(index);
     const alt = imageData[index].alt;
 
     if (lightboxImg) {
-      // Use edited image if available, otherwise original
-      lightboxImg.src = editedSrc || originalSrc;
+      lightboxImg.src = src;
       lightboxImg.alt = alt;
     }
     if (lightboxCaption) {
       lightboxCaption.textContent = alt;
     }
     if (lightboxCounter) {
-      lightboxCounter.textContent = `${index + 1} / ${totalImages}`;
+      lightboxCounter.textContent = `${getVisiblePosition(index)} / ${getVisibleCount()}`;
     }
   }
 
-  function openLightbox(index: number) {
+  // Wait for SharedData to be available (max 3 seconds)
+  async function ensureSharedDataLoaded(): Promise<void> {
+    if (sharedDataLoaded) return;
+
+    // Wait for SharedData to become available
+    const maxWait = 3000;
+    const start = Date.now();
+    while (typeof (window as any).SharedData === 'undefined' && Date.now() - start < maxWait) {
+      await new Promise(r => setTimeout(r, 50));
+    }
+
+    if (typeof (window as any).SharedData === 'undefined') return;
+
+    try {
+      const SharedData = (window as any).SharedData;
+      const deletedImages = await SharedData.getDeletedImages() || [];
+      deletedPathsCache = Array.isArray(deletedImages)
+        ? deletedImages.map((d: any) => d.path || d)
+        : [];
+      editedImagesCache = await SharedData.getEditedImages() || {};
+      sharedDataLoaded = true;
+
+      // Rebuild visible indices and update thumbnails
+      visibleIndices = [];
+      allThumbnails.forEach((thumb, i) => {
+        const originalSrc = thumb.getAttribute('data-src');
+        if (originalSrc && deletedPathsCache.includes(originalSrc)) {
+          thumb.style.display = 'none';
+          thumb.classList.add('deleted');
+          return;
+        }
+        visibleIndices.push(i);
+
+        // Apply edited images to thumbnails
+        if (originalSrc && editedImagesCache[originalSrc]) {
+          const editedSrc = editedImagesCache[originalSrc].dataUrl;
+          const img = thumb.querySelector('img') as HTMLImageElement;
+          if (img) img.src = editedSrc;
+          imageData[i].src = editedSrc;
+          thumb.setAttribute('data-edited', editedSrc);
+        }
+      });
+    } catch (e) {
+      console.log('Could not load SharedData:', e);
+    }
+  }
+
+  async function openLightbox(index: number) {
+    // Ensure SharedData is loaded before showing images
+    await ensureSharedDataLoaded();
+
     showImage(index);
     lightbox?.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -611,12 +708,24 @@ const bathroomAmenities = [
   }
 
   function showPrevImage() {
-    currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+    if (visibleIndices.length > 0) {
+      const currentPos = visibleIndices.indexOf(currentIndex);
+      const newPos = (currentPos - 1 + visibleIndices.length) % visibleIndices.length;
+      currentIndex = visibleIndices[newPos];
+    } else {
+      currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+    }
     showImage(currentIndex);
   }
 
   function showNextImage() {
-    currentIndex = (currentIndex + 1) % totalImages;
+    if (visibleIndices.length > 0) {
+      const currentPos = visibleIndices.indexOf(currentIndex);
+      const newPos = (currentPos + 1) % visibleIndices.length;
+      currentIndex = visibleIndices[newPos];
+    } else {
+      currentIndex = (currentIndex + 1) % totalImages;
+    }
     showImage(currentIndex);
   }
 
