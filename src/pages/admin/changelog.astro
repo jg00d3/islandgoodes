@@ -4,10 +4,23 @@ import PreviewLayout from '../../layouts/PreviewLayout.astro';
 const title = "Changelog | Island Goodes Admin";
 const description = "Version history and release notes";
 
-const CURRENT_VERSION = "2.3.4";
-const RELEASE_DATE = "January 10, 2026";
+const CURRENT_VERSION = "2.5.0";
+const RELEASE_DATE = "January 11, 2026";
 
 const changelog = [
+  {
+    version: "2.5.0",
+    date: "January 11, 2026",
+    type: "Bug Fix",
+    changes: [
+      { type: "fixed", text: "Room lightbox now properly shows rotated/edited images from Image Manager" },
+      { type: "fixed", text: "Deleted images no longer appear in room lightbox or navigation" },
+      { type: "fixed", text: "Lightbox waits for SharedData to load before showing images (fixes race condition)" },
+      { type: "fixed", text: "Lightbox counter shows correct count excluding deleted images" },
+      { type: "improved", text: "Slideshow controls now respect admin 'slideshowEnabled' setting on all pages" },
+      { type: "added", text: "'Not clothing-optional' clarification added to home page and rooms page" },
+    ]
+  },
   {
     version: "2.3.4",
     date: "January 10, 2026",

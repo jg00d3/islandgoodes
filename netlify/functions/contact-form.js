@@ -29,20 +29,25 @@ export async function handler(event) {
       };
     }
 
-    // Save inquiry to Netlify Blobs
-    const store = getStore('contact-inquiries');
-    const inquiries = await store.get('list', { type: 'json' }) || [];
-    inquiries.push({
-      id: Date.now(),
-      name,
-      email,
-      phone: phone || null,
-      dates: dates || null,
-      message,
-      submittedAt: new Date().toISOString(),
-      status: 'new'
-    });
-    await store.setJSON('list', inquiries);
+    // Save inquiry to Netlify Blobs (non-blocking - don't fail if Blobs unavailable)
+    try {
+      const store = getStore('contact-inquiries');
+      const inquiries = await store.get('list', { type: 'json' }) || [];
+      inquiries.push({
+        id: Date.now(),
+        name,
+        email,
+        phone: phone || null,
+        dates: dates || null,
+        message,
+        submittedAt: new Date().toISOString(),
+        status: 'new'
+      });
+      await store.setJSON('list', inquiries);
+    } catch (blobError) {
+      console.error('Netlify Blobs error (non-fatal):', blobError);
+      // Continue anyway - emails will still be sent
+    }
 
     // Initialize Resend
     const resend = new Resend(process.env.RESEND_API_KEY);

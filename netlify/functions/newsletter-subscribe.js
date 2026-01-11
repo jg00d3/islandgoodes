@@ -29,19 +29,24 @@ export async function handler(event) {
       };
     }
 
-    // Save subscriber to Netlify Blobs
-    const store = getStore('newsletter-subscribers');
-    const subscribers = await store.get('list', { type: 'json' }) || [];
+    // Save subscriber to Netlify Blobs (non-blocking - don't fail if Blobs unavailable)
+    try {
+      const store = getStore('newsletter-subscribers');
+      const subscribers = await store.get('list', { type: 'json' }) || [];
 
-    // Check if already subscribed
-    const existingIndex = subscribers.findIndex(s => s.email.toLowerCase() === email.toLowerCase());
-    if (existingIndex === -1) {
-      subscribers.push({
-        email: email.toLowerCase(),
-        subscribedAt: new Date().toISOString(),
-        source: 'website'
-      });
-      await store.setJSON('list', subscribers);
+      // Check if already subscribed
+      const existingIndex = subscribers.findIndex(s => s.email.toLowerCase() === email.toLowerCase());
+      if (existingIndex === -1) {
+        subscribers.push({
+          email: email.toLowerCase(),
+          subscribedAt: new Date().toISOString(),
+          source: 'website'
+        });
+        await store.setJSON('list', subscribers);
+      }
+    } catch (blobError) {
+      console.error('Netlify Blobs error (non-fatal):', blobError);
+      // Continue anyway - email will still be sent
     }
 
     // Initialize Resend

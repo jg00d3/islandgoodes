@@ -116,9 +116,12 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
   <!-- HEADER -->
   <header class="site-header">
     <nav class="nav-container">
-      <a href="/" class="logo">
-        <span class="logo-text">Island <span class="logo-accent">Goodes</span></span>
-      </a>
+      <div class="logo-container">
+        <a href="/" class="logo">
+          <span class="logo-text">Island <span class="logo-accent">Goodes</span></span>
+        </a>
+        <span class="permit-number">Permit #SPP 13-000151</span>
+      </div>
       <ul class="nav-links">
         <li><a href="/" class="nav-link">Home</a></li>
         <li><a href="/rooms" class="nav-link">Rooms</a></li>
@@ -484,9 +487,21 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
     align-items: center;
   }
 
+  .logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   .logo {
     display: flex;
     align-items: center;
+  }
+
+  .permit-number {
+    font-size: 0.65rem;
+    color: var(--color-text-light);
+    margin-top: -2px;
   }
 
   .logo-text {

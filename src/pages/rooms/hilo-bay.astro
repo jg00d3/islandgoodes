@@ -1055,7 +1055,23 @@ const bathroomAmenities = [
     if (e.key === 'ArrowRight') nextImage();
   });
 
-  // Hide slideshow controls (not used in simple version)
-  const slideshowControls = document.querySelector('.lightbox-controls');
-  if (slideshowControls) slideshowControls.style.display = 'none';
+  // Check if slideshow is enabled in admin settings
+  (async function() {
+    try {
+      const response = await fetch('/.netlify/functions/data-store', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ store: 'settings', action: 'get', key: 'data' })
+      });
+      const settings = response.ok ? await response.json() : {};
+      if (!settings.slideshowEnabled) {
+        const controls = document.querySelector('.lightbox-controls');
+        if (controls) controls.style.display = 'none';
+      }
+    } catch (e) {
+      // Hide by default if can't fetch settings
+      const controls = document.querySelector('.lightbox-controls');
+      if (controls) controls.style.display = 'none';
+    }
+  })();
 </script>
