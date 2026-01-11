@@ -9,6 +9,7 @@ const beaches = [
     name: "Punalu'u Black Sand Beach",
     type: "Black Sand",
     distance: "1.5 hours from Island Goodes",
+    image: "/images/blog/black-sand-beach.jpg",
     description: "Hawaii's most famous black sand beach with jet-black basalt sand. Green and endangered Hawksbill turtles regularly bask on the warm sand - best viewing 11am-6pm.",
     highlights: ["Sea turtles (daily!)", "Coconut palms", "Dramatic black sand", "Lifeguard 8:30am-5pm"],
     tip: "Stay 10+ feet from turtles - fines range from $1,000-$10,500. Never touch or feed them!",
@@ -135,6 +136,16 @@ const turtleGuidelines = [
       {beaches.map((beach, index) => (
         <div class={`beach-card ${index % 2 === 1 ? 'reverse' : ''}`}>
           <div class="beach-image">
+            {beach.image ? (
+              <img src={beach.image} alt={beach.name} loading="lazy" />
+            ) : (
+              <div class="photo-placeholder">
+                <div class="placeholder-icon">📷</div>
+                <p>Have a great photo of this beach?</p>
+                <a href="/contact?subject=Photo%20Contribution" class="contribute-link">Share it with us</a>
+                <span class="credit-note">We'll feature it with credit & a link to your social media!</span>
+              </div>
+            )}
             <span class="beach-type">{beach.type}</span>
             <div class="swim-status" data-swimmable={beach.swimmable.toString()}>
               {beach.swimmable === true ? '✓ Swimmable' : beach.swimmable === false ? '✗ Not for swimming' : '⚠ ' + beach.swimmable}
@@ -233,9 +244,18 @@ const turtleGuidelines = [
   .beach-card.reverse { grid-template-columns: 1fr 300px; }
   .beach-card.reverse .beach-image { order: 2; }
 
-  .beach-image { position: relative; background: linear-gradient(135deg, #1a1a1a 0%, #444 100%); border-radius: 16px; height: 200px; display: flex; align-items: center; justify-content: center; }
-  .beach-type { position: absolute; top: 1rem; left: 1rem; background: var(--color-secondary); color: #1a1a1a; padding: 0.375rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
-  .swim-status { position: absolute; bottom: 1rem; left: 1rem; padding: 0.375rem 0.875rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; background: rgba(0,0,0,0.7); color: #fff; }
+  .beach-image { position: relative; background: linear-gradient(135deg, #1a1a1a 0%, #444 100%); border-radius: 16px; min-height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .beach-image img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
+
+  .photo-placeholder { text-align: center; padding: 2.5rem 2rem 3.5rem; color: #fff; position: relative; z-index: 2; }
+  .placeholder-icon { font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.7; }
+  .photo-placeholder p { font-size: 0.95rem; margin-bottom: 0.75rem; opacity: 0.9; }
+  .contribute-link { display: inline-block; background: var(--color-secondary); color: #1a1a1a; padding: 0.5rem 1.25rem; border-radius: 50px; font-weight: 600; font-size: 0.875rem; margin-bottom: 0.75rem; transition: transform 0.2s, box-shadow 0.2s; }
+  .contribute-link:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(197, 165, 114, 0.4); color: #1a1a1a; }
+  .credit-note { display: block; font-size: 0.75rem; opacity: 0.8; max-width: 220px; margin: 0 auto; line-height: 1.5; }
+
+  .beach-type { position: absolute; top: 1rem; left: 1rem; background: var(--color-secondary); color: #1a1a1a; padding: 0.375rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; z-index: 1; }
+  .swim-status { position: absolute; bottom: 1rem; right: 1rem; padding: 0.375rem 0.875rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; background: rgba(0,0,0,0.7); color: #fff; z-index: 3; }
   .swim-status[data-swimmable="true"] { background: rgba(27, 107, 90, 0.9); }
   .swim-status[data-swimmable="false"] { background: rgba(180, 60, 60, 0.9); }
 
@@ -280,6 +300,7 @@ const turtleGuidelines = [
     .beach-card { grid-template-columns: 1fr; }
     .beach-card.reverse { grid-template-columns: 1fr; }
     .beach-card.reverse .beach-image { order: 0; }
+    .beach-image { height: 220px; }
     .safety-grid { grid-template-columns: repeat(2, 1fr); }
   }
 </style>

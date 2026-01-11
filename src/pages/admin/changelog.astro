@@ -4,10 +4,22 @@ import PreviewLayout from '../../layouts/PreviewLayout.astro';
 const title = "Changelog | Island Goodes Admin";
 const description = "Version history and release notes";
 
-const CURRENT_VERSION = "2.5.0";
+const CURRENT_VERSION = "2.6.0";
 const RELEASE_DATE = "January 11, 2026";
 
 const changelog = [
+  {
+    version: "2.6.0",
+    date: "January 11, 2026",
+    type: "Feature",
+    changes: [
+      { type: "fixed", text: "Mobile menu now has solid white background (was transparent)" },
+      { type: "added", text: "Photo contributor call-to-action on beaches page for missing images" },
+      { type: "added", text: "Blog contributor section inviting guest writers" },
+      { type: "improved", text: "Beach images now display correctly on mobile devices" },
+      { type: "added", text: "New mobile menu overlay component for better styling control" },
+    ]
+  },
   {
     version: "2.5.0",
     date: "January 11, 2026",

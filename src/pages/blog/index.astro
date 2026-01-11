@@ -203,6 +203,22 @@ const categories = [...new Set(posts.map(p => p.category))];
     </div>
   </section>
 
+  <section class="contributor-section">
+    <div class="container">
+      <div class="contributor-card">
+        <div class="contributor-icon">✍️</div>
+        <h2>Share Your Big Island Story</h2>
+        <p>Are you a local expert, frequent visitor, or passionate about Hawaii? We'd love to feature your writing!</p>
+        <ul class="contributor-perks">
+          <li>Your name & bio featured with your article</li>
+          <li>Link to your website or social media</li>
+          <li>Help visitors discover the real Hawaii</li>
+        </ul>
+        <a href="/contact?subject=Blog%20Contribution" class="btn btn-primary">Submit Your Story Idea</a>
+      </div>
+    </div>
+  </section>
+
   <section class="cta-section">
     <div class="container">
       <div class="cta-content">
@@ -437,6 +453,62 @@ const categories = [...new Set(posts.map(p => p.category))];
   .topic-card p {
     font-size: 0.875rem;
     color: var(--color-text-light);
+  }
+
+  .contributor-section {
+    padding: 4rem 2rem;
+    background: var(--color-bg-alt);
+  }
+
+  .contributor-card {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    background: #fff;
+    padding: 3rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  .contributor-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .contributor-card h2 {
+    color: var(--color-text);
+    font-size: 1.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .contributor-card > p {
+    color: var(--color-text-light);
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+  }
+
+  .contributor-perks {
+    list-style: none;
+    text-align: left;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--color-bg-alt);
+    border-radius: 12px;
+  }
+
+  .contributor-perks li {
+    padding: 0.5rem 0;
+    color: var(--color-text-light);
+    position: relative;
+    padding-left: 1.75rem;
+  }
+
+  .contributor-perks li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+    font-weight: bold;
   }
 
   .cta-section {
