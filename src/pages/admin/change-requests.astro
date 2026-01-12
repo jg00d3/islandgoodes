@@ -503,6 +503,34 @@ const description = "Track content changes and fixes needed";
     await renderRequests();
   }
 
+  // Get current admin's email for notifications
+  async function getAdminEmail(): Promise<string | null> {
+    try {
+      const session = getSession();
+      if (!session) return null;
+      const admins = await window.SharedData.getAdmins();
+      const admin = admins.find((a: any) =>
+        a.id === session.id ||
+        a.username === session.username ||
+        a.fullName === session.fullName
+      );
+      return admin?.email || null;
+    } catch { return null; }
+  }
+
+  // Send email notification for new request
+  async function sendNewRequestNotification(request: ChangeRequest, requesterEmail: string | null) {
+    try {
+      await fetch('/.netlify/functions/change-request-notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ request, requesterEmail })
+      });
+    } catch (err) {
+      console.error('Failed to send notification:', err);
+    }
+  }
+
   // Add new request
   document.getElementById('addRequestForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -516,6 +544,12 @@ const description = "Track content changes and fixes needed";
     if (!type || !description) {
       alert('Please fill in the required fields');
       return;
+    }
+
+    const submitBtn = document.querySelector('#addRequestForm button[type="submit"]') as HTMLButtonElement;
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
     }
 
     const requests = await getRequests();
@@ -534,10 +568,18 @@ const description = "Track content changes and fixes needed";
     await saveRequests(requests);
     await logActivity('roadmap', 'Added change request', `${type}: ${description.substring(0, 50)}...`);
 
+    // Send email notification
+    const requesterEmail = await getAdminEmail();
+    await sendNewRequestNotification(newRequest, requesterEmail);
+
     // Reset form
     (document.getElementById('addRequestForm') as HTMLFormElement).reset();
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Add Request';
+    }
     await renderRequests();
-    alert('Request added!');
+    alert('Request added! Email notifications sent.');
   });
 
   // Filter/sort change handlers
