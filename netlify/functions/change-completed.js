@@ -9,11 +9,13 @@ export async function handler(event) {
   }
 
   try {
-    const { requestId, completedNotes, completedBy } = JSON.parse(event.body);
+    const { requestId, completedNotes, completedBy, affectedUrls } = JSON.parse(event.body);
 
     if (!requestId || !completedNotes) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Request ID and completion notes are required' }) };
     }
+
+    // affectedUrls should be an array of { url: string, label: string }
 
     // Get the change requests store
     const requestStore = getStore({
@@ -35,7 +37,8 @@ export async function handler(event) {
     request.status = 'completed';
     request.completedAt = new Date().toISOString();
     request.completedNotes = completedNotes;
-    request.completedBy = completedBy || 'System';
+    request.completedBy = completedBy || 'Claude Code';
+    request.affectedUrls = affectedUrls || [];
 
     // Save updated requests
     await requestStore.setJSON('data', requests);
@@ -118,6 +121,19 @@ export async function handler(event) {
               <h3 style="margin: 0 0 10px 0; color: #333;">What Was Done:</h3>
               <p style="margin: 0; color: #555; white-space: pre-wrap; line-height: 1.7;">${completedNotes}</p>
             </div>
+
+            ${affectedUrls && affectedUrls.length > 0 ? `
+            <div style="background: #eff6ff; border: 1px solid #93c5fd; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <h3 style="margin: 0 0 15px 0; color: #1e40af;">🔗 Verify the Changes:</h3>
+              <p style="margin: 0 0 15px 0; color: #555; font-size: 14px;">Click the links below to review the updates:</p>
+              ${affectedUrls.map(item => `
+                <a href="${item.url}" style="display: block; background: #fff; border: 1px solid #ddd; padding: 12px 16px; border-radius: 6px; margin-bottom: 8px; color: #1b6b5a; text-decoration: none; font-weight: 500;">
+                  ${item.label} →
+                  <span style="display: block; font-size: 12px; color: #666; font-weight: normal; margin-top: 4px;">${item.url}</span>
+                </a>
+              `).join('')}
+            </div>
+            ` : ''}
 
             <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
               <tr>
