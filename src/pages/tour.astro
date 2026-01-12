@@ -5,11 +5,12 @@ const title = "3D Virtual Tour - Island Goodes";
 const description = "Take a virtual 3D tour of Island Goodes, an adults-only oceanview accommodation near Hilo, Hawaii. Explore our rooms and property before you visit.";
 
 // Room-specific starting positions in Matterport
-const roomPositions: Record<string, { ss: string; sr: string; name: string }> = {
-  'hilo-bay': { ss: '16', sr: '-1.95,1.23', name: 'Hilo Bay Room' },
-  'mauna-kea': { ss: '58', sr: '-1.45,1.13', name: 'Mauna Kea Room' },
-  'ginger': { ss: '14', sr: '-1.91,1.2', name: 'Ginger Room' },
-  'property': { ss: '1', sr: '0,0', name: 'Full Property Tour' }
+const roomPositions: Record<string, { ss: string; sr: string; name: string; backUrl: string }> = {
+  'hilo-bay': { ss: '16', sr: '-1.95,1.23', name: 'Hilo Bay Room', backUrl: '/rooms/hilo-bay' },
+  'mauna-kea': { ss: '58', sr: '-1.45,1.13', name: 'Mauna Kea Room', backUrl: '/rooms/mauna-kea' },
+  'ginger': { ss: '14', sr: '-1.91,1.2', name: 'Ginger Room', backUrl: '/rooms/ginger' },
+  'orchid': { ss: '27', sr: '-1.5,1.1', name: 'Orchid Suite', backUrl: '/rooms/orchid' },
+  'property': { ss: '1', sr: '0,0', name: 'Full Property Tour', backUrl: '/rooms' }
 };
 
 const matterportId = 'zrMG54r6RUx';
@@ -19,7 +20,7 @@ const matterportId = 'zrMG54r6RUx';
   <section class="tour-page">
     <div class="tour-bar">
       <div class="tour-bar-content">
-        <a href="javascript:history.back()" class="back-link">
+        <a href="/rooms" class="back-link" id="backLink">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M19 12H5M12 19l-7-7 7-7"/>
           </svg>
@@ -272,6 +273,12 @@ const matterportId = 'zrMG54r6RUx';
     titleEl.textContent = position.name;
   }
 
+  // Set back link to the appropriate room page
+  const backLink = document.getElementById('backLink');
+  if (backLink) {
+    backLink.href = position.backUrl;
+  }
+
   // Set select value
   const select = document.getElementById('roomSelect');
   if (select) {
@@ -292,6 +299,9 @@ const matterportId = 'zrMG54r6RUx';
 
       // Update title
       if (titleEl) titleEl.textContent = newPosition.name;
+
+      // Update back link
+      if (backLink) backLink.href = newPosition.backUrl;
 
       // Update URL without reload
       const pageUrl = new URL(window.location.href);
