@@ -194,22 +194,22 @@ window.SharedData = {
 
   // ============== NEWSLETTER SUBSCRIBERS ==============
   async getNewsletterSubscribers() {
-    return await apiCall('newsletterSubscribers', 'get', 'list');
+    return await apiCall('newsletterSubscribers', 'get', 'data');
   },
 
   async saveNewsletterSubscribers(subscribers) {
     clearCache('newsletterSubscribers');
-    return await apiCall('newsletterSubscribers', 'set', 'list', subscribers);
+    return await apiCall('newsletterSubscribers', 'set', 'data', subscribers);
   },
 
   // ============== CONTACT INQUIRIES ==============
   async getContactInquiries() {
-    return await apiCall('contactInquiries', 'get', 'list');
+    return await apiCall('contactInquiries', 'get', 'data');
   },
 
   async saveContactInquiries(inquiries) {
     clearCache('contactInquiries');
-    return await apiCall('contactInquiries', 'set', 'list', inquiries);
+    return await apiCall('contactInquiries', 'set', 'data', inquiries);
   },
 
   // ============== IMAGE ORDER ==============
@@ -222,6 +222,26 @@ window.SharedData = {
   async saveImageOrder(order) {
     clearCache('imageOrder');
     return await apiCall('imageOrder', 'set', 'data', order);
+  },
+
+  // ============== PHOTO CONTRIBUTORS ==============
+  async getPhotoContributors() {
+    return await apiCall('photoContributors', 'get');
+  },
+
+  async savePhotoContributors(contributors) {
+    clearCache('photoContributors');
+    return await apiCall('photoContributors', 'set', 'data', contributors);
+  },
+
+  // ============== BLOG CONTRIBUTORS ==============
+  async getBlogContributors() {
+    return await apiCall('blogContributors', 'get');
+  },
+
+  async saveBlogContributors(contributors) {
+    clearCache('blogContributors');
+    return await apiCall('blogContributors', 'set', 'data', contributors);
   },
 
   // Clear all caches

@@ -41,13 +41,21 @@ export async function handler(event) {
       const subscribers = await store.get('data', { type: 'json' }) || [];
 
       // Check if already subscribed
-      const existingIndex = subscribers.findIndex(s => s.email.toLowerCase() === email.toLowerCase());
+      const existingIndex = subscribers.findIndex(s => s.email?.toLowerCase() === email.toLowerCase());
       if (existingIndex === -1) {
         subscribers.push({
+          id: Date.now(),
           email: email.toLowerCase(),
           subscribedAt: new Date().toISOString(),
+          status: 'active',
           source: 'website'
         });
+        await store.setJSON('data', subscribers);
+      } else if (subscribers[existingIndex].status === 'unsubscribed') {
+        // Re-subscribe if they unsubscribed before
+        subscribers[existingIndex].status = 'active';
+        subscribers[existingIndex].subscribedAt = new Date().toISOString();
+        delete subscribers[existingIndex].unsubscribedAt;
         await store.setJSON('data', subscribers);
       }
     } catch (blobError) {

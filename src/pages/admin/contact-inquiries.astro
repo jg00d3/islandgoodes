@@ -1,0 +1,566 @@
+---
+import PreviewLayout from '../../layouts/PreviewLayout.astro';
+
+const title = "Contact Inquiries | Island Goodes Admin";
+const description = "Manage contact form submissions";
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="admin-hero">
+    <div class="container">
+      <div class="hero-content">
+        <a href="/admin" class="back-link">&larr; Back to Admin</a>
+        <h1>Contact Inquiries</h1>
+        <p>Manage messages from the contact form</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="admin-section">
+    <div class="container">
+      <!-- Email Settings Card -->
+      <div class="settings-card">
+        <h3>Notification Settings</h3>
+        <div class="settings-row">
+          <label for="notificationEmail">Send new inquiry alerts to:</label>
+          <div class="email-input-group">
+            <input type="email" id="notificationEmail" placeholder="email@example.com" />
+            <button id="saveEmailBtn" class="btn btn-primary btn-small">Save</button>
+          </div>
+        </div>
+        <p class="settings-note">Default: sysadmroot@gmail.com</p>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <span class="stat-number" id="totalCount">0</span>
+          <span class="stat-label">Total</span>
+        </div>
+        <div class="stat-card new">
+          <span class="stat-number" id="newCount">0</span>
+          <span class="stat-label">Unread</span>
+        </div>
+        <div class="stat-card accepted">
+          <span class="stat-number" id="repliedCount">0</span>
+          <span class="stat-label">Replied</span>
+        </div>
+      </div>
+
+      <!-- Filter Controls -->
+      <div class="filter-controls">
+        <div class="filter-group">
+          <label>Show:</label>
+          <select id="statusFilter">
+            <option value="all">All Inquiries</option>
+            <option value="new">Unread Only</option>
+            <option value="read">Read</option>
+            <option value="replied">Replied</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Sort by:</label>
+          <select id="sortBy">
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+          </select>
+        </div>
+        <button id="markAllRead" class="btn btn-outline btn-small">Mark All Read</button>
+      </div>
+
+      <!-- Inquiries List -->
+      <div id="inquiriesList" class="submissions-list">
+        <div class="loading-state">Loading inquiries...</div>
+      </div>
+    </div>
+  </section>
+</PreviewLayout>
+
+<style>
+  .admin-hero {
+    background: var(--gradient-primary);
+    color: #fff;
+    padding: 8rem 2rem 3rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: rgba(255,255,255,0.7);
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover { color: #fff; }
+
+  .admin-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-content > p {
+    opacity: 0.9;
+  }
+
+  .admin-section {
+    padding: 2rem;
+    background: var(--color-bg-alt);
+    min-height: 60vh;
+  }
+
+  .settings-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 1.5rem;
+  }
+
+  .settings-card h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+  }
+
+  .settings-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .settings-row label {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+  }
+
+  .email-input-group {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .email-input-group input {
+    padding: 0.5rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    width: 280px;
+  }
+
+  .settings-note {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-top: 0.75rem;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-card {
+    background: #fff;
+    padding: 1.25rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+
+  .stat-card .stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+
+  .stat-card .stat-label {
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+    text-transform: uppercase;
+  }
+
+  .stat-card.new .stat-number { color: #3B82F6; }
+  .stat-card.accepted .stat-number { color: #10B981; }
+
+  .filter-controls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .filter-group label {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+  }
+
+  .filter-group select {
+    padding: 0.5rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    background: #fff;
+  }
+
+  .submissions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .loading-state,
+  .empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--color-text-light);
+    background: #fff;
+    border-radius: 16px;
+  }
+
+  .inquiry-item {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+  }
+
+  .inquiry-item:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+
+  .inquiry-item.unread {
+    border-left: 4px solid #3B82F6;
+  }
+
+  .inquiry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+  }
+
+  .inquiry-info h4 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.1rem;
+  }
+
+  .inquiry-info .email {
+    font-size: 0.875rem;
+    color: var(--color-primary);
+  }
+
+  .inquiry-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .inquiry-status.new { background: #DBEAFE; color: #1D4ED8; }
+  .inquiry-status.read { background: #FEF3C7; color: #D97706; }
+  .inquiry-status.replied { background: #D1FAE5; color: #059669; }
+
+  .inquiry-subject {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+  }
+
+  .inquiry-message {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: var(--color-bg-alt);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    white-space: pre-wrap;
+    line-height: 1.6;
+  }
+
+  .inquiry-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+  }
+
+  .inquiry-date {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+
+  .inquiry-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .btn-small {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .btn-success {
+    background: #10B981;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+
+  .btn-success:hover { background: #059669; }
+
+  .btn-danger {
+    background: #EF4444;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+
+  .btn-danger:hover { background: #DC2626; }
+
+  .btn-outline {
+    background: transparent;
+    border: 2px solid #e0e0e0;
+    color: var(--color-text);
+    cursor: pointer;
+    border-radius: 6px;
+  }
+
+  .btn-outline:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  @media (max-width: 768px) {
+    .stats-row {
+      grid-template-columns: 1fr;
+    }
+    .filter-controls {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .settings-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .email-input-group {
+      width: 100%;
+    }
+    .email-input-group input {
+      width: 100%;
+      flex: 1;
+    }
+  }
+</style>
+
+<script is:inline src="/js/shared-data.js"></script>
+<script>
+  const SESSION_KEY = 'islandgoodes_admin_session';
+
+  function getSession() {
+    try {
+      const stored = sessionStorage.getItem(SESSION_KEY);
+      return stored ? JSON.parse(stored) : null;
+    } catch { return null; }
+  }
+
+  if (!getSession()) {
+    window.location.href = '/admin';
+  }
+
+  interface ContactInquiry {
+    id: number;
+    name: string;
+    email: string;
+    phone?: string;
+    subject?: string;
+    message: string;
+    submittedAt: string;
+    status: 'new' | 'read' | 'replied';
+  }
+
+  async function getInquiries(): Promise<ContactInquiry[]> {
+    try {
+      const data = await window.SharedData.getContactInquiries();
+      return Array.isArray(data) ? data : [];
+    } catch { return []; }
+  }
+
+  async function saveInquiries(inquiries: ContactInquiry[]) {
+    await window.SharedData.saveContactInquiries(inquiries);
+  }
+
+  async function getNotificationEmail(): Promise<string> {
+    try {
+      const settings = await window.SharedData.getSettings();
+      return settings?.contactInquiryEmail || 'sysadmroot@gmail.com';
+    } catch { return 'sysadmroot@gmail.com'; }
+  }
+
+  async function saveNotificationEmail(email: string) {
+    const settings = await window.SharedData.getSettings();
+    settings.contactInquiryEmail = email;
+    await window.SharedData.saveSettings(settings);
+  }
+
+  function formatDate(dateStr: string): string {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  async function updateStats() {
+    const inquiries = await getInquiries();
+    document.getElementById('totalCount')!.textContent = String(inquiries.length);
+    document.getElementById('newCount')!.textContent = String(inquiries.filter(i => i.status === 'new').length);
+    document.getElementById('repliedCount')!.textContent = String(inquiries.filter(i => i.status === 'replied').length);
+  }
+
+  async function renderInquiries() {
+    const container = document.getElementById('inquiriesList');
+    if (!container) return;
+
+    const statusFilter = (document.getElementById('statusFilter') as HTMLSelectElement).value;
+    const sortBy = (document.getElementById('sortBy') as HTMLSelectElement).value;
+
+    let inquiries = await getInquiries();
+
+    // Filter
+    if (statusFilter !== 'all') {
+      inquiries = inquiries.filter(i => i.status === statusFilter);
+    }
+
+    // Sort
+    if (sortBy === 'newest') {
+      inquiries.sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
+    } else {
+      inquiries.sort((a, b) => new Date(a.submittedAt).getTime() - new Date(b.submittedAt).getTime());
+    }
+
+    if (inquiries.length === 0) {
+      container.innerHTML = '<div class="empty-state">No contact inquiries yet.</div>';
+      return;
+    }
+
+    container.innerHTML = inquiries.map(i => `
+      <div class="inquiry-item ${i.status === 'new' ? 'unread' : ''}" data-id="${i.id}">
+        <div class="inquiry-header">
+          <div class="inquiry-info">
+            <h4>${i.name}</h4>
+            <a href="mailto:${i.email}" class="email">${i.email}</a>
+            ${i.phone ? `<span style="margin-left: 1rem; color: var(--color-text-muted);">${i.phone}</span>` : ''}
+          </div>
+          <span class="inquiry-status ${i.status}">${i.status === 'new' ? 'unread' : i.status}</span>
+        </div>
+        ${i.subject ? `<div class="inquiry-subject">${i.subject}</div>` : ''}
+        <div class="inquiry-message">${i.message}</div>
+        <div class="inquiry-footer">
+          <span class="inquiry-date">Received ${formatDate(i.submittedAt)}</span>
+          <div class="inquiry-actions">
+            ${i.status === 'new' ? `
+              <button class="btn btn-outline btn-small mark-read" data-id="${i.id}">Mark Read</button>
+            ` : ''}
+            ${i.status !== 'replied' ? `
+              <button class="btn btn-success btn-small mark-replied" data-id="${i.id}">Mark Replied</button>
+            ` : ''}
+            <a href="mailto:${i.email}?subject=Re: ${i.subject || 'Your Island Goodes Inquiry'}" class="btn btn-primary btn-small">Reply</a>
+            <button class="btn btn-outline btn-small delete-btn" data-id="${i.id}">Delete</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    // Attach event handlers
+    container.querySelectorAll('.mark-read').forEach(btn => {
+      btn.addEventListener('click', () => updateStatus(parseInt(btn.getAttribute('data-id')!), 'read'));
+    });
+    container.querySelectorAll('.mark-replied').forEach(btn => {
+      btn.addEventListener('click', () => updateStatus(parseInt(btn.getAttribute('data-id')!), 'replied'));
+    });
+    container.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', () => deleteInquiry(parseInt(btn.getAttribute('data-id')!)));
+    });
+
+    await updateStats();
+  }
+
+  async function updateStatus(id: number, status: ContactInquiry['status']) {
+    const inquiries = await getInquiries();
+    const inquiry = inquiries.find(i => i.id === id);
+    if (inquiry) {
+      inquiry.status = status;
+      await saveInquiries(inquiries);
+      await window.SharedData.logActivity('contact-inquiries', `Marked inquiry as ${status}`, inquiry.name);
+      await renderInquiries();
+    }
+  }
+
+  async function deleteInquiry(id: number) {
+    if (!confirm('Delete this inquiry? This cannot be undone.')) return;
+    const inquiries = (await getInquiries()).filter(i => i.id !== id);
+    await saveInquiries(inquiries);
+    await window.SharedData.logActivity('contact-inquiries', 'Deleted inquiry');
+    await renderInquiries();
+  }
+
+  // Mark all as read
+  document.getElementById('markAllRead')?.addEventListener('click', async () => {
+    const inquiries = await getInquiries();
+    let changed = false;
+    inquiries.forEach(i => {
+      if (i.status === 'new') {
+        i.status = 'read';
+        changed = true;
+      }
+    });
+    if (changed) {
+      await saveInquiries(inquiries);
+      await window.SharedData.logActivity('contact-inquiries', 'Marked all inquiries as read');
+      await renderInquiries();
+    }
+  });
+
+  // Load notification email
+  async function loadEmailSetting() {
+    const email = await getNotificationEmail();
+    (document.getElementById('notificationEmail') as HTMLInputElement).value = email;
+  }
+
+  // Save email button
+  document.getElementById('saveEmailBtn')?.addEventListener('click', async () => {
+    const email = (document.getElementById('notificationEmail') as HTMLInputElement).value;
+    if (!email || !email.includes('@')) {
+      alert('Please enter a valid email address');
+      return;
+    }
+    await saveNotificationEmail(email);
+    await window.SharedData.logActivity('contact-inquiries', 'Updated notification email', email);
+    alert('Email saved!');
+  });
+
+  // Filter/sort handlers
+  document.getElementById('statusFilter')?.addEventListener('change', renderInquiries);
+  document.getElementById('sortBy')?.addEventListener('change', renderInquiries);
+
+  // Initialize
+  loadEmailSetting();
+  renderInquiries();
+</script>

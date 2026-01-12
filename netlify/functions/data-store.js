@@ -17,7 +17,9 @@ const STORES = {
   editedImages: 'edited-images',
   newsletterSubscribers: 'newsletter-subscribers',
   contactInquiries: 'contact-inquiries',
-  imageOrder: 'image-order'
+  imageOrder: 'image-order',
+  photoContributors: 'photo-contributors',
+  blogContributors: 'blog-contributors'
 };
 
 // Default admin (only used on first setup)

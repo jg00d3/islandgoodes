@@ -1,0 +1,712 @@
+---
+import PreviewLayout from '../../layouts/PreviewLayout.astro';
+
+const title = "Newsletter Subscribers | Island Goodes Admin";
+const description = "Manage newsletter subscriber list";
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="admin-hero">
+    <div class="container">
+      <div class="hero-content">
+        <a href="/admin" class="back-link">&larr; Back to Admin</a>
+        <h1>Newsletter Subscribers</h1>
+        <p>Manage your email newsletter subscriber list</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="admin-section">
+    <div class="container">
+      <!-- Email Settings Card -->
+      <div class="settings-card">
+        <h3>Notification Settings</h3>
+        <div class="settings-row">
+          <label for="notificationEmail">Send new subscriber alerts to:</label>
+          <div class="email-input-group">
+            <input type="email" id="notificationEmail" placeholder="email@example.com" />
+            <button id="saveEmailBtn" class="btn btn-primary btn-small">Save</button>
+          </div>
+        </div>
+        <p class="settings-note">Default: sysadmroot@gmail.com</p>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <span class="stat-number" id="totalCount">0</span>
+          <span class="stat-label">Total Subscribers</span>
+        </div>
+        <div class="stat-card active">
+          <span class="stat-number" id="activeCount">0</span>
+          <span class="stat-label">Active</span>
+        </div>
+        <div class="stat-card unsubscribed">
+          <span class="stat-number" id="unsubscribedCount">0</span>
+          <span class="stat-label">Unsubscribed</span>
+        </div>
+      </div>
+
+      <!-- Actions Row -->
+      <div class="actions-row">
+        <button id="exportBtn" class="btn btn-primary">Export CSV</button>
+        <button id="addSubscriberBtn" class="btn btn-outline">Add Subscriber</button>
+      </div>
+
+      <!-- Filter Controls -->
+      <div class="filter-controls">
+        <div class="filter-group">
+          <label>Show:</label>
+          <select id="statusFilter">
+            <option value="all">All Subscribers</option>
+            <option value="active">Active Only</option>
+            <option value="unsubscribed">Unsubscribed</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Sort by:</label>
+          <select id="sortBy">
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="email">Email A-Z</option>
+          </select>
+        </div>
+        <div class="search-group">
+          <input type="text" id="searchInput" placeholder="Search by email..." />
+        </div>
+      </div>
+
+      <!-- Subscribers List -->
+      <div id="subscribersList" class="subscribers-list">
+        <div class="loading-state">Loading subscribers...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Add Subscriber Modal -->
+  <div id="addModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" id="closeModal">&times;</button>
+      <h2>Add Subscriber</h2>
+      <form id="addForm">
+        <div class="form-group">
+          <label for="newEmail">Email Address *</label>
+          <input type="email" id="newEmail" required placeholder="email@example.com" />
+        </div>
+        <div class="form-group">
+          <label for="newName">Name (optional)</label>
+          <input type="text" id="newName" placeholder="Full name" />
+        </div>
+        <button type="submit" class="btn btn-primary">Add Subscriber</button>
+      </form>
+    </div>
+  </div>
+</PreviewLayout>
+
+<style>
+  .admin-hero {
+    background: var(--gradient-primary);
+    color: #fff;
+    padding: 8rem 2rem 3rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: rgba(255,255,255,0.7);
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover { color: #fff; }
+
+  .admin-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-content > p {
+    opacity: 0.9;
+  }
+
+  .admin-section {
+    padding: 2rem;
+    background: var(--color-bg-alt);
+    min-height: 60vh;
+  }
+
+  .settings-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 1.5rem;
+  }
+
+  .settings-card h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+  }
+
+  .settings-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .settings-row label {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+  }
+
+  .email-input-group {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .email-input-group input {
+    padding: 0.5rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    width: 280px;
+  }
+
+  .settings-note {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-top: 0.75rem;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-card {
+    background: #fff;
+    padding: 1.25rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+
+  .stat-card .stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+
+  .stat-card .stat-label {
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+    text-transform: uppercase;
+  }
+
+  .stat-card.active .stat-number { color: #10B981; }
+  .stat-card.unsubscribed .stat-number { color: #EF4444; }
+
+  .actions-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .filter-controls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .filter-group label {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+  }
+
+  .filter-group select {
+    padding: 0.5rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    background: #fff;
+  }
+
+  .search-group input {
+    padding: 0.5rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    width: 220px;
+  }
+
+  .subscribers-list {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    overflow: hidden;
+  }
+
+  .loading-state,
+  .empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--color-text-light);
+  }
+
+  .subscriber-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .subscriber-table th,
+  .subscriber-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+
+  .subscriber-table th {
+    background: var(--color-bg-alt);
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--color-text-light);
+  }
+
+  .subscriber-table tr:hover {
+    background: var(--color-bg-alt);
+  }
+
+  .subscriber-email {
+    color: var(--color-primary);
+  }
+
+  .subscriber-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .subscriber-status.active { background: #D1FAE5; color: #059669; }
+  .subscriber-status.unsubscribed { background: #FEE2E2; color: #DC2626; }
+
+  .subscriber-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .btn-small {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .btn-danger {
+    background: #EF4444;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+
+  .btn-danger:hover { background: #DC2626; }
+
+  .btn-outline {
+    background: transparent;
+    border: 2px solid #e0e0e0;
+    color: var(--color-text);
+    cursor: pointer;
+    border-radius: 6px;
+  }
+
+  .btn-outline:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 10001;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .modal.active {
+    display: flex;
+  }
+
+  .modal-content {
+    background: #fff;
+    border-radius: 16px;
+    max-width: 400px;
+    width: 100%;
+    position: relative;
+    padding: 2rem;
+  }
+
+  .modal-content h2 {
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: var(--color-bg-alt);
+    border-radius: 50%;
+    font-size: 1.25rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-close:hover {
+    background: #e0e0e0;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.375rem;
+    font-size: 0.875rem;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.9375rem;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  @media (max-width: 768px) {
+    .stats-row {
+      grid-template-columns: 1fr;
+    }
+    .filter-controls {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .settings-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .email-input-group {
+      width: 100%;
+    }
+    .email-input-group input {
+      width: 100%;
+      flex: 1;
+    }
+    .actions-row {
+      flex-direction: column;
+    }
+    .subscriber-table {
+      font-size: 0.875rem;
+    }
+    .subscriber-table th:nth-child(3),
+    .subscriber-table td:nth-child(3) {
+      display: none;
+    }
+  }
+</style>
+
+<script is:inline src="/js/shared-data.js"></script>
+<script>
+  const SESSION_KEY = 'islandgoodes_admin_session';
+
+  function getSession() {
+    try {
+      const stored = sessionStorage.getItem(SESSION_KEY);
+      return stored ? JSON.parse(stored) : null;
+    } catch { return null; }
+  }
+
+  if (!getSession()) {
+    window.location.href = '/admin';
+  }
+
+  interface Subscriber {
+    id: number;
+    email: string;
+    name?: string;
+    subscribedAt: string;
+    status: 'active' | 'unsubscribed';
+    unsubscribedAt?: string;
+  }
+
+  async function getSubscribers(): Promise<Subscriber[]> {
+    try {
+      const data = await window.SharedData.getNewsletterSubscribers();
+      return Array.isArray(data) ? data : [];
+    } catch { return []; }
+  }
+
+  async function saveSubscribers(subscribers: Subscriber[]) {
+    await window.SharedData.saveNewsletterSubscribers(subscribers);
+  }
+
+  async function getNotificationEmail(): Promise<string> {
+    try {
+      const settings = await window.SharedData.getSettings();
+      return settings?.newsletterEmail || 'sysadmroot@gmail.com';
+    } catch { return 'sysadmroot@gmail.com'; }
+  }
+
+  async function saveNotificationEmail(email: string) {
+    const settings = await window.SharedData.getSettings();
+    settings.newsletterEmail = email;
+    await window.SharedData.saveSettings(settings);
+  }
+
+  function formatDate(dateStr: string): string {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+  }
+
+  async function updateStats() {
+    const subscribers = await getSubscribers();
+    document.getElementById('totalCount')!.textContent = String(subscribers.length);
+    document.getElementById('activeCount')!.textContent = String(subscribers.filter(s => s.status === 'active').length);
+    document.getElementById('unsubscribedCount')!.textContent = String(subscribers.filter(s => s.status === 'unsubscribed').length);
+  }
+
+  async function renderSubscribers() {
+    const container = document.getElementById('subscribersList');
+    if (!container) return;
+
+    const statusFilter = (document.getElementById('statusFilter') as HTMLSelectElement).value;
+    const sortBy = (document.getElementById('sortBy') as HTMLSelectElement).value;
+    const search = (document.getElementById('searchInput') as HTMLInputElement).value.toLowerCase();
+
+    let subscribers = await getSubscribers();
+
+    // Filter by status
+    if (statusFilter !== 'all') {
+      subscribers = subscribers.filter(s => s.status === statusFilter);
+    }
+
+    // Filter by search
+    if (search) {
+      subscribers = subscribers.filter(s =>
+        s.email.toLowerCase().includes(search) ||
+        (s.name && s.name.toLowerCase().includes(search))
+      );
+    }
+
+    // Sort
+    if (sortBy === 'newest') {
+      subscribers.sort((a, b) => new Date(b.subscribedAt).getTime() - new Date(a.subscribedAt).getTime());
+    } else if (sortBy === 'oldest') {
+      subscribers.sort((a, b) => new Date(a.subscribedAt).getTime() - new Date(b.subscribedAt).getTime());
+    } else if (sortBy === 'email') {
+      subscribers.sort((a, b) => a.email.localeCompare(b.email));
+    }
+
+    if (subscribers.length === 0) {
+      container.innerHTML = '<div class="empty-state">No subscribers found.</div>';
+      return;
+    }
+
+    container.innerHTML = `
+      <table class="subscriber-table">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Subscribed</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${subscribers.map(s => `
+            <tr data-id="${s.id}">
+              <td><span class="subscriber-email">${s.email}</span></td>
+              <td>${s.name || '-'}</td>
+              <td>${formatDate(s.subscribedAt)}</td>
+              <td><span class="subscriber-status ${s.status}">${s.status}</span></td>
+              <td class="subscriber-actions">
+                ${s.status === 'active' ? `
+                  <button class="btn btn-outline btn-small unsubscribe-btn" data-id="${s.id}">Unsubscribe</button>
+                ` : `
+                  <button class="btn btn-outline btn-small resubscribe-btn" data-id="${s.id}">Resubscribe</button>
+                `}
+                <button class="btn btn-danger btn-small delete-btn" data-id="${s.id}">Delete</button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+
+    // Attach event handlers
+    container.querySelectorAll('.unsubscribe-btn').forEach(btn => {
+      btn.addEventListener('click', () => toggleSubscription(parseInt(btn.getAttribute('data-id')!), 'unsubscribed'));
+    });
+    container.querySelectorAll('.resubscribe-btn').forEach(btn => {
+      btn.addEventListener('click', () => toggleSubscription(parseInt(btn.getAttribute('data-id')!), 'active'));
+    });
+    container.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', () => deleteSubscriber(parseInt(btn.getAttribute('data-id')!)));
+    });
+
+    await updateStats();
+  }
+
+  async function toggleSubscription(id: number, status: Subscriber['status']) {
+    const subscribers = await getSubscribers();
+    const subscriber = subscribers.find(s => s.id === id);
+    if (subscriber) {
+      subscriber.status = status;
+      if (status === 'unsubscribed') {
+        subscriber.unsubscribedAt = new Date().toISOString();
+      }
+      await saveSubscribers(subscribers);
+      await window.SharedData.logActivity('newsletter', `${status === 'active' ? 'Resubscribed' : 'Unsubscribed'} user`, subscriber.email);
+      await renderSubscribers();
+    }
+  }
+
+  async function deleteSubscriber(id: number) {
+    if (!confirm('Delete this subscriber? This cannot be undone.')) return;
+    const subscribers = (await getSubscribers()).filter(s => s.id !== id);
+    await saveSubscribers(subscribers);
+    await window.SharedData.logActivity('newsletter', 'Deleted subscriber');
+    await renderSubscribers();
+  }
+
+  // Export CSV
+  document.getElementById('exportBtn')?.addEventListener('click', async () => {
+    const subscribers = await getSubscribers();
+    const activeOnly = subscribers.filter(s => s.status === 'active');
+
+    const csv = [
+      'Email,Name,Subscribed Date,Status',
+      ...activeOnly.map(s => `${s.email},${s.name || ''},${s.subscribedAt},${s.status}`)
+    ].join('\n');
+
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `island-goodes-subscribers-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    await window.SharedData.logActivity('newsletter', 'Exported subscriber list');
+  });
+
+  // Add subscriber modal
+  const addModal = document.getElementById('addModal');
+  document.getElementById('addSubscriberBtn')?.addEventListener('click', () => {
+    addModal?.classList.add('active');
+  });
+  document.getElementById('closeModal')?.addEventListener('click', () => {
+    addModal?.classList.remove('active');
+  });
+
+  // Add subscriber form
+  document.getElementById('addForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = (document.getElementById('newEmail') as HTMLInputElement).value;
+    const name = (document.getElementById('newName') as HTMLInputElement).value;
+
+    if (!email || !email.includes('@')) {
+      alert('Please enter a valid email address');
+      return;
+    }
+
+    const subscribers = await getSubscribers();
+
+    // Check for duplicate
+    if (subscribers.some(s => s.email.toLowerCase() === email.toLowerCase())) {
+      alert('This email is already subscribed');
+      return;
+    }
+
+    const newSubscriber: Subscriber = {
+      id: Date.now(),
+      email,
+      name: name || undefined,
+      subscribedAt: new Date().toISOString(),
+      status: 'active'
+    };
+
+    subscribers.push(newSubscriber);
+    await saveSubscribers(subscribers);
+    await window.SharedData.logActivity('newsletter', 'Added subscriber manually', email);
+
+    // Reset form and close modal
+    (document.getElementById('addForm') as HTMLFormElement).reset();
+    addModal?.classList.remove('active');
+    await renderSubscribers();
+    alert('Subscriber added!');
+  });
+
+  // Load notification email
+  async function loadEmailSetting() {
+    const email = await getNotificationEmail();
+    (document.getElementById('notificationEmail') as HTMLInputElement).value = email;
+  }
+
+  // Save email button
+  document.getElementById('saveEmailBtn')?.addEventListener('click', async () => {
+    const email = (document.getElementById('notificationEmail') as HTMLInputElement).value;
+    if (!email || !email.includes('@')) {
+      alert('Please enter a valid email address');
+      return;
+    }
+    await saveNotificationEmail(email);
+    await window.SharedData.logActivity('newsletter', 'Updated notification email', email);
+    alert('Email saved!');
+  });
+
+  // Filter/sort handlers
+  document.getElementById('statusFilter')?.addEventListener('change', renderSubscribers);
+  document.getElementById('sortBy')?.addEventListener('change', renderSubscribers);
+  document.getElementById('searchInput')?.addEventListener('input', renderSubscribers);
+
+  // Initialize
+  loadEmailSetting();
+  renderSubscribers();
+</script>
