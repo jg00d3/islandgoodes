@@ -151,6 +151,30 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.islandgoodes.com/blog/black-sand-beaches</loc>
+    <lastmod>2026-01-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.islandgoodes.com/blog/snorkeling-big-island</loc>
+    <lastmod>2026-01-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.islandgoodes.com/blog/kona-coffee-tours</loc>
+    <lastmod>2026-01-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.islandgoodes.com/tour</loc>
+    <lastmod>2026-01-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.islandgoodes.com/property</loc>
     <lastmod>2026-01-06</lastmod>
     <changefreq>monthly</changefreq>

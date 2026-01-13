@@ -24,7 +24,7 @@ const description = "Expert website audit and recommendations";
         <p>Three experts evaluated the Island Goodes website across code quality, design/UX, and visual assets.</p>
         <div class="summary-stats">
           <div class="stat critical">
-            <span class="stat-value">4</span>
+            <span class="stat-value">1</span>
             <span class="stat-label">Critical Issues</span>
           </div>
           <div class="stat high">
@@ -32,7 +32,7 @@ const description = "Expert website audit and recommendations";
             <span class="stat-label">High Priority</span>
           </div>
           <div class="stat medium">
-            <span class="stat-value">5</span>
+            <span class="stat-value">4</span>
             <span class="stat-label">Medium Priority</span>
           </div>
           <div class="stat info">
@@ -62,8 +62,8 @@ const description = "Expert website audit and recommendations";
           <h4 class="findings-title critical">Critical Security Concerns</h4>
           <ul class="findings-list">
             <li>Hardcoded admin credentials embedded in client-side JavaScript at <code>admin.astro:841</code></li>
-            <li>XSS vulnerabilities present in six locations using innerHTML with external data</li>
-            <li>Broken navigation with empty href attributes in breadcrumbs</li>
+            <li class="low-risk">XSS in admin pages using innerHTML (low risk - internal data only, no public exposure)</li>
+            <li class="completed">Broken navigation with empty href attributes in breadcrumbs <span class="fixed-badge">FIXED</span></li>
           </ul>
         </div>
 
@@ -81,7 +81,7 @@ const description = "Expert website audit and recommendations";
             <li>Move authentication to serverless functions with environment variables</li>
             <li>Add keyboard navigation skip-links</li>
             <li>Include ARIA labels throughout</li>
-            <li>Remove 15+ obsolete files cluttering the pages directory</li>
+            <li class="completed">Remove 15+ obsolete files cluttering the pages directory <span class="fixed-badge">FIXED</span> (33 files removed)</li>
           </ul>
         </div>
       </div>
@@ -159,8 +159,8 @@ const description = "Expert website audit and recommendations";
         <div class="findings-group">
           <h4 class="findings-title warning">Missing Assets</h4>
           <ul class="findings-list">
-            <li><code>logo.png</code> referenced in structured data but absent</li>
-            <li><code>island-goodes-ocean-view.jpg</code> unavailable</li>
+            <li class="completed"><code>logo.png</code> referenced in structured data but absent <span class="fixed-badge">FIXED</span></li>
+            <li class="completed"><code>island-goodes-ocean-view.jpg</code> unavailable <span class="fixed-badge">FIXED</span></li>
             <li>Modern format conversion needed (no WebP/AVIF formats)</li>
           </ul>
         </div>
@@ -210,24 +210,24 @@ const description = "Expert website audit and recommendations";
               <p>Move credentials to environment variables</p>
             </div>
           </div>
-          <div class="action-item">
-            <span class="action-num">2</span>
+          <div class="action-item completed">
+            <span class="action-num done">✓</span>
             <div class="action-content">
-              <strong>Create missing logo.png</strong>
+              <strong><s>Create missing logo.png</s></strong>
               <p>Required for structured data</p>
             </div>
           </div>
-          <div class="action-item">
-            <span class="action-num">3</span>
+          <div class="action-item completed">
+            <span class="action-num done">✓</span>
             <div class="action-content">
-              <strong>Fix broken image references</strong>
+              <strong><s>Fix broken image references</s></strong>
               <p>Replace missing image files</p>
             </div>
           </div>
-          <div class="action-item">
-            <span class="action-num">4</span>
+          <div class="action-item completed">
+            <span class="action-num done">✓</span>
             <div class="action-content">
-              <strong>Correct empty breadcrumb hrefs</strong>
+              <strong><s>Correct empty breadcrumb hrefs</s></strong>
               <p>Fix navigation accessibility</p>
             </div>
           </div>
@@ -275,21 +275,21 @@ const description = "Expert website audit and recommendations";
             <span class="action-num">9</span>
             <span>Enhance accessibility features</span>
           </div>
-          <div class="action-item small">
-            <span class="action-num">10</span>
-            <span>Add navigation active states</span>
+          <div class="action-item small completed">
+            <span class="action-num done">✓</span>
+            <span><s>Add navigation active states</s></span>
           </div>
           <div class="action-item small">
             <span class="action-num">11</span>
             <span>Improve image alt text</span>
           </div>
-          <div class="action-item small">
-            <span class="action-num">12</span>
-            <span>Remove obsolete files</span>
+          <div class="action-item small completed">
+            <span class="action-num done">✓</span>
+            <span><s>Remove obsolete files</s></span>
           </div>
-          <div class="action-item small">
+          <div class="action-item small low-priority">
             <span class="action-num">13</span>
-            <span>Fix XSS vulnerabilities</span>
+            <span>XSS in admin (low risk - internal data)</span>
           </div>
         </div>
       </div>
@@ -297,9 +297,9 @@ const description = "Expert website audit and recommendations";
       <div class="action-category">
         <h3 class="category-title low">Nice-to-Have</h3>
         <div class="action-grid small">
-          <div class="action-item small">
-            <span class="action-num">14</span>
-            <span>Add sitemap.xml & robots.txt</span>
+          <div class="action-item small completed">
+            <span class="action-num done">✓</span>
+            <span><s>Add sitemap.xml & robots.txt</s></span>
           </div>
           <div class="action-item small">
             <span class="action-num">15</span>
@@ -645,6 +645,44 @@ const description = "Expert website audit and recommendations";
     font-size: 0.8125rem;
     color: var(--color-text-light);
     margin: 0;
+  }
+
+  .action-item.completed {
+    opacity: 0.6;
+    background: #f0fdf4;
+  }
+
+  .action-num.done {
+    background: #059669;
+  }
+
+  .findings-list li.completed {
+    opacity: 0.7;
+    text-decoration: line-through;
+  }
+
+  .findings-list li.low-risk {
+    opacity: 0.7;
+  }
+
+  .findings-list li.low-risk::before {
+    background: #9CA3AF;
+  }
+
+  .action-item.low-priority {
+    opacity: 0.6;
+  }
+
+  .fixed-badge {
+    background: #059669;
+    color: #fff;
+    font-size: 0.625rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    margin-left: 0.5rem;
+    text-decoration: none;
+    display: inline-block;
   }
 
   .cta-box {

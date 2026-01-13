@@ -112,3 +112,59 @@ Settings stored in localStorage under `islandgoodes_settings`.
 - Facebook: /islandgoodes
 
 Social share buttons in footer: Facebook, Twitter, Pinterest, WhatsApp, Instagram, Email, Copy Link.
+
+---
+
+## Session Log
+
+### January 12, 2026 - v2.7.0
+
+**Completed:**
+- Fixed empty breadcrumb hrefs (`href=""` → `href="/"`) in 18 pages
+- Created `/public/images/logo.png` (512x512 PNG from favicon.svg) for structured data
+- Created `/public/images/island-goodes-ocean-view.jpg` for OG images
+- Removed 33 obsolete `_old-*` backup files from src/pages
+- Updated `/admin/website-review` page to show completed fixes with green FIXED badges
+- Updated version to 2.7.0 in package.json and changelog
+- Added session log section to claude.md for continuity across sessions
+- Updated sitemap.xml with 4 missing pages (3 blog posts + tour page)
+- Added navigation active states (desktop + mobile) with gold underline
+
+**Reviewed & Deferred:**
+- XSS vulnerabilities - All in admin-only pages with internal data, low risk, deferred
+
+**In Progress:**
+- Local dev testing (SSH port forwarding from VPSdime)
+- Dev banner at bottom of screen for testing verification
+
+**Pending before deploy:**
+- Remove dev banner from PreviewLayout.astro (lines 116-119)
+
+**Remaining from website-review list:**
+- Improve image alt text
+- Implement WebP image optimization
+- Enhance accessibility features (skip-links, ARIA labels)
+- Unify layout systems (bigger project)
+- Secure admin authentication (move credentials to env vars)
+
+---
+
+### January 11, 2026 - v2.6.0
+
+**Completed:**
+- Fixed mobile menu transparency (now solid white background)
+- Added photo contributor CTA on beaches page
+- Added blog contributor section
+- Fixed beach images on mobile
+- Processed change requests (3D tour back button, View 3D Tour button visibility)
+
+---
+
+### January 9-10, 2026 - v2.3.x to v2.5.0
+
+**Completed:**
+- Migrated all admin data from localStorage to Netlify Blobs (shared across admins)
+- Fixed room lightbox to show rotated/edited images correctly
+- Added volcano cameras (V2cam, V3cam)
+- Admin invitation system
+- Contact form inquiries saved to persistent storage

@@ -4,10 +4,22 @@ import PreviewLayout from '../../layouts/PreviewLayout.astro';
 const title = "Changelog | Island Goodes Admin";
 const description = "Version history and release notes";
 
-const CURRENT_VERSION = "2.6.0";
-const RELEASE_DATE = "January 11, 2026";
+const CURRENT_VERSION = "2.7.0";
+const RELEASE_DATE = "January 12, 2026";
 
 const changelog = [
+  {
+    version: "2.7.0",
+    date: "January 12, 2026",
+    type: "Bug Fix & Cleanup",
+    changes: [
+      { type: "fixed", text: "Empty breadcrumb hrefs now link to homepage (18 pages fixed)" },
+      { type: "added", text: "Created logo.png (512x512) for structured data/SEO" },
+      { type: "added", text: "Created island-goodes-ocean-view.jpg for Open Graph images" },
+      { type: "removed", text: "Removed 33 obsolete _old-* backup files from src/pages" },
+      { type: "improved", text: "Website review page now tracks completed fixes" },
+    ]
+  },
   {
     version: "2.6.0",
     date: "January 11, 2026",
