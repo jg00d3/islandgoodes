@@ -8,7 +8,7 @@ const description = "Contact Island Goodes in Hilo, Hawaii. Call 808-964-2291 or
 <PreviewLayout title={title} description={description}>
   <section class="page-hero">
     <div class="page-hero-bg">
-      <img src="/images/site/pool.jpg" alt="Island Goodes pool and property" />
+      <img src="/images/site/pool.webp" alt="Island Goodes pool and property" />
     </div>
     <div class="page-hero-overlay"></div>
     <div class="page-hero-content">
@@ -79,6 +79,13 @@ const description = "Contact Island Goodes in Hilo, Hawaii. Call 808-964-2291 or
             <p>Have a question? We typically respond within 24 hours.</p>
           </div>
           <form id="contactForm" class="contact-form">
+            <!-- Honeypot field - hidden from users, bots will fill it -->
+            <div style="position: absolute; left: -9999px;" aria-hidden="true">
+              <label for="website">Website</label>
+              <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+            </div>
+            <!-- Track form load time -->
+            <input type="hidden" id="formLoadTime" name="formLoadTime" />
             <div class="form-row">
               <div class="form-group">
                 <label for="name">Name *</label>
@@ -498,6 +505,12 @@ const description = "Contact Island Goodes in Hilo, Hawaii. Call 808-964-2291 or
   const form = document.getElementById('contactForm');
   const message = document.getElementById('formMessage');
 
+  // Set form load time for spam protection
+  const formLoadTimeInput = document.getElementById('formLoadTime') as HTMLInputElement;
+  if (formLoadTimeInput) {
+    formLoadTimeInput.value = Date.now().toString();
+  }
+
   form?.addEventListener('submit', async function(e) {
     e.preventDefault();
 
@@ -507,7 +520,9 @@ const description = "Contact Island Goodes in Hilo, Hawaii. Call 808-964-2291 or
       email: (document.getElementById('email') as HTMLInputElement)?.value,
       phone: (document.getElementById('phone') as HTMLInputElement)?.value,
       dates: (document.getElementById('dates') as HTMLInputElement)?.value,
-      message: (document.getElementById('message') as HTMLTextAreaElement)?.value
+      message: (document.getElementById('message') as HTMLTextAreaElement)?.value,
+      website: (document.getElementById('website') as HTMLInputElement)?.value, // honeypot
+      formLoadTime: (document.getElementById('formLoadTime') as HTMLInputElement)?.value
     };
 
     // Show loading state

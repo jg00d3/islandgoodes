@@ -1,0 +1,268 @@
+---
+import PreviewLayout from '../../layouts/PreviewLayout.astro';
+
+const title = "Compare Rooms | Island Goodes";
+const description = "Compare our four unique rooms side by side to find your perfect Hawaiian getaway. View amenities, prices, and features at a glance.";
+
+const rooms = [
+  {
+    name: "Hilo Bay Room",
+    slug: "hilo-bay",
+    price: 225,
+    sqft: 488,
+    view: "Ocean View",
+    bed: "Sleep Number King",
+    image: "/images/rooms/hilo-bay/bed.webp",
+    highlights: ["Panoramic ocean views", "Most popular room", "Private lanai", "En-suite bathroom"],
+    amenities: {
+      oceanView: true,
+      mountainView: false,
+      kitchenette: false,
+      privateLanai: true,
+      sleepNumber: true,
+      wifi: true,
+      ac: true,
+      groundFloor: false
+    }
+  },
+  {
+    name: "Orchid Room",
+    slug: "orchid",
+    price: 225,
+    sqft: 645,
+    view: "Ocean View",
+    bed: "Sleep Number King",
+    image: "/images/rooms/orchid/bed.webp",
+    highlights: ["Largest room", "Full kitchenette", "Ocean views", "Extra living space"],
+    amenities: {
+      oceanView: true,
+      mountainView: false,
+      kitchenette: true,
+      privateLanai: true,
+      sleepNumber: true,
+      wifi: true,
+      ac: true,
+      groundFloor: false
+    }
+  },
+  {
+    name: "Mauna Kea Room",
+    slug: "mauna-kea",
+    price: 195,
+    sqft: 527,
+    view: "Mountain View",
+    bed: "Sleep Number King",
+    image: "/images/rooms/mauna-kea/bed.webp",
+    highlights: ["Mountain views", "Stargazing potential", "Peaceful setting", "Private lanai"],
+    amenities: {
+      oceanView: false,
+      mountainView: true,
+      kitchenette: false,
+      privateLanai: true,
+      sleepNumber: true,
+      wifi: true,
+      ac: true,
+      groundFloor: false
+    }
+  },
+  {
+    name: "Ginger Room",
+    slug: "ginger",
+    price: 195,
+    sqft: 400,
+    view: "Garden View",
+    bed: "Sleep Number King",
+    image: "/images/rooms/ginger/room.webp",
+    highlights: ["Ground floor access", "Garden setting", "Cozy retreat", "Easy accessibility"],
+    amenities: {
+      oceanView: false,
+      mountainView: false,
+      kitchenette: false,
+      privateLanai: true,
+      sleepNumber: true,
+      wifi: true,
+      ac: true,
+      groundFloor: true
+    }
+  }
+];
+
+const amenityLabels = {
+  oceanView: "Ocean View",
+  mountainView: "Mountain View",
+  kitchenette: "Kitchenette",
+  privateLanai: "Private Lanai",
+  sleepNumber: "Sleep Number Bed",
+  wifi: "Free WiFi",
+  ac: "Air Conditioning",
+  groundFloor: "Ground Floor"
+};
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="page-hero">
+    <div class="page-hero-bg">
+      <img src="/images/hero.webp" alt="Island Goodes rooms" />
+    </div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <nav class="breadcrumb">
+        <a href="/">Home</a> / <a href="/rooms">Rooms</a> / Compare
+      </nav>
+      <h1>Compare Rooms</h1>
+      <p class="tagline">Find your perfect room at a glance</p>
+    </div>
+  </section>
+
+  <section class="compare-section">
+    <div class="container">
+      <div class="compare-intro">
+        <p>All rooms include complimentary WiFi, air conditioning, private lanai, and access to our pool and hot tub.</p>
+      </div>
+
+      <!-- Mobile-friendly cards view -->
+      <div class="compare-cards">
+        {rooms.map(room => (
+          <div class="compare-card">
+            <div class="card-image">
+              <img src={room.image} alt={room.name} loading="lazy" />
+              <span class="card-price">${room.price}/night</span>
+            </div>
+            <div class="card-content">
+              <h2>{room.name}</h2>
+              <div class="card-meta">
+                <span>{room.sqft} sq ft</span>
+                <span>{room.view}</span>
+              </div>
+              <ul class="card-highlights">
+                {room.highlights.map(h => <li>{h}</li>)}
+              </ul>
+              <a href={`/rooms/${room.slug}`} class="btn btn-primary">View Room</a>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Desktop comparison table -->
+      <div class="compare-table-wrapper">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th class="feature-col">Feature</th>
+              {rooms.map(room => (
+                <th class="room-col">
+                  <img src={room.image} alt={room.name} />
+                  <span class="room-name">{room.name}</span>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Price per night</td>
+              {rooms.map(room => <td class="price-cell">${room.price}</td>)}
+            </tr>
+            <tr>
+              <td>Room Size</td>
+              {rooms.map(room => <td>{room.sqft} sq ft</td>)}
+            </tr>
+            <tr>
+              <td>View</td>
+              {rooms.map(room => <td>{room.view}</td>)}
+            </tr>
+            <tr>
+              <td>Bed</td>
+              {rooms.map(room => <td>{room.bed}</td>)}
+            </tr>
+            {Object.entries(amenityLabels).map(([key, label]) => (
+              <tr>
+                <td>{label}</td>
+                {rooms.map(room => (
+                  <td class={room.amenities[key] ? 'has-amenity' : 'no-amenity'}>
+                    {room.amenities[key] ? '✓' : '—'}
+                  </td>
+                ))}
+              </tr>
+            ))}
+            <tr class="action-row">
+              <td></td>
+              {rooms.map(room => (
+                <td>
+                  <a href={`/rooms/${room.slug}`} class="btn btn-primary btn-small">View Details</a>
+                </td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="compare-cta">
+        <h3>Ready to book?</h3>
+        <p>All rooms include access to our pool, hot tub, and tropical gardens.</p>
+        <a href="/book" class="btn btn-secondary btn-large">Book Your Stay</a>
+      </div>
+    </div>
+  </section>
+</PreviewLayout>
+
+<style>
+  .page-hero { position: relative; min-height: 40vh; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; padding: 8rem 2rem 3rem; }
+  .page-hero-bg { position: absolute; inset: 0; z-index: -2; }
+  .page-hero-bg img { width: 100%; height: 100%; object-fit: cover; }
+  .page-hero-overlay { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.7) 100%); }
+  .page-hero-content { max-width: 800px; }
+  .page-hero h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 0.5rem; }
+  .tagline { font-size: 1.125rem; opacity: 0.9; }
+
+  .compare-section { padding: 3rem 0 5rem; }
+
+  .compare-intro { text-align: center; max-width: 600px; margin: 0 auto 3rem; }
+  .compare-intro p { color: var(--color-text-light); font-size: 1.0625rem; }
+
+  /* Mobile cards (shown on small screens) */
+  .compare-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+
+  .compare-card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  .card-image { position: relative; height: 180px; }
+  .card-image img { width: 100%; height: 100%; object-fit: cover; }
+  .card-price { position: absolute; bottom: 1rem; right: 1rem; background: var(--color-primary); color: #fff; padding: 0.5rem 1rem; border-radius: 50px; font-weight: 600; font-size: 0.9375rem; }
+
+  .card-content { padding: 1.5rem; }
+  .card-content h2 { font-size: 1.375rem; margin-bottom: 0.5rem; color: var(--color-text); }
+  .card-meta { display: flex; gap: 1rem; margin-bottom: 1rem; font-size: 0.875rem; color: var(--color-text-light); }
+
+  .card-highlights { list-style: none; margin-bottom: 1.5rem; }
+  .card-highlights li { padding: 0.375rem 0; padding-left: 1.5rem; position: relative; font-size: 0.9375rem; color: var(--color-text-light); }
+  .card-highlights li::before { content: "✓"; position: absolute; left: 0; color: var(--color-primary); font-weight: bold; }
+
+  /* Desktop table (hidden on mobile) */
+  .compare-table-wrapper { display: none; overflow-x: auto; margin: 2rem 0; }
+
+  .compare-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+
+  .compare-table th, .compare-table td { padding: 1rem; text-align: center; border-bottom: 1px solid #f0f0f0; }
+  .compare-table th { background: var(--color-bg-alt); font-weight: 600; }
+
+  .feature-col { text-align: left !important; width: 180px; color: var(--color-text); }
+  .room-col { width: 180px; padding: 1.5rem 1rem; }
+  .room-col img { width: 100%; height: 100px; object-fit: cover; border-radius: 8px; margin-bottom: 0.75rem; }
+  .room-name { display: block; font-size: 1rem; color: var(--color-text); }
+
+  .price-cell { font-size: 1.25rem; font-weight: 700; color: var(--color-primary); }
+
+  .has-amenity { color: var(--color-primary); font-weight: 600; }
+  .no-amenity { color: #ccc; }
+
+  .action-row td { padding: 1.5rem 1rem; border-bottom: none; }
+
+  .btn-small { padding: 0.5rem 1rem; font-size: 0.875rem; }
+
+  .compare-cta { text-align: center; padding: 3rem 2rem; background: var(--gradient-primary); border-radius: 16px; color: #fff; margin-top: 3rem; }
+  .compare-cta h3 { font-size: 1.75rem; margin-bottom: 0.5rem; }
+  .compare-cta p { opacity: 0.9; margin-bottom: 1.5rem; }
+
+  @media (min-width: 900px) {
+    .compare-cards { display: none; }
+    .compare-table-wrapper { display: block; }
+  }
+</style>

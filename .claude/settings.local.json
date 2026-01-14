@@ -65,7 +65,9 @@
       "Bash(echo -e '\\\\nWebP images count:' find public/images -name *.webp)",
       "Bash(apt-get update:*)",
       "Bash(apt-get install:*)",
-      "Bash(rsvg-convert:*)"
+      "Bash(rsvg-convert:*)",
+      "Bash(while read f)",
+      "Bash(do cwebp -q 80 $f -o $f%.jpg.webp)"
     ]
   }
 }

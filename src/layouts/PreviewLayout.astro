@@ -99,7 +99,7 @@ const isActive = (path: string) => {
       "latitude": 19.8075,
       "longitude": -155.0939
     },
-    "image": "https://www.islandgoodes.com/images/island-goodes-ocean-view.jpg",
+    "image": "https://www.islandgoodes.com/images/island-goodes-ocean-view.webp",
     "priceRange": "$$",
     "amenityFeature": [
       { "@type": "LocationFeatureSpecification", "name": "Free WiFi", "value": true },
@@ -120,9 +120,12 @@ const isActive = (path: string) => {
   })} />
 </head>
 <body>
+  <!-- SKIP LINK FOR ACCESSIBILITY -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
   <!-- HEADER -->
-  <header class="site-header">
-    <nav class="nav-container">
+  <header class="site-header" role="banner">
+    <nav class="nav-container" aria-label="Main navigation">
       <div class="logo-container">
         <a href="/" class="logo">
           <span class="logo-text">Island <span class="logo-accent">Goodes</span></span>
@@ -176,12 +179,12 @@ const isActive = (path: string) => {
   </div>
 
   <!-- MAIN CONTENT -->
-  <main>
+  <main id="main-content" role="main">
     <slot />
   </main>
 
   <!-- FOOTER -->
-  <footer class="site-footer">
+  <footer class="site-footer" role="contentinfo">
     <div class="footer-container">
       <div class="footer-brand">
         <span class="logo-text footer-logo">Island <span class="logo-accent">Goodes</span></span>
@@ -1399,6 +1402,25 @@ const isActive = (path: string) => {
 </div>
 
 <style>
+  /* Skip link for keyboard accessibility */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--color-primary);
+    color: white;
+    padding: 8px 16px;
+    z-index: 100000;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 0 0 4px 0;
+    transition: top 0.3s;
+  }
+
+  .skip-link:focus {
+    top: 0;
+  }
+
   .cookie-banner {
     position: fixed;
     bottom: 0;

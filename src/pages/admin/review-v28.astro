@@ -1,0 +1,509 @@
+---
+import PreviewLayout from '../../layouts/PreviewLayout.astro';
+
+const title = "Review v2.8 Changes | Island Goodes";
+const description = "Review and approve website changes before going live";
+
+const changes = [
+  {
+    id: "room-compare",
+    title: "Room Comparison Page",
+    type: "New Feature",
+    description: "Side-by-side comparison of all four rooms showing prices, sizes, views, and amenities. Helps guests choose the right room.",
+    link: "/rooms/compare",
+    image: "/images/rooms/hilo-bay/bed.webp"
+  },
+  {
+    id: "webp-images",
+    title: "Faster Loading Images",
+    type: "Performance",
+    description: "All 161 images converted to WebP format. Total image size reduced from 156MB to 66MB (58% smaller). Pages will load much faster.",
+    link: "/",
+    image: "/images/hero.webp"
+  },
+  {
+    id: "alt-text",
+    title: "Improved Image Descriptions",
+    type: "SEO",
+    description: "Better alt text on key images for improved Google search rankings and accessibility for visually impaired visitors.",
+    link: "/",
+    image: null
+  },
+  {
+    id: "skip-link",
+    title: "Accessibility Improvements",
+    type: "Accessibility",
+    description: "Added skip-to-content link for keyboard users and proper ARIA labels for screen readers. Makes site accessible to more visitors.",
+    link: "/",
+    image: null
+  },
+  {
+    id: "nav-active",
+    title: "Navigation Active States",
+    type: "UX Improvement",
+    description: "Current page now shows gold underline in navigation menu, helping visitors know where they are on the site.",
+    link: "/rooms",
+    image: null
+  }
+];
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="review-hero">
+    <div class="container">
+      <h1>Review v2.8 Changes</h1>
+      <p>Please review the following updates and provide your feedback</p>
+    </div>
+  </section>
+
+  <section class="review-section">
+    <div class="container">
+      <div class="review-intro">
+        <p>Hi! Below are the changes ready to go live. Please review each one and either approve or request changes. Your feedback will be submitted as a change request.</p>
+      </div>
+
+      <form id="reviewForm" class="review-form">
+        {changes.map((change, index) => (
+          <div class="review-item" data-id={change.id}>
+            <div class="item-header">
+              <span class="item-number">{index + 1}</span>
+              <div class="item-meta">
+                <span class="item-type">{change.type}</span>
+                <h3>{change.title}</h3>
+              </div>
+            </div>
+
+            {change.image && (
+              <div class="item-preview">
+                <img src={change.image} alt={change.title} loading="lazy" />
+              </div>
+            )}
+
+            <p class="item-description">{change.description}</p>
+
+            <a href={change.link} target="_blank" class="preview-link">
+              Preview this change →
+            </a>
+
+            <div class="item-feedback">
+              <div class="feedback-options">
+                <label class="feedback-option">
+                  <input type="radio" name={`status-${change.id}`} value="approved" />
+                  <span class="option-label approve">Approve</span>
+                </label>
+                <label class="feedback-option">
+                  <input type="radio" name={`status-${change.id}`} value="changes" />
+                  <span class="option-label changes">Request Changes</span>
+                </label>
+              </div>
+              <textarea
+                name={`comment-${change.id}`}
+                placeholder="Optional: Add any comments or specific changes needed..."
+                rows="2"
+              ></textarea>
+            </div>
+          </div>
+        ))}
+
+        <div class="review-summary">
+          <div class="reviewer-info">
+            <label>
+              Your Name
+              <input type="text" name="reviewerName" placeholder="e.g., Dad" required />
+            </label>
+          </div>
+
+          <div class="overall-feedback">
+            <label>
+              Overall Comments (optional)
+              <textarea name="overallComments" rows="3" placeholder="Any general feedback about these changes..."></textarea>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-large" id="submitBtn">
+            Submit Review
+          </button>
+        </div>
+      </form>
+
+      <div id="successMessage" class="success-message" style="display: none;">
+        <div class="success-icon">✓</div>
+        <h2>Thank You!</h2>
+        <p>Your review has been submitted. We'll process your feedback shortly.</p>
+      </div>
+    </div>
+  </section>
+</PreviewLayout>
+
+<script>
+  const form = document.getElementById('reviewForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const successMessage = document.getElementById('successMessage');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+
+    const formData = new FormData(form);
+    const reviewerName = formData.get('reviewerName');
+    const overallComments = formData.get('overallComments');
+
+    // Collect all change requests
+    const changeRequests = [];
+    const items = document.querySelectorAll('.review-item');
+
+    items.forEach(item => {
+      const id = item.dataset.id;
+      const title = item.querySelector('h3')?.textContent || '';
+      const status = formData.get(`status-${id}`);
+      const comment = formData.get(`comment-${id}`);
+
+      if (status || comment) {
+        changeRequests.push({
+          id: `review-${id}-${Date.now()}`,
+          type: status === 'approved' ? 'approval' : 'change',
+          priority: status === 'approved' ? 'low' : 'medium',
+          page: `/admin/review-v28`,
+          description: status === 'approved'
+            ? `✅ APPROVED: ${title}${comment ? ` - "${comment}"` : ''}`
+            : `📝 CHANGES REQUESTED: ${title} - ${comment || 'No details provided'}`,
+          status: 'pending',
+          requestedBy: reviewerName,
+          created: new Date().toISOString()
+        });
+      }
+    });
+
+    // Add overall comment if provided
+    if (overallComments?.trim()) {
+      changeRequests.push({
+        id: `review-overall-${Date.now()}`,
+        type: 'feedback',
+        priority: 'medium',
+        page: '/admin/review-v28',
+        description: `💬 OVERALL FEEDBACK from ${reviewerName}: ${overallComments}`,
+        status: 'pending',
+        requestedBy: reviewerName,
+        created: new Date().toISOString()
+      });
+    }
+
+    if (changeRequests.length === 0) {
+      alert('Please provide feedback on at least one item');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Review';
+      return;
+    }
+
+    try {
+      // Get existing change requests
+      const getResponse = await fetch('/.netlify/functions/data-store', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          store: 'changeRequests',
+          action: 'get',
+          key: 'data'
+        })
+      });
+
+      let existing = [];
+      if (getResponse.ok) {
+        existing = await getResponse.json() || [];
+      }
+
+      // Add new requests
+      const updated = [...existing, ...changeRequests];
+
+      // Save back
+      await fetch('/.netlify/functions/data-store', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          store: 'changeRequests',
+          action: 'set',
+          key: 'data',
+          data: updated
+        })
+      });
+
+      // Show success
+      form.style.display = 'none';
+      successMessage.style.display = 'block';
+
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      alert('There was an error submitting your review. Please try again.');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Review';
+    }
+  });
+</script>
+
+<style>
+  .review-hero {
+    background: var(--gradient-primary);
+    color: #fff;
+    padding: 8rem 2rem 3rem;
+    text-align: center;
+  }
+
+  .review-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .review-hero p {
+    opacity: 0.9;
+  }
+
+  .review-section {
+    padding: 3rem 2rem;
+    background: var(--color-bg-alt);
+  }
+
+  .review-intro {
+    max-width: 700px;
+    margin: 0 auto 2rem;
+    text-align: center;
+  }
+
+  .review-intro p {
+    color: var(--color-text-light);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+
+  .review-form {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .review-item {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+
+  .item-header {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .item-number {
+    width: 36px;
+    height: 36px;
+    background: var(--color-primary);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .item-meta h3 {
+    font-size: 1.25rem;
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  .item-type {
+    display: inline-block;
+    background: var(--color-bg-alt);
+    color: var(--color-text-light);
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+
+  .item-preview {
+    margin: 1rem 0;
+    border-radius: 12px;
+    overflow: hidden;
+    max-height: 200px;
+  }
+
+  .item-preview img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .item-description {
+    color: var(--color-text-light);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  .preview-link {
+    display: inline-block;
+    color: var(--color-primary);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+
+  .preview-link:hover {
+    text-decoration: underline;
+  }
+
+  .item-feedback {
+    border-top: 1px solid #eee;
+    padding-top: 1.5rem;
+  }
+
+  .feedback-options {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .feedback-option {
+    cursor: pointer;
+  }
+
+  .feedback-option input {
+    display: none;
+  }
+
+  .option-label {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border: 2px solid #ddd;
+    transition: all 0.2s;
+  }
+
+  .option-label.approve {
+    border-color: #10B981;
+    color: #10B981;
+  }
+
+  .option-label.changes {
+    border-color: #F59E0B;
+    color: #F59E0B;
+  }
+
+  .feedback-option input:checked + .option-label.approve {
+    background: #10B981;
+    color: #fff;
+  }
+
+  .feedback-option input:checked + .option-label.changes {
+    background: #F59E0B;
+    color: #fff;
+  }
+
+  .item-feedback textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.9375rem;
+    resize: vertical;
+  }
+
+  .item-feedback textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .review-summary {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-top: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+
+  .reviewer-info {
+    margin-bottom: 1.5rem;
+  }
+
+  .reviewer-info label,
+  .overall-feedback label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+  }
+
+  .reviewer-info input,
+  .overall-feedback textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.9375rem;
+  }
+
+  .reviewer-info input:focus,
+  .overall-feedback textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .overall-feedback {
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-large {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.0625rem;
+  }
+
+  .success-message {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: #fff;
+    border-radius: 16px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    background: #10B981;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin: 0 auto 1.5rem;
+  }
+
+  .success-message h2 {
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+  }
+
+  .success-message p {
+    color: var(--color-text-light);
+  }
+
+  @media (max-width: 600px) {
+    .feedback-options {
+      flex-direction: column;
+    }
+
+    .review-hero {
+      padding: 6rem 1.5rem 2rem;
+    }
+  }
+</style>

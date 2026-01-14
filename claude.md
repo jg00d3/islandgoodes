@@ -133,12 +133,7 @@ Social share buttons in footer: Facebook, Twitter, Pinterest, WhatsApp, Instagra
 **Reviewed & Deferred:**
 - XSS vulnerabilities - All in admin-only pages with internal data, low risk, deferred
 
-**In Progress:**
-- Local dev testing (SSH port forwarding from VPSdime)
-- Dev banner at bottom of screen for testing verification
-
-**Pending before deploy:**
-- Remove dev banner from PreviewLayout.astro (lines 116-119)
+**Deployed:** v2.7.0 pushed to GitHub → Netlify auto-deploy triggered
 
 **Remaining from website-review list:**
 - Improve image alt text
