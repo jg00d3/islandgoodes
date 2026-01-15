@@ -1,0 +1,285 @@
+---
+import PreviewLayout from '../../layouts/PreviewLayout.astro';
+
+const title = "Session Notes | Island Goodes Admin";
+const description = "Summary of recent development work";
+
+const today = new Date().toLocaleDateString('en-US', {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'Pacific/Honolulu'
+});
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="notes-hero">
+    <div class="container">
+      <a href="/admin" class="back-link">&larr; Back to Admin</a>
+      <h1>Session Notes</h1>
+      <p>Summary of recent development work</p>
+    </div>
+  </section>
+
+  <section class="notes-section">
+    <div class="container">
+
+      <div class="session-card current">
+        <div class="session-header">
+          <h2>January 14, 2026</h2>
+          <span class="status-badge active">Current Session</span>
+        </div>
+
+        <div class="completed-section">
+          <h3>✅ Completed Today</h3>
+          <ul>
+            <li><strong>Bot/Spam Protection</strong> - Added to all public forms (contact, newsletter, photo/blog contributions). Uses honeypot fields, timing checks, gibberish detection, and spam keyword filtering.</li>
+            <li><strong>Secure Admin Authentication</strong> - Moved password verification server-side. Passwords now use bcrypt hashing. Credentials no longer exposed in browser.</li>
+            <li><strong>XSS Protection</strong> - Added HTML escaping to admin pages displaying user-submitted data (contact inquiries, contributors, subscribers).</li>
+            <li><strong>Unused Images Review Page</strong> - Created /admin/unused-images showing 20 images not currently displayed. Dad can review and decide what to use.</li>
+            <li><strong>Send Notification Function</strong> - Added ability to send emails directly to specific recipients.</li>
+          </ul>
+        </div>
+
+        <div class="pending-section">
+          <h3>⏳ Waiting for Dad's Approval</h3>
+          <ul>
+            <li><strong>V2.8 Changes</strong> - WebP images, room comparison page, accessibility improvements
+              <br><a href="/admin/review-v28" class="review-link">→ Review Page</a></li>
+            <li><strong>Unused Images</strong> - 20 images to review (property, rooms, wildlife, heroes)
+              <br><a href="/admin/unused-images" class="review-link">→ Review Page</a></li>
+          </ul>
+        </div>
+
+        <div class="roadmap-section">
+          <h3>📋 Added to Roadmap</h3>
+          <ul>
+            <li><strong>Virtual Trip Planner</strong> - Interactive tool for guests to plan Big Island itinerary. Select trip length/interests, get day-by-day suggestions with distances, insider tips, printable itinerary.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="session-card">
+        <div class="session-header">
+          <h2>January 12-13, 2026</h2>
+        </div>
+        <div class="completed-section">
+          <h3>✅ Completed</h3>
+          <ul>
+            <li><strong>V2.8 Features Built</strong>
+              <ul>
+                <li>WebP image conversion (161 images, 58% smaller)</li>
+                <li>Room comparison page (/rooms/compare)</li>
+                <li>Accessibility: skip-to-content link, ARIA labels</li>
+                <li>Navigation active states (gold underline)</li>
+                <li>Improved alt text on key images</li>
+              </ul>
+            </li>
+            <li><strong>Review System</strong> - Created /admin/review-v28 for stakeholder approval</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="session-card">
+        <div class="session-header">
+          <h2>Earlier Sessions</h2>
+        </div>
+        <div class="completed-section">
+          <h3>✅ Previously Completed</h3>
+          <ul>
+            <li>Fixed breadcrumb navigation (18 pages)</li>
+            <li>Created logo.png for structured data</li>
+            <li>Removed 33 obsolete backup files</li>
+            <li>Created sitemap.xml and robots.txt</li>
+            <li>Social share buttons (Pinterest, WhatsApp, Instagram)</li>
+            <li>Admin dashboard with analytics</li>
+            <li>Contact form with email notifications</li>
+            <li>Newsletter subscription system</li>
+            <li>Photo/blog contributor forms</li>
+            <li>Change request system</li>
+            <li>3D Matterport tour integration</li>
+            <li>Live camera feeds</li>
+            <li>Weather widget</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="quick-links">
+        <h3>Quick Links</h3>
+        <div class="links-grid">
+          <a href="/admin/review-v28" class="quick-link">V2.8 Review</a>
+          <a href="/admin/unused-images" class="quick-link">Unused Images</a>
+          <a href="/admin/roadmap" class="quick-link">Roadmap</a>
+          <a href="/admin/change-requests" class="quick-link">Change Requests</a>
+          <a href="/admin/website-review" class="quick-link">Website Review</a>
+          <a href="/rooms/compare" class="quick-link">Room Comparison</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</PreviewLayout>
+
+<style>
+  .notes-hero {
+    background: var(--gradient-primary);
+    color: #fff;
+    padding: 8rem 2rem 3rem;
+  }
+
+  .back-link {
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    font-size: 0.875rem;
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+
+  .back-link:hover {
+    color: #fff;
+  }
+
+  .notes-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .notes-hero p {
+    opacity: 0.9;
+  }
+
+  .notes-section {
+    padding: 3rem 2rem;
+    background: var(--color-bg-alt);
+  }
+
+  .notes-section .container {
+    max-width: 900px;
+  }
+
+  .session-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+
+  .session-card.current {
+    border: 2px solid var(--color-primary);
+  }
+
+  .session-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .session-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--color-text);
+  }
+
+  .status-badge {
+    background: var(--color-primary);
+    color: #fff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .completed-section,
+  .pending-section,
+  .roadmap-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .completed-section h3,
+  .pending-section h3,
+  .roadmap-section h3 {
+    font-size: 1rem;
+    color: var(--color-text);
+    margin-bottom: 0.75rem;
+  }
+
+  .session-card ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: var(--color-text-light);
+    line-height: 1.8;
+  }
+
+  .session-card ul ul {
+    margin-top: 0.5rem;
+  }
+
+  .session-card li {
+    margin-bottom: 0.5rem;
+  }
+
+  .session-card strong {
+    color: var(--color-text);
+  }
+
+  .review-link {
+    color: var(--color-primary);
+    font-size: 0.875rem;
+    text-decoration: none;
+  }
+
+  .review-link:hover {
+    text-decoration: underline;
+  }
+
+  .quick-links {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+
+  .quick-links h3 {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+  }
+
+  .links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .quick-link {
+    display: block;
+    padding: 0.75rem 1rem;
+    background: var(--color-bg-alt);
+    border-radius: 8px;
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 0.875rem;
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  .quick-link:hover {
+    background: var(--color-primary);
+    color: #fff;
+  }
+
+  @media (max-width: 600px) {
+    .notes-hero {
+      padding: 6rem 1.5rem 2rem;
+    }
+
+    .session-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
