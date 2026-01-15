@@ -20,8 +20,7 @@ const TERMINAL_URL = "http://104.251.212.62:7681";
             <p>Web-based access to development server</p>
           </div>
           <div class="hero-actions">
-            <button id="fullscreenBtn" class="btn btn-outline">Fullscreen</button>
-            <a href="/admin/session-notes" class="btn btn-outline">Session Notes</a>
+            <a href="/admin/session-notes" class="btn btn-outline">Notes</a>
             <a href="/admin" class="btn btn-outline">Dashboard</a>
           </div>
         </div>
@@ -104,7 +103,7 @@ const TERMINAL_URL = "http://104.251.212.62:7681";
   .terminal-hero {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     color: #fff;
-    padding: 6rem 2rem 2rem;
+    padding: 6rem 2rem 1rem;
   }
 
   .hero-header {
@@ -262,17 +261,46 @@ const TERMINAL_URL = "http://104.251.212.62:7681";
 
   @media (max-width: 768px) {
     .terminal-hero {
-      padding: 5rem 1rem 1.5rem;
+      padding: 4.5rem 1rem 0.5rem;
     }
 
     .hero-header {
-      flex-direction: column;
-      align-items: flex-start;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hero-header h1 {
+      font-size: 1.25rem;
+    }
+
+    .hero-header p {
+      display: none;
+    }
+
+    .security-notice {
+      display: none;
     }
 
     .terminal-container {
-      height: calc(100vh - 400px);
+      height: calc(100vh - 120px);
+      min-height: 300px;
+    }
+
+    .terminal-help {
+      display: none;
+    }
+  }
+
+  /* Extra small screens - optimize for keyboard */
+  @media (max-height: 500px) {
+    .terminal-hero {
+      padding: 3.5rem 0.5rem 0.25rem;
+    }
+
+    .terminal-container {
+      height: calc(100vh - 60px);
+      min-height: 200px;
     }
   }
 </style>
-</PreviewLayout>
