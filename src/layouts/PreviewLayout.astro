@@ -134,7 +134,16 @@ const isActive = (path: string) => {
       </div>
       <ul class="nav-links" id="navLinks">
         <li><a href="/" class={`nav-link ${isActive('/') ? 'active' : ''}`}>Home</a></li>
-        <li><a href="/rooms" class={`nav-link ${isActive('/rooms') ? 'active' : ''}`}>Rooms</a></li>
+        <li class="has-dropdown">
+          <a href="/rooms" class={`nav-link ${isActive('/rooms') ? 'active' : ''}`}>Rooms</a>
+          <div class="nav-dropdown">
+            <a href="/rooms/hilo-bay" class="dropdown-item">Hilo Bay Room</a>
+            <a href="/rooms/orchid" class="dropdown-item">Orchid Room</a>
+            <a href="/rooms/mauna-kea" class="dropdown-item">Mauna Kea Room</a>
+            <a href="/rooms/ginger" class="dropdown-item">Ginger Room</a>
+            <a href="/rooms/compare" class="dropdown-item dropdown-highlight">Compare Rooms</a>
+          </div>
+        </li>
         <li><a href="/guide" class={`nav-link ${isActive('/guide') ? 'active' : ''}`}>Guide</a></li>
         <li><a href="/blog" class={`nav-link ${isActive('/blog') ? 'active' : ''}`}>Blog</a></li>
         <li><a href="/contact" class={`nav-link ${isActive('/contact') ? 'active' : ''}`}>Contact</a></li>
@@ -172,6 +181,13 @@ const isActive = (path: string) => {
   <div class="mobile-menu-overlay" id="mobileMenuOverlay">
     <a href="/" class={`mobile-nav-link ${isActive('/') ? 'active' : ''}`}>Home</a>
     <a href="/rooms" class={`mobile-nav-link ${isActive('/rooms') ? 'active' : ''}`}>Rooms</a>
+    <div class="mobile-sub-links">
+      <a href="/rooms/hilo-bay" class="mobile-sub-link">Hilo Bay</a>
+      <a href="/rooms/orchid" class="mobile-sub-link">Orchid</a>
+      <a href="/rooms/mauna-kea" class="mobile-sub-link">Mauna Kea</a>
+      <a href="/rooms/ginger" class="mobile-sub-link">Ginger</a>
+      <a href="/rooms/compare" class="mobile-sub-link mobile-compare">Compare</a>
+    </div>
     <a href="/guide" class={`mobile-nav-link ${isActive('/guide') ? 'active' : ''}`}>Guide</a>
     <a href="/blog" class={`mobile-nav-link ${isActive('/blog') ? 'active' : ''}`}>Blog</a>
     <a href="/contact" class={`mobile-nav-link ${isActive('/contact') ? 'active' : ''}`}>Contact</a>
@@ -581,6 +597,59 @@ const isActive = (path: string) => {
 
   .nav-link.active::after {
     width: 100%;
+  }
+
+  /* Rooms Dropdown */
+  .has-dropdown {
+    position: relative;
+  }
+
+  .nav-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    padding: 0.5rem 0;
+    min-width: 180px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 1000;
+    margin-top: 0.5rem;
+  }
+
+  .has-dropdown:hover .nav-dropdown {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .dropdown-item {
+    display: block;
+    padding: 0.625rem 1.25rem;
+    color: var(--color-text);
+    font-size: 0.875rem;
+    transition: all 0.15s;
+  }
+
+  .dropdown-item:hover {
+    background: var(--color-bg-alt);
+    color: var(--color-primary);
+  }
+
+  .dropdown-highlight {
+    border-top: 1px solid var(--color-bg-alt);
+    margin-top: 0.25rem;
+    padding-top: 0.75rem;
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .dropdown-highlight:hover {
+    background: var(--color-primary);
+    color: #fff;
   }
 
   /* Language Selector */
@@ -1357,6 +1426,39 @@ const isActive = (path: string) => {
     .mobile-nav-link.active {
       color: #1B6B5A;
       font-weight: 600;
+    }
+
+    .mobile-sub-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .mobile-sub-link {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      color: #666;
+      background: #f5f5f5;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .mobile-sub-link:hover {
+      background: #1B6B5A;
+      color: white;
+    }
+
+    .mobile-compare {
+      background: #1B6B5A;
+      color: white;
+    }
+
+    .mobile-compare:hover {
+      background: #0F4A3E;
     }
 
     .mobile-book-btn {

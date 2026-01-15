@@ -229,6 +229,9 @@ const bathroomAmenities = [
           </div>
         </a>
       </div>
+      <div class="compare-cta">
+        <a href="/rooms/compare" class="btn btn-outline">Compare All Rooms</a>
+      </div>
     </div>
   </section>
 
@@ -326,6 +329,10 @@ const bathroomAmenities = [
   .room-card-content { padding: 1.25rem; }
   .room-card-content h3 { font-size: 1.125rem; margin-bottom: 0.25rem; }
   .room-card-content p { font-size: 0.875rem; color: var(--color-text-light); }
+
+  .compare-cta { text-align: center; margin-top: 2rem; }
+  .btn-outline { display: inline-block; background: transparent; border: 2px solid var(--color-primary); color: var(--color-primary); padding: 0.875rem 2rem; border-radius: 50px; font-weight: 600; transition: all 0.3s; }
+  .btn-outline:hover { background: var(--color-primary); color: #fff; }
 
   @media (max-width: 1024px) { .room-grid, .rooms-grid { grid-template-columns: 1fr; } }
   @media (max-width: 768px) { .quick-info { grid-template-columns: repeat(2, 1fr); } .thumbnail-grid { grid-template-columns: repeat(3, 1fr); } .amenities-grid { grid-template-columns: 1fr; } }
