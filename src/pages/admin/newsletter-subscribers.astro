@@ -450,6 +450,17 @@ const description = "Manage newsletter subscriber list";
 <script>
   const SESSION_KEY = 'islandgoodes_admin_session';
 
+  // XSS protection - escape HTML entities in user-submitted data
+  function escapeHtml(str: string | null | undefined): string {
+    if (!str) return '';
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
   function getSession() {
     try {
       const stored = sessionStorage.getItem(SESSION_KEY);
@@ -561,8 +572,8 @@ const description = "Manage newsletter subscriber list";
         <tbody>
           ${subscribers.map(s => `
             <tr data-id="${s.id}">
-              <td><span class="subscriber-email">${s.email}</span></td>
-              <td>${s.name || '-'}</td>
+              <td><span class="subscriber-email">${escapeHtml(s.email)}</span></td>
+              <td>${escapeHtml(s.name) || '-'}</td>
               <td>${formatDate(s.subscribedAt)}</td>
               <td><span class="subscriber-status ${s.status}">${s.status}</span></td>
               <td class="subscriber-actions">

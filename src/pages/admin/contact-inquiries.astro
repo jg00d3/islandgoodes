@@ -370,6 +370,17 @@ const description = "Manage contact form submissions";
 <script>
   const SESSION_KEY = 'islandgoodes_admin_session';
 
+  // XSS protection - escape HTML entities in user-submitted data
+  function escapeHtml(str: string | null | undefined): string {
+    if (!str) return '';
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
   function getSession() {
     try {
       const stored = sessionStorage.getItem(SESSION_KEY);
@@ -464,14 +475,14 @@ const description = "Manage contact form submissions";
       <div class="inquiry-item ${i.status === 'new' ? 'unread' : ''}" data-id="${i.id}">
         <div class="inquiry-header">
           <div class="inquiry-info">
-            <h4>${i.name}</h4>
-            <a href="mailto:${i.email}" class="email">${i.email}</a>
-            ${i.phone ? `<span style="margin-left: 1rem; color: var(--color-text-muted);">${i.phone}</span>` : ''}
+            <h4>${escapeHtml(i.name)}</h4>
+            <a href="mailto:${escapeHtml(i.email)}" class="email">${escapeHtml(i.email)}</a>
+            ${i.phone ? `<span style="margin-left: 1rem; color: var(--color-text-muted);">${escapeHtml(i.phone)}</span>` : ''}
           </div>
           <span class="inquiry-status ${i.status}">${i.status === 'new' ? 'unread' : i.status}</span>
         </div>
-        ${i.subject ? `<div class="inquiry-subject">${i.subject}</div>` : ''}
-        <div class="inquiry-message">${i.message}</div>
+        ${i.subject ? `<div class="inquiry-subject">${escapeHtml(i.subject)}</div>` : ''}
+        <div class="inquiry-message">${escapeHtml(i.message)}</div>
         <div class="inquiry-footer">
           <span class="inquiry-date">Received ${formatDate(i.submittedAt)}</span>
           <div class="inquiry-actions">
@@ -481,7 +492,7 @@ const description = "Manage contact form submissions";
             ${i.status !== 'replied' ? `
               <button class="btn btn-success btn-small mark-replied" data-id="${i.id}">Mark Replied</button>
             ` : ''}
-            <a href="mailto:${i.email}?subject=Re: ${i.subject || 'Your Island Goodes Inquiry'}" class="btn btn-primary btn-small">Reply</a>
+            <a href="mailto:${escapeHtml(i.email)}?subject=Re: ${escapeHtml(i.subject) || 'Your Island Goodes Inquiry'}" class="btn btn-primary btn-small">Reply</a>
             <button class="btn btn-outline btn-small delete-btn" data-id="${i.id}">Delete</button>
           </div>
         </div>

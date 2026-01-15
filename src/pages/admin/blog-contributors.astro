@@ -393,6 +393,17 @@ const description = "Manage blog contributor submissions";
 <script>
   const SESSION_KEY = 'islandgoodes_admin_session';
 
+  // XSS protection - escape HTML entities in user-submitted data
+  function escapeHtml(str: string | null | undefined): string {
+    if (!str) return '';
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
   function getSession() {
     try {
       const stored = sessionStorage.getItem(SESSION_KEY);
@@ -489,19 +500,19 @@ const description = "Manage blog contributor submissions";
       <div class="submission-item" data-id="${c.id}">
         <div class="submission-header">
           <div class="submission-info">
-            <h4>${c.name}</h4>
-            <a href="mailto:${c.email}" class="email">${c.email}</a>
+            <h4>${escapeHtml(c.name)}</h4>
+            <a href="mailto:${escapeHtml(c.email)}" class="email">${escapeHtml(c.email)}</a>
           </div>
           <span class="submission-status ${c.status}">${c.status}</span>
         </div>
-        <div class="submission-topic">${c.topic}</div>
+        <div class="submission-topic">${escapeHtml(c.topic)}</div>
         <div class="submission-details">
-          ${c.website ? `<p><strong>Website:</strong> <a href="${c.website}" target="_blank">${c.website}</a></p>` : ''}
+          ${c.website ? `<p><strong>Website:</strong> <a href="${escapeHtml(c.website)}" target="_blank">${escapeHtml(c.website)}</a></p>` : ''}
           <p><strong>Outline:</strong></p>
-          <div class="outline-text">${c.outline}</div>
+          <div class="outline-text">${escapeHtml(c.outline)}</div>
           ${c.experience ? `
             <p style="margin-top: 1rem;"><strong>Connection to Hawaii:</strong></p>
-            <div class="outline-text">${c.experience}</div>
+            <div class="outline-text">${escapeHtml(c.experience)}</div>
           ` : ''}
         </div>
         <div class="submission-footer">

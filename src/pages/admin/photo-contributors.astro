@@ -435,6 +435,17 @@ const description = "Manage photo contributor submissions";
 <script>
   const SESSION_KEY = 'islandgoodes_admin_session';
 
+  // XSS protection - escape HTML entities in user-submitted data
+  function escapeHtml(str: string | null | undefined): string {
+    if (!str) return '';
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
   function getSession() {
     try {
       const stored = sessionStorage.getItem(SESSION_KEY);
@@ -531,16 +542,16 @@ const description = "Manage photo contributor submissions";
       <div class="submission-item" data-id="${c.id}">
         <div class="submission-header">
           <div class="submission-info">
-            <h4>${c.name}</h4>
-            <a href="mailto:${c.email}" class="email">${c.email}</a>
+            <h4>${escapeHtml(c.name)}</h4>
+            <a href="mailto:${escapeHtml(c.email)}" class="email">${escapeHtml(c.email)}</a>
           </div>
           <span class="submission-status ${c.status}">${c.status}</span>
         </div>
         <div class="submission-details">
-          <p><strong>Location:</strong> ${c.location}</p>
-          <p><strong>Photos:</strong> <a href="${c.photoLink}" target="_blank">${c.photoLink}</a></p>
-          ${c.social ? `<p><strong>Social:</strong> <a href="${c.social}" target="_blank">${c.social}</a></p>` : ''}
-          ${c.notes ? `<p><strong>Notes:</strong> ${c.notes}</p>` : ''}
+          <p><strong>Location:</strong> ${escapeHtml(c.location)}</p>
+          <p><strong>Photos:</strong> <a href="${escapeHtml(c.photoLink)}" target="_blank">${escapeHtml(c.photoLink)}</a></p>
+          ${c.social ? `<p><strong>Social:</strong> <a href="${escapeHtml(c.social)}" target="_blank">${escapeHtml(c.social)}</a></p>` : ''}
+          ${c.notes ? `<p><strong>Notes:</strong> ${escapeHtml(c.notes)}</p>` : ''}
         </div>
         <div class="submission-footer">
           <span class="submission-date">Submitted ${formatDate(c.submittedAt)}</span>
