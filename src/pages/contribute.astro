@@ -88,6 +88,11 @@ const description = "Share your Big Island photos or write a guest blog post. Ge
           <div class="contribute-form">
             <h3>Submit Your Photos</h3>
             <form id="photoForm" class="submission-form">
+              <!-- Honeypot field - hidden from users, bots fill it -->
+              <div style="position: absolute; left: -9999px;" aria-hidden="true">
+                <input type="text" id="photoHoneypot" name="honeypot" tabindex="-1" autocomplete="off" />
+              </div>
+              <input type="hidden" id="photoLoadTime" name="formLoadTime" />
               <div class="form-group">
                 <label for="photoName">Your Name *</label>
                 <input type="text" id="photoName" name="name" required />
@@ -174,6 +179,11 @@ const description = "Share your Big Island photos or write a guest blog post. Ge
           <div class="contribute-form">
             <h3>Pitch Your Article</h3>
             <form id="blogForm" class="submission-form">
+              <!-- Honeypot field - hidden from users, bots fill it -->
+              <div style="position: absolute; left: -9999px;" aria-hidden="true">
+                <input type="text" id="blogHoneypot" name="honeypot" tabindex="-1" autocomplete="off" />
+              </div>
+              <input type="hidden" id="blogLoadTime" name="formLoadTime" />
               <div class="form-group">
                 <label for="blogName">Your Name *</label>
                 <input type="text" id="blogName" name="name" required />
@@ -574,6 +584,12 @@ const description = "Share your Big Island photos or write a guest blog post. Ge
 </style>
 
 <script>
+  // Set load times for spam protection
+  const photoLoadTime = document.getElementById('photoLoadTime') as HTMLInputElement;
+  const blogLoadTime = document.getElementById('blogLoadTime') as HTMLInputElement;
+  if (photoLoadTime) photoLoadTime.value = Date.now().toString();
+  if (blogLoadTime) blogLoadTime.value = Date.now().toString();
+
   // Photo form submission
   document.getElementById('photoForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -590,7 +606,9 @@ const description = "Share your Big Island photos or write a guest blog post. Ge
       social: formData.get('social') || '',
       location: formData.get('location'),
       photoLink: formData.get('photoLink'),
-      notes: formData.get('notes') || ''
+      notes: formData.get('notes') || '',
+      honeypot: formData.get('honeypot') || '',
+      formLoadTime: formData.get('formLoadTime') || ''
     };
 
     try {
@@ -637,7 +655,9 @@ const description = "Share your Big Island photos or write a guest blog post. Ge
       website: formData.get('website') || '',
       topic: formData.get('topic'),
       outline: formData.get('outline'),
-      experience: formData.get('experience') || ''
+      experience: formData.get('experience') || '',
+      honeypot: formData.get('honeypot') || '',
+      formLoadTime: formData.get('formLoadTime') || ''
     };
 
     try {

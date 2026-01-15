@@ -220,6 +220,11 @@ const isActive = (path: string) => {
         <p>Get travel tips and special offers</p>
         <form id="newsletterForm" class="newsletter-form">
           <input type="email" id="newsletterEmail" name="email" placeholder="Your email" required />
+          <!-- Honeypot field - hidden from users, bots fill it -->
+          <div style="position: absolute; left: -9999px;" aria-hidden="true">
+            <input type="text" id="newsletterWebsite" name="website" tabindex="-1" autocomplete="off" />
+          </div>
+          <input type="hidden" id="newsletterLoadTime" name="formLoadTime" />
           <button type="submit" class="btn btn-primary">Subscribe</button>
         </form>
         <p id="newsletterMessage" class="newsletter-message"></p>
@@ -1692,10 +1697,19 @@ const isActive = (path: string) => {
     const form = document.getElementById('newsletterForm');
     const emailInput = document.getElementById('newsletterEmail');
     const message = document.getElementById('newsletterMessage');
+    const loadTimeInput = document.getElementById('newsletterLoadTime');
+    const honeypotInput = document.getElementById('newsletterWebsite');
+
+    // Set load time for spam protection
+    if (loadTimeInput) {
+      loadTimeInput.value = Date.now().toString();
+    }
 
     form?.addEventListener('submit', async function(e) {
       e.preventDefault();
       const email = emailInput?.value;
+      const website = honeypotInput?.value || '';
+      const formLoadTime = loadTimeInput?.value || '';
       const btn = form.querySelector('button');
 
       if (!email) return;
@@ -1714,7 +1728,7 @@ const isActive = (path: string) => {
         const response = await fetch('/.netlify/functions/newsletter-subscribe', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
+          body: JSON.stringify({ email, website, formLoadTime })
         });
 
         const data = await response.json();

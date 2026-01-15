@@ -13,7 +13,30 @@ export async function handler(event) {
   }
 
   try {
-    const { email } = JSON.parse(event.body);
+    const { email, website, formLoadTime } = JSON.parse(event.body);
+
+    // SPAM PROTECTION
+
+    // 1. Honeypot check - if "website" field is filled, it's a bot
+    if (website) {
+      console.log('Spam blocked: honeypot triggered');
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ success: true, message: 'Successfully subscribed!' })
+      };
+    }
+
+    // 2. Time-based check - form must take at least 3 seconds to fill
+    if (formLoadTime) {
+      const elapsed = Date.now() - parseInt(formLoadTime);
+      if (elapsed < 3000) {
+        console.log('Spam blocked: form submitted too fast (' + elapsed + 'ms)');
+        return {
+          statusCode: 200,
+          body: JSON.stringify({ success: true, message: 'Successfully subscribed!' })
+        };
+      }
+    }
 
     if (!email) {
       return {

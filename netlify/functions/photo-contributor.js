@@ -13,7 +13,53 @@ export async function handler(event) {
   }
 
   try {
-    const { name, email, social, location, photoLink, notes } = JSON.parse(event.body);
+    const { name, email, social, location, photoLink, notes, honeypot, formLoadTime } = JSON.parse(event.body);
+
+    // SPAM PROTECTION
+
+    // 1. Honeypot check - if honeypot field is filled, it's a bot
+    if (honeypot) {
+      console.log('Spam blocked: honeypot triggered');
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ success: true, message: 'Thank you for your submission!' })
+      };
+    }
+
+    // 2. Time-based check - form must take at least 3 seconds to fill
+    if (formLoadTime) {
+      const elapsed = Date.now() - parseInt(formLoadTime);
+      if (elapsed < 3000) {
+        console.log('Spam blocked: form submitted too fast (' + elapsed + 'ms)');
+        return {
+          statusCode: 200,
+          body: JSON.stringify({ success: true, message: 'Thank you for your submission!' })
+        };
+      }
+    }
+
+    // 3. Gibberish detection - check for random character strings
+    const gibberishPattern = /^[a-zA-Z]{15,}$/;
+    if (gibberishPattern.test(name) || gibberishPattern.test(location)) {
+      console.log('Spam blocked: gibberish detected');
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ success: true, message: 'Thank you for your submission!' })
+      };
+    }
+
+    // 4. Check for spam patterns in notes
+    const spamPatterns = [
+      /\b(viagra|cialis|casino|lottery|winner|bitcoin|crypto|investment opportunity)\b/i,
+      /\b(click here|act now|limited time|free money)\b/i
+    ];
+    if (notes && spamPatterns.some(pattern => pattern.test(notes))) {
+      console.log('Spam blocked: spam keywords detected');
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ success: true, message: 'Thank you for your submission!' })
+      };
+    }
 
     if (!name || !email || !location || !photoLink) {
       return {
