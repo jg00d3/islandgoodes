@@ -1,5 +1,6 @@
 ---
 import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import RecommendedRooms from '../../components/RecommendedRooms.astro';
 
 const title = "Big Island Destination Guide | Island Goodes";
 const description = "Your comprehensive guide to the Big Island of Hawaii. Explore attractions, activities, beaches, restaurants, and hidden gems near Hilo.";
@@ -192,15 +193,10 @@ const categories = [
     </div>
   </section>
 
-  <section class="cta-section">
-    <div class="container">
-      <div class="cta-content">
-        <h2>Ready to Explore?</h2>
-        <p>Book your stay at Island Goodes and let us help you discover the best of the Big Island</p>
-        <a href="/book" class="btn btn-secondary btn-large">Book Your Stay</a>
-      </div>
-    </div>
-  </section>
+  <RecommendedRooms
+    title="Find Your Perfect Room"
+    subtitle="Stay with us"
+  />
 </PreviewLayout>
 
 <style>

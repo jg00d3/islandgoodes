@@ -1,5 +1,6 @@
 ---
 import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import RecommendedRooms from '../../components/RecommendedRooms.astro';
 
 const title = "Big Island Beaches & Swimming | Island Goodes Destination Guide";
 const description = "Discover the best beaches on Hawaii's Big Island. Black sand beaches, swimming spots, tide pools, and sea turtle viewing areas near Hilo.";
@@ -214,15 +215,10 @@ const turtleGuidelines = [
     </div>
   </section>
 
-  <section class="cta-section">
-    <div class="container">
-      <div class="cta-content">
-        <h2>Stay at Island Goodes</h2>
-        <p>Minutes from Hilo's best beaches</p>
-        <a href="/book" class="btn btn-secondary btn-large">Book Your Stay</a>
-      </div>
-    </div>
-  </section>
+  <RecommendedRooms
+    title="Your Beach Home Base"
+    subtitle="Stay with us"
+  />
 </PreviewLayout>
 
 <style>

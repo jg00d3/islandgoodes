@@ -1,7 +1,14 @@
 ---
 import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import RelatedContent from '../../components/RelatedContent.astro';
 
 const title = "Mauna Kea Room - Mountain View Suite";
+
+const nearbyAttractions = [
+  { slug: "mauna-kea-stargazing", title: "Stargazing on Mauna Kea", image: "/images/blog/mauna-kea.webp", category: "Activities" },
+  { slug: "hawaii-volcanoes-national-park", title: "Hawaii Volcanoes National Park Guide", image: "/images/blog/volcanoes.webp", category: "Attractions" },
+  { slug: "kona-coffee-tours", title: "Kona Coffee Farm Tours", image: "/images/blog/coffee-farm.webp", category: "Activities" }
+];
 const description = "Mountain view room with views toward Hawaii's highest peak. Perfect for stargazers visiting Mauna Kea observatories. Sleep Number bed, private lanai. Adults-only accommodation near Hilo.";
 
 const images = [
@@ -199,6 +206,9 @@ const bathroomAmenities = [
       </div>
     </div>
   </section>
+
+  <!-- Explore the Area -->
+  <RelatedContent items={nearbyAttractions} />
 
   <section class="other-rooms">
     <div class="container">

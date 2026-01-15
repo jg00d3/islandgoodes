@@ -1,5 +1,6 @@
 ---
 import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import RecommendedRooms from '../../components/RecommendedRooms.astro';
 
 const title = "Big Island Food & Dining | Island Goodes Destination Guide";
 const description = "Discover the best restaurants, food trucks, and local eats on Hawaii's Big Island. Fresh poke, plate lunches, and authentic Hawaiian cuisine near Hilo.";
@@ -333,15 +334,10 @@ const foodTrucks = [
     </div>
   </section>
 
-  <section class="cta-section">
-    <div class="container">
-      <div class="cta-content">
-        <h2>Stay at Island Goodes</h2>
-        <p>5 minutes from Hilo's best restaurants</p>
-        <a href="/book" class="btn btn-secondary btn-large">Book Your Stay</a>
-      </div>
-    </div>
-  </section>
+  <RecommendedRooms
+    title="Your Foodie Home Base"
+    subtitle="Stay with us"
+  />
 </PreviewLayout>
 
 <style>

@@ -4,10 +4,30 @@ import PreviewLayout from '../../layouts/PreviewLayout.astro';
 const title = "Changelog | Island Goodes Admin";
 const description = "Version history and release notes";
 
-const CURRENT_VERSION = "2.7.0";
-const RELEASE_DATE = "January 12, 2026";
+const CURRENT_VERSION = "2.8.0";
+const RELEASE_DATE = "January 15, 2026";
 
 const changelog = [
+  {
+    version: "2.8.0",
+    date: "January 15, 2026",
+    type: "Feature & Performance",
+    changes: [
+      { type: "added", text: "WebP image conversion (161 images, 58% smaller file sizes)" },
+      { type: "added", text: "Room comparison page with all amenities at a glance" },
+      { type: "added", text: "Accessibility improvements: skip-to-content link, ARIA labels" },
+      { type: "added", text: "Navigation active states (gold underline)" },
+      { type: "added", text: "Internal cross-linking: Related Posts on all 12 blog articles" },
+      { type: "added", text: "Internal cross-linking: Explore the Area section on all 4 room pages" },
+      { type: "added", text: "Internal cross-linking: Recommended Rooms section on all 7 guide pages" },
+      { type: "fixed", text: "Image rotation issues from WebP conversion" },
+      { type: "improved", text: "Room comparison: All rooms marked as ground floor" },
+      { type: "improved", text: "Room comparison: Added lanai cooking area info for 3 rooms" },
+      { type: "added", text: "Bot/spam protection on all public forms" },
+      { type: "improved", text: "Secure admin authentication with bcrypt hashing" },
+      { type: "added", text: "XSS protection on admin pages displaying user data" },
+    ]
+  },
   {
     version: "2.7.0",
     date: "January 12, 2026",

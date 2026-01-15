@@ -27,18 +27,21 @@ const today = new Date().toLocaleDateString('en-US', {
 
       <div class="session-card current">
         <div class="session-header">
-          <h2>January 14, 2026</h2>
+          <h2>January 15, 2026</h2>
           <span class="status-badge active">Current Session</span>
         </div>
 
         <div class="completed-section">
           <h3>✅ Completed Today</h3>
           <ul>
-            <li><strong>Bot/Spam Protection</strong> - Added to all public forms (contact, newsletter, photo/blog contributions). Uses honeypot fields, timing checks, gibberish detection, and spam keyword filtering.</li>
-            <li><strong>Secure Admin Authentication</strong> - Moved password verification server-side. Passwords now use bcrypt hashing. Credentials no longer exposed in browser.</li>
-            <li><strong>XSS Protection</strong> - Added HTML escaping to admin pages displaying user-submitted data (contact inquiries, contributors, subscribers).</li>
-            <li><strong>Unused Images Review Page</strong> - Created /admin/unused-images showing 20 images not currently displayed. Dad can review and decide what to use.</li>
-            <li><strong>Send Notification Function</strong> - Added ability to send emails directly to specific recipients.</li>
+            <li><strong>V2.8 LIVE!</strong> - WebP images, room comparison, accessibility improvements all deployed</li>
+            <li><strong>Image Rotation Fixes</strong> - Fixed all sideways images from WebP conversion (Hilo Bay, Orchid, Mauna Kea, Ginger rooms)</li>
+            <li><strong>Room Comparison Updates</strong> - Per Dad's feedback: all rooms marked as ground floor, added lanai cooking area info</li>
+            <li><strong>Internal Cross-linking (Blog)</strong> - Added "Related Posts" to all 12 blog articles for better SEO</li>
+            <li><strong>Internal Cross-linking (Rooms)</strong> - Added "Explore the Area" related content section to all 4 room pages</li>
+            <li><strong>Internal Cross-linking (Guide)</strong> - Added "Recommended Rooms" section to all 7 guide pages</li>
+            <li><strong>Web Terminal Setup</strong> - Secure terminal access via browser (pending DNS for SSL)</li>
+            <li><strong>Removed Duplicate Images</strong> - Cleaned up duplicate room images (room3, lanai3, bathroom3, etc.)</li>
           </ul>
         </div>
 
@@ -50,19 +53,34 @@ const today = new Date().toLocaleDateString('en-US', {
         </div>
 
         <div class="pending-section">
-          <h3>⏳ Waiting for Dad's Approval</h3>
+          <h3>⏳ Still In Progress</h3>
           <ul>
-            <li><strong>V2.8 Changes</strong> - WebP images, room comparison page, accessibility improvements
-              <br><a href="/admin/review-v28" class="review-link">→ Review Page</a></li>
             <li><strong>Unused Images</strong> - 20 images to review (property, rooms, wildlife, heroes)
               <br><a href="/admin/unused-images" class="review-link">→ Review Page</a></li>
           </ul>
         </div>
 
         <div class="roadmap-section">
-          <h3>📋 Added to Roadmap</h3>
+          <h3>📋 On Roadmap</h3>
           <ul>
             <li><strong>Virtual Trip Planner</strong> - Interactive tool for guests to plan Big Island itinerary. Select trip length/interests, get day-by-day suggestions with distances, insider tips, printable itinerary.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="session-card">
+        <div class="session-header">
+          <h2>January 14, 2026</h2>
+        </div>
+
+        <div class="completed-section">
+          <h3>✅ Completed</h3>
+          <ul>
+            <li><strong>Bot/Spam Protection</strong> - Added to all public forms (contact, newsletter, photo/blog contributions)</li>
+            <li><strong>Secure Admin Authentication</strong> - Server-side bcrypt hashing</li>
+            <li><strong>XSS Protection</strong> - HTML escaping on admin pages</li>
+            <li><strong>Unused Images Review Page</strong> - Created /admin/unused-images</li>
+            <li><strong>Send Notification Function</strong> - Direct email sending capability</li>
           </ul>
         </div>
       </div>

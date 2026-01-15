@@ -1,7 +1,14 @@
 ---
 import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import RelatedContent from '../../components/RelatedContent.astro';
 
 const title = "Orchid Room - Oceanview Suite with Kitchenette";
+
+const nearbyAttractions = [
+  { slug: "hilo-farmers-market", title: "Hilo Farmers Market Guide", image: "/images/blog/farmers-market.webp", category: "Local Guide" },
+  { slug: "swimming-holes-hilo", title: "Hidden Swimming Holes Near Hilo", image: "/images/blog/swimming-hole.webp", category: "Nature" },
+  { slug: "hamakua-coast-waterfalls", title: "Waterfalls on the Hamakua Coast", image: "/images/blog/waterfalls.webp", category: "Nature" }
+];
 const description = "645 sq ft oceanview suite with kitchenette at Island Goodes. Sleep Number King Bed, private lanai, perfect for extended stays. Adults-only accommodation near Hilo, Hawaii.";
 
 const images = [
@@ -195,6 +202,9 @@ const bathroomAmenities = [
       </div>
     </div>
   </section>
+
+  <!-- Explore the Area -->
+  <RelatedContent items={nearbyAttractions} />
 
   <section class="other-rooms">
     <div class="container">

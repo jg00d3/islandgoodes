@@ -1,5 +1,6 @@
 ---
 import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import RecommendedRooms from '../../components/RecommendedRooms.astro';
 
 const title = "Big Island Day Trips | Island Goodes Destination Guide";
 const description = "Plan perfect day trips from Hilo, Hawaii. Explore volcanoes, waterfalls, Kona coffee farms, and hidden gems across the Big Island.";
@@ -220,15 +221,10 @@ const dayTrips = [
     </div>
   </section>
 
-  <section class="cta-section">
-    <div class="container">
-      <div class="cta-content">
-        <h2>Your Adventure Awaits</h2>
-        <p>Return to Island Goodes after your day trips for a relaxing evening</p>
-        <a href="/book" class="btn btn-secondary btn-large">Book Your Stay</a>
-      </div>
-    </div>
-  </section>
+  <RecommendedRooms
+    title="Your Day Trip Home Base"
+    subtitle="Stay with us"
+  />
 </PreviewLayout>
 
 <style>
