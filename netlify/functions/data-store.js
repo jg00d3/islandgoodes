@@ -22,17 +22,30 @@ const STORES = {
   blogContributors: 'blog-contributors'
 };
 
-// Default admin (only used on first setup)
+// Default admin (only used on first setup - password set via admin-set-password function)
 const DEFAULT_ADMIN = {
   id: 1,
   username: 'jgoode',
   fullName: 'Jeremiah Goode',
   email: 'sysadmroot@gmail.com',
   twoFAEmail: 'sysadmroot@gmail.com',
+  // Password hash stored server-side only, never sent to client
   passwordHash: 'SXNsYW5kR29vZGVzMjAyNiE=',
   role: 'owner',
   created: '2026-01-01T00:00:00.000Z'
 };
+
+// Sanitize admin data - remove sensitive fields before sending to client
+function sanitizeAdmin(admin) {
+  if (!admin) return admin;
+  const { passwordHash, passwordHashBcrypt, ...safeAdmin } = admin;
+  return safeAdmin;
+}
+
+function sanitizeAdmins(admins) {
+  if (!Array.isArray(admins)) return admins;
+  return admins.map(sanitizeAdmin);
+}
 
 // Default site settings
 const DEFAULT_SETTINGS = {
@@ -81,7 +94,8 @@ export async function handler(event, context) {
       console.error('Failed to get store:', storeError);
       // Return defaults if blob store fails
       if (storeName === 'admins') {
-        return { statusCode: 200, headers, body: JSON.stringify([DEFAULT_ADMIN]) };
+        // Sanitize - never send password hashes to client
+        return { statusCode: 200, headers, body: JSON.stringify(sanitizeAdmins([DEFAULT_ADMIN])) };
       }
       if (storeName === 'settings') {
         return { statusCode: 200, headers, body: JSON.stringify(DEFAULT_SETTINGS) };
@@ -102,7 +116,8 @@ export async function handler(event, context) {
         // Return defaults if no data exists OR if admins array is empty
         if (!value || (storeName === 'admins' && Array.isArray(value) && value.length === 0)) {
           if (storeName === 'admins') {
-            return { statusCode: 200, headers, body: JSON.stringify([DEFAULT_ADMIN]) };
+            // Sanitize - never send password hashes to client
+            return { statusCode: 200, headers, body: JSON.stringify(sanitizeAdmins([DEFAULT_ADMIN])) };
           }
           if (storeName === 'settings') {
             return { statusCode: 200, headers, body: JSON.stringify(DEFAULT_SETTINGS) };
@@ -117,6 +132,11 @@ export async function handler(event, context) {
               storeName === 'securitySettings' || storeName === 'imageOrder') {
             return { statusCode: 200, headers, body: JSON.stringify({}) };
           }
+        }
+
+        // Sanitize admins data - never send password hashes to client
+        if (storeName === 'admins') {
+          return { statusCode: 200, headers, body: JSON.stringify(sanitizeAdmins(value)) };
         }
 
         return { statusCode: 200, headers, body: JSON.stringify(value) };

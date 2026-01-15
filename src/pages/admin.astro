@@ -1556,7 +1556,7 @@ const description = "Analytics dashboard for Island Goodes.";
     showDashboard();
   }
 
-  // Step 1: Email/Password login
+  // Step 1: Email/Password login (server-side verification)
   loginForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = (document.getElementById('loginEmail') as HTMLInputElement)?.value.toLowerCase().trim();
@@ -1565,22 +1565,36 @@ const description = "Analytics dashboard for Island Goodes.";
 
     if (loginError) loginError.textContent = '';
 
-    // Show loading state while fetching admins
+    // Show loading state
     if (submitBtn) {
       submitBtn.disabled = true;
       submitBtn.textContent = 'Checking...';
     }
 
-    // Find admin by email (from shared storage)
-    const admins = await getAdmins();
-    console.log('[LOGIN DEBUG] Admins loaded:', admins);
-    console.log('[LOGIN DEBUG] Looking for email:', email);
-    const admin = admins.find((a: any) => a.email?.toLowerCase() === email);
-    console.log('[LOGIN DEBUG] Found admin:', admin);
+    // Authenticate via server-side function (passwords never sent to client)
+    try {
+      const response = await fetch('/.netlify/functions/admin-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
 
-    if (!admin) {
-      console.error('[LOGIN DEBUG] No admin found. Available emails:', admins.map((a: any) => a.email));
-      if (loginError) loginError.textContent = 'Email not found. Check console for debug info.';
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        if (loginError) loginError.textContent = result.error || 'Invalid credentials';
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Continue';
+        }
+        return;
+      }
+
+      // Store authenticated admin (no password hash included)
+      currentAdmin = result.admin;
+    } catch (err) {
+      console.error('Login error:', err);
+      if (loginError) loginError.textContent = 'Login failed. Please try again.';
       if (submitBtn) {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Continue';
@@ -1588,18 +1602,8 @@ const description = "Analytics dashboard for Island Goodes.";
       return;
     }
 
-    // Check password
-    if (atob(admin.passwordHash) !== password) {
-      if (loginError) loginError.textContent = 'Incorrect password';
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Continue';
-      }
-      return;
-    }
-
-    // Store current admin for step 2
-    currentAdmin = admin;
+    // Admin authenticated - store for step 2
+    const admin = currentAdmin;
 
     // Check if 2FA is required
     const settings = await getSecuritySettings();
