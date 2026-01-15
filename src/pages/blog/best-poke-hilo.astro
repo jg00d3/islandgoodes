@@ -1,9 +1,16 @@
 ---
 import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
 
 const title = "Best Poke in Hilo: A Local's Guide to Fresh Fish | Island Goodes";
 const description = "Discover where locals go for the freshest poke bowls in Hilo, Hawaii. From historic fish markets to hidden gems, find the best raw fish on the Big Island.";
 const publishDate = "2025-12-15";
+
+const relatedPosts = [
+  { slug: "hilo-farmers-market", title: "Hilo Farmers Market Guide", image: "/images/blog/farmers-market.webp", category: "Food" },
+  { slug: "downtown-hilo-guide", title: "Downtown Hilo: Where to Eat & Explore", image: "/images/blog/downtown-hilo.webp", category: "Guide" },
+  { slug: "uncle-roberts-night-market", title: "Uncle Robert's Night Market", image: "/images/blog/night-market.webp", category: "Food" }
+];
 ---
 
 <PreviewLayout title={title} description={description}>
@@ -152,6 +159,8 @@ const publishDate = "2025-12-15";
           </p>
           <a href="/book" class="btn btn-primary">Book Your Stay</a>
         </div>
+
+        <RelatedPosts posts={relatedPosts} />
       </div>
     </div>
   </article>

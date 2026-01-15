@@ -1,5 +1,6 @@
 ---
 import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
 
 const title = "Hawaii Volcanoes National Park: Complete Visitor's Guide";
 const description = "Everything you need to know about visiting Hawaii Volcanoes National Park from Hilo. See Kilauea crater, lava tubes, and volcanic landscapes just 45 minutes from Island Goodes.";
@@ -32,6 +33,12 @@ const blogPostSchema = {
     "@id": "https://islandgoodes.com/blog/hawaii-volcanoes-national-park"
   }
 };
+
+const relatedPosts = [
+  { slug: "mauna-kea-stargazing", title: "Stargazing on Mauna Kea", image: "/images/blog/mauna-kea.webp", category: "Activities" },
+  { slug: "black-sand-beaches", title: "Black Sand Beaches of the Big Island", image: "/images/blog/black-sand.webp", category: "Beaches" },
+  { slug: "hamakua-coast-waterfalls", title: "Chasing Waterfalls on the Hamakua Coast", image: "/images/blog/waterfalls.webp", category: "Nature" }
+];
 ---
 
 <PreviewLayout title={title} description={description}>
@@ -129,6 +136,8 @@ const blogPostSchema = {
           <p>Island Goodes is the perfect home base for exploring Hawaii Volcanoes National Park. After a day of hiking, relax in our hot tub before your next adventure.</p>
           <a href="/book" class="btn btn-primary btn-large">Book Your Stay</a>
         </div>
+
+        <RelatedPosts posts={relatedPosts} />
 
         <div class="back-link">
           <a href="/blog">← Back to Blog</a>

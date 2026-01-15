@@ -1,8 +1,15 @@
 ---
 import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
 
 const title = "Stargazing on Mauna Kea: What to Know Before You Go";
 const description = "Tips for experiencing world-class stargazing at 13,800 feet, from the best times to visit to what to bring.";
+
+const relatedPosts = [
+  { slug: "hawaii-volcanoes-national-park", title: "Hawaii Volcanoes National Park Guide", image: "/images/blog/volcanoes.webp", category: "Attractions" },
+  { slug: "hamakua-coast-waterfalls", title: "Chasing Waterfalls on the Hamakua Coast", image: "/images/blog/waterfalls.webp", category: "Nature" },
+  { slug: "whale-watching-hawaii", title: "Whale Watching Season in Hawaii", image: "/images/blog/whale-watching.webp", category: "Activities" }
+];
 ---
 
 <PreviewLayout title={title} description={description}>
@@ -97,6 +104,8 @@ const description = "Tips for experiencing world-class stargazing at 13,800 feet
           <p>Book the Mauna Kea Room for the perfect before-and-after stargazing experience. Rest up during the day, then head to the summit for an unforgettable night under the stars.</p>
           <a href="/book" class="btn btn-primary btn-large">Book Your Stay</a>
         </div>
+
+        <RelatedPosts posts={relatedPosts} />
 
         <div class="back-link">
           <a href="/blog">← Back to Blog</a>
