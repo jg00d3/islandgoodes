@@ -67,7 +67,9 @@
       "Bash(apt-get install:*)",
       "Bash(rsvg-convert:*)",
       "Bash(while read f)",
-      "Bash(do cwebp -q 80 $f -o $f%.jpg.webp)"
+      "Bash(do cwebp -q 80 $f -o $f%.jpg.webp)",
+      "Bash(chmod:*)",
+      "Bash(/root/projects/islandgoodes/find-unused-images.sh:*)"
     ]
   }
 }

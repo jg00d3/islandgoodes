@@ -1,0 +1,564 @@
+---
+import PreviewLayout from '../../layouts/PreviewLayout.astro';
+
+const title = "Unused Images Review | Island Goodes";
+const description = "Review unused images and decide where to use them";
+
+// Images not currently used on the website
+const unusedImages = [
+  {
+    path: "/images/property/hosts2.webp",
+    name: "Hosts Photo 2",
+    category: "Property",
+    suggestion: "Could be added to the Property page or About section"
+  },
+  {
+    path: "/images/property/sleep-number.webp",
+    name: "Sleep Number Bed",
+    category: "Property",
+    suggestion: "Could highlight the premium beds in room descriptions"
+  },
+  {
+    path: "/images/property/sleep-number2.webp",
+    name: "Sleep Number Bed 2",
+    category: "Property",
+    suggestion: "Another angle of the Sleep Number bed"
+  },
+  {
+    path: "/images/property/kitchenette.webp",
+    name: "Kitchenette",
+    category: "Property",
+    suggestion: "Could be added to room pages or amenities section"
+  },
+  {
+    path: "/images/property/kitchenette2.webp",
+    name: "Kitchenette 2",
+    category: "Property",
+    suggestion: "Another angle of the kitchenette"
+  },
+  {
+    path: "/images/rooms/hilo-bay-room.webp",
+    name: "Hilo Bay Room Card",
+    category: "Rooms",
+    suggestion: "Alternate image for Hilo Bay room listing"
+  },
+  {
+    path: "/images/rooms/orchid-room.webp",
+    name: "Orchid Room Card",
+    category: "Rooms",
+    suggestion: "Alternate image for Orchid room listing"
+  },
+  {
+    path: "/images/rooms/mauna-kea-room.webp",
+    name: "Mauna Kea Room Card",
+    category: "Rooms",
+    suggestion: "Alternate image for Mauna Kea room listing"
+  },
+  {
+    path: "/images/rooms/ginger-room.webp",
+    name: "Ginger Room Card",
+    category: "Rooms",
+    suggestion: "Alternate image for Ginger room listing"
+  },
+  {
+    path: "/images/ginger-room.webp",
+    name: "Ginger Room (duplicate)",
+    category: "Rooms",
+    suggestion: "Duplicate of room card - could be removed"
+  },
+  {
+    path: "/images/birds/nene-goose.webp",
+    name: "Nene Goose",
+    category: "Wildlife",
+    suggestion: "Hawaii state bird - could add to blog or guide"
+  },
+  {
+    path: "/images/birds/myna-bird.webp",
+    name: "Myna Bird",
+    category: "Wildlife",
+    suggestion: "Common Hawaii bird - could add to blog or guide"
+  },
+  {
+    path: "/images/scenery/hilo-bay2.webp",
+    name: "Hilo Bay View 2",
+    category: "Scenery",
+    suggestion: "Another Hilo Bay view for homepage or guide"
+  },
+  {
+    path: "/images/kilauea-volcano.webp",
+    name: "Kilauea Volcano",
+    category: "Attractions",
+    suggestion: "Great for the Volcanoes blog post or guide"
+  },
+  {
+    path: "/images/attractions/akaka-falls3.webp",
+    name: "Akaka Falls 3",
+    category: "Attractions",
+    suggestion: "Additional Akaka Falls photo for waterfall content"
+  },
+  {
+    path: "/images/activities/manta-ray.webp",
+    name: "Manta Ray",
+    category: "Activities",
+    suggestion: "Could add to activities page or night snorkeling blog"
+  },
+  {
+    path: "/images/rooms-hero.webp",
+    name: "Rooms Hero",
+    category: "Heroes",
+    suggestion: "Hero image - could replace current rooms page hero"
+  },
+  {
+    path: "/images/location-hero.webp",
+    name: "Location Hero",
+    category: "Heroes",
+    suggestion: "Hero image for a location/directions page"
+  },
+  {
+    path: "/images/amenities-hero.webp",
+    name: "Amenities Hero",
+    category: "Heroes",
+    suggestion: "Hero image for an amenities page"
+  },
+  {
+    path: "/images/contact-hero.webp",
+    name: "Contact Hero",
+    category: "Heroes",
+    suggestion: "Could replace current contact page hero"
+  }
+];
+
+const categories = [...new Set(unusedImages.map(img => img.category))];
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="review-hero">
+    <div class="container">
+      <a href="/admin" class="back-link">&larr; Back to Admin</a>
+      <h1>Unused Images</h1>
+      <p>These {unusedImages.length} images exist but aren't displayed on the website</p>
+    </div>
+  </section>
+
+  <section class="review-section">
+    <div class="container">
+      <div class="review-intro">
+        <p>Review these images and let us know which ones you'd like to add to the website. You can approve, skip, or suggest where each image should go.</p>
+      </div>
+
+      <form id="reviewForm" class="review-form">
+        {categories.map(category => (
+          <div class="category-section">
+            <h2 class="category-title">{category}</h2>
+            <div class="image-grid">
+              {unusedImages.filter(img => img.category === category).map(image => (
+                <div class="image-card" data-path={image.path}>
+                  <div class="image-preview">
+                    <img src={image.path} alt={image.name} loading="lazy" />
+                  </div>
+                  <div class="image-info">
+                    <h4>{image.name}</h4>
+                    <p class="suggestion">{image.suggestion}</p>
+                  </div>
+                  <div class="image-actions">
+                    <label class="action-option">
+                      <input type="radio" name={`action-${image.path.replace(/\//g, '-')}`} value="use" />
+                      <span class="option-btn use">Use This</span>
+                    </label>
+                    <label class="action-option">
+                      <input type="radio" name={`action-${image.path.replace(/\//g, '-')}`} value="skip" />
+                      <span class="option-btn skip">Skip</span>
+                    </label>
+                    <label class="action-option">
+                      <input type="radio" name={`action-${image.path.replace(/\//g, '-')}`} value="delete" />
+                      <span class="option-btn delete">Delete</span>
+                    </label>
+                  </div>
+                  <textarea
+                    name={`comment-${image.path.replace(/\//g, '-')}`}
+                    placeholder="Where should this image go? Any notes..."
+                    rows="2"
+                  ></textarea>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        <div class="review-summary">
+          <div class="reviewer-info">
+            <label>
+              Your Name
+              <input type="text" name="reviewerName" placeholder="e.g., Dad" required />
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary btn-large" id="submitBtn">
+            Submit Image Review
+          </button>
+        </div>
+      </form>
+
+      <div id="successMessage" class="success-message" style="display: none;">
+        <div class="success-icon">✓</div>
+        <h2>Thank You!</h2>
+        <p>Your image review has been submitted. We'll update the website based on your feedback.</p>
+      </div>
+    </div>
+  </section>
+</PreviewLayout>
+
+<script>
+  const form = document.getElementById('reviewForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const successMessage = document.getElementById('successMessage');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+
+    const formData = new FormData(form);
+    const reviewerName = formData.get('reviewerName');
+
+    // Collect image decisions
+    const imageDecisions = [];
+    const cards = document.querySelectorAll('.image-card');
+
+    cards.forEach(card => {
+      const path = card.dataset.path;
+      const safeKey = path.replace(/\//g, '-');
+      const action = formData.get(`action-${safeKey}`);
+      const comment = formData.get(`comment-${safeKey}`);
+      const name = card.querySelector('h4')?.textContent || '';
+
+      if (action) {
+        imageDecisions.push({
+          id: `image-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          type: 'image-review',
+          priority: action === 'use' ? 'medium' : 'low',
+          page: '/admin/unused-images',
+          description: action === 'use'
+            ? `📸 USE IMAGE: ${name} (${path})${comment ? ` - "${comment}"` : ''}`
+            : action === 'delete'
+            ? `🗑️ DELETE IMAGE: ${name} (${path})${comment ? ` - "${comment}"` : ''}`
+            : `⏭️ SKIP IMAGE: ${name} (${path})${comment ? ` - "${comment}"` : ''}`,
+          status: 'pending',
+          requestedBy: reviewerName,
+          created: new Date().toISOString()
+        });
+      }
+    });
+
+    if (imageDecisions.length === 0) {
+      alert('Please make a decision on at least one image');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Image Review';
+      return;
+    }
+
+    try {
+      // Get existing change requests
+      const getResponse = await fetch('/.netlify/functions/data-store', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          store: 'changeRequests',
+          action: 'get',
+          key: 'data'
+        })
+      });
+
+      let existing = [];
+      if (getResponse.ok) {
+        existing = await getResponse.json() || [];
+      }
+
+      // Add new decisions
+      const updated = [...existing, ...imageDecisions];
+
+      // Save back
+      await fetch('/.netlify/functions/data-store', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          store: 'changeRequests',
+          action: 'set',
+          key: 'data',
+          data: updated
+        })
+      });
+
+      // Show success
+      form.style.display = 'none';
+      successMessage.style.display = 'block';
+
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      alert('There was an error submitting your review. Please try again.');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Image Review';
+    }
+  });
+</script>
+
+<style>
+  .review-hero {
+    background: var(--gradient-primary);
+    color: #fff;
+    padding: 8rem 2rem 3rem;
+  }
+
+  .back-link {
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    font-size: 0.875rem;
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+
+  .back-link:hover {
+    color: #fff;
+  }
+
+  .review-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .review-hero p {
+    opacity: 0.9;
+  }
+
+  .review-section {
+    padding: 3rem 2rem;
+    background: var(--color-bg-alt);
+  }
+
+  .review-intro {
+    max-width: 700px;
+    margin: 0 auto 2rem;
+    text-align: center;
+  }
+
+  .review-intro p {
+    color: var(--color-text-light);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+
+  .review-form {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .category-section {
+    margin-bottom: 3rem;
+  }
+
+  .category-title {
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-accent);
+  }
+
+  .image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .image-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+
+  .image-preview {
+    height: 200px;
+    overflow: hidden;
+  }
+
+  .image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .image-info {
+    padding: 1rem 1.25rem;
+  }
+
+  .image-info h4 {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    color: var(--color-text);
+  }
+
+  .suggestion {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    line-height: 1.5;
+  }
+
+  .image-actions {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .action-option {
+    cursor: pointer;
+    flex: 1;
+    min-width: 80px;
+  }
+
+  .action-option input {
+    display: none;
+  }
+
+  .option-btn {
+    display: block;
+    text-align: center;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border: 2px solid #ddd;
+    transition: all 0.2s;
+  }
+
+  .option-btn.use {
+    border-color: #10B981;
+    color: #10B981;
+  }
+
+  .option-btn.skip {
+    border-color: #9CA3AF;
+    color: #9CA3AF;
+  }
+
+  .option-btn.delete {
+    border-color: #EF4444;
+    color: #EF4444;
+  }
+
+  .action-option input:checked + .option-btn.use {
+    background: #10B981;
+    color: #fff;
+  }
+
+  .action-option input:checked + .option-btn.skip {
+    background: #9CA3AF;
+    color: #fff;
+  }
+
+  .action-option input:checked + .option-btn.delete {
+    background: #EF4444;
+    color: #fff;
+  }
+
+  .image-card textarea {
+    width: calc(100% - 2.5rem);
+    margin: 1rem 1.25rem;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.875rem;
+    resize: vertical;
+  }
+
+  .image-card textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .review-summary {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-top: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .reviewer-info {
+    margin-bottom: 1.5rem;
+  }
+
+  .reviewer-info label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+  }
+
+  .reviewer-info input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.9375rem;
+  }
+
+  .reviewer-info input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .btn-large {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.0625rem;
+  }
+
+  .success-message {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: #fff;
+    border-radius: 16px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    background: #10B981;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin: 0 auto 1.5rem;
+  }
+
+  .success-message h2 {
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+  }
+
+  .success-message p {
+    color: var(--color-text-light);
+  }
+
+  @media (max-width: 600px) {
+    .image-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .review-hero {
+      padding: 6rem 1.5rem 2rem;
+    }
+  }
+</style>
