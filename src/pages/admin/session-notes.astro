@@ -42,6 +42,13 @@ const today = new Date().toLocaleDateString('en-US', {
           </ul>
         </div>
 
+        <div class="urgent-section">
+          <h3>🚨 ASAP - DNS Setup Required</h3>
+          <ul>
+            <li><strong>Add DNS Record for Secure Terminal</strong> - Add an A record pointing <code>terminal.jmgent.com</code> (or similar) to <code>104.251.212.62</code>. This allows SSL certificate for the web terminal, making it fully secure (HTTPS). Currently using HTTP which works but isn't encrypted.</li>
+          </ul>
+        </div>
+
         <div class="pending-section">
           <h3>⏳ Waiting for Dad's Approval</h3>
           <ul>
@@ -196,13 +203,34 @@ const today = new Date().toLocaleDateString('en-US', {
 
   .completed-section,
   .pending-section,
-  .roadmap-section {
+  .roadmap-section,
+  .urgent-section {
     margin-bottom: 1.5rem;
+  }
+
+  .urgent-section {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: -0.5rem -0.5rem 1.5rem;
+  }
+
+  .urgent-section h3 {
+    color: #dc2626;
+  }
+
+  .urgent-section code {
+    background: rgba(239, 68, 68, 0.15);
+    padding: 0.125rem 0.375rem;
+    border-radius: 4px;
+    font-family: monospace;
   }
 
   .completed-section h3,
   .pending-section h3,
-  .roadmap-section h3 {
+  .roadmap-section h3,
+  .urgent-section h3 {
     font-size: 1rem;
     color: var(--color-text);
     margin-bottom: 0.75rem;
