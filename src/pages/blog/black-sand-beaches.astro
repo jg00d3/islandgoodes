@@ -1,9 +1,15 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
 
 const title = "Black Sand Beaches: A Guide to Hawaii's Unique Shorelines";
 const description = "Discover the Big Island's stunning black sand beaches, formed from volcanic lava. Visit Punalu'u, Kehena, and other unique beaches near Hilo.";
 const date = "2025-09-01";
+const relatedPosts = [
+  { slug: "snorkeling-big-island", title: "Best Snorkeling Spots on the Big Island", image: "/images/blog/snorkeling.webp", category: "Activities" },
+  { slug: "swimming-holes-hilo", title: "Hidden Swimming Holes Near Hilo", image: "/images/blog/swimming-hole.webp", category: "Nature" },
+  { slug: "whale-watching-hawaii", title: "Whale Watching Season in Hawaii", image: "/images/blog/whale-watching.webp", category: "Nature" }
+];
 ---
 
 <BaseLayout title={title} description={description}>
@@ -93,6 +99,8 @@ const date = "2025-09-01";
         <p>Book your stay at Island Goodes and discover Hawaii's black sand beaches.</p>
         <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary" target="_blank" rel="noopener">Check Availability</a>
       </div>
+
+      <RelatedPosts posts={relatedPosts} />
     </div>
   </article>
 </BaseLayout>

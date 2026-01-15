@@ -1,9 +1,15 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
 
 const title = "Kona Coffee Farm Tours: Experience Hawaii's Famous Brew";
 const description = "Visit Kona coffee farms and learn about Hawaii's world-famous coffee. Tours, tastings, and the history behind the Big Island's beloved crop.";
 const date = "2025-10-01";
+const relatedPosts = [
+  { slug: "hamakua-coast-waterfalls", title: "Chasing Waterfalls on the Hamakua Coast", image: "/images/blog/waterfalls.webp", category: "Nature" },
+  { slug: "hawaii-volcanoes-national-park", title: "Hawaii Volcanoes National Park Guide", image: "/images/blog/volcanoes.webp", category: "Attractions" },
+  { slug: "downtown-hilo-guide", title: "A Local's Guide to Downtown Hilo", image: "/images/blog/downtown-hilo.webp", category: "Guide" }
+];
 ---
 
 <BaseLayout title={title} description={description}>
@@ -137,6 +143,8 @@ const date = "2025-10-01";
         <p>Every room at Island Goodes includes a coffee maker with fresh Kona coffee—the perfect start to your Big Island adventures.</p>
         <a href="https://v2.reservationkey.com/3655/reserve/c" class="btn btn-primary" target="_blank" rel="noopener">Book Your Stay</a>
       </div>
+
+      <RelatedPosts posts={relatedPosts} />
     </div>
   </article>
 </BaseLayout>

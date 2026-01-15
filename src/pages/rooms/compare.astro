@@ -13,7 +13,7 @@ const rooms = [
     view: "Ocean View",
     bed: "Sleep Number King",
     image: "/images/rooms/hilo-bay/bed.webp",
-    highlights: ["Panoramic ocean views", "Most popular room", "Private lanai", "En-suite bathroom"],
+    highlights: ["Panoramic ocean views", "Most popular room", "Private lanai", "Outdoor cooking area"],
     amenities: {
       oceanView: true,
       mountainView: false,
@@ -22,7 +22,8 @@ const rooms = [
       sleepNumber: true,
       wifi: true,
       ac: true,
-      groundFloor: false
+      groundFloor: true,
+      lanaiCooking: true
     }
   },
   {
@@ -42,7 +43,8 @@ const rooms = [
       sleepNumber: true,
       wifi: true,
       ac: true,
-      groundFloor: false
+      groundFloor: true,
+      lanaiCooking: false
     }
   },
   {
@@ -53,7 +55,7 @@ const rooms = [
     view: "Mountain View",
     bed: "Sleep Number King",
     image: "/images/rooms/mauna-kea/bed.webp",
-    highlights: ["Mountain views", "Stargazing potential", "Peaceful setting", "Private lanai"],
+    highlights: ["Mountain views", "Stargazing potential", "Peaceful setting", "Outdoor cooking area"],
     amenities: {
       oceanView: false,
       mountainView: true,
@@ -62,7 +64,8 @@ const rooms = [
       sleepNumber: true,
       wifi: true,
       ac: true,
-      groundFloor: false
+      groundFloor: true,
+      lanaiCooking: true
     }
   },
   {
@@ -73,7 +76,7 @@ const rooms = [
     view: "Garden View",
     bed: "Sleep Number King",
     image: "/images/rooms/ginger/room.webp",
-    highlights: ["Ground floor access", "Garden setting", "Cozy retreat", "Easy accessibility"],
+    highlights: ["Garden setting", "Cozy retreat", "Easy accessibility", "Outdoor cooking area"],
     amenities: {
       oceanView: false,
       mountainView: false,
@@ -82,7 +85,8 @@ const rooms = [
       sleepNumber: true,
       wifi: true,
       ac: true,
-      groundFloor: true
+      groundFloor: true,
+      lanaiCooking: true
     }
   }
 ];
@@ -95,7 +99,8 @@ const amenityLabels = {
   sleepNumber: "Sleep Number Bed",
   wifi: "Free WiFi",
   ac: "Air Conditioning",
-  groundFloor: "Ground Floor"
+  groundFloor: "Ground Floor",
+  lanaiCooking: "Lanai Cooking Area"
 };
 ---
 
@@ -117,7 +122,7 @@ const amenityLabels = {
   <section class="compare-section">
     <div class="container">
       <div class="compare-intro">
-        <p>All rooms include complimentary WiFi, air conditioning, private lanai, and access to our pool and hot tub.</p>
+        <p>All rooms are ground floor with no steps, include complimentary WiFi, air conditioning, private lanai, and access to our pool and hot tub. Hilo Bay, Mauna Kea, and Ginger rooms feature outdoor lanai cooking areas with appliances available upon request.</p>
       </div>
 
       <!-- Mobile-friendly cards view -->

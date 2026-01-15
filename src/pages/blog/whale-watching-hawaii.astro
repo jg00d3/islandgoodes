@@ -1,11 +1,17 @@
 ---
 import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
 
 const title = "Whale Watching Season in Hawaii: Your Complete Guide";
 const description = "Humpback whales visit Hawaii from December through April. Learn the best spots, tours, and tips for whale watching on the Big Island.";
 const publishDate = "2025-12-01";
 const category = "Nature";
 const image = "/images/blog/whale-watching.webp";
+const relatedPosts = [
+  { slug: "snorkeling-big-island", title: "Best Snorkeling Spots on the Big Island", image: "/images/blog/snorkeling.webp", category: "Activities" },
+  { slug: "black-sand-beaches", title: "Black Sand Beaches of the Big Island", image: "/images/blog/black-sand.webp", category: "Beaches" },
+  { slug: "mauna-kea-stargazing", title: "Stargazing on Mauna Kea", image: "/images/blog/mauna-kea.webp", category: "Activities" }
+];
 ---
 
 <PreviewLayout title={title} description={description}>
@@ -93,6 +99,8 @@ const image = "/images/blog/whale-watching.webp";
           <p>Book the Hilo Bay Room for the best chance to spot whales from your private lanai. Our oceanview accommodations put you front and center for Hawaii's most magical wildlife experience.</p>
           <a href="/book" class="btn btn-primary btn-large">Book Your Stay</a>
         </div>
+
+        <RelatedPosts posts={relatedPosts} />
 
         <div class="back-link">
           <a href="/blog">← Back to Blog</a>

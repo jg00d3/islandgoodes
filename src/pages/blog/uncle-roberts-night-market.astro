@@ -1,7 +1,13 @@
 ---
 import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
 
 const title = "Uncle Robert's Wednesday Night Market: The Real Puna Experience | Island Goodes";
+const relatedPosts = [
+  { slug: "hilo-farmers-market", title: "Hilo Farmers Market Guide", image: "/images/blog/farmers-market.webp", category: "Food" },
+  { slug: "downtown-hilo-guide", title: "A Local's Guide to Downtown Hilo", image: "/images/blog/downtown-hilo.webp", category: "Guide" },
+  { slug: "best-poke-hilo", title: "Best Poke in Hilo", image: "/images/blog/poke-bowl.webp", category: "Food" }
+];
 const description = "Experience authentic Hawaiian culture at Uncle Robert's Wednesday Night Market in Kalapana. Live music, awa bar, local food, and the spirit of Puna.";
 const publishDate = "2025-11-20";
 ---
@@ -123,6 +129,8 @@ const publishDate = "2025-11-20";
           </p>
           <a href="/book" class="btn btn-primary">Book Your Stay</a>
         </div>
+
+        <RelatedPosts posts={relatedPosts} />
       </div>
     </div>
   </article>

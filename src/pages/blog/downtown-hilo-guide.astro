@@ -1,7 +1,13 @@
 ---
 import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
 
 const title = "A Local's Guide to Downtown Hilo";
+const relatedPosts = [
+  { slug: "hilo-farmers-market", title: "Hilo Farmers Market Guide", image: "/images/blog/farmers-market.webp", category: "Food" },
+  { slug: "best-poke-hilo", title: "Best Poke in Hilo", image: "/images/blog/poke-bowl.webp", category: "Food" },
+  { slug: "uncle-roberts-night-market", title: "Uncle Robert's Night Market", image: "/images/blog/night-market.webp", category: "Food" }
+];
 const description = "Farmers markets, historic buildings, local restaurants, and hidden gems in Hawaii's most authentic town.";
 ---
 
@@ -117,6 +123,8 @@ const description = "Farmers markets, historic buildings, local restaurants, and
           <p>Just 5 minutes from downtown Hilo, Island Goodes puts you close to all the town's attractions while offering peaceful oceanview accommodations when you're ready to relax.</p>
           <a href="/book" class="btn btn-primary btn-large">Book Your Stay</a>
         </div>
+
+        <RelatedPosts posts={relatedPosts} />
 
         <div class="back-link">
           <a href="/blog">← Back to Blog</a>
