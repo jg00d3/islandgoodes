@@ -142,20 +142,23 @@ exports.handler = async (event) => {
     }
 
     if (reportType === 'cities') {
-      // Geographic data by city
+      // Geographic data by city with region/state
       [response] = await analyticsDataClient.runReport({
         property: `properties/${propertyId}`,
         dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
-        dimensions: [{ name: 'city' }, { name: 'country' }],
-        metrics: [{ name: 'activeUsers' }],
+        dimensions: [{ name: 'city' }, { name: 'region' }, { name: 'country' }, { name: 'countryId' }],
+        metrics: [{ name: 'activeUsers' }, { name: 'sessions' }],
         orderBys: [{ metric: { metricName: 'activeUsers' }, desc: true }],
-        limit: 15
+        limit: 30
       });
 
       const cities = response.rows?.map(row => ({
         city: row.dimensionValues[0].value,
-        country: row.dimensionValues[1].value,
-        users: row.metricValues[0].value
+        region: row.dimensionValues[1].value,
+        country: row.dimensionValues[2].value,
+        countryCode: row.dimensionValues[3].value,
+        users: row.metricValues[0].value,
+        sessions: row.metricValues[1].value
       })) || [];
 
       return {

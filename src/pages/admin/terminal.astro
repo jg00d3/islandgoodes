@@ -100,10 +100,47 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
 </script>
 
 <style>
+  /* Hide share button and footer on terminal page */
+  .share-buttons {
+    display: none !important;
+  }
+
+  .site-footer {
+    display: none !important;
+  }
+
+  /* Minimize header to thin bar */
+  .site-header {
+    background: #1a1a2e !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+  }
+
+  .site-header .nav-container {
+    padding: 0.5rem 1rem !important;
+  }
+
+  .site-header .logo-text {
+    font-size: 1.1rem !important;
+    color: #fff !important;
+  }
+
+  .site-header .permit-number {
+    display: none !important;
+  }
+
+  .site-header .nav-links {
+    display: none !important;
+  }
+
+  .site-header .mobile-menu-toggle {
+    display: none !important;
+  }
+
+  /* Compact terminal hero */
   .terminal-hero {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     color: #fff;
-    padding: 6rem 2rem 1rem;
+    padding: 4rem 1rem 0.5rem;
   }
 
   .hero-header {
@@ -170,8 +207,8 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
 
   .terminal-container {
     width: 100%;
-    height: calc(100vh - 350px);
-    min-height: 400px;
+    height: calc(100vh - 180px);
+    min-height: 500px;
     background: #0d1117;
   }
 
@@ -261,7 +298,7 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
 
   @media (max-width: 768px) {
     .terminal-hero {
-      padding: 4.5rem 1rem 0.5rem;
+      padding: 3.5rem 0.75rem 0.25rem;
     }
 
     .hero-header {
@@ -271,7 +308,7 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
     }
 
     .hero-header h1 {
-      font-size: 1.25rem;
+      font-size: 1rem;
     }
 
     .hero-header p {
@@ -283,8 +320,8 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
     }
 
     .terminal-container {
-      height: calc(100vh - 120px);
-      min-height: 300px;
+      height: calc(100vh - 80px);
+      min-height: 400px;
     }
 
     .terminal-help {
@@ -295,11 +332,11 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
   /* Extra small screens - optimize for keyboard */
   @media (max-height: 500px) {
     .terminal-hero {
-      padding: 3.5rem 0.5rem 0.25rem;
+      padding: 3rem 0.5rem 0.25rem;
     }
 
     .terminal-container {
-      height: calc(100vh - 60px);
+      height: calc(100vh - 50px);
       min-height: 200px;
     }
   }
