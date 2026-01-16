@@ -6,38 +6,123 @@ const description = "Planned features and improvements";
 
 // Default roadmap items
 const defaultRoadmap = [
+  // === COMPLETED ===
   {
     id: 1,
     title: "Secure admin authentication",
-    description: "Move credentials from client-side to serverless functions with environment variables",
+    description: "Server-side bcrypt password hashing with Netlify Functions",
     priority: "critical",
     category: "Security",
-    status: "planned"
+    status: "completed",
+    completedDate: "January 14, 2026"
   },
   {
     id: 2,
     title: "Create missing logo.png",
-    description: "Design and add logo.png referenced in structured data",
+    description: "Created 512x512 logo.png for structured data/SEO",
     priority: "critical",
     category: "Assets",
-    status: "planned"
-  },
-  {
-    id: 3,
-    title: "Unify layout systems",
-    description: "Consolidate BaseLayout and PreviewLayout into single consistent system",
-    priority: "high",
-    category: "Code",
-    status: "planned"
+    status: "completed",
+    completedDate: "January 12, 2026"
   },
   {
     id: 4,
     title: "WebP image optimization",
-    description: "Convert all images to WebP format for 30-80% size reduction",
+    description: "Converted 161 images to WebP format (58% size reduction)",
     priority: "high",
     category: "Performance",
+    status: "completed",
+    completedDate: "January 13, 2026"
+  },
+  {
+    id: 6,
+    title: "Add keyboard navigation skip-links",
+    description: "Skip-to-content link added for accessibility",
+    priority: "medium",
+    category: "Accessibility",
+    status: "completed",
+    completedDate: "January 15, 2026"
+  },
+  {
+    id: 7,
+    title: "Add ARIA labels throughout site",
+    description: "ARIA attributes added to navigation and interactive elements",
+    priority: "medium",
+    category: "Accessibility",
+    status: "completed",
+    completedDate: "January 15, 2026"
+  },
+  {
+    id: 8,
+    title: "Remove obsolete files",
+    description: "Removed 33 _old-* backup files and 12 unused images",
+    priority: "medium",
+    category: "Maintenance",
+    status: "completed",
+    completedDate: "January 16, 2026"
+  },
+  {
+    id: 9,
+    title: "Add sitemap.xml and robots.txt",
+    description: "Created sitemap and robots.txt for better SEO",
+    priority: "low",
+    category: "SEO",
+    status: "completed",
+    completedDate: "January 12, 2026"
+  },
+  {
+    id: 10,
+    title: "Room comparison feature",
+    description: "Side-by-side room comparison page at /rooms/compare",
+    priority: "low",
+    category: "Feature",
+    status: "completed",
+    completedDate: "January 15, 2026"
+  },
+  {
+    id: 15,
+    title: "Auto-slideshow for room and photo gallery lightboxes",
+    description: "Play/pause button, speed selector, and keyboard controls",
+    priority: "medium",
+    category: "Feature",
+    status: "completed",
+    completedDate: "January 10, 2026"
+  },
+  {
+    id: 16,
+    title: "Secure web terminal",
+    description: "Admin terminal access at /admin/terminal with SSL",
+    priority: "high",
+    category: "Feature",
+    status: "completed",
+    completedDate: "January 16, 2026"
+  },
+  // === PLANNED ===
+  {
+    id: 3,
+    title: "Unify layout systems",
+    description: "Consolidate BaseLayout and PreviewLayout into single consistent system",
+    priority: "medium",
+    category: "Code",
     status: "planned"
   },
+  {
+    id: 13,
+    title: "AI Chat widget on website",
+    description: "Add floating chat bubble to main website for visitor AI assistance. Backend is ready - needs frontend widget.",
+    priority: "high",
+    category: "Feature",
+    status: "planned"
+  },
+  {
+    id: 17,
+    title: "Virtual Trip Planner",
+    description: "Interactive tool for guests to plan Big Island itinerary. Select trip length/interests, get day-by-day suggestions with distances, insider tips, printable itinerary.",
+    priority: "high",
+    category: "Feature",
+    status: "planned"
+  },
+  // === IN PROGRESS ===
   {
     id: 5,
     title: "Complete Ginger Room photography",
@@ -46,46 +131,7 @@ const defaultRoadmap = [
     category: "Content",
     status: "in-progress"
   },
-  {
-    id: 6,
-    title: "Add keyboard navigation skip-links",
-    description: "Improve accessibility with skip navigation links",
-    priority: "medium",
-    category: "Accessibility",
-    status: "planned"
-  },
-  {
-    id: 7,
-    title: "Add ARIA labels throughout site",
-    description: "Enhance screen reader support with proper ARIA attributes",
-    priority: "medium",
-    category: "Accessibility",
-    status: "planned"
-  },
-  {
-    id: 8,
-    title: "Remove obsolete files",
-    description: "Clean up 15+ unused files cluttering pages directory",
-    priority: "medium",
-    category: "Maintenance",
-    status: "planned"
-  },
-  {
-    id: 9,
-    title: "Add sitemap.xml and robots.txt",
-    description: "Improve SEO with proper sitemap and robots configuration",
-    priority: "low",
-    category: "SEO",
-    status: "planned"
-  },
-  {
-    id: 10,
-    title: "Room comparison feature",
-    description: "Allow guests to compare rooms side-by-side",
-    priority: "low",
-    category: "Feature",
-    status: "planned"
-  },
+  // === BACKLOG ===
   {
     id: 11,
     title: "Online booking integration",
@@ -103,29 +149,12 @@ const defaultRoadmap = [
     status: "backlog"
   },
   {
-    id: 13,
-    title: "AI Chat widget on website",
-    description: "Add floating chat bubble to main website for visitor AI assistance. Backend is ready - needs frontend widget.",
-    priority: "high",
-    category: "Feature",
-    status: "planned"
-  },
-  {
     id: 14,
     title: "Voice assistant for guest rooms",
-    description: "Integrate AI assistant with Alexa devices or tablets in guest rooms for voice-activated concierge. Options: custom Alexa Skill, Google Home, or tablet with speech-to-text.",
+    description: "Integrate AI assistant with Alexa devices or tablets in guest rooms for voice-activated concierge.",
     priority: "medium",
     category: "Feature",
     status: "backlog"
-  },
-  {
-    id: 15,
-    title: "Auto-slideshow for room and photo gallery lightboxes",
-    description: "Added play/pause button, speed selector (Slow 5s, Medium 3s, Fast 1.5s), and keyboard controls to lightbox slideshows",
-    priority: "medium",
-    category: "Feature",
-    status: "completed",
-    completedDate: "January 10, 2026"
   }
 ];
 ---
