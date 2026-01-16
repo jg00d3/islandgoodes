@@ -75,7 +75,8 @@
       "Bash(for:*)",
       "Bash(do echo \"$f:\")",
       "Bash(do identify \"$f\")",
-      "Bash(convert:*)"
+      "Bash(convert:*)",
+      "Bash(python3:*)"
     ]
   }
 }
