@@ -421,6 +421,21 @@ const description = "Analytics dashboard for Island Goodes.";
                 <polyline points="9,18 15,12 9,6"/>
               </svg>
             </a>
+            <a href="/admin/terminal" class="tool-item owner-only" id="terminalLink" style="display: none;">
+              <div class="tool-icon" style="background: #1a1a2e;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2">
+                  <polyline points="4 17 10 11 4 5"/>
+                  <line x1="12" y1="19" x2="20" y2="19"/>
+                </svg>
+              </div>
+              <div class="tool-info">
+                <strong>Dev Terminal</strong>
+                <p>Secure web terminal access</p>
+              </div>
+              <svg class="tool-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9,18 15,12 9,6"/>
+              </svg>
+            </a>
           </div>
         </div>
       </div>
@@ -2239,11 +2254,35 @@ const description = "Analytics dashboard for Island Goodes.";
   showDashboard = function() {
     originalShowDashboard();
     initSettingsToggles();
+    showOwnerOnlyTools();
   };
 
   // If already logged in, init settings now
   if (getSession()) {
     initSettingsToggles();
+  }
+
+  // Show terminal link only for owner (sysadmroot@gmail.com)
+  async function showOwnerOnlyTools() {
+    const session = getSession();
+    if (!session) return;
+
+    // Get the logged-in admin's email from server
+    try {
+      const admins = await getAdmins();
+      const currentAdmin = admins.find(a => a.id === session.id || a.username === session.username);
+      if (currentAdmin && currentAdmin.email === 'sysadmroot@gmail.com') {
+        const terminalLink = document.getElementById('terminalLink');
+        if (terminalLink) terminalLink.style.display = 'flex';
+      }
+    } catch (e) {
+      console.error('Failed to check owner status:', e);
+    }
+  }
+
+  // Call after dashboard loads
+  if (getSession()) {
+    showOwnerOnlyTools();
   }
 
   // ============================================
