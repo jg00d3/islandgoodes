@@ -76,7 +76,8 @@
       "Bash(do echo \"$f:\")",
       "Bash(do identify \"$f\")",
       "Bash(convert:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(certbot:*)"
     ]
   }
 }
