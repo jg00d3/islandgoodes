@@ -4,10 +4,22 @@ import PreviewLayout from '../../layouts/PreviewLayout.astro';
 const title = "Changelog | Island Goodes Admin";
 const description = "Version history and release notes";
 
-const CURRENT_VERSION = "2.8.1";
-const RELEASE_DATE = "January 15, 2026";
+const CURRENT_VERSION = "2.8.2";
+const RELEASE_DATE = "January 16, 2026";
 
 const changelog = [
+  {
+    version: "2.8.2",
+    date: "January 16, 2026",
+    type: "Maintenance",
+    changes: [
+      { type: "added", text: "Secure web terminal at /admin/terminal with SSL and authentication" },
+      { type: "added", text: "Unused images review system with safe deletion workflow" },
+      { type: "removed", text: "Removed 12 unused images (moved to _deleted folder for safety)" },
+      { type: "improved", text: "Terminal page minimal UI with header-only navigation" },
+      { type: "added", text: "Multi-project terminal setup script for future use" },
+    ]
+  },
   {
     version: "2.8.1",
     date: "January 15, 2026",
