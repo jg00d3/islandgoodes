@@ -67,6 +67,7 @@ export async function handler(event) {
 
     // Look up requester's email from admins store
     let requesterEmail = null;
+    let ownerEmail = null;
     try {
       const adminStore = getStore({
         name: 'admins',
@@ -75,13 +76,29 @@ export async function handler(event) {
       });
       const admins = await adminStore.get('data', { type: 'json' }) || [];
 
+      // Aliases for common nicknames
+      const aliases = {
+        'Dad': 'Garvin Goode',
+        'dad': 'Garvin Goode',
+        'Mom': 'Garvin Goode', // adjust if different
+      };
+
+      const requestedByName = aliases[request.requestedBy] || request.requestedBy;
+
       // Find admin by name (requestedBy field)
       const requester = admins.find(a =>
+        a.fullName === requestedByName ||
         a.fullName === request.requestedBy ||
         a.username === request.requestedBy
       );
       if (requester) {
         requesterEmail = requester.email;
+      }
+
+      // Also get owner email to CC
+      const owner = admins.find(a => a.role === 'owner');
+      if (owner && owner.email !== requesterEmail) {
+        ownerEmail = owner.email;
       }
     } catch (adminError) {
       console.error('Failed to look up requester:', adminError);
@@ -158,9 +175,14 @@ export async function handler(event) {
           </div>
         `;
 
+        const toAddresses = [requesterEmail];
+        if (ownerEmail) {
+          toAddresses.push(ownerEmail);
+        }
+
         await resend.emails.send({
           from: 'Island Goodes Admin <noreply@islandgoodes.com>',
-          to: [requesterEmail],
+          to: toAddresses,
           subject: `✅ Change Request Completed: ${typeLabels[request.type] || request.type} - ${request.page || 'General'}`,
           html: emailHtml
         });
