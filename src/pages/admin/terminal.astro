@@ -12,37 +12,14 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
   <div id="authCheck"></div>
 
   <div id="terminal-page" style="display: none;">
-    <section class="terminal-section">
-      <div class="container">
-        <div class="security-notice">
-          <div class="notice-icon">🔒</div>
-          <div class="notice-content">
-            <strong>Ultra Secure Access</strong>
-            <p>You'll be prompted for terminal credentials. These are separate from your admin login for extra security.</p>
-          </div>
-        </div>
-
-        <div class="terminal-container" id="terminalContainer">
-          <iframe
-            id="terminalFrame"
-            src={TERMINAL_URL}
-            class="terminal-frame"
-            allow="clipboard-read; clipboard-write"
-          ></iframe>
-        </div>
-
-        <div class="terminal-help">
-          <h3>Quick Tips</h3>
-          <ul>
-            <li><strong>Scroll:</strong> Mouse wheel or Ctrl+Shift+Up/Down</li>
-            <li><strong>Copy:</strong> Select text, then Ctrl+Shift+C</li>
-            <li><strong>Paste:</strong> Ctrl+Shift+V</li>
-            <li><strong>Claude Code:</strong> Type <code>claude</code> to start</li>
-            <li><strong>tmux sessions:</strong> Type <code>tmux ls</code> to list</li>
-          </ul>
-        </div>
-      </div>
-    </section>
+    <div class="terminal-container" id="terminalContainer">
+      <iframe
+        id="terminalFrame"
+        src={TERMINAL_URL}
+        class="terminal-frame"
+        allow="clipboard-read; clipboard-write"
+      ></iframe>
+    </div>
   </div>
 
   <div id="accessDenied" class="access-denied" style="display: none;">
@@ -85,26 +62,35 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
 </script>
 
 <style is:global>
-  /* Hide share button and footer on terminal page - MUST be global to override layout */
-  /* Use .terminal-page-active class added to body via script */
+  /* Hide everything except minimal header on terminal page */
   body.terminal-page-active .share-buttons,
   body.terminal-page-active .site-footer,
-  body.terminal-page-active .cookie-banner {
+  body.terminal-page-active .cookie-banner,
+  body.terminal-page-active .mobile-menu-overlay {
     display: none !important;
   }
 
-  /* Minimize header to thin bar */
+  /* Minimal header bar */
   body.terminal-page-active .site-header {
     background: #1a1a2e !important;
     border-bottom: 1px solid rgba(255,255,255,0.1) !important;
   }
 
   body.terminal-page-active .site-header .nav-container {
-    padding: 0.5rem 1rem !important;
+    padding: 0.4rem 1rem !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+  }
+
+  body.terminal-page-active .site-header .logo-container {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
   }
 
   body.terminal-page-active .site-header .logo-text {
-    font-size: 1.1rem !important;
+    font-size: 1rem !important;
     color: #fff !important;
   }
 
@@ -113,57 +99,68 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
   body.terminal-page-active .site-header .mobile-menu-toggle {
     display: none !important;
   }
+
+  /* Injected secure badge */
+  .terminal-secure-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: #10B981;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  /* Injected dashboard link */
+  .terminal-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .terminal-dashboard-link {
+    color: #9CA3AF !important;
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .terminal-dashboard-link:hover {
+    color: #fff !important;
+  }
 </style>
 
 <script is:inline>
   // Add class to body immediately for CSS to work
   document.body.classList.add('terminal-page-active');
+
+  // Inject secure badge next to logo
+  document.addEventListener('DOMContentLoaded', function() {
+    const logoContainer = document.querySelector('.logo-container');
+    if (logoContainer && !document.querySelector('.terminal-secure-badge')) {
+      const badge = document.createElement('span');
+      badge.className = 'terminal-secure-badge';
+      badge.innerHTML = '🔒 Secure';
+      logoContainer.appendChild(badge);
+    }
+
+    // Inject dashboard link on right side
+    const navContainer = document.querySelector('.nav-container');
+    if (navContainer && !document.querySelector('.terminal-header-actions')) {
+      const actions = document.createElement('div');
+      actions.className = 'terminal-header-actions';
+      actions.innerHTML = '<a href="/admin" class="terminal-dashboard-link">← Dashboard</a>';
+      navContainer.appendChild(actions);
+    }
+  });
 </script>
 
 <style>
-  .terminal-section {
-    background: #0d1117;
-    padding: 0;
-    padding-top: 50px; /* Account for fixed header */
-    min-height: 100vh;
-  }
-
-  .terminal-section .container {
-    max-width: 100%;
-    padding: 0;
-  }
-
-  .security-notice {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid rgba(16, 185, 129, 0.3);
-    padding: 1rem 1.5rem;
-    margin: 1rem;
-    border-radius: 8px;
-  }
-
-  .notice-icon {
-    font-size: 1.5rem;
-  }
-
-  .notice-content strong {
-    color: #10B981;
-    display: block;
-    margin-bottom: 0.25rem;
-  }
-
-  .notice-content p {
-    margin: 0;
-    color: #9CA3AF;
-    font-size: 0.875rem;
-  }
-
   .terminal-container {
-    width: 100%;
-    height: calc(100vh - 100px);
-    min-height: 500px;
+    position: fixed;
+    top: 40px; /* Height of minimal header */
+    left: 0;
+    right: 0;
+    bottom: 0;
     background: #0d1117;
   }
 
@@ -172,44 +169,6 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
     height: 100%;
     border: none;
     background: #0d1117;
-  }
-
-  .terminal-help {
-    background: #161b22;
-    padding: 1.5rem;
-    margin: 1rem;
-    border-radius: 8px;
-  }
-
-  .terminal-help h3 {
-    color: #fff;
-    margin: 0 0 1rem;
-    font-size: 1rem;
-  }
-
-  .terminal-help ul {
-    margin: 0;
-    padding-left: 1.25rem;
-    color: #9CA3AF;
-    font-size: 0.875rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 0.5rem;
-  }
-
-  .terminal-help li {
-    margin-bottom: 0.25rem;
-  }
-
-  .terminal-help strong {
-    color: #fff;
-  }
-
-  .terminal-help code {
-    background: rgba(255,255,255,0.1);
-    padding: 0.125rem 0.375rem;
-    border-radius: 4px;
-    font-family: monospace;
   }
 
   .access-denied {
@@ -243,34 +202,10 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
 
   /* Fullscreen styles */
   .terminal-container:fullscreen {
-    background: #0d1117;
-    padding: 0;
+    top: 0;
   }
 
   .terminal-container:fullscreen .terminal-frame {
     height: 100vh;
-  }
-
-  @media (max-width: 768px) {
-    .security-notice {
-      display: none;
-    }
-
-    .terminal-container {
-      height: calc(100vh - 50px);
-      min-height: 400px;
-    }
-
-    .terminal-help {
-      display: none;
-    }
-  }
-
-  /* Extra small screens - optimize for keyboard */
-  @media (max-height: 500px) {
-    .terminal-container {
-      height: calc(100vh - 40px);
-      min-height: 200px;
-    }
   }
 </style>
