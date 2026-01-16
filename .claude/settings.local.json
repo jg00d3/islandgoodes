@@ -77,7 +77,8 @@
       "Bash(do identify \"$f\")",
       "Bash(convert:*)",
       "Bash(python3:*)",
-      "Bash(certbot:*)"
+      "Bash(certbot:*)",
+      "Bash(tmux ls:*)"
     ]
   }
 }
