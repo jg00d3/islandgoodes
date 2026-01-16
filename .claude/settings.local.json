@@ -80,7 +80,8 @@
       "Bash(certbot:*)",
       "Bash(tmux ls:*)",
       "Bash(systemctl status ttyd-secure)",
-      "Bash(journalctl:*)"
+      "Bash(journalctl:*)",
+      "Bash(jq:*)"
     ]
   }
 }
