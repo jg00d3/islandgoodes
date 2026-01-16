@@ -12,21 +12,6 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
   <div id="authCheck"></div>
 
   <div id="terminal-page" style="display: none;">
-    <section class="terminal-hero">
-      <div class="container">
-        <div class="hero-header">
-          <div>
-            <h1>Secure Terminal</h1>
-            <p>Web-based access to development server</p>
-          </div>
-          <div class="hero-actions">
-            <a href="/admin/session-notes" class="btn btn-outline">Notes</a>
-            <a href="/admin" class="btn btn-outline">Dashboard</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section class="terminal-section">
       <div class="container">
         <div class="security-notice">
@@ -136,41 +121,11 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
 </script>
 
 <style>
-  /* Compact terminal hero */
-  .terminal-hero {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    color: #fff;
-    padding: 4rem 1rem 0.5rem;
-  }
-
-  .hero-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  .hero-header h1 {
-    font-size: 2rem;
-    margin: 0 0 0.25rem;
-  }
-
-  .hero-header p {
-    margin: 0;
-    opacity: 0.8;
-  }
-
-  .hero-actions {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
   .terminal-section {
     background: #0d1117;
     padding: 0;
-    min-height: calc(100vh - 200px);
+    padding-top: 50px; /* Account for fixed header */
+    min-height: 100vh;
   }
 
   .terminal-section .container {
@@ -207,7 +162,7 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
 
   .terminal-container {
     width: 100%;
-    height: calc(100vh - 180px);
+    height: calc(100vh - 100px);
     min-height: 500px;
     background: #0d1117;
   }
@@ -297,30 +252,12 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
   }
 
   @media (max-width: 768px) {
-    .terminal-hero {
-      padding: 3.5rem 0.75rem 0.25rem;
-    }
-
-    .hero-header {
-      flex-direction: row;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .hero-header h1 {
-      font-size: 1rem;
-    }
-
-    .hero-header p {
-      display: none;
-    }
-
     .security-notice {
       display: none;
     }
 
     .terminal-container {
-      height: calc(100vh - 80px);
+      height: calc(100vh - 50px);
       min-height: 400px;
     }
 
@@ -331,12 +268,8 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
 
   /* Extra small screens - optimize for keyboard */
   @media (max-height: 500px) {
-    .terminal-hero {
-      padding: 3rem 0.5rem 0.25rem;
-    }
-
     .terminal-container {
-      height: calc(100vh - 50px);
+      height: calc(100vh - 40px);
       min-height: 200px;
     }
   }
