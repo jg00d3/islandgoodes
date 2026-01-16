@@ -66,7 +66,8 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
   body.terminal-page-active .share-buttons,
   body.terminal-page-active .site-footer,
   body.terminal-page-active .cookie-banner,
-  body.terminal-page-active .mobile-menu-overlay {
+  body.terminal-page-active .mobile-menu-overlay,
+  body.terminal-page-active .skip-link {
     display: none !important;
   }
 
@@ -110,6 +111,29 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
     font-weight: 500;
   }
 
+  /* Injected header tips */
+  .terminal-header-tips {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    color: #6B7280;
+    font-size: 0.65rem;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .terminal-header-tips span {
+    white-space: nowrap;
+  }
+
+  .terminal-header-tips code {
+    background: rgba(255,255,255,0.1);
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    font-family: monospace;
+    color: #9CA3AF;
+  }
+
   /* Injected dashboard link */
   .terminal-header-actions {
     display: flex;
@@ -119,13 +143,20 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
 
   .terminal-dashboard-link {
     color: #9CA3AF !important;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     text-decoration: none;
     transition: color 0.2s;
+    white-space: nowrap;
   }
 
   .terminal-dashboard-link:hover {
     color: #fff !important;
+  }
+
+  @media (max-width: 900px) {
+    .terminal-header-tips {
+      display: none;
+    }
   }
 </style>
 
@@ -133,7 +164,7 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
   // Add class to body immediately for CSS to work
   document.body.classList.add('terminal-page-active');
 
-  // Inject secure badge next to logo
+  // Inject header elements
   document.addEventListener('DOMContentLoaded', function() {
     const logoContainer = document.querySelector('.logo-container');
     if (logoContainer && !document.querySelector('.terminal-secure-badge')) {
@@ -143,8 +174,17 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
       logoContainer.appendChild(badge);
     }
 
-    // Inject dashboard link on right side
     const navContainer = document.querySelector('.nav-container');
+
+    // Inject tips in center
+    if (navContainer && !document.querySelector('.terminal-header-tips')) {
+      const tips = document.createElement('div');
+      tips.className = 'terminal-header-tips';
+      tips.innerHTML = '<span>Scroll: mouse wheel</span><span>Copy: <code>Ctrl+Shift+C</code></span><span>Paste: <code>Ctrl+Shift+V</code></span><span>Claude: <code>claude</code></span>';
+      navContainer.appendChild(tips);
+    }
+
+    // Inject dashboard link on right
     if (navContainer && !document.querySelector('.terminal-header-actions')) {
       const actions = document.createElement('div');
       actions.className = 'terminal-header-actions';
