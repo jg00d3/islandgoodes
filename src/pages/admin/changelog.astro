@@ -4,10 +4,21 @@ import PreviewLayout from '../../layouts/PreviewLayout.astro';
 const title = "Changelog | Island Goodes Admin";
 const description = "Version history and release notes";
 
-const CURRENT_VERSION = "2.8.0";
+const CURRENT_VERSION = "2.8.1";
 const RELEASE_DATE = "January 15, 2026";
 
 const changelog = [
+  {
+    version: "2.8.1",
+    date: "January 15, 2026",
+    type: "Enhancement",
+    changes: [
+      { type: "added", text: "Rooms dropdown menu in navigation with links to all rooms + Compare" },
+      { type: "added", text: "Mobile sub-menu under Rooms with quick links to each room" },
+      { type: "added", text: "Compare All Rooms button on all 4 individual room pages" },
+      { type: "improved", text: "Better room discovery and comparison access across site" },
+    ]
+  },
   {
     version: "2.8.0",
     date: "January 15, 2026",
