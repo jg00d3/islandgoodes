@@ -99,43 +99,45 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
   });
 </script>
 
-<style>
-  /* Hide share button and footer on terminal page */
-  .share-buttons {
+<style is:global>
+  /* Hide share button and footer on terminal page - MUST be global to override layout */
+  body:has(#terminal-page) .share-buttons {
     display: none !important;
   }
 
-  .site-footer {
+  body:has(#terminal-page) .site-footer {
     display: none !important;
   }
 
   /* Minimize header to thin bar */
-  .site-header {
+  body:has(#terminal-page) .site-header {
     background: #1a1a2e !important;
     border-bottom: 1px solid rgba(255,255,255,0.1) !important;
   }
 
-  .site-header .nav-container {
+  body:has(#terminal-page) .site-header .nav-container {
     padding: 0.5rem 1rem !important;
   }
 
-  .site-header .logo-text {
+  body:has(#terminal-page) .site-header .logo-text {
     font-size: 1.1rem !important;
     color: #fff !important;
   }
 
-  .site-header .permit-number {
+  body:has(#terminal-page) .site-header .permit-number {
     display: none !important;
   }
 
-  .site-header .nav-links {
+  body:has(#terminal-page) .site-header .nav-links {
     display: none !important;
   }
 
-  .site-header .mobile-menu-toggle {
+  body:has(#terminal-page) .site-header .mobile-menu-toggle {
     display: none !important;
   }
+</style>
 
+<style>
   /* Compact terminal hero */
   .terminal-hero {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
