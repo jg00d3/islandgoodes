@@ -101,41 +101,39 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
 
 <style is:global>
   /* Hide share button and footer on terminal page - MUST be global to override layout */
-  body:has(#terminal-page) .share-buttons {
-    display: none !important;
-  }
-
-  body:has(#terminal-page) .site-footer {
+  /* Use .terminal-page-active class added to body via script */
+  body.terminal-page-active .share-buttons,
+  body.terminal-page-active .site-footer,
+  body.terminal-page-active .cookie-banner {
     display: none !important;
   }
 
   /* Minimize header to thin bar */
-  body:has(#terminal-page) .site-header {
+  body.terminal-page-active .site-header {
     background: #1a1a2e !important;
     border-bottom: 1px solid rgba(255,255,255,0.1) !important;
   }
 
-  body:has(#terminal-page) .site-header .nav-container {
+  body.terminal-page-active .site-header .nav-container {
     padding: 0.5rem 1rem !important;
   }
 
-  body:has(#terminal-page) .site-header .logo-text {
+  body.terminal-page-active .site-header .logo-text {
     font-size: 1.1rem !important;
     color: #fff !important;
   }
 
-  body:has(#terminal-page) .site-header .permit-number {
-    display: none !important;
-  }
-
-  body:has(#terminal-page) .site-header .nav-links {
-    display: none !important;
-  }
-
-  body:has(#terminal-page) .site-header .mobile-menu-toggle {
+  body.terminal-page-active .site-header .permit-number,
+  body.terminal-page-active .site-header .nav-links,
+  body.terminal-page-active .site-header .mobile-menu-toggle {
     display: none !important;
   }
 </style>
+
+<script is:inline>
+  // Add class to body immediately for CSS to work
+  document.body.classList.add('terminal-page-active');
+</script>
 
 <style>
   /* Compact terminal hero */
