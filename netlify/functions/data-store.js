@@ -19,7 +19,8 @@ const STORES = {
   contactInquiries: 'contact-inquiries',
   imageOrder: 'image-order',
   photoContributors: 'photo-contributors',
-  blogContributors: 'blog-contributors'
+  blogContributors: 'blog-contributors',
+  planningWorkflow: 'planning-workflow'
 };
 
 // Default admin (only used on first setup - password set via admin-set-password function)

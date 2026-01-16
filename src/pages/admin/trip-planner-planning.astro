@@ -1,0 +1,1280 @@
+---
+import PreviewLayout from '../../layouts/PreviewLayout.astro';
+
+const title = "Feature Planning | Island Goodes Admin";
+const description = "Collaborative planning for Virtual Trip Planner and Guest Check-in System";
+
+// Default planning data structure
+const defaultPlanningData = {
+  sections: [
+    {
+      id: "virtual-trip-planner",
+      title: "Virtual Trip Planner",
+      description: "Interactive tool for guests to plan Big Island itinerary with personalized recommendations",
+      expanded: true,
+      items: [
+        {
+          id: "vtp-inputs",
+          title: "Guest Input Fields",
+          type: "category",
+          status: "not_started",
+          priority: "high",
+          notes: "",
+          children: [
+            { id: "vtp-input-001", title: "Trip dates (arrival/departure)", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "vtp-input-002", title: "Origin city/airport", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "vtp-input-003", title: "Flight information (optional)", checked: false, notes: "", status: "not_started", priority: "medium" },
+            { id: "vtp-input-004", title: "Number of travelers", checked: false, notes: "", status: "not_started", priority: "medium" },
+            { id: "vtp-input-005", title: "Interest categories (beaches, hiking, culture, food, etc.)", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "vtp-input-006", title: "Mobility/accessibility needs", checked: false, notes: "", status: "not_started", priority: "medium" },
+            { id: "vtp-input-007", title: "Budget preference", checked: false, notes: "", status: "not_started", priority: "low" },
+            { id: "vtp-input-008", title: "Preferred pace (relaxed/moderate/packed)", checked: false, notes: "", status: "not_started", priority: "medium" },
+            { id: "vtp-input-009", title: "Rental car needed?", checked: false, notes: "", status: "not_started", priority: "high" }
+          ]
+        },
+        {
+          id: "vtp-itinerary",
+          title: "Itinerary Generation Features",
+          type: "category",
+          status: "not_started",
+          priority: "high",
+          notes: "",
+          children: [
+            { id: "vtp-itin-001", title: "Day-by-day activity suggestions", checked: false, notes: "", status: "not_started", priority: "critical" },
+            { id: "vtp-itin-002", title: "Distance/drive time between locations", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "vtp-itin-003", title: "Insider tips for each activity", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "vtp-itin-004", title: "Weather considerations by season", checked: false, notes: "", status: "not_started", priority: "medium" },
+            { id: "vtp-itin-005", title: "Restaurant/food recommendations", checked: false, notes: "", status: "not_started", priority: "medium" },
+            { id: "vtp-itin-006", title: "Drag-and-drop itinerary editing", checked: false, notes: "", status: "not_started", priority: "low" },
+            { id: "vtp-itin-007", title: "Alternative activity suggestions", checked: false, notes: "", status: "not_started", priority: "low" }
+          ]
+        },
+        {
+          id: "vtp-output",
+          title: "Output Formats",
+          type: "category",
+          status: "not_started",
+          priority: "medium",
+          notes: "",
+          children: [
+            { id: "vtp-out-001", title: "Interactive web view", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "vtp-out-002", title: "Printable PDF itinerary", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "vtp-out-003", title: "Email itinerary to guest", checked: false, notes: "", status: "not_started", priority: "medium" },
+            { id: "vtp-out-004", title: "Save/bookmark for later", checked: false, notes: "", status: "not_started", priority: "medium" }
+          ]
+        },
+        {
+          id: "vtp-integration",
+          title: "Integration with Existing Content",
+          type: "category",
+          status: "not_started",
+          priority: "high",
+          notes: "",
+          children: [
+            { id: "vtp-int-001", title: "Link to blog posts for destinations", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "vtp-int-002", title: "Link to guide pages", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "vtp-int-003", title: "Room recommendation based on interests", checked: false, notes: "", status: "not_started", priority: "medium" },
+            { id: "vtp-int-004", title: "Use existing photo gallery images", checked: false, notes: "", status: "not_started", priority: "low" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "guest-checkin",
+      title: "Guest Check-in System",
+      description: "Automated pre-arrival communication and digital check-in packet generation",
+      expanded: true,
+      items: [
+        {
+          id: "gci-booking",
+          title: "Booking Data Input Method",
+          type: "category",
+          status: "not_started",
+          priority: "high",
+          notes: "",
+          children: [
+            { id: "gci-book-001", title: "Manual entry form for booking details", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "gci-book-002", title: "Import from booking platform API", checked: false, notes: "", status: "not_started", priority: "medium" },
+            { id: "gci-book-003", title: "CSV/spreadsheet upload", checked: false, notes: "", status: "not_started", priority: "low" },
+            { id: "gci-book-004", title: "Calendar sync integration", checked: false, notes: "", status: "not_started", priority: "low" }
+          ]
+        },
+        {
+          id: "gci-packet",
+          title: "Check-in Packet Contents",
+          type: "category",
+          status: "not_started",
+          priority: "critical",
+          notes: "",
+          children: [
+            { id: "gci-pkt-001", title: "Room details and photos", checked: false, notes: "", status: "not_started", priority: "critical" },
+            { id: "gci-pkt-002", title: "Check-in/check-out times", checked: false, notes: "", status: "not_started", priority: "critical" },
+            { id: "gci-pkt-003", title: "Access codes/instructions", checked: false, notes: "", status: "not_started", priority: "critical" },
+            { id: "gci-pkt-004", title: "House rules summary", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "gci-pkt-005", title: "WiFi password", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "gci-pkt-006", title: "Emergency contacts", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "gci-pkt-007", title: "Directions from airport", checked: false, notes: "", status: "not_started", priority: "medium" },
+            { id: "gci-pkt-008", title: "Recommended first-day activities", checked: false, notes: "", status: "not_started", priority: "medium" },
+            { id: "gci-pkt-009", title: "Link to Virtual Trip Planner", checked: false, notes: "", status: "not_started", priority: "medium" }
+          ]
+        },
+        {
+          id: "gci-email",
+          title: "Email Automation Settings",
+          type: "category",
+          status: "not_started",
+          priority: "high",
+          notes: "",
+          children: [
+            { id: "gci-eml-001", title: "Booking confirmation email", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "gci-eml-002", title: "Pre-arrival email (X days before)", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "gci-eml-003", title: "Day-of-arrival reminder", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "gci-eml-004", title: "Post-checkout thank you/review request", checked: false, notes: "", status: "not_started", priority: "medium" },
+            { id: "gci-eml-005", title: "Configurable email templates", checked: false, notes: "", status: "not_started", priority: "medium" },
+            { id: "gci-eml-006", title: "Manual send override", checked: false, notes: "", status: "not_started", priority: "low" }
+          ]
+        },
+        {
+          id: "gci-integration",
+          title: "Integration with Booking System",
+          type: "category",
+          status: "not_started",
+          priority: "medium",
+          notes: "",
+          children: [
+            { id: "gci-int-001", title: "ReservationKey integration", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "gci-int-002", title: "Airbnb API integration", checked: false, notes: "", status: "not_started", priority: "medium" },
+            { id: "gci-int-003", title: "Booking.com API integration", checked: false, notes: "", status: "not_started", priority: "medium" },
+            { id: "gci-int-004", title: "Google Calendar sync", checked: false, notes: "", status: "not_started", priority: "low" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "technical-requirements",
+      title: "Technical Requirements",
+      description: "Infrastructure, APIs, and services needed for both features",
+      expanded: true,
+      items: [
+        {
+          id: "tech-api",
+          title: "API Integrations Needed",
+          type: "category",
+          status: "not_started",
+          priority: "high",
+          notes: "",
+          children: [
+            { id: "tech-api-001", title: "Google Maps API (distances, directions)", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "tech-api-002", title: "AI API for itinerary generation (Claude/OpenAI)", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "tech-api-003", title: "Weather API (forecast data)", checked: false, notes: "", status: "not_started", priority: "medium" },
+            { id: "tech-api-004", title: "Booking platform APIs", checked: false, notes: "", status: "not_started", priority: "medium" },
+            { id: "tech-api-005", title: "PDF generation library", checked: false, notes: "", status: "not_started", priority: "medium" }
+          ]
+        },
+        {
+          id: "tech-storage",
+          title: "Data Storage Requirements",
+          type: "category",
+          status: "not_started",
+          priority: "high",
+          notes: "",
+          children: [
+            { id: "tech-str-001", title: "Destination/activity database", checked: false, notes: "Extract from existing guide pages", status: "not_started", priority: "critical" },
+            { id: "tech-str-002", title: "Guest booking records", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "tech-str-003", title: "Saved itineraries", checked: false, notes: "", status: "not_started", priority: "medium" },
+            { id: "tech-str-004", title: "Email templates storage", checked: false, notes: "", status: "not_started", priority: "medium" },
+            { id: "tech-str-005", title: "Audit log for automated actions", checked: false, notes: "", status: "not_started", priority: "low" }
+          ]
+        },
+        {
+          id: "tech-email",
+          title: "Email Service Requirements",
+          type: "category",
+          status: "not_started",
+          priority: "high",
+          notes: "",
+          children: [
+            { id: "tech-eml-001", title: "Resend email service (already configured)", checked: true, notes: "Using noreply@islandgoodes.com", status: "complete", priority: "high" },
+            { id: "tech-eml-002", title: "HTML email templates", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "tech-eml-003", title: "Email scheduling capability", checked: false, notes: "", status: "not_started", priority: "medium" },
+            { id: "tech-eml-004", title: "Email delivery tracking", checked: false, notes: "", status: "not_started", priority: "low" }
+          ]
+        }
+      ]
+    }
+  ],
+  lastUpdated: null,
+  updatedBy: null
+};
+---
+
+<PreviewLayout title={title} description={description}>
+  <section class="planning-hero">
+    <div class="container">
+      <div class="hero-content">
+        <a href="/admin" class="back-link">&larr; Back to Admin</a>
+        <h1>Feature Planning Workflow</h1>
+        <p>Collaborative planning for Virtual Trip Planner and Guest Check-in System</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="planning-section">
+    <div class="container">
+      <!-- Progress Summary -->
+      <div class="progress-summary">
+        <div class="progress-card">
+          <h3>Overall Progress</h3>
+          <div class="progress-bar">
+            <div class="progress-fill" id="overallProgress" style="width: 0%"></div>
+          </div>
+          <div class="progress-stats">
+            <span id="completedCount">0</span> of <span id="totalCount">0</span> items complete
+          </div>
+        </div>
+        <div class="progress-card">
+          <h3>By Status</h3>
+          <div class="status-breakdown" id="statusBreakdown">
+            <div class="status-item not-started"><span class="dot"></span> Not Started: <span id="notStartedCount">0</span></div>
+            <div class="status-item in-discussion"><span class="dot"></span> In Discussion: <span id="discussionCount">0</span></div>
+            <div class="status-item approved"><span class="dot"></span> Approved: <span id="approvedCount">0</span></div>
+            <div class="status-item in-progress"><span class="dot"></span> In Progress: <span id="inProgressCount">0</span></div>
+            <div class="status-item complete"><span class="dot"></span> Complete: <span id="completeCount">0</span></div>
+          </div>
+        </div>
+        <div class="progress-card">
+          <h3>Last Updated</h3>
+          <div id="lastUpdated" class="last-updated">Never</div>
+          <div id="lastUpdatedBy" class="last-updated-by"></div>
+        </div>
+      </div>
+
+      <!-- Feature Sections -->
+      <div id="sectionsContainer" class="sections-container">
+        <!-- Sections will be rendered by JavaScript -->
+      </div>
+
+      <!-- Add New Item Modal -->
+      <div id="addItemModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Add New Item</h3>
+            <button class="modal-close" id="closeAddModal">&times;</button>
+          </div>
+          <form id="addItemForm">
+            <input type="hidden" id="parentSectionId" />
+            <input type="hidden" id="parentCategoryId" />
+            <div class="form-group">
+              <label for="newItemTitle">Item Title *</label>
+              <input type="text" id="newItemTitle" placeholder="Describe the feature or task" required />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="newItemStatus">Status</label>
+                <select id="newItemStatus">
+                  <option value="not_started">Not Started</option>
+                  <option value="in_discussion">In Discussion</option>
+                  <option value="approved">Approved</option>
+                  <option value="in_progress">In Progress</option>
+                  <option value="complete">Complete</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="newItemPriority">Priority</label>
+                <select id="newItemPriority">
+                  <option value="low">Low</option>
+                  <option value="medium" selected>Medium</option>
+                  <option value="high">High</option>
+                  <option value="critical">Critical</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="newItemNotes">Notes</label>
+              <textarea id="newItemNotes" rows="3" placeholder="Additional details, questions, or requirements..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Item</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Edit Notes Modal -->
+      <div id="editNotesModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Edit Notes</h3>
+            <button class="modal-close" id="closeEditModal">&times;</button>
+          </div>
+          <form id="editNotesForm">
+            <input type="hidden" id="editItemId" />
+            <div class="form-group">
+              <label for="editItemNotes">Notes</label>
+              <textarea id="editItemNotes" rows="5" placeholder="Add comments, questions, or discussion notes..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Notes</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</PreviewLayout>
+
+<style>
+  .planning-hero {
+    background: var(--gradient-primary);
+    color: #fff;
+    padding: 8rem 2rem 3rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: rgba(255,255,255,0.7);
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+    transition: color 0.2s;
+    text-decoration: none;
+  }
+
+  .back-link:hover {
+    color: #fff;
+  }
+
+  .planning-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-content > p {
+    opacity: 0.9;
+  }
+
+  .planning-section {
+    padding: 2rem;
+    background: var(--color-bg-alt);
+    min-height: 70vh;
+  }
+
+  /* Progress Summary */
+  .progress-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .progress-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+
+  .progress-card h3 {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-light);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .progress-bar {
+    height: 8px;
+    background: var(--color-bg-alt);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10B981, #059669);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+
+  .progress-stats {
+    font-size: 0.9375rem;
+    color: var(--color-text);
+  }
+
+  .status-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .status-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .status-item .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .status-item.not-started .dot { background: #9CA3AF; }
+  .status-item.in-discussion .dot { background: #8B5CF6; }
+  .status-item.approved .dot { background: #3B82F6; }
+  .status-item.in-progress .dot { background: #F59E0B; }
+  .status-item.complete .dot { background: #10B981; }
+
+  .last-updated {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .last-updated-by {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    margin-top: 0.25rem;
+  }
+
+  /* Sections */
+  .sections-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .section-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+
+  .section-header {
+    padding: 1.5rem;
+    background: var(--color-bg-alt);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s;
+  }
+
+  .section-header:hover {
+    background: #e8e6e3;
+  }
+
+  .section-title-area {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .expand-icon {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s;
+  }
+
+  .section-card.expanded .expand-icon {
+    transform: rotate(90deg);
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .section-description {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    margin-top: 0.25rem;
+  }
+
+  .section-progress {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .section-content {
+    display: none;
+    padding: 1.5rem;
+  }
+
+  .section-card.expanded .section-content {
+    display: block;
+  }
+
+  /* Category */
+  .category-card {
+    background: var(--color-bg-alt);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+
+  .category-header {
+    padding: 1rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .category-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .category-meta {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .status-badge.not_started { background: #F3F4F6; color: #6B7280; }
+  .status-badge.in_discussion { background: #EDE9FE; color: #7C3AED; }
+  .status-badge.approved { background: #DBEAFE; color: #2563EB; }
+  .status-badge.in_progress { background: #FEF3C7; color: #D97706; }
+  .status-badge.complete { background: #D1FAE5; color: #059669; }
+
+  .priority-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .priority-badge.low { background: #F3F4F6; color: #6B7280; }
+  .priority-badge.medium { background: #E0F2FE; color: #0369A1; }
+  .priority-badge.high { background: #FEF3C7; color: #D97706; }
+  .priority-badge.critical { background: #FEE2E2; color: #DC2626; }
+
+  .category-items {
+    padding: 0 1.25rem 1.25rem;
+  }
+
+  /* Checkbox Items */
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: #fff;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s;
+  }
+
+  .check-item:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  .check-item.checked {
+    background: rgba(16, 185, 129, 0.05);
+  }
+
+  .check-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    cursor: pointer;
+    accent-color: var(--color-primary);
+    flex-shrink: 0;
+  }
+
+  .check-item-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .check-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .check-item-title {
+    font-size: 0.9375rem;
+    color: var(--color-text);
+    line-height: 1.4;
+  }
+
+  .check-item.checked .check-item-title {
+    text-decoration: line-through;
+    color: var(--color-text-light);
+  }
+
+  .check-item-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .check-item-meta {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .item-note-preview {
+    font-size: 0.8125rem;
+    color: var(--color-text-light);
+    font-style: italic;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: var(--color-bg-alt);
+    border-radius: 4px;
+    border-left: 3px solid var(--color-primary);
+  }
+
+  /* Action Buttons */
+  .action-btn {
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 6px;
+    background: var(--color-bg-alt);
+    color: var(--color-text-light);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .action-btn:hover {
+    background: var(--color-primary);
+    color: #fff;
+  }
+
+  .action-btn.delete:hover {
+    background: #EF4444;
+  }
+
+  .action-btn.notes {
+    position: relative;
+  }
+
+  .action-btn.notes.has-notes::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 8px;
+    height: 8px;
+    background: var(--color-secondary);
+    border-radius: 50%;
+  }
+
+  /* Add Item Button */
+  .add-item-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: none;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    color: var(--color-text-light);
+    cursor: pointer;
+    font-size: 0.875rem;
+    width: 100%;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .add-item-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: rgba(27, 107, 90, 0.05);
+  }
+
+  /* Status Select Dropdown */
+  .status-select {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    background: #fff;
+    cursor: pointer;
+  }
+
+  /* Modal */
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+  }
+
+  .modal.active {
+    display: flex;
+  }
+
+  .modal-content {
+    background: #fff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--color-bg-alt);
+  }
+
+  .modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--color-text-light);
+    cursor: pointer;
+  }
+
+  .modal-close:hover {
+    color: var(--color-text);
+  }
+
+  #addItemForm,
+  #editNotesForm {
+    padding: 1.5rem;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    margin-bottom: 0.375rem;
+    color: var(--color-text);
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    border: 2px solid var(--color-bg-alt);
+    border-radius: 8px;
+    font-size: 0.9375rem;
+    font-family: var(--font-body);
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .progress-summary {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .planning-hero {
+      padding: 6rem 1.5rem 2rem;
+    }
+
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+
+    .category-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .check-item-header {
+      flex-direction: column;
+    }
+
+    .check-item-actions {
+      margin-top: 0.5rem;
+    }
+  }
+</style>
+
+<script is:inline src="/js/shared-data.js"></script>
+<script define:vars={{ defaultPlanningData }}>
+  const SESSION_KEY = 'islandgoodes_admin_session';
+
+  // Check session
+  function getSession() {
+    try {
+      const stored = sessionStorage.getItem(SESSION_KEY);
+      return stored ? JSON.parse(stored) : null;
+    } catch { return null; }
+  }
+
+  if (!getSession()) {
+    window.location.href = '/admin';
+  }
+
+  let planningData = null;
+
+  // Get planning data from server or use defaults
+  async function getPlanningData() {
+    try {
+      const response = await fetch('/.netlify/functions/data-store', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          store: 'planningWorkflow',
+          action: 'get',
+          key: 'data'
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data && data.sections && data.sections.length > 0) {
+          return data;
+        }
+      }
+    } catch (e) {
+      console.error('Failed to load planning data:', e);
+    }
+
+    return JSON.parse(JSON.stringify(defaultPlanningData));
+  }
+
+  // Save planning data to server
+  async function savePlanningData() {
+    const session = getSession();
+    planningData.lastUpdated = new Date().toISOString();
+    planningData.updatedBy = session?.fullName || session?.username || 'Unknown';
+
+    try {
+      await fetch('/.netlify/functions/data-store', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          store: 'planningWorkflow',
+          action: 'set',
+          key: 'data',
+          data: planningData
+        })
+      });
+
+      if (window.SharedData) {
+        await window.SharedData.logActivity('planning', 'Updated feature planning workflow');
+      }
+    } catch (e) {
+      console.error('Failed to save planning data:', e);
+      alert('Failed to save changes. Please try again.');
+    }
+  }
+
+  // Count items by status
+  function countByStatus() {
+    const counts = {
+      not_started: 0,
+      in_discussion: 0,
+      approved: 0,
+      in_progress: 0,
+      complete: 0,
+      total: 0,
+      checked: 0
+    };
+
+    planningData.sections.forEach(section => {
+      section.items.forEach(category => {
+        if (category.children) {
+          category.children.forEach(item => {
+            counts.total++;
+            counts[item.status]++;
+            if (item.checked || item.status === 'complete') {
+              counts.checked++;
+            }
+          });
+        }
+      });
+    });
+
+    return counts;
+  }
+
+  // Update progress display
+  function updateProgressDisplay() {
+    const counts = countByStatus();
+    const percent = counts.total > 0 ? Math.round((counts.checked / counts.total) * 100) : 0;
+
+    document.getElementById('overallProgress').style.width = percent + '%';
+    document.getElementById('completedCount').textContent = counts.checked;
+    document.getElementById('totalCount').textContent = counts.total;
+    document.getElementById('notStartedCount').textContent = counts.not_started;
+    document.getElementById('discussionCount').textContent = counts.in_discussion;
+    document.getElementById('approvedCount').textContent = counts.approved;
+    document.getElementById('inProgressCount').textContent = counts.in_progress;
+    document.getElementById('completeCount').textContent = counts.complete;
+
+    if (planningData.lastUpdated) {
+      const date = new Date(planningData.lastUpdated);
+      document.getElementById('lastUpdated').textContent = date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      document.getElementById('lastUpdatedBy').textContent = planningData.updatedBy ? `by ${planningData.updatedBy}` : '';
+    }
+  }
+
+  // Render all sections
+  function renderSections() {
+    const container = document.getElementById('sectionsContainer');
+    container.innerHTML = '';
+
+    planningData.sections.forEach(section => {
+      const sectionEl = document.createElement('div');
+      sectionEl.className = `section-card ${section.expanded ? 'expanded' : ''}`;
+      sectionEl.dataset.sectionId = section.id;
+
+      let sectionTotal = 0;
+      let sectionComplete = 0;
+      section.items.forEach(cat => {
+        if (cat.children) {
+          sectionTotal += cat.children.length;
+          sectionComplete += cat.children.filter(i => i.checked || i.status === 'complete').length;
+        }
+      });
+      const sectionPercent = sectionTotal > 0 ? Math.round((sectionComplete / sectionTotal) * 100) : 0;
+
+      sectionEl.innerHTML = `
+        <div class="section-header">
+          <div class="section-title-area">
+            <svg class="expand-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+            <div>
+              <h2 class="section-title">${section.title}</h2>
+              <p class="section-description">${section.description}</p>
+            </div>
+          </div>
+          <div class="section-progress">
+            <span>${sectionComplete}/${sectionTotal}</span>
+            <span>(${sectionPercent}%)</span>
+          </div>
+        </div>
+        <div class="section-content">
+          ${section.items.map(category => renderCategory(section.id, category)).join('')}
+        </div>
+      `;
+
+      sectionEl.querySelector('.section-header').addEventListener('click', () => {
+        sectionEl.classList.toggle('expanded');
+        section.expanded = sectionEl.classList.contains('expanded');
+        savePlanningData();
+      });
+
+      container.appendChild(sectionEl);
+    });
+
+    attachEventHandlers();
+    updateProgressDisplay();
+  }
+
+  // Render a category
+  function renderCategory(sectionId, category) {
+    return `
+      <div class="category-card" data-category-id="${category.id}">
+        <div class="category-header">
+          <h3 class="category-title">${category.title}</h3>
+          <div class="category-meta">
+            <select class="status-select" data-section="${sectionId}" data-category="${category.id}" data-type="category-status">
+              <option value="not_started" ${category.status === 'not_started' ? 'selected' : ''}>Not Started</option>
+              <option value="in_discussion" ${category.status === 'in_discussion' ? 'selected' : ''}>In Discussion</option>
+              <option value="approved" ${category.status === 'approved' ? 'selected' : ''}>Approved</option>
+              <option value="in_progress" ${category.status === 'in_progress' ? 'selected' : ''}>In Progress</option>
+              <option value="complete" ${category.status === 'complete' ? 'selected' : ''}>Complete</option>
+            </select>
+            <span class="priority-badge ${category.priority}">${category.priority}</span>
+          </div>
+        </div>
+        <div class="category-items">
+          ${category.children ? category.children.map(item => renderCheckItem(sectionId, category.id, item)).join('') : ''}
+          <button class="add-item-btn" data-section="${sectionId}" data-category="${category.id}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Add Item
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  // Render a checkbox item
+  function renderCheckItem(sectionId, categoryId, item) {
+    const hasNotes = item.notes && item.notes.trim().length > 0;
+    return `
+      <div class="check-item ${item.checked || item.status === 'complete' ? 'checked' : ''}" data-item-id="${item.id}">
+        <input type="checkbox" ${item.checked || item.status === 'complete' ? 'checked' : ''}
+               data-section="${sectionId}" data-category="${categoryId}" data-item="${item.id}" />
+        <div class="check-item-content">
+          <div class="check-item-header">
+            <span class="check-item-title">${item.title}</span>
+            <div class="check-item-actions">
+              <button class="action-btn notes ${hasNotes ? 'has-notes' : ''}"
+                      data-section="${sectionId}" data-category="${categoryId}" data-item="${item.id}"
+                      title="Edit notes">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+              </button>
+              <button class="action-btn delete"
+                      data-section="${sectionId}" data-category="${categoryId}" data-item="${item.id}"
+                      title="Delete item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="check-item-meta">
+            <span class="status-badge ${item.status}">${item.status.replace(/_/g, ' ')}</span>
+            <span class="priority-badge ${item.priority}">${item.priority}</span>
+            <select class="status-select" data-section="${sectionId}" data-category="${categoryId}" data-item="${item.id}" data-type="item-status">
+              <option value="not_started" ${item.status === 'not_started' ? 'selected' : ''}>Not Started</option>
+              <option value="in_discussion" ${item.status === 'in_discussion' ? 'selected' : ''}>In Discussion</option>
+              <option value="approved" ${item.status === 'approved' ? 'selected' : ''}>Approved</option>
+              <option value="in_progress" ${item.status === 'in_progress' ? 'selected' : ''}>In Progress</option>
+              <option value="complete" ${item.status === 'complete' ? 'selected' : ''}>Complete</option>
+            </select>
+          </div>
+          ${hasNotes ? `<div class="item-note-preview">${item.notes}</div>` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  // Find item in data structure
+  function findItem(sectionId, categoryId, itemId) {
+    const section = planningData.sections.find(s => s.id === sectionId);
+    if (!section) return null;
+    const category = section.items.find(c => c.id === categoryId);
+    if (!category) return null;
+    if (itemId) {
+      return category.children?.find(i => i.id === itemId) || null;
+    }
+    return category;
+  }
+
+  // Attach event handlers after render
+  function attachEventHandlers() {
+    document.querySelectorAll('.check-item input[type="checkbox"]').forEach(checkbox => {
+      checkbox.addEventListener('change', async (e) => {
+        const { section, category, item } = e.target.dataset;
+        const itemData = findItem(section, category, item);
+        if (itemData) {
+          itemData.checked = e.target.checked;
+          if (e.target.checked) {
+            itemData.status = 'complete';
+          }
+          await savePlanningData();
+          renderSections();
+        }
+      });
+    });
+
+    document.querySelectorAll('.status-select').forEach(select => {
+      select.addEventListener('change', async (e) => {
+        const { section, category, item, type } = e.target.dataset;
+        if (type === 'category-status') {
+          const categoryData = findItem(section, category, null);
+          if (categoryData) {
+            categoryData.status = e.target.value;
+            await savePlanningData();
+            renderSections();
+          }
+        } else if (type === 'item-status') {
+          const itemData = findItem(section, category, item);
+          if (itemData) {
+            itemData.status = e.target.value;
+            itemData.checked = e.target.value === 'complete';
+            await savePlanningData();
+            renderSections();
+          }
+        }
+      });
+    });
+
+    document.querySelectorAll('.add-item-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const { section, category } = e.target.closest('.add-item-btn').dataset;
+        document.getElementById('parentSectionId').value = section;
+        document.getElementById('parentCategoryId').value = category;
+        document.getElementById('addItemModal').classList.add('active');
+        document.getElementById('newItemTitle').focus();
+      });
+    });
+
+    document.querySelectorAll('.action-btn.notes').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const { section, category, item } = e.target.closest('.action-btn').dataset;
+        const itemData = findItem(section, category, item);
+        if (itemData) {
+          document.getElementById('editItemId').value = `${section}|${category}|${item}`;
+          document.getElementById('editItemNotes').value = itemData.notes || '';
+          document.getElementById('editNotesModal').classList.add('active');
+          document.getElementById('editItemNotes').focus();
+        }
+      });
+    });
+
+    document.querySelectorAll('.action-btn.delete').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        if (!confirm('Delete this item?')) return;
+        const { section, category, item } = e.target.closest('.action-btn').dataset;
+        const sectionData = planningData.sections.find(s => s.id === section);
+        const categoryData = sectionData?.items.find(c => c.id === category);
+        if (categoryData?.children) {
+          categoryData.children = categoryData.children.filter(i => i.id !== item);
+          await savePlanningData();
+          renderSections();
+        }
+      });
+    });
+  }
+
+  // Modal handlers
+  document.getElementById('closeAddModal')?.addEventListener('click', () => {
+    document.getElementById('addItemModal').classList.remove('active');
+    document.getElementById('addItemForm').reset();
+  });
+
+  document.getElementById('closeEditModal')?.addEventListener('click', () => {
+    document.getElementById('editNotesModal').classList.remove('active');
+  });
+
+  document.getElementById('addItemForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const sectionId = document.getElementById('parentSectionId').value;
+    const categoryId = document.getElementById('parentCategoryId').value;
+    const title = document.getElementById('newItemTitle').value;
+    const status = document.getElementById('newItemStatus').value;
+    const priority = document.getElementById('newItemPriority').value;
+    const notes = document.getElementById('newItemNotes').value;
+
+    const sectionData = planningData.sections.find(s => s.id === sectionId);
+    const categoryData = sectionData?.items.find(c => c.id === categoryId);
+
+    if (categoryData) {
+      if (!categoryData.children) categoryData.children = [];
+
+      const session = getSession();
+      const newItem = {
+        id: `${categoryId}-${Date.now()}`,
+        title,
+        checked: status === 'complete',
+        notes,
+        status,
+        priority,
+        createdBy: session?.fullName || session?.username || 'Unknown',
+        createdAt: new Date().toISOString(),
+        updatedAt: null
+      };
+
+      categoryData.children.push(newItem);
+      await savePlanningData();
+
+      document.getElementById('addItemModal').classList.remove('active');
+      document.getElementById('addItemForm').reset();
+      renderSections();
+    }
+  });
+
+  document.getElementById('editNotesForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const ids = document.getElementById('editItemId').value.split('|');
+    const notes = document.getElementById('editItemNotes').value;
+
+    if (ids.length === 3) {
+      const itemData = findItem(ids[0], ids[1], ids[2]);
+      if (itemData) {
+        itemData.notes = notes;
+        itemData.updatedAt = new Date().toISOString();
+        await savePlanningData();
+
+        document.getElementById('editNotesModal').classList.remove('active');
+        renderSections();
+      }
+    }
+  });
+
+  document.querySelectorAll('.modal').forEach(modal => {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
+    }
+  });
+
+  // Initialize
+  async function init() {
+    planningData = await getPlanningData();
+    renderSections();
+  }
+
+  init();
+</script>
