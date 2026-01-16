@@ -10,7 +10,9 @@ const defaultPlanningData = {
     {
       id: "virtual-trip-planner",
       title: "Virtual Trip Planner",
-      description: "Interactive tool for guests to plan Big Island itinerary with personalized recommendations",
+      icon: "map",
+      description: "Help guests plan their perfect Big Island adventure",
+      color: "#8B5CF6",
       expanded: true,
       items: [
         {
@@ -25,7 +27,7 @@ const defaultPlanningData = {
             { id: "vtp-input-002", title: "Origin city/airport", checked: false, notes: "", status: "not_started", priority: "high" },
             { id: "vtp-input-003", title: "Flight information (optional)", checked: false, notes: "", status: "not_started", priority: "medium" },
             { id: "vtp-input-004", title: "Number of travelers", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "vtp-input-005", title: "Interest categories (beaches, hiking, culture, food, etc.)", checked: false, notes: "", status: "not_started", priority: "high" },
+            { id: "vtp-input-005", title: "Interest categories (beaches, hiking, culture, food)", checked: false, notes: "", status: "not_started", priority: "high" },
             { id: "vtp-input-006", title: "Mobility/accessibility needs", checked: false, notes: "", status: "not_started", priority: "medium" },
             { id: "vtp-input-007", title: "Budget preference", checked: false, notes: "", status: "not_started", priority: "low" },
             { id: "vtp-input-008", title: "Preferred pace (relaxed/moderate/packed)", checked: false, notes: "", status: "not_started", priority: "medium" },
@@ -34,7 +36,7 @@ const defaultPlanningData = {
         },
         {
           id: "vtp-itinerary",
-          title: "Itinerary Generation Features",
+          title: "Itinerary Generation",
           type: "category",
           status: "not_started",
           priority: "high",
@@ -51,7 +53,7 @@ const defaultPlanningData = {
         },
         {
           id: "vtp-output",
-          title: "Output Formats",
+          title: "Output & Sharing",
           type: "category",
           status: "not_started",
           priority: "medium",
@@ -65,7 +67,7 @@ const defaultPlanningData = {
         },
         {
           id: "vtp-integration",
-          title: "Integration with Existing Content",
+          title: "Content Integration",
           type: "category",
           status: "not_started",
           priority: "high",
@@ -82,12 +84,14 @@ const defaultPlanningData = {
     {
       id: "guest-checkin",
       title: "Guest Check-in System",
-      description: "Automated pre-arrival communication and digital check-in packet generation",
+      icon: "key",
+      description: "Automate pre-arrival communications and check-in packets",
+      color: "#10B981",
       expanded: true,
       items: [
         {
           id: "gci-booking",
-          title: "Booking Data Input Method",
+          title: "Booking Management",
           type: "category",
           status: "not_started",
           priority: "high",
@@ -120,7 +124,7 @@ const defaultPlanningData = {
         },
         {
           id: "gci-email",
-          title: "Email Automation Settings",
+          title: "Email Automation",
           type: "category",
           status: "not_started",
           priority: "high",
@@ -136,7 +140,7 @@ const defaultPlanningData = {
         },
         {
           id: "gci-integration",
-          title: "Integration with Booking System",
+          title: "Platform Integration",
           type: "category",
           status: "not_started",
           priority: "medium",
@@ -153,12 +157,14 @@ const defaultPlanningData = {
     {
       id: "technical-requirements",
       title: "Technical Requirements",
-      description: "Infrastructure, APIs, and services needed for both features",
-      expanded: true,
+      icon: "code",
+      description: "Infrastructure and APIs needed for implementation",
+      color: "#F59E0B",
+      expanded: false,
       items: [
         {
           id: "tech-api",
-          title: "API Integrations Needed",
+          title: "API Integrations",
           type: "category",
           status: "not_started",
           priority: "high",
@@ -173,7 +179,7 @@ const defaultPlanningData = {
         },
         {
           id: "tech-storage",
-          title: "Data Storage Requirements",
+          title: "Data Storage",
           type: "category",
           status: "not_started",
           priority: "high",
@@ -188,7 +194,7 @@ const defaultPlanningData = {
         },
         {
           id: "tech-email",
-          title: "Email Service Requirements",
+          title: "Email Infrastructure",
           type: "category",
           status: "not_started",
           priority: "high",
@@ -209,457 +215,648 @@ const defaultPlanningData = {
 ---
 
 <PreviewLayout title={title} description={description}>
-  <section class="planning-hero">
-    <div class="container">
-      <div class="hero-content">
-        <a href="/admin" class="back-link">&larr; Back to Admin</a>
-        <h1>Feature Planning Workflow</h1>
-        <p>Collaborative planning for Virtual Trip Planner and Guest Check-in System</p>
+  <div class="planning-page">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-bg"></div>
+      <div class="container">
+        <a href="/admin" class="back-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          Back to Admin
+        </a>
+        <div class="hero-content">
+          <h1>Feature Planning</h1>
+          <p class="hero-subtitle">Designing the next generation of guest experiences</p>
+        </div>
+
+        <!-- Big Progress Ring -->
+        <div class="hero-progress">
+          <div class="progress-ring-container">
+            <svg class="progress-ring" viewBox="0 0 120 120">
+              <circle class="progress-ring-bg" cx="60" cy="60" r="54"/>
+              <circle class="progress-ring-fill" cx="60" cy="60" r="54" id="progressRing"/>
+            </svg>
+            <div class="progress-ring-text">
+              <span class="progress-percent" id="progressPercent">0</span>
+              <span class="progress-label">% Complete</span>
+            </div>
+          </div>
+          <div class="progress-meta">
+            <div class="progress-stat">
+              <span class="stat-num" id="completedCount">0</span>
+              <span class="stat-label">Done</span>
+            </div>
+            <div class="progress-stat">
+              <span class="stat-num" id="inProgressCount">0</span>
+              <span class="stat-label">In Progress</span>
+            </div>
+            <div class="progress-stat">
+              <span class="stat-num" id="totalCount">0</span>
+              <span class="stat-label">Total</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature Tabs -->
+    <section class="tabs-section">
+      <div class="container">
+        <div class="tabs" id="featureTabs">
+          <!-- Tabs generated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="main-content">
+      <div class="container">
+        <div id="featureContent" class="feature-content">
+          <!-- Content generated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Add Item Modal -->
+    <div id="addModal" class="modal">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Add New Task</h3>
+          <button class="modal-close" id="closeAddModal">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        <form id="addItemForm">
+          <input type="hidden" id="parentSectionId" />
+          <input type="hidden" id="parentCategoryId" />
+          <div class="form-group">
+            <label>Task Description</label>
+            <input type="text" id="newItemTitle" placeholder="What needs to be done?" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Priority</label>
+              <div class="priority-select" id="prioritySelect">
+                <button type="button" class="priority-btn" data-value="low">Low</button>
+                <button type="button" class="priority-btn active" data-value="medium">Medium</button>
+                <button type="button" class="priority-btn" data-value="high">High</button>
+                <button type="button" class="priority-btn" data-value="critical">Critical</button>
+              </div>
+              <input type="hidden" id="newItemPriority" value="medium" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Notes (optional)</label>
+            <textarea id="newItemNotes" rows="3" placeholder="Additional context or requirements..."></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" id="cancelAdd">Cancel</button>
+            <button type="submit" class="btn-submit">Add Task</button>
+          </div>
+        </form>
       </div>
     </div>
-  </section>
 
-  <section class="planning-section">
-    <div class="container">
-      <!-- Progress Summary -->
-      <div class="progress-summary">
-        <div class="progress-card">
-          <h3>Overall Progress</h3>
-          <div class="progress-bar">
-            <div class="progress-fill" id="overallProgress" style="width: 0%"></div>
-          </div>
-          <div class="progress-stats">
-            <span id="completedCount">0</span> of <span id="totalCount">0</span> items complete
-          </div>
+    <!-- Notes Modal -->
+    <div id="notesModal" class="modal">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Task Notes</h3>
+          <button class="modal-close" id="closeNotesModal">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
         </div>
-        <div class="progress-card">
-          <h3>By Status</h3>
-          <div class="status-breakdown" id="statusBreakdown">
-            <div class="status-item not-started"><span class="dot"></span> Not Started: <span id="notStartedCount">0</span></div>
-            <div class="status-item in-discussion"><span class="dot"></span> In Discussion: <span id="discussionCount">0</span></div>
-            <div class="status-item approved"><span class="dot"></span> Approved: <span id="approvedCount">0</span></div>
-            <div class="status-item in-progress"><span class="dot"></span> In Progress: <span id="inProgressCount">0</span></div>
-            <div class="status-item complete"><span class="dot"></span> Complete: <span id="completeCount">0</span></div>
+        <form id="editNotesForm">
+          <input type="hidden" id="editItemId" />
+          <div class="form-group">
+            <label id="editItemTitle">Task</label>
+            <textarea id="editItemNotes" rows="6" placeholder="Add notes, questions, or discussion points..."></textarea>
           </div>
-        </div>
-        <div class="progress-card">
-          <h3>Last Updated</h3>
-          <div id="lastUpdated" class="last-updated">Never</div>
-          <div id="lastUpdatedBy" class="last-updated-by"></div>
-        </div>
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" id="cancelNotes">Cancel</button>
+            <button type="submit" class="btn-submit">Save Notes</button>
+          </div>
+        </form>
       </div>
-
-      <!-- Feature Sections -->
-      <div id="sectionsContainer" class="sections-container">
-        <!-- Sections will be rendered by JavaScript -->
-      </div>
-
-      <!-- Add New Item Modal -->
-      <div id="addItemModal" class="modal">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3>Add New Item</h3>
-            <button class="modal-close" id="closeAddModal">&times;</button>
-          </div>
-          <form id="addItemForm">
-            <input type="hidden" id="parentSectionId" />
-            <input type="hidden" id="parentCategoryId" />
-            <div class="form-group">
-              <label for="newItemTitle">Item Title *</label>
-              <input type="text" id="newItemTitle" placeholder="Describe the feature or task" required />
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="newItemStatus">Status</label>
-                <select id="newItemStatus">
-                  <option value="not_started">Not Started</option>
-                  <option value="in_discussion">In Discussion</option>
-                  <option value="approved">Approved</option>
-                  <option value="in_progress">In Progress</option>
-                  <option value="complete">Complete</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="newItemPriority">Priority</label>
-                <select id="newItemPriority">
-                  <option value="low">Low</option>
-                  <option value="medium" selected>Medium</option>
-                  <option value="high">High</option>
-                  <option value="critical">Critical</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="newItemNotes">Notes</label>
-              <textarea id="newItemNotes" rows="3" placeholder="Additional details, questions, or requirements..."></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Add Item</button>
-          </form>
-        </div>
-      </div>
-
-      <!-- Edit Notes Modal -->
-      <div id="editNotesModal" class="modal">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3>Edit Notes</h3>
-            <button class="modal-close" id="closeEditModal">&times;</button>
-          </div>
-          <form id="editNotesForm">
-            <input type="hidden" id="editItemId" />
-            <div class="form-group">
-              <label for="editItemNotes">Notes</label>
-              <textarea id="editItemNotes" rows="5" placeholder="Add comments, questions, or discussion notes..."></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Save Notes</button>
-          </form>
-        </div>
-      </div>
-
     </div>
-  </section>
+
+    <!-- Last Updated -->
+    <div class="last-updated-bar" id="lastUpdatedBar">
+      <span id="lastUpdatedText">Loading...</span>
+    </div>
+  </div>
 </PreviewLayout>
 
 <style>
-  .planning-hero {
-    background: var(--gradient-primary);
-    color: #fff;
-    padding: 8rem 2rem 3rem;
+  .planning-page {
+    min-height: 100vh;
+    background: #0f0f0f;
+  }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    padding: 6rem 2rem 3rem;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    z-index: 0;
+  }
+
+  .hero-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .hero .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
   .back-link {
-    display: inline-block;
-    color: rgba(255,255,255,0.7);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255,255,255,0.6);
     font-size: 0.875rem;
-    margin-bottom: 1rem;
-    transition: color 0.2s;
     text-decoration: none;
+    margin-bottom: 2rem;
+    transition: color 0.2s;
   }
 
   .back-link:hover {
     color: #fff;
   }
 
-  .planning-hero h1 {
+  .hero-content {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-subtitle {
+    font-size: 1.125rem;
+    color: rgba(255,255,255,0.6);
+    margin: 0;
+  }
+
+  /* Progress Ring */
+  .hero-progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .progress-ring-container {
+    position: relative;
+    width: 140px;
+    height: 140px;
+  }
+
+  .progress-ring {
+    transform: rotate(-90deg);
+    width: 100%;
+    height: 100%;
+  }
+
+  .progress-ring-bg {
+    fill: none;
+    stroke: rgba(255,255,255,0.1);
+    stroke-width: 8;
+  }
+
+  .progress-ring-fill {
+    fill: none;
+    stroke: url(#progressGradient);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 339.292;
+    stroke-dashoffset: 339.292;
+    transition: stroke-dashoffset 1s ease-out;
+  }
+
+  .progress-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .progress-percent {
     font-size: 2.5rem;
-    margin-bottom: 0.5rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
   }
 
-  .hero-content > p {
-    opacity: 0.9;
-  }
-
-  .planning-section {
-    padding: 2rem;
-    background: var(--color-bg-alt);
-    min-height: 70vh;
-  }
-
-  /* Progress Summary */
-  .progress-summary {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-  }
-
-  .progress-card {
-    background: #fff;
-    border-radius: 16px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-  }
-
-  .progress-card h3 {
-    font-family: var(--font-body);
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--color-text-light);
-    margin-bottom: 1rem;
+  .progress-label {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.5);
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
 
-  .progress-bar {
-    height: 8px;
-    background: var(--color-bg-alt);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 0.75rem;
+  .progress-meta {
+    display: flex;
+    gap: 2rem;
   }
 
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #10B981, #059669);
-    border-radius: 4px;
-    transition: width 0.5s ease;
+  .progress-stat {
+    text-align: center;
   }
 
-  .progress-stats {
+  .stat-num {
+    display: block;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Tabs */
+  .tabs-section {
+    background: #0f0f0f;
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .tabs-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.5);
     font-size: 0.9375rem;
-    color: var(--color-text);
-  }
-
-  .status-breakdown {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .status-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-  }
-
-  .status-item .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-  }
-
-  .status-item.not-started .dot { background: #9CA3AF; }
-  .status-item.in-discussion .dot { background: #8B5CF6; }
-  .status-item.approved .dot { background: #3B82F6; }
-  .status-item.in-progress .dot { background: #F59E0B; }
-  .status-item.complete .dot { background: #10B981; }
-
-  .last-updated {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--color-text);
-  }
-
-  .last-updated-by {
-    font-size: 0.875rem;
-    color: var(--color-text-light);
-    margin-top: 0.25rem;
-  }
-
-  /* Sections */
-  .sections-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .section-card {
-    background: #fff;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-  }
-
-  .section-header {
-    padding: 1.5rem;
-    background: var(--color-bg-alt);
+    font-weight: 500;
     cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: background 0.2s;
+    white-space: nowrap;
+    position: relative;
+    transition: all 0.2s;
   }
 
-  .section-header:hover {
-    background: #e8e6e3;
+  .tab-btn:hover {
+    color: rgba(255,255,255,0.8);
   }
 
-  .section-title-area {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+  .tab-btn.active {
+    color: #fff;
   }
 
-  .expand-icon {
+  .tab-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--tab-color, #8B5CF6);
+    transform: scaleX(0);
+    transition: transform 0.2s;
+  }
+
+  .tab-btn.active::after {
+    transform: scaleX(1);
+  }
+
+  .tab-icon {
     width: 24px;
     height: 24px;
-    transition: transform 0.3s;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--tab-color, #8B5CF6);
   }
 
-  .section-card.expanded .expand-icon {
-    transform: rotate(90deg);
+  .tab-icon svg {
+    width: 14px;
+    height: 14px;
+    stroke: #fff;
   }
 
-  .section-title {
-    font-size: 1.25rem;
+  .tab-progress {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* Main Content */
+  .main-content {
+    padding: 2rem;
+    background: #0f0f0f;
+    min-height: 60vh;
+  }
+
+  .main-content .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .feature-content {
+    display: none;
+  }
+
+  .feature-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .feature-header {
+    margin-bottom: 2rem;
+  }
+
+  .feature-title {
+    font-size: 1.5rem;
     font-weight: 600;
-    color: var(--color-text);
+    color: #fff;
+    margin: 0 0 0.5rem;
+  }
+
+  .feature-description {
+    color: rgba(255,255,255,0.5);
     margin: 0;
   }
 
-  .section-description {
-    font-size: 0.875rem;
-    color: var(--color-text-light);
-    margin-top: 0.25rem;
+  /* Categories */
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
   }
 
-  .section-progress {
-    font-size: 0.875rem;
-    color: var(--color-text-light);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .section-content {
-    display: none;
-    padding: 1.5rem;
-  }
-
-  .section-card.expanded .section-content {
-    display: block;
-  }
-
-  /* Category */
   .category-card {
-    background: var(--color-bg-alt);
-    border-radius: 12px;
-    margin-bottom: 1rem;
+    background: linear-gradient(145deg, #1a1a1a 0%, #141414 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
     overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .category-card:hover {
+    border-color: rgba(255,255,255,0.15);
+    transform: translateY(-2px);
   }
 
   .category-header {
-    padding: 1rem 1.25rem;
+    padding: 1.25rem 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .category-title-area {
+    display: flex;
+    align-items: center;
     gap: 0.75rem;
   }
 
   .category-title {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--color-text);
+    color: #fff;
     margin: 0;
   }
 
-  .category-meta {
-    display: flex;
-    gap: 0.75rem;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .status-badge {
-    padding: 0.25rem 0.75rem;
-    border-radius: 50px;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-  }
-
-  .status-badge.not_started { background: #F3F4F6; color: #6B7280; }
-  .status-badge.in_discussion { background: #EDE9FE; color: #7C3AED; }
-  .status-badge.approved { background: #DBEAFE; color: #2563EB; }
-  .status-badge.in_progress { background: #FEF3C7; color: #D97706; }
-  .status-badge.complete { background: #D1FAE5; color: #059669; }
-
-  .priority-badge {
+  .category-count {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.05);
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    text-transform: uppercase;
   }
 
-  .priority-badge.low { background: #F3F4F6; color: #6B7280; }
-  .priority-badge.medium { background: #E0F2FE; color: #0369A1; }
-  .priority-badge.high { background: #FEF3C7; color: #D97706; }
-  .priority-badge.critical { background: #FEE2E2; color: #DC2626; }
+  .category-progress {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .mini-progress {
+    width: 60px;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .mini-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10B981, #34D399);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  .category-percent {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.6);
+    min-width: 36px;
+    text-align: right;
+  }
 
   .category-items {
-    padding: 0 1.25rem 1.25rem;
+    padding: 0.75rem;
   }
 
-  /* Checkbox Items */
-  .check-item {
+  /* Task Items */
+  .task-item {
     display: flex;
     align-items: flex-start;
     gap: 0.75rem;
-    padding: 0.75rem;
-    background: #fff;
-    border-radius: 8px;
-    margin-bottom: 0.5rem;
+    padding: 0.875rem;
+    border-radius: 10px;
+    transition: all 0.2s;
+    cursor: default;
+  }
+
+  .task-item:hover {
+    background: rgba(255,255,255,0.03);
+  }
+
+  .task-checkbox {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .task-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .task-checkbox .checkmark {
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
     transition: all 0.2s;
   }
 
-  .check-item:hover {
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  .task-checkbox input:hover + .checkmark {
+    border-color: rgba(255,255,255,0.4);
   }
 
-  .check-item.checked {
-    background: rgba(16, 185, 129, 0.05);
+  .task-checkbox input:checked + .checkmark {
+    background: #10B981;
+    border-color: #10B981;
   }
 
-  .check-item input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    margin-top: 2px;
-    cursor: pointer;
-    accent-color: var(--color-primary);
-    flex-shrink: 0;
+  .task-checkbox .checkmark::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 6px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) scale(0);
+    transition: transform 0.2s;
   }
 
-  .check-item-content {
+  .task-checkbox input:checked + .checkmark::after {
+    transform: rotate(45deg) scale(1);
+  }
+
+  .task-content {
     flex: 1;
     min-width: 0;
   }
 
-  .check-item-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  .check-item-title {
+  .task-title {
     font-size: 0.9375rem;
-    color: var(--color-text);
+    color: rgba(255,255,255,0.85);
     line-height: 1.4;
+    margin-bottom: 0.375rem;
+    transition: all 0.2s;
   }
 
-  .check-item.checked .check-item-title {
+  .task-item.completed .task-title {
+    color: rgba(255,255,255,0.35);
     text-decoration: line-through;
-    color: var(--color-text-light);
   }
 
-  .check-item-actions {
+  .task-meta {
     display: flex;
     gap: 0.5rem;
-    flex-shrink: 0;
-  }
-
-  .check-item-meta {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-    flex-wrap: wrap;
     align-items: center;
+    flex-wrap: wrap;
   }
 
-  .item-note-preview {
-    font-size: 0.8125rem;
-    color: var(--color-text-light);
-    font-style: italic;
-    margin-top: 0.5rem;
-    padding: 0.5rem;
-    background: var(--color-bg-alt);
+  .priority-tag {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 0.2rem 0.5rem;
     border-radius: 4px;
-    border-left: 3px solid var(--color-primary);
   }
 
-  /* Action Buttons */
-  .action-btn {
-    width: 28px;
-    height: 28px;
+  .priority-tag.low { background: rgba(107,114,128,0.2); color: #9CA3AF; }
+  .priority-tag.medium { background: rgba(59,130,246,0.2); color: #60A5FA; }
+  .priority-tag.high { background: rgba(245,158,11,0.2); color: #FBBF24; }
+  .priority-tag.critical { background: rgba(239,68,68,0.2); color: #F87171; }
+
+  .task-note-indicator {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .task-note-indicator svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .task-actions {
+    display: flex;
+    gap: 0.25rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .task-item:hover .task-actions {
+    opacity: 1;
+  }
+
+  .task-action-btn {
+    width: 32px;
+    height: 32px;
     border: none;
-    border-radius: 6px;
-    background: var(--color-bg-alt);
-    color: var(--color-text-light);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.5);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -667,72 +864,58 @@ const defaultPlanningData = {
     transition: all 0.2s;
   }
 
-  .action-btn:hover {
-    background: var(--color-primary);
+  .task-action-btn:hover {
+    background: rgba(255,255,255,0.1);
     color: #fff;
   }
 
-  .action-btn.delete:hover {
-    background: #EF4444;
+  .task-action-btn.delete:hover {
+    background: rgba(239,68,68,0.2);
+    color: #F87171;
   }
 
-  .action-btn.notes {
-    position: relative;
+  .task-action-btn svg {
+    width: 16px;
+    height: 16px;
   }
 
-  .action-btn.notes.has-notes::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    width: 8px;
-    height: 8px;
-    background: var(--color-secondary);
-    border-radius: 50%;
-  }
-
-  /* Add Item Button */
-  .add-item-btn {
+  /* Add Task Button */
+  .add-task-btn {
+    width: 100%;
+    padding: 0.875rem;
+    border: 2px dashed rgba(255,255,255,0.1);
+    border-radius: 10px;
+    background: none;
+    color: rgba(255,255,255,0.4);
+    font-size: 0.875rem;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1rem;
-    background: none;
-    border: 2px dashed #ccc;
-    border-radius: 8px;
-    color: var(--color-text-light);
-    cursor: pointer;
-    font-size: 0.875rem;
-    width: 100%;
     justify-content: center;
+    gap: 0.5rem;
     transition: all 0.2s;
+    margin-top: 0.5rem;
   }
 
-  .add-item-btn:hover {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-    background: rgba(27, 107, 90, 0.05);
+  .add-task-btn:hover {
+    border-color: rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.02);
   }
 
-  /* Status Select Dropdown */
-  .status-select {
-    padding: 0.25rem 0.5rem;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    background: #fff;
-    cursor: pointer;
+  .add-task-btn svg {
+    width: 18px;
+    height: 18px;
   }
 
   /* Modal */
   .modal {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.5);
+    z-index: 1000;
     display: none;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
     padding: 1rem;
   }
 
@@ -740,38 +923,56 @@ const defaultPlanningData = {
     display: flex;
   }
 
+  .modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(4px);
+  }
+
   .modal-content {
-    background: #fff;
-    border-radius: 16px;
+    position: relative;
+    background: #1a1a1a;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
     width: 100%;
-    max-width: 500px;
+    max-width: 480px;
     max-height: 90vh;
     overflow-y: auto;
   }
 
   .modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem;
-    border-bottom: 1px solid var(--color-bg-alt);
   }
 
   .modal-header h3 {
     margin: 0;
     font-size: 1.25rem;
+    font-weight: 600;
+    color: #fff;
   }
 
   .modal-close {
-    background: none;
+    width: 36px;
+    height: 36px;
     border: none;
-    font-size: 1.5rem;
-    color: var(--color-text-light);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.5);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
   }
 
   .modal-close:hover {
-    color: var(--color-text);
+    background: rgba(255,255,255,0.1);
+    color: #fff;
   }
 
   #addItemForm,
@@ -779,78 +980,201 @@ const defaultPlanningData = {
     padding: 1.5rem;
   }
 
-  .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-
   .form-group {
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
   }
 
   .form-group label {
     display: block;
     font-size: 0.8125rem;
-    font-weight: 600;
-    margin-bottom: 0.375rem;
-    color: var(--color-text);
+    font-weight: 500;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 0.5rem;
   }
 
   .form-group input,
-  .form-group select,
   .form-group textarea {
     width: 100%;
-    padding: 0.625rem 0.875rem;
-    border: 2px solid var(--color-bg-alt);
-    border-radius: 8px;
+    padding: 0.875rem 1rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    color: #fff;
     font-size: 0.9375rem;
-    font-family: var(--font-body);
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: rgba(255,255,255,0.3);
   }
 
   .form-group input:focus,
-  .form-group select:focus,
   .form-group textarea:focus {
     outline: none;
-    border-color: var(--color-primary);
+    border-color: rgba(139,92,246,0.5);
+    background: rgba(255,255,255,0.08);
+  }
+
+  .form-row {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .priority-select {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .priority-btn {
+    flex: 1;
+    padding: 0.625rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.03);
+    color: rgba(255,255,255,0.5);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .priority-btn:hover {
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.8);
+  }
+
+  .priority-btn.active {
+    background: rgba(139,92,246,0.2);
+    border-color: rgba(139,92,246,0.5);
+    color: #A78BFA;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .btn-cancel {
+    flex: 1;
+    padding: 0.875rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    background: none;
+    color: rgba(255,255,255,0.6);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-cancel:hover {
+    background: rgba(255,255,255,0.05);
+    color: #fff;
+  }
+
+  .btn-submit {
+    flex: 1;
+    padding: 0.875rem;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+    color: #fff;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(139,92,246,0.4);
+  }
+
+  /* Last Updated Bar */
+  .last-updated-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.75rem 2rem;
+    background: rgba(15,15,15,0.95);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    text-align: center;
+    font-size: 0.8125rem;
+    color: rgba(255,255,255,0.4);
+    backdrop-filter: blur(10px);
+  }
+
+  /* SVG Gradient Definition */
+  .svg-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
   }
 
   /* Responsive */
-  @media (max-width: 1024px) {
-    .progress-summary {
-      grid-template-columns: 1fr;
-    }
-  }
-
   @media (max-width: 768px) {
-    .planning-hero {
-      padding: 6rem 1.5rem 2rem;
+    .hero {
+      padding: 5rem 1.5rem 2rem;
     }
 
-    .form-row {
+    .hero h1 {
+      font-size: 2rem;
+    }
+
+    .hero-progress {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .progress-meta {
+      justify-content: center;
+    }
+
+    .tabs-section {
+      padding: 0 1rem;
+    }
+
+    .tab-btn {
+      padding: 1rem;
+      font-size: 0.875rem;
+    }
+
+    .main-content {
+      padding: 1.5rem 1rem;
+    }
+
+    .categories-grid {
       grid-template-columns: 1fr;
     }
 
-    .category-header {
-      flex-direction: column;
-      align-items: flex-start;
+    .priority-select {
+      flex-wrap: wrap;
     }
 
-    .check-item-header {
-      flex-direction: column;
-    }
-
-    .check-item-actions {
-      margin-top: 0.5rem;
+    .priority-btn {
+      flex: 0 0 calc(50% - 0.25rem);
     }
   }
 </style>
+
+<!-- SVG Gradient Definition -->
+<svg class="svg-defs">
+  <defs>
+    <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+  </defs>
+</svg>
 
 <script is:inline src="/js/shared-data.js"></script>
 <script define:vars={{ defaultPlanningData }}>
   const SESSION_KEY = 'islandgoodes_admin_session';
 
-  // Check session
   function getSession() {
     try {
       const stored = sessionStorage.getItem(SESSION_KEY);
@@ -863,20 +1187,15 @@ const defaultPlanningData = {
   }
 
   let planningData = null;
+  let activeSection = 0;
 
-  // Get planning data from server or use defaults
   async function getPlanningData() {
     try {
       const response = await fetch('/.netlify/functions/data-store', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          store: 'planningWorkflow',
-          action: 'get',
-          key: 'data'
-        })
+        body: JSON.stringify({ store: 'planningWorkflow', action: 'get', key: 'data' })
       });
-
       if (response.ok) {
         const data = await response.json();
         if (data && data.sections && data.sections.length > 0) {
@@ -884,13 +1203,11 @@ const defaultPlanningData = {
         }
       }
     } catch (e) {
-      console.error('Failed to load planning data:', e);
+      console.error('Failed to load:', e);
     }
-
     return JSON.parse(JSON.stringify(defaultPlanningData));
   }
 
-  // Save planning data to server
   async function savePlanningData() {
     const session = getSession();
     planningData.lastUpdated = new Date().toISOString();
@@ -900,313 +1217,293 @@ const defaultPlanningData = {
       await fetch('/.netlify/functions/data-store', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          store: 'planningWorkflow',
-          action: 'set',
-          key: 'data',
-          data: planningData
-        })
+        body: JSON.stringify({ store: 'planningWorkflow', action: 'set', key: 'data', data: planningData })
       });
-
-      if (window.SharedData) {
-        await window.SharedData.logActivity('planning', 'Updated feature planning workflow');
-      }
+      updateLastUpdated();
     } catch (e) {
-      console.error('Failed to save planning data:', e);
-      alert('Failed to save changes. Please try again.');
+      console.error('Failed to save:', e);
     }
   }
 
-  // Count items by status
-  function countByStatus() {
-    const counts = {
-      not_started: 0,
-      in_discussion: 0,
-      approved: 0,
-      in_progress: 0,
-      complete: 0,
-      total: 0,
-      checked: 0
-    };
-
+  function countItems() {
+    let total = 0, completed = 0, inProgress = 0;
     planningData.sections.forEach(section => {
-      section.items.forEach(category => {
-        if (category.children) {
-          category.children.forEach(item => {
-            counts.total++;
-            counts[item.status]++;
-            if (item.checked || item.status === 'complete') {
-              counts.checked++;
-            }
+      section.items.forEach(cat => {
+        if (cat.children) {
+          cat.children.forEach(item => {
+            total++;
+            if (item.checked || item.status === 'complete') completed++;
+            else if (item.status === 'in_progress') inProgress++;
           });
         }
       });
     });
-
-    return counts;
+    return { total, completed, inProgress };
   }
 
-  // Update progress display
-  function updateProgressDisplay() {
-    const counts = countByStatus();
-    const percent = counts.total > 0 ? Math.round((counts.checked / counts.total) * 100) : 0;
+  function countSectionItems(section) {
+    let total = 0, completed = 0;
+    section.items.forEach(cat => {
+      if (cat.children) {
+        cat.children.forEach(item => {
+          total++;
+          if (item.checked || item.status === 'complete') completed++;
+        });
+      }
+    });
+    return { total, completed, percent: total > 0 ? Math.round((completed / total) * 100) : 0 };
+  }
 
-    document.getElementById('overallProgress').style.width = percent + '%';
-    document.getElementById('completedCount').textContent = counts.checked;
-    document.getElementById('totalCount').textContent = counts.total;
-    document.getElementById('notStartedCount').textContent = counts.not_started;
-    document.getElementById('discussionCount').textContent = counts.in_discussion;
-    document.getElementById('approvedCount').textContent = counts.approved;
-    document.getElementById('inProgressCount').textContent = counts.in_progress;
-    document.getElementById('completeCount').textContent = counts.complete;
+  function countCategoryItems(category) {
+    if (!category.children) return { total: 0, completed: 0, percent: 0 };
+    const total = category.children.length;
+    const completed = category.children.filter(i => i.checked || i.status === 'complete').length;
+    return { total, completed, percent: total > 0 ? Math.round((completed / total) * 100) : 0 };
+  }
 
+  function updateProgress() {
+    const { total, completed, inProgress } = countItems();
+    const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+    document.getElementById('progressPercent').textContent = percent;
+    document.getElementById('completedCount').textContent = completed;
+    document.getElementById('inProgressCount').textContent = inProgress;
+    document.getElementById('totalCount').textContent = total;
+
+    const circumference = 2 * Math.PI * 54;
+    const offset = circumference - (percent / 100) * circumference;
+    document.getElementById('progressRing').style.strokeDashoffset = offset;
+  }
+
+  function updateLastUpdated() {
     if (planningData.lastUpdated) {
       const date = new Date(planningData.lastUpdated);
-      document.getElementById('lastUpdated').textContent = date.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
+      const formatted = date.toLocaleDateString('en-US', {
+        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
       });
-      document.getElementById('lastUpdatedBy').textContent = planningData.updatedBy ? `by ${planningData.updatedBy}` : '';
+      document.getElementById('lastUpdatedText').textContent =
+        `Last updated ${formatted}${planningData.updatedBy ? ` by ${planningData.updatedBy}` : ''}`;
+    } else {
+      document.getElementById('lastUpdatedText').textContent = 'Not yet saved';
     }
   }
 
-  // Render all sections
-  function renderSections() {
-    const container = document.getElementById('sectionsContainer');
-    container.innerHTML = '';
-
-    planningData.sections.forEach(section => {
-      const sectionEl = document.createElement('div');
-      sectionEl.className = `section-card ${section.expanded ? 'expanded' : ''}`;
-      sectionEl.dataset.sectionId = section.id;
-
-      let sectionTotal = 0;
-      let sectionComplete = 0;
-      section.items.forEach(cat => {
-        if (cat.children) {
-          sectionTotal += cat.children.length;
-          sectionComplete += cat.children.filter(i => i.checked || i.status === 'complete').length;
-        }
-      });
-      const sectionPercent = sectionTotal > 0 ? Math.round((sectionComplete / sectionTotal) * 100) : 0;
-
-      sectionEl.innerHTML = `
-        <div class="section-header">
-          <div class="section-title-area">
-            <svg class="expand-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="9 18 15 12 9 6"/>
-            </svg>
-            <div>
-              <h2 class="section-title">${section.title}</h2>
-              <p class="section-description">${section.description}</p>
-            </div>
-          </div>
-          <div class="section-progress">
-            <span>${sectionComplete}/${sectionTotal}</span>
-            <span>(${sectionPercent}%)</span>
-          </div>
-        </div>
-        <div class="section-content">
-          ${section.items.map(category => renderCategory(section.id, category)).join('')}
-        </div>
-      `;
-
-      sectionEl.querySelector('.section-header').addEventListener('click', () => {
-        sectionEl.classList.toggle('expanded');
-        section.expanded = sectionEl.classList.contains('expanded');
-        savePlanningData();
-      });
-
-      container.appendChild(sectionEl);
-    });
-
-    attachEventHandlers();
-    updateProgressDisplay();
+  function getIcon(type) {
+    const icons = {
+      map: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>',
+      key: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>',
+      code: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>'
+    };
+    return icons[type] || icons.map;
   }
 
-  // Render a category
+  function renderTabs() {
+    const container = document.getElementById('featureTabs');
+    container.innerHTML = planningData.sections.map((section, idx) => {
+      const { total, completed, percent } = countSectionItems(section);
+      return `
+        <button class="tab-btn ${idx === activeSection ? 'active' : ''}"
+                data-index="${idx}"
+                style="--tab-color: ${section.color}">
+          <span class="tab-icon" style="background: ${section.color}">${getIcon(section.icon)}</span>
+          <span>${section.title}</span>
+          <span class="tab-progress">${percent}%</span>
+        </button>
+      `;
+    }).join('');
+
+    container.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeSection = parseInt(btn.dataset.index);
+        renderTabs();
+        renderContent();
+      });
+    });
+  }
+
+  function renderContent() {
+    const container = document.getElementById('featureContent');
+    const section = planningData.sections[activeSection];
+
+    container.innerHTML = `
+      <div class="feature-content active">
+        <div class="feature-header">
+          <h2 class="feature-title">${section.title}</h2>
+          <p class="feature-description">${section.description}</p>
+        </div>
+        <div class="categories-grid">
+          ${section.items.map(category => renderCategory(section.id, category)).join('')}
+        </div>
+      </div>
+    `;
+
+    attachEventHandlers();
+    updateProgress();
+  }
+
   function renderCategory(sectionId, category) {
+    const { total, completed, percent } = countCategoryItems(category);
     return `
       <div class="category-card" data-category-id="${category.id}">
         <div class="category-header">
-          <h3 class="category-title">${category.title}</h3>
-          <div class="category-meta">
-            <select class="status-select" data-section="${sectionId}" data-category="${category.id}" data-type="category-status">
-              <option value="not_started" ${category.status === 'not_started' ? 'selected' : ''}>Not Started</option>
-              <option value="in_discussion" ${category.status === 'in_discussion' ? 'selected' : ''}>In Discussion</option>
-              <option value="approved" ${category.status === 'approved' ? 'selected' : ''}>Approved</option>
-              <option value="in_progress" ${category.status === 'in_progress' ? 'selected' : ''}>In Progress</option>
-              <option value="complete" ${category.status === 'complete' ? 'selected' : ''}>Complete</option>
-            </select>
-            <span class="priority-badge ${category.priority}">${category.priority}</span>
+          <div class="category-title-area">
+            <h3 class="category-title">${category.title}</h3>
+            <span class="category-count">${completed}/${total}</span>
+          </div>
+          <div class="category-progress">
+            <div class="mini-progress">
+              <div class="mini-progress-fill" style="width: ${percent}%"></div>
+            </div>
+            <span class="category-percent">${percent}%</span>
           </div>
         </div>
         <div class="category-items">
-          ${category.children ? category.children.map(item => renderCheckItem(sectionId, category.id, item)).join('') : ''}
-          <button class="add-item-btn" data-section="${sectionId}" data-category="${category.id}">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          ${category.children ? category.children.map(item => renderTask(sectionId, category.id, item)).join('') : ''}
+          <button class="add-task-btn" data-section="${sectionId}" data-category="${category.id}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
             </svg>
-            Add Item
+            Add Task
           </button>
         </div>
       </div>
     `;
   }
 
-  // Render a checkbox item
-  function renderCheckItem(sectionId, categoryId, item) {
+  function renderTask(sectionId, categoryId, item) {
+    const isComplete = item.checked || item.status === 'complete';
     const hasNotes = item.notes && item.notes.trim().length > 0;
     return `
-      <div class="check-item ${item.checked || item.status === 'complete' ? 'checked' : ''}" data-item-id="${item.id}">
-        <input type="checkbox" ${item.checked || item.status === 'complete' ? 'checked' : ''}
-               data-section="${sectionId}" data-category="${categoryId}" data-item="${item.id}" />
-        <div class="check-item-content">
-          <div class="check-item-header">
-            <span class="check-item-title">${item.title}</span>
-            <div class="check-item-actions">
-              <button class="action-btn notes ${hasNotes ? 'has-notes' : ''}"
-                      data-section="${sectionId}" data-category="${categoryId}" data-item="${item.id}"
-                      title="Edit notes">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                </svg>
-              </button>
-              <button class="action-btn delete"
-                      data-section="${sectionId}" data-category="${categoryId}" data-item="${item.id}"
-                      title="Delete item">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                </svg>
-              </button>
-            </div>
+      <div class="task-item ${isComplete ? 'completed' : ''}" data-item-id="${item.id}">
+        <label class="task-checkbox">
+          <input type="checkbox" ${isComplete ? 'checked' : ''}
+                 data-section="${sectionId}" data-category="${categoryId}" data-item="${item.id}">
+          <span class="checkmark"></span>
+        </label>
+        <div class="task-content">
+          <div class="task-title">${item.title}</div>
+          <div class="task-meta">
+            <span class="priority-tag ${item.priority}">${item.priority}</span>
+            ${hasNotes ? `<span class="task-note-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Note</span>` : ''}
           </div>
-          <div class="check-item-meta">
-            <span class="status-badge ${item.status}">${item.status.replace(/_/g, ' ')}</span>
-            <span class="priority-badge ${item.priority}">${item.priority}</span>
-            <select class="status-select" data-section="${sectionId}" data-category="${categoryId}" data-item="${item.id}" data-type="item-status">
-              <option value="not_started" ${item.status === 'not_started' ? 'selected' : ''}>Not Started</option>
-              <option value="in_discussion" ${item.status === 'in_discussion' ? 'selected' : ''}>In Discussion</option>
-              <option value="approved" ${item.status === 'approved' ? 'selected' : ''}>Approved</option>
-              <option value="in_progress" ${item.status === 'in_progress' ? 'selected' : ''}>In Progress</option>
-              <option value="complete" ${item.status === 'complete' ? 'selected' : ''}>Complete</option>
-            </select>
-          </div>
-          ${hasNotes ? `<div class="item-note-preview">${item.notes}</div>` : ''}
+        </div>
+        <div class="task-actions">
+          <button class="task-action-btn notes" data-section="${sectionId}" data-category="${categoryId}" data-item="${item.id}" title="Notes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </button>
+          <button class="task-action-btn delete" data-section="${sectionId}" data-category="${categoryId}" data-item="${item.id}" title="Delete">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+          </button>
         </div>
       </div>
     `;
   }
 
-  // Find item in data structure
   function findItem(sectionId, categoryId, itemId) {
     const section = planningData.sections.find(s => s.id === sectionId);
     if (!section) return null;
     const category = section.items.find(c => c.id === categoryId);
     if (!category) return null;
-    if (itemId) {
-      return category.children?.find(i => i.id === itemId) || null;
-    }
+    if (itemId) return category.children?.find(i => i.id === itemId) || null;
     return category;
   }
 
-  // Attach event handlers after render
   function attachEventHandlers() {
-    document.querySelectorAll('.check-item input[type="checkbox"]').forEach(checkbox => {
+    // Checkboxes
+    document.querySelectorAll('.task-checkbox input').forEach(checkbox => {
       checkbox.addEventListener('change', async (e) => {
         const { section, category, item } = e.target.dataset;
         const itemData = findItem(section, category, item);
         if (itemData) {
           itemData.checked = e.target.checked;
-          if (e.target.checked) {
-            itemData.status = 'complete';
-          }
+          itemData.status = e.target.checked ? 'complete' : 'not_started';
           await savePlanningData();
-          renderSections();
+          renderTabs();
+          renderContent();
         }
       });
     });
 
-    document.querySelectorAll('.status-select').forEach(select => {
-      select.addEventListener('change', async (e) => {
-        const { section, category, item, type } = e.target.dataset;
-        if (type === 'category-status') {
-          const categoryData = findItem(section, category, null);
-          if (categoryData) {
-            categoryData.status = e.target.value;
-            await savePlanningData();
-            renderSections();
-          }
-        } else if (type === 'item-status') {
-          const itemData = findItem(section, category, item);
-          if (itemData) {
-            itemData.status = e.target.value;
-            itemData.checked = e.target.value === 'complete';
-            await savePlanningData();
-            renderSections();
-          }
-        }
-      });
-    });
-
-    document.querySelectorAll('.add-item-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const { section, category } = e.target.closest('.add-item-btn').dataset;
-        document.getElementById('parentSectionId').value = section;
-        document.getElementById('parentCategoryId').value = category;
-        document.getElementById('addItemModal').classList.add('active');
+    // Add buttons
+    document.querySelectorAll('.add-task-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById('parentSectionId').value = btn.dataset.section;
+        document.getElementById('parentCategoryId').value = btn.dataset.category;
+        document.getElementById('addModal').classList.add('active');
         document.getElementById('newItemTitle').focus();
       });
     });
 
-    document.querySelectorAll('.action-btn.notes').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const { section, category, item } = e.target.closest('.action-btn').dataset;
+    // Notes buttons
+    document.querySelectorAll('.task-action-btn.notes').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const { section, category, item } = btn.dataset;
         const itemData = findItem(section, category, item);
         if (itemData) {
           document.getElementById('editItemId').value = `${section}|${category}|${item}`;
+          document.getElementById('editItemTitle').textContent = itemData.title;
           document.getElementById('editItemNotes').value = itemData.notes || '';
-          document.getElementById('editNotesModal').classList.add('active');
+          document.getElementById('notesModal').classList.add('active');
           document.getElementById('editItemNotes').focus();
         }
       });
     });
 
-    document.querySelectorAll('.action-btn.delete').forEach(btn => {
-      btn.addEventListener('click', async (e) => {
-        if (!confirm('Delete this item?')) return;
-        const { section, category, item } = e.target.closest('.action-btn').dataset;
+    // Delete buttons
+    document.querySelectorAll('.task-action-btn.delete').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('Delete this task?')) return;
+        const { section, category, item } = btn.dataset;
         const sectionData = planningData.sections.find(s => s.id === section);
         const categoryData = sectionData?.items.find(c => c.id === category);
         if (categoryData?.children) {
           categoryData.children = categoryData.children.filter(i => i.id !== item);
           await savePlanningData();
-          renderSections();
+          renderTabs();
+          renderContent();
         }
       });
     });
   }
 
+  // Priority buttons
+  document.querySelectorAll('.priority-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('newItemPriority').value = btn.dataset.value;
+    });
+  });
+
   // Modal handlers
-  document.getElementById('closeAddModal')?.addEventListener('click', () => {
-    document.getElementById('addItemModal').classList.remove('active');
-    document.getElementById('addItemForm').reset();
+  function closeModals() {
+    document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+  }
+
+  document.getElementById('closeAddModal').addEventListener('click', closeModals);
+  document.getElementById('cancelAdd').addEventListener('click', closeModals);
+  document.getElementById('closeNotesModal').addEventListener('click', closeModals);
+  document.getElementById('cancelNotes').addEventListener('click', closeModals);
+
+  document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+    backdrop.addEventListener('click', closeModals);
   });
 
-  document.getElementById('closeEditModal')?.addEventListener('click', () => {
-    document.getElementById('editNotesModal').classList.remove('active');
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModals();
   });
 
-  document.getElementById('addItemForm')?.addEventListener('submit', async (e) => {
+  // Add form
+  document.getElementById('addItemForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const sectionId = document.getElementById('parentSectionId').value;
     const categoryId = document.getElementById('parentCategoryId').value;
     const title = document.getElementById('newItemTitle').value;
-    const status = document.getElementById('newItemStatus').value;
     const priority = document.getElementById('newItemPriority').value;
     const notes = document.getElementById('newItemNotes').value;
 
@@ -1215,30 +1512,27 @@ const defaultPlanningData = {
 
     if (categoryData) {
       if (!categoryData.children) categoryData.children = [];
-
-      const session = getSession();
-      const newItem = {
+      categoryData.children.push({
         id: `${categoryId}-${Date.now()}`,
         title,
-        checked: status === 'complete',
+        checked: false,
         notes,
-        status,
+        status: 'not_started',
         priority,
-        createdBy: session?.fullName || session?.username || 'Unknown',
-        createdAt: new Date().toISOString(),
-        updatedAt: null
-      };
-
-      categoryData.children.push(newItem);
+        createdAt: new Date().toISOString()
+      });
       await savePlanningData();
-
-      document.getElementById('addItemModal').classList.remove('active');
+      closeModals();
       document.getElementById('addItemForm').reset();
-      renderSections();
+      document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('.priority-btn[data-value="medium"]').classList.add('active');
+      renderTabs();
+      renderContent();
     }
   });
 
-  document.getElementById('editNotesForm')?.addEventListener('submit', async (e) => {
+  // Notes form
+  document.getElementById('editNotesForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const ids = document.getElementById('editItemId').value.split('|');
     const notes = document.getElementById('editItemNotes').value;
@@ -1247,33 +1541,19 @@ const defaultPlanningData = {
       const itemData = findItem(ids[0], ids[1], ids[2]);
       if (itemData) {
         itemData.notes = notes;
-        itemData.updatedAt = new Date().toISOString();
         await savePlanningData();
-
-        document.getElementById('editNotesModal').classList.remove('active');
-        renderSections();
+        closeModals();
+        renderContent();
       }
     }
   });
 
-  document.querySelectorAll('.modal').forEach(modal => {
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.remove('active');
-      }
-    });
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
-    }
-  });
-
-  // Initialize
+  // Init
   async function init() {
     planningData = await getPlanningData();
-    renderSections();
+    renderTabs();
+    renderContent();
+    updateLastUpdated();
   }
 
   init();
