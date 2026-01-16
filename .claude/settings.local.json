@@ -81,7 +81,11 @@
       "Bash(tmux ls:*)",
       "Bash(systemctl status ttyd-secure)",
       "Bash(journalctl:*)",
-      "Bash(jq:*)"
+      "Bash(jq:*)",
+      "Bash(ttyd:*)",
+      "Bash(systemctl daemon-reload:*)",
+      "Bash(systemctl restart:*)",
+      "Bash(systemctl status:*)"
     ]
   }
 }
