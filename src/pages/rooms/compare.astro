@@ -156,8 +156,10 @@ const amenityLabels = {
               <th class="feature-col">Feature</th>
               {rooms.map(room => (
                 <th class="room-col">
-                  <img src={room.image} alt={room.name} />
-                  <span class="room-name">{room.name}</span>
+                  <a href={`/rooms/${room.slug}`} class="room-col-link">
+                    <img src={room.image} alt={room.name} />
+                    <span class="room-name">{room.name}</span>
+                  </a>
                 </th>
               ))}
             </tr>
@@ -269,5 +271,71 @@ const amenityLabels = {
   @media (min-width: 900px) {
     .compare-cards { display: none; }
     .compare-table-wrapper { display: block; }
+  }
+
+  /* Clickable room column headers */
+  .room-col-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+
+  .room-col-link:hover {
+    transform: scale(1.02);
+    opacity: 0.9;
+  }
+
+  .room-col-link:hover .room-name {
+    color: var(--color-primary);
+  }
+</style>
+
+<style is:global>
+  /* Dark mode styles for compare page */
+  [data-theme="dark"] .compare-table {
+    background: #1f2937 !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+  }
+
+  [data-theme="dark"] .compare-table th {
+    background: #374151 !important;
+    color: #fff !important;
+  }
+
+  [data-theme="dark"] .compare-table td {
+    background: #1f2937 !important;
+    color: #e5e7eb !important;
+    border-bottom-color: #374151 !important;
+  }
+
+  [data-theme="dark"] .feature-col {
+    color: #fff !important;
+  }
+
+  [data-theme="dark"] .room-name {
+    color: #fff !important;
+  }
+
+  [data-theme="dark"] .price-cell {
+    color: var(--color-secondary) !important;
+  }
+
+  [data-theme="dark"] .no-amenity {
+    color: #6b7280 !important;
+  }
+
+  [data-theme="dark"] .compare-card {
+    background: #1f2937 !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+  }
+
+  [data-theme="dark"] .card-content h2 {
+    color: #fff !important;
+  }
+
+  [data-theme="dark"] .card-meta,
+  [data-theme="dark"] .card-highlights li {
+    color: #9ca3af !important;
   }
 </style>

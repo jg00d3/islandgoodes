@@ -88,123 +88,6 @@ const pageTip = "Website analytics and admin tools";
       </div>
     </section>
 
-    <!-- Stats Overview -->
-    <section class="stats-section">
-      <div class="container">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-period">Today</div>
-            <div class="stat-row">
-              <div class="stat-item">
-                <span class="stat-value" id="todayUsers">-</span>
-                <span class="stat-label">Visitors</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-value" id="todaySessions">-</span>
-                <span class="stat-label">Sessions</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-value" id="todayPageViews">-</span>
-                <span class="stat-label">Page Views</span>
-              </div>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-period">This Week</div>
-            <div class="stat-row">
-              <div class="stat-item">
-                <span class="stat-value" id="weekUsers">-</span>
-                <span class="stat-label">Visitors</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-value" id="weekSessions">-</span>
-                <span class="stat-label">Sessions</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-value" id="weekPageViews">-</span>
-                <span class="stat-label">Page Views</span>
-              </div>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-period">This Month</div>
-            <div class="stat-row">
-              <div class="stat-item">
-                <span class="stat-value" id="monthUsers">-</span>
-                <span class="stat-label">Visitors</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-value" id="monthSessions">-</span>
-                <span class="stat-label">Sessions</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-value" id="monthPageViews">-</span>
-                <span class="stat-label">Page Views</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Main Dashboard Grid -->
-    <section class="dashboard-main">
-      <div class="container">
-        <div class="dashboard-grid">
-          <!-- Traffic Trend Chart -->
-          <div class="dashboard-card wide">
-            <h3>Visitor Trend (Last 30 Days)</h3>
-            <div class="chart-container">
-              <canvas id="trendChart"></canvas>
-            </div>
-          </div>
-
-          <!-- World Map -->
-          <div class="dashboard-card wide">
-            <h3>Visitors by Country</h3>
-            <div id="worldMap" class="world-map">
-              <div class="map-loading">Loading map data...</div>
-            </div>
-            <div id="countryList" class="country-list"></div>
-          </div>
-
-          <!-- Top Pages -->
-          <div class="dashboard-card">
-            <h3>Top Pages</h3>
-            <div id="topPages" class="data-list">
-              <div class="loading">Loading...</div>
-            </div>
-          </div>
-
-          <!-- Traffic Sources -->
-          <div class="dashboard-card">
-            <h3>Traffic Sources</h3>
-            <div class="chart-container-small">
-              <canvas id="sourcesChart"></canvas>
-            </div>
-            <div id="sourcesList" class="data-list"></div>
-          </div>
-
-          <!-- Top Cities -->
-          <div class="dashboard-card">
-            <h3>Top Cities</h3>
-            <div id="topCities" class="data-list">
-              <div class="loading">Loading...</div>
-            </div>
-          </div>
-
-          <!-- Devices -->
-          <div class="dashboard-card">
-            <h3>Devices</h3>
-            <div class="chart-container-small">
-              <canvas id="devicesChart"></canvas>
-            </div>
-            <div id="devicesList" class="data-list"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- Admin Tools -->
     <section class="tools-section">
       <div class="container">
@@ -479,6 +362,123 @@ const pageTip = "Website analytics and admin tools";
                 <polyline points="9,18 15,12 9,6"/>
               </svg>
             </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Overview -->
+    <section class="stats-section">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-period">Today</div>
+            <div class="stat-row">
+              <div class="stat-item">
+                <span class="stat-value" id="todayUsers">-</span>
+                <span class="stat-label">Visitors</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="todaySessions">-</span>
+                <span class="stat-label">Sessions</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="todayPageViews">-</span>
+                <span class="stat-label">Page Views</span>
+              </div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-period">This Week</div>
+            <div class="stat-row">
+              <div class="stat-item">
+                <span class="stat-value" id="weekUsers">-</span>
+                <span class="stat-label">Visitors</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="weekSessions">-</span>
+                <span class="stat-label">Sessions</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="weekPageViews">-</span>
+                <span class="stat-label">Page Views</span>
+              </div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-period">This Month</div>
+            <div class="stat-row">
+              <div class="stat-item">
+                <span class="stat-value" id="monthUsers">-</span>
+                <span class="stat-label">Visitors</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="monthSessions">-</span>
+                <span class="stat-label">Sessions</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="monthPageViews">-</span>
+                <span class="stat-label">Page Views</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Dashboard Grid -->
+    <section class="dashboard-main">
+      <div class="container">
+        <div class="dashboard-grid">
+          <!-- Traffic Trend Chart -->
+          <div class="dashboard-card wide">
+            <h3>Visitor Trend (Last 30 Days)</h3>
+            <div class="chart-container">
+              <canvas id="trendChart"></canvas>
+            </div>
+          </div>
+
+          <!-- World Map -->
+          <div class="dashboard-card wide">
+            <h3>Visitors by Country</h3>
+            <div id="worldMap" class="world-map">
+              <div class="map-loading">Loading map data...</div>
+            </div>
+            <div id="countryList" class="country-list"></div>
+          </div>
+
+          <!-- Top Pages -->
+          <div class="dashboard-card">
+            <h3>Top Pages</h3>
+            <div id="topPages" class="data-list">
+              <div class="loading">Loading...</div>
+            </div>
+          </div>
+
+          <!-- Traffic Sources -->
+          <div class="dashboard-card">
+            <h3>Traffic Sources</h3>
+            <div class="chart-container-small">
+              <canvas id="sourcesChart"></canvas>
+            </div>
+            <div id="sourcesList" class="data-list"></div>
+          </div>
+
+          <!-- Top Cities -->
+          <div class="dashboard-card">
+            <h3>Top Cities</h3>
+            <div id="topCities" class="data-list">
+              <div class="loading">Loading...</div>
+            </div>
+          </div>
+
+          <!-- Devices -->
+          <div class="dashboard-card">
+            <h3>Devices</h3>
+            <div class="chart-container-small">
+              <canvas id="devicesChart"></canvas>
+            </div>
+            <div id="devicesList" class="data-list"></div>
           </div>
         </div>
       </div>
@@ -1506,6 +1506,12 @@ const pageTip = "Website analytics and admin tools";
     z-index: 10;
   }
 
+  /* Remove default Leaflet DivIcon background */
+  .leaflet-div-icon {
+    background: transparent !important;
+    border: none !important;
+  }
+
   /* Pulsing notification badge for tool items */
   .tool-badge {
     display: none;
@@ -1522,12 +1528,12 @@ const pageTip = "Website analytics and admin tools";
     border-radius: 10px;
     line-height: 20px;
     text-align: center;
-    animation: badge-pulse 2s ease-in-out infinite;
     z-index: 10;
   }
 
   .tool-badge.show {
     display: block;
+    animation: badge-pulse 2s ease-in-out infinite;
   }
 
   @keyframes badge-pulse {

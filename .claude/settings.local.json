@@ -94,7 +94,10 @@
       "Bash(echo:*)",
       "Bash(else)",
       "Bash(fi)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(systemctl cat:*)",
+      "Bash(do echo \"=== $commit ===\")",
+      "Bash(node --check:*)"
     ]
   }
 }
