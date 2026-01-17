@@ -16,6 +16,8 @@ const {
 const siteName = "Island Goodes";
 const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
 
+// Dev mode flag - dark mode toggle only shows locally, NOT on live site
+
 // Get current path for active nav states
 const currentPath = Astro.url.pathname;
 const isActive = (path: string) => {
@@ -55,6 +57,16 @@ const isActive = (path: string) => {
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Theme initialization - runs before page render to prevent flash -->
+  <script is:inline>
+    (function() {
+      const theme = localStorage.getItem('islandgoodes_theme');
+      if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -166,6 +178,23 @@ const isActive = (path: string) => {
             <button class="lang-option" data-lang="es">Español</button>
             <button class="lang-option lang-more" id="langMoreBtn">More...</button>
           </div>
+        </li>
+        <li class="theme-toggle-nav">
+          <button id="themeToggle" class="theme-toggle-switch" aria-label="Toggle dark/light mode" title="Toggle dark/light mode">
+            <span class="toggle-track">
+              <span class="toggle-icon sun">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="12" cy="12" r="5"/>
+                </svg>
+              </span>
+              <span class="toggle-icon moon">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+              </span>
+              <span class="toggle-thumb"></span>
+            </span>
+          </button>
         </li>
         <li><a href="/book" class="btn btn-primary">Book Now</a></li>
       </ul>
@@ -466,6 +495,235 @@ const isActive = (path: string) => {
     --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ============================================
+     DARK MODE (DEV ONLY)
+     ============================================ */
+  [data-theme="dark"] {
+    --color-text: #e4e4e7;
+    --color-text-light: #a1a1aa;
+    --color-text-muted: #71717a;
+    --color-bg: #0f0f11;
+    --color-bg-warm: #18181b;
+    --color-bg-alt: #1f1f23;
+    --color-bg-dark: #09090b;
+    --gradient-primary: linear-gradient(135deg, #134e4a 0%, #0f766e 100%);
+  }
+
+  [data-theme="dark"] body {
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .site-header {
+    background: rgba(15, 15, 17, 0.95) !important;
+    border-bottom-color: #27272a !important;
+  }
+
+  [data-theme="dark"] .site-footer {
+    background: #09090b !important;
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] section:not(.hero):not([class*="-hero"]),
+  [data-theme="dark"] [class*="-section"]:not([class*="-hero"]) {
+    background: var(--color-bg) !important;
+  }
+
+  [data-theme="dark"] .card,
+  [data-theme="dark"] [class*="-card"],
+  [data-theme="dark"] [class*="-box"],
+  [data-theme="dark"] .room-card,
+  [data-theme="dark"] .feature-card,
+  [data-theme="dark"] .stat-card {
+    background: var(--color-bg-alt) !important;
+    border-color: #3f3f46 !important;
+  }
+
+  [data-theme="dark"] h1, [data-theme="dark"] h2,
+  [data-theme="dark"] h3, [data-theme="dark"] h4 {
+    color: var(--color-text) !important;
+  }
+
+  [data-theme="dark"] p, [data-theme="dark"] span,
+  [data-theme="dark"] li, [data-theme="dark"] label {
+    color: var(--color-text-light);
+  }
+
+  [data-theme="dark"] input,
+  [data-theme="dark"] textarea,
+  [data-theme="dark"] select {
+    background: #27272a !important;
+    border-color: #3f3f46 !important;
+    color: #e4e4e7 !important;
+  }
+
+  [data-theme="dark"] .btn-secondary,
+  [data-theme="dark"] .btn-outline {
+    background: #27272a;
+    border-color: #3f3f46;
+    color: #e4e4e7;
+  }
+
+  /* Dark mode - Google Maps */
+  [data-theme="dark"] iframe[src*="google.com/maps"],
+  [data-theme="dark"] iframe[src*="google.com/maps/embed"],
+  [data-theme="dark"] .location-map iframe {
+    filter: invert(90%) hue-rotate(180deg) brightness(0.95) contrast(0.9) !important;
+  }
+
+  /* Dark mode - Blog posts */
+  [data-theme="dark"] .blog-post,
+  [data-theme="dark"] .post-content {
+    background: var(--color-bg) !important;
+  }
+
+  [data-theme="dark"] .spot-card,
+  [data-theme="dark"] .tip-box,
+  [data-theme="dark"] .info-box,
+  [data-theme="dark"] .highlight-box,
+  [data-theme="dark"] .blog-card,
+  [data-theme="dark"] .post-card,
+  [data-theme="dark"] .article-card {
+    background: #1f2937 !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2) !important;
+  }
+
+  [data-theme="dark"] .spot-card h3,
+  [data-theme="dark"] .spot-card h4,
+  [data-theme="dark"] .blog-card h3,
+  [data-theme="dark"] .post-card h3 {
+    color: #f3f4f6 !important;
+  }
+
+  [data-theme="dark"] .spot-card p,
+  [data-theme="dark"] .blog-card p,
+  [data-theme="dark"] .post-card p {
+    color: #d1d5db !important;
+  }
+
+  [data-theme="dark"] .post-content h2,
+  [data-theme="dark"] .post-content h3 {
+    color: #f3f4f6 !important;
+  }
+
+  [data-theme="dark"] .post-content p,
+  [data-theme="dark"] .post-content li {
+    color: #d1d5db !important;
+  }
+
+  [data-theme="dark"] .related-posts,
+  [data-theme="dark"] .related-section {
+    background: #111827 !important;
+  }
+
+  [data-theme="dark"] .related-posts h2,
+  [data-theme="dark"] .related-section h2 {
+    color: #f3f4f6 !important;
+  }
+
+  /* Dark mode - Navigation dropdown */
+  [data-theme="dark"] .nav-dropdown {
+    background: #1f2937 !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important;
+  }
+
+  [data-theme="dark"] .dropdown-item {
+    color: #e5e7eb !important;
+  }
+
+  [data-theme="dark"] .dropdown-item:hover {
+    background: #374151 !important;
+    color: var(--color-primary) !important;
+  }
+
+  [data-theme="dark"] .dropdown-highlight {
+    border-top-color: #374151 !important;
+  }
+
+  [data-theme="dark"] .lang-dropdown {
+    background: #1f2937 !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important;
+  }
+
+  [data-theme="dark"] .lang-option {
+    color: #e5e7eb !important;
+  }
+
+  [data-theme="dark"] .lang-option:hover {
+    background: #374151 !important;
+  }
+
+  /* Dark mode - Social share buttons */
+  [data-theme="dark"] .share-btn,
+  [data-theme="dark"] .social-share-btn,
+  [data-theme="dark"] [class*="share"] button,
+  [data-theme="dark"] .share-buttons a,
+  [data-theme="dark"] .social-buttons a {
+    background: #1f2937 !important;
+    border-color: #374151 !important;
+  }
+
+  /* Header Theme Toggle - Sliding Switch */
+  .theme-toggle-nav {
+    display: flex;
+    align-items: center;
+  }
+
+  .theme-toggle-switch {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .toggle-track {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 50px;
+    height: 26px;
+    background: #e5e7eb;
+    border-radius: 13px;
+    padding: 0 5px;
+    transition: background 0.3s ease;
+  }
+
+  [data-theme="dark"] .toggle-track {
+    background: #374151;
+  }
+
+  .toggle-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+  }
+
+  .toggle-icon.sun {
+    color: #f59e0b;
+  }
+
+  .toggle-icon.moon {
+    color: #6366f1;
+  }
+
+  .toggle-thumb {
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  [data-theme="dark"] .toggle-thumb {
+    transform: translateX(24px);
   }
 
   *, *::before, *::after {
@@ -1736,14 +1994,29 @@ const isActive = (path: string) => {
 
   // Share buttons functionality - respects admin settings
   (async function() {
-    // Check if share buttons are enabled
+    const SETTINGS_STORAGE_KEY = 'islandgoodes_settings';
+    let settings = {};
+
+    // Try SharedData API first
     try {
-      const settings = window.SharedData ? await window.SharedData.getSettings() : {};
-      if (settings.shareEnabled === false) {
-        document.getElementById('shareButtons')?.remove();
-        return;
+      if (window.SharedData) {
+        settings = await window.SharedData.getSettings() || {};
       }
     } catch(e) {}
+
+    // Fallback to localStorage
+    if (!settings || Object.keys(settings).length === 0) {
+      try {
+        const local = localStorage.getItem(SETTINGS_STORAGE_KEY);
+        if (local) settings = JSON.parse(local);
+      } catch(e) {}
+    }
+
+    // Check if share buttons are enabled
+    if (settings.shareEnabled === false) {
+      document.getElementById('shareButtons')?.remove();
+      return;
+    }
 
     const shareToggle = document.getElementById('shareToggle');
     const shareButtons = document.getElementById('shareButtons');
@@ -1866,14 +2139,26 @@ const isActive = (path: string) => {
 <!-- Live Chat (Tawk.to) - Only loads if enabled in admin settings -->
 <script is:inline>
   (async function(){
-    // Check if chat is enabled in settings
+    const SETTINGS_STORAGE_KEY = 'islandgoodes_settings';
+    let settings = {};
+
+    // Try SharedData API first
     try {
-      // Wait for SharedData to be available
       if (window.SharedData) {
-        const settings = await window.SharedData.getSettings();
-        if (settings.chatEnabled === false) return;
+        settings = await window.SharedData.getSettings() || {};
       }
     } catch(e) {}
+
+    // Fallback to localStorage
+    if (!settings || Object.keys(settings).length === 0) {
+      try {
+        const local = localStorage.getItem(SETTINGS_STORAGE_KEY);
+        if (local) settings = JSON.parse(local);
+      } catch(e) {}
+    }
+
+    // Only load chat if explicitly enabled (default is OFF)
+    if (settings.chatEnabled !== true) return;
 
     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
     var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
@@ -1899,16 +2184,29 @@ const isActive = (path: string) => {
 
   // Language selector functionality - respects admin settings
   document.addEventListener('DOMContentLoaded', async function() {
-    // Check if language selector is enabled
+    const SETTINGS_STORAGE_KEY = 'islandgoodes_settings';
+    let settings = {};
+
+    // Try SharedData API first
     try {
       if (window.SharedData) {
-        const settings = await window.SharedData.getSettings();
-        if (settings.languageEnabled === false) {
-          document.querySelector('.lang-selector')?.remove();
-          return;
-        }
+        settings = await window.SharedData.getSettings() || {};
       }
     } catch(e) {}
+
+    // Fallback to localStorage
+    if (!settings || Object.keys(settings).length === 0) {
+      try {
+        const local = localStorage.getItem(SETTINGS_STORAGE_KEY);
+        if (local) settings = JSON.parse(local);
+      } catch(e) {}
+    }
+
+    // Check if language selector is enabled
+    if (settings.languageEnabled === false) {
+      document.querySelector('.lang-selector')?.remove();
+      return;
+    }
 
     const langToggle = document.getElementById('langToggle');
     const langDropdown = document.getElementById('langDropdown');
@@ -2050,6 +2348,36 @@ const isActive = (path: string) => {
   } catch (e) {
     console.log('Image filter error:', e);
   }
+})();
+</script>
+
+<!-- DEV ONLY: Theme Toggle Script -->
+<script is:inline>
+(function() {
+  const THEME_KEY = 'islandgoodes_theme';
+  const toggleBtn = document.getElementById('themeToggle');
+  if (!toggleBtn) return; // Not in dev mode
+
+  function getTheme() {
+    return localStorage.getItem(THEME_KEY) || 'light';
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem(THEME_KEY, theme);
+  }
+
+  function toggleTheme() {
+    const current = getTheme();
+    const next = current === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+  }
+
+  // Apply saved theme immediately
+  applyTheme(getTheme());
+
+  // Setup toggle
+  toggleBtn.addEventListener('click', toggleTheme);
 })();
 </script>
 </body>

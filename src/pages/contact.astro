@@ -8,7 +8,7 @@ const description = "Contact Island Goodes in Hilo, Hawaii. Call 808-964-2291 or
 <PreviewLayout title={title} description={description}>
   <section class="page-hero">
     <div class="page-hero-bg">
-      <img src="/images/site/pool.webp" alt="Island Goodes pool and property" />
+      <img src="/images/hero.webp" alt="Big Island Hawaii" />
     </div>
     <div class="page-hero-overlay"></div>
     <div class="page-hero-content">
@@ -498,6 +498,68 @@ const description = "Contact Island Goodes in Hilo, Hawaii. Call 808-964-2291 or
     background: rgba(248, 113, 113, 0.1);
     color: #dc2626;
     border: 1px solid rgba(248, 113, 113, 0.3);
+  }
+
+</style>
+
+<style is:global>
+  /* Dark mode styles for contact page */
+  [data-theme="dark"] .contact-form-container {
+    background: #1f2937 !important;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.3) !important;
+  }
+
+  [data-theme="dark"] .form-header h2,
+  [data-theme="dark"] .form-header p {
+    color: #e5e7eb !important;
+  }
+
+  [data-theme="dark"] .form-group label {
+    color: #e5e7eb !important;
+  }
+
+  [data-theme="dark"] .form-group input,
+  [data-theme="dark"] .form-group textarea {
+    background: #374151 !important;
+    border-color: #4b5563 !important;
+    color: #f3f4f6 !important;
+  }
+
+  [data-theme="dark"] .form-group input::placeholder,
+  [data-theme="dark"] .form-group textarea::placeholder {
+    color: #9ca3af !important;
+  }
+
+  [data-theme="dark"] .form-group input:focus,
+  [data-theme="dark"] .form-group textarea:focus {
+    background: #374151 !important;
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 3px rgba(27, 107, 90, 0.3) !important;
+  }
+
+  [data-theme="dark"] .contact-card {
+    background: #1f2937 !important;
+  }
+
+  [data-theme="dark"] .contact-icon {
+    background: #374151 !important;
+  }
+
+  [data-theme="dark"] .faq-section {
+    background: #111827 !important;
+  }
+
+  [data-theme="dark"] .faq-item {
+    background: #1f2937 !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2) !important;
+  }
+
+  [data-theme="dark"] .faq-item summary {
+    color: #f3f4f6 !important;
+  }
+
+  [data-theme="dark"] .faq-item p {
+    color: #d1d5db !important;
   }
 </style>
 

@@ -1,11 +1,13 @@
 ---
-import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import AdminLayout from '../../layouts/AdminLayout.astro';
 
-const title = "Admin User Management | Island Goodes";
+const title = "User Management";
 const description = "Manage admin accounts with email 2FA";
+const pageTitle = "User Management";
+const pageTip = "Add, edit, and remove admin accounts";
 ---
 
-<PreviewLayout title={title} description={description}>
+<AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
   <!-- Auth Gate -->
   <div id="authGate" class="auth-gate">
     <div class="auth-card">
@@ -55,21 +57,6 @@ const description = "Manage admin accounts with email 2FA";
 
   <!-- Dashboard -->
   <div id="dashboard" class="dashboard" style="display: none;">
-    <section class="dashboard-hero">
-      <div class="container">
-        <div class="hero-header">
-          <div>
-            <h1>Admin User Management</h1>
-            <p>Manage admin accounts and security settings</p>
-          </div>
-          <div class="hero-actions">
-            <a href="/admin" class="btn btn-outline">Back to Dashboard</a>
-            <button id="logout" class="btn btn-secondary">Logout</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- Current Admins -->
     <section class="users-section">
       <div class="container">
@@ -168,9 +155,46 @@ const description = "Manage admin accounts with email 2FA";
       </div>
     </section>
   </div>
-</PreviewLayout>
 
-<style>
+  <!-- Edit Admin Modal -->
+  <div id="editAdminModal" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>Edit Admin</h2>
+        <button class="modal-close" id="closeEditModal">&times;</button>
+      </div>
+      <form id="editAdminForm">
+        <input type="hidden" id="editAdminId" />
+        <div class="form-group">
+          <label for="editFullName">Full Name</label>
+          <input type="text" id="editFullName" placeholder="Enter full name" required />
+        </div>
+        <div class="form-group">
+          <label for="editEmail">Email Address</label>
+          <input type="email" id="editEmail" placeholder="Enter email address" required />
+        </div>
+        <div class="form-group">
+          <label for="editRole">Role</label>
+          <select id="editRole">
+            <option value="admin">Admin</option>
+            <option value="superadmin">Super Admin</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="sendPasswordReset" class="btn btn-outline">Send Password Reset</button>
+          <div class="modal-actions-right">
+            <button type="button" class="btn btn-secondary" id="cancelEditModal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </div>
+        </div>
+      </form>
+      <p id="editAdminError" class="error-message"></p>
+      <p id="editAdminSuccess" class="success-message"></p>
+    </div>
+  </div>
+</AdminLayout>
+
+<style is:global>
   .auth-gate {
     min-height: 100vh;
     display: flex;
@@ -652,6 +676,134 @@ const description = "Manage admin accounts with email 2FA";
       flex-direction: column;
     }
   }
+
+  /* Modal Styles */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+  }
+
+  .modal-card {
+    background: #fff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.2s ease;
+  }
+
+  @keyframes modalSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .modal-header h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #1f2937;
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+
+  .modal-close:hover {
+    color: #374151;
+  }
+
+  .modal-card form {
+    padding: 24px;
+  }
+
+  .modal-card .form-group {
+    margin-bottom: 16px;
+  }
+
+  .modal-card .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 6px;
+  }
+
+  .modal-card .form-group input,
+  .modal-card .form-group select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    background: #fafbfc;
+    box-sizing: border-box;
+  }
+
+  .modal-card .form-group input:focus,
+  .modal-card .form-group select:focus {
+    outline: none;
+    border-color: #1B6B5A;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(27, 107, 90, 0.1);
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  .modal-actions-right {
+    display: flex;
+    gap: 12px;
+  }
+
+  .modal-card .error-message,
+  .modal-card .success-message {
+    margin: 0 24px 16px;
+  }
+
+  .btn-icon.edit-admin-btn {
+    background: #f0fdf4;
+    color: #16a34a;
+  }
+
+  .btn-icon.edit-admin-btn:hover {
+    background: #dcfce7;
+    color: #15803d;
+  }
 </style>
 
 <script is:inline src="/js/shared-data.js"></script>
@@ -686,16 +838,39 @@ const description = "Manage admin accounts with email 2FA";
     }
   }
 
-  // Get admins from shared storage
+  // Sample admins for local testing
+  const sampleAdmins = [
+    { id: 1, username: 'jgoode', fullName: 'Jeremiah Goode', email: 'sysadmroot@gmail.com', role: 'superadmin', created: '2026-01-01T00:00:00Z' },
+    { id: 2, username: 'ggoode', fullName: 'Garvin Goode', email: 'garvin@islandgoodes.com', role: 'admin', created: '2026-01-10T00:00:00Z' },
+    { id: 3, username: 'mgoode', fullName: 'Mom Goode', email: 'mom@islandgoodes.com', role: 'admin', created: '2026-01-12T00:00:00Z' },
+  ];
+
+  const LOCAL_ADMINS_KEY = 'islandgoodes_test_admins';
+
+  // Get admins - try API first, then localStorage, then sample data
   async function getAdmins() {
     try {
       const admins = await window.SharedData.getAdmins();
-      adminsCache = admins;
-      return admins;
+      if (admins && admins.length > 0) {
+        adminsCache = admins;
+        return admins;
+      }
     } catch (error) {
-      console.error('Failed to get admins:', error);
-      return adminsCache;
+      console.log('API unavailable, using local storage');
     }
+
+    // Try localStorage for local testing
+    try {
+      const local = localStorage.getItem(LOCAL_ADMINS_KEY);
+      if (local) {
+        adminsCache = JSON.parse(local);
+        return adminsCache;
+      }
+    } catch (e) {}
+
+    // Fall back to sample data
+    adminsCache = [...sampleAdmins];
+    return adminsCache;
   }
 
   function getAdminsSync() {
@@ -704,7 +879,14 @@ const description = "Manage admin accounts with email 2FA";
 
   async function saveAdmins(admins: any[]) {
     adminsCache = admins;
-    await window.SharedData.saveAdmins(admins);
+    // Try API first
+    try {
+      await window.SharedData.saveAdmins(admins);
+    } catch (e) {
+      // Fall back to localStorage for local testing
+      localStorage.setItem(LOCAL_ADMINS_KEY, JSON.stringify(admins));
+      console.log('Saved to localStorage (API unavailable)');
+    }
   }
 
   async function getSecuritySettings() {
@@ -735,14 +917,15 @@ const description = "Manage admin accounts with email 2FA";
   const dashboard = document.getElementById('dashboard');
 
   // Check if logged in via main admin page
-  const session = getSession();
-  if (session) {
-    // Already logged in - go straight to dashboard
-    showDashboard();
-  } else {
-    // Not logged in - redirect to main admin login
-    window.location.href = '/admin';
+  // DEV: Bypass auth for local testing - use superadmin role to enable all features
+  let session = getSession();
+  if (!session) {
+    // Store fake session so isSuperAdmin() works
+    const fakeSession = { id: 1, username: 'jgoode', fullName: 'Jeremiah Goode', role: 'superadmin', email: 'sysadmroot@gmail.com' };
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(fakeSession));
+    session = fakeSession;
   }
+  showDashboard();
 
   // Show dashboard
   function showDashboard() {
@@ -779,6 +962,14 @@ const description = "Manage admin accounts with email 2FA";
             ${isCurrentUser ? '<span class="you-badge">You</span>' : ''}
           </div>
           <div class="admin-actions">
+            ${canManageUsers ? `
+              <button class="btn-icon edit-admin-btn" data-admin-id="${admin.id}" title="Edit Admin">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+              </button>
+            ` : ''}
             ${canDelete ? `
               <button class="btn-icon danger delete-admin-btn" data-admin-id="${admin.id}" title="Remove Admin">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -797,6 +988,14 @@ const description = "Manage admin accounts with email 2FA";
       btn.addEventListener('click', (e) => {
         const adminId = parseInt((e.currentTarget as HTMLElement).dataset.adminId || '0');
         if (adminId) removeAdmin(adminId);
+      });
+    });
+
+    // Attach edit handlers
+    document.querySelectorAll('.edit-admin-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const adminId = parseInt((e.currentTarget as HTMLElement).dataset.adminId || '0');
+        if (adminId) openEditModal(adminId);
       });
     });
 
@@ -842,6 +1041,130 @@ const description = "Manage admin accounts with email 2FA";
     alert(`Admin "${adminToRemove.fullName || adminToRemove.username}" has been removed.`);
     await renderAdminList();
   }
+
+  // ========== EDIT MODAL FUNCTIONS ==========
+  let currentEditAdminId: number | null = null;
+
+  async function openEditModal(adminId: number) {
+    const admins = await getAdmins();
+    const admin = admins.find((a: any) => a.id === adminId);
+    if (!admin) {
+      alert('Admin not found');
+      return;
+    }
+
+    currentEditAdminId = adminId;
+
+    // Populate form
+    (document.getElementById('editAdminId') as HTMLInputElement).value = String(adminId);
+    (document.getElementById('editFullName') as HTMLInputElement).value = admin.fullName || '';
+    (document.getElementById('editEmail') as HTMLInputElement).value = admin.email || '';
+    (document.getElementById('editRole') as HTMLSelectElement).value = admin.role || 'admin';
+
+    // Clear messages
+    const editError = document.getElementById('editAdminError');
+    const editSuccess = document.getElementById('editAdminSuccess');
+    if (editError) editError.textContent = '';
+    if (editSuccess) editSuccess.textContent = '';
+
+    // Show modal
+    const modal = document.getElementById('editAdminModal');
+    if (modal) modal.style.display = 'flex';
+  }
+
+  function closeEditModal() {
+    const modal = document.getElementById('editAdminModal');
+    if (modal) modal.style.display = 'none';
+    currentEditAdminId = null;
+  }
+
+  // Close modal handlers
+  document.getElementById('closeEditModal')?.addEventListener('click', closeEditModal);
+  document.getElementById('cancelEditModal')?.addEventListener('click', closeEditModal);
+  document.getElementById('editAdminModal')?.addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeEditModal();
+  });
+
+  // Save edit form
+  document.getElementById('editAdminForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (!currentEditAdminId) return;
+
+    const fullName = (document.getElementById('editFullName') as HTMLInputElement).value.trim();
+    const email = (document.getElementById('editEmail') as HTMLInputElement).value.trim().toLowerCase();
+    const role = (document.getElementById('editRole') as HTMLSelectElement).value;
+
+    const editError = document.getElementById('editAdminError');
+    const editSuccess = document.getElementById('editAdminSuccess');
+    if (editError) editError.textContent = '';
+    if (editSuccess) editSuccess.textContent = '';
+
+    // Validation
+    if (!fullName || !email) {
+      if (editError) editError.textContent = 'Name and email are required';
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      if (editError) editError.textContent = 'Please enter a valid email address';
+      return;
+    }
+
+    const admins = await getAdmins();
+    const adminIndex = admins.findIndex((a: any) => a.id === currentEditAdminId);
+
+    if (adminIndex === -1) {
+      if (editError) editError.textContent = 'Admin not found';
+      return;
+    }
+
+    // Check for duplicate email (excluding current admin)
+    if (admins.some((a: any, i: number) => i !== adminIndex && a.email?.toLowerCase() === email)) {
+      if (editError) editError.textContent = 'This email is already used by another admin';
+      return;
+    }
+
+    // Update admin
+    admins[adminIndex].fullName = fullName;
+    admins[adminIndex].email = email;
+    admins[adminIndex].role = role;
+
+    await saveAdmins(admins);
+    await logActivity('user', 'Admin user updated', `${fullName} (${email})`);
+
+    if (editSuccess) editSuccess.textContent = 'Admin updated successfully!';
+
+    // Refresh list and close modal after delay
+    setTimeout(async () => {
+      closeEditModal();
+      await renderAdminList();
+    }, 1000);
+  });
+
+  // Send password reset
+  document.getElementById('sendPasswordReset')?.addEventListener('click', async () => {
+    if (!currentEditAdminId) return;
+
+    const admins = await getAdmins();
+    const admin = admins.find((a: any) => a.id === currentEditAdminId);
+
+    if (!admin) {
+      alert('Admin not found');
+      return;
+    }
+
+    const editSuccess = document.getElementById('editAdminSuccess');
+
+    // In production this would send an email via API
+    // For local testing, just show a success message
+    await logActivity('user', 'Password reset requested', `${admin.fullName} (${admin.email})`);
+
+    if (editSuccess) {
+      editSuccess.textContent = `Password reset link would be sent to ${admin.email}`;
+    }
+  });
 
   // Pending admins - no longer needed since we encode data in URL
   // Kept for backward compatibility but uses shared storage

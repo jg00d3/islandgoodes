@@ -116,7 +116,7 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
   <section class="gallery-section">
     <div class="container">
       <div class="gallery-intro">
-        <p>Browse photos of our rooms, amenities, and stunning views. For a complete interactive tour, try our <a href="https://my.matterport.com/show/?m=zrMG54r6RUx" target="_blank" rel="noopener">3D Room Tour</a>.</p>
+        <p>Browse photos of our rooms, amenities, and stunning views. For a complete interactive tour, try our <a href="/tour">3D Room Tour</a>.</p>
       </div>
 
       <div class="filter-tabs">
@@ -143,7 +143,7 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
           <div class="tour-icon">🏠</div>
           <h2>3D Virtual Tour</h2>
           <p>Experience Island Goodes like you're really here with our interactive Matterport 3D tour. Walk through our rooms and property from anywhere in the world.</p>
-          <a href="https://my.matterport.com/show/?m=zrMG54r6RUx" target="_blank" rel="noopener" class="btn btn-primary btn-large">Launch 3D Tour</a>
+          <a href="/tour" class="btn btn-primary btn-large">Launch 3D Tour</a>
         </div>
       </div>
     </div>
@@ -415,7 +415,7 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.95);
+    background: rgba(255, 255, 255, 0.98);
     z-index: 9999;
     align-items: center;
     justify-content: center;
@@ -429,19 +429,21 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
     max-width: 90vw;
     max-height: 90vh;
     text-align: center;
+    padding-bottom: 5rem; /* Space for controls bar */
   }
 
   .lightbox-content img {
     max-width: 100%;
-    max-height: 85vh;
+    max-height: 70vh;
     object-fit: contain;
     border-radius: 8px;
   }
 
   .lightbox-caption {
-    color: #fff;
-    margin-top: 1rem;
-    font-size: 1rem;
+    color: #1f2937;
+    margin-top: 0.75rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
   }
 
   .lightbox-close {
@@ -450,7 +452,7 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
     right: 1.5rem;
     background: none;
     border: none;
-    color: #fff;
+    color: #374151;
     font-size: 3rem;
     cursor: pointer;
     z-index: 10001;
@@ -458,7 +460,7 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
   }
 
   .lightbox-close:hover {
-    color: var(--color-secondary);
+    color: var(--color-primary);
   }
 
   .lightbox-prev,
@@ -466,19 +468,25 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--color-primary);
     border: none;
     color: #fff;
-    font-size: 2rem;
-    padding: 1rem;
+    font-size: 1.5rem;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    border-radius: 4px;
-    transition: background 0.3s;
+    border-radius: 50%;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
   }
 
   .lightbox-prev:hover,
   .lightbox-next:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--color-primary-dark);
+    transform: translateY(-50%) scale(1.1);
   }
 
   .lightbox-prev {
@@ -490,22 +498,23 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
   }
 
   .lightbox-counter {
-    color: rgba(255,255,255,0.7);
-    font-size: 0.875rem;
-    margin-top: 0.5rem;
+    color: rgba(0,0,0,0.5);
+    font-size: 0.8125rem;
+    margin-top: 0.25rem;
   }
 
   .lightbox-controls {
     position: absolute;
-    bottom: 2rem;
+    bottom: 1.5rem;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     align-items: center;
-    gap: 1rem;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 0.75rem 1.5rem;
+    gap: 0.75rem;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 0.5rem 1rem;
     border-radius: 50px;
+    backdrop-filter: blur(10px);
     z-index: 10001;
   }
 
@@ -513,14 +522,15 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
     background: var(--color-primary);
     border: none;
     color: #fff;
-    width: 44px;
-    height: 44px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background 0.3s, transform 0.2s;
+    flex-shrink: 0;
   }
 
   .slideshow-btn:hover {
@@ -533,14 +543,30 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
     color: #1a1a1a;
   }
 
+  .slideshow-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
   .speed-select {
     background: rgba(255, 255, 255, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.3);
     color: #fff;
-    padding: 0.5rem 1rem;
+    padding: 0.35rem 0.75rem;
     border-radius: 20px;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    padding-right: 1.75rem;
+  }
+
+  .speed-select:focus {
+    outline: none;
+    border-color: var(--color-primary);
   }
 
   .speed-select option {
@@ -567,13 +593,97 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
   }
 </style>
 
+<style is:global>
+  /* Dark mode styles for gallery */
+  [data-theme="dark"] .filter-btn {
+    background: #1f2937 !important;
+    border-color: #374151 !important;
+    color: #d1d5db !important;
+  }
+
+  [data-theme="dark"] .filter-btn:hover {
+    border-color: var(--color-primary) !important;
+    color: var(--color-primary) !important;
+  }
+
+  [data-theme="dark"] .filter-btn.active {
+    background: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+    color: #fff !important;
+  }
+
+  [data-theme="dark"] .gallery-section {
+    background: #111827 !important;
+  }
+
+  [data-theme="dark"] .lightbox {
+    background: rgba(0, 0, 0, 0.95) !important;
+  }
+
+  [data-theme="dark"] .lightbox-caption {
+    color: #fff !important;
+  }
+
+  [data-theme="dark"] .lightbox-close {
+    color: #fff !important;
+  }
+
+  [data-theme="dark"] .lightbox-close:hover {
+    color: var(--color-secondary) !important;
+  }
+
+  [data-theme="dark"] .lightbox-prev,
+  [data-theme="dark"] .lightbox-next {
+    background: var(--color-primary) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4) !important;
+  }
+
+  [data-theme="dark"] .lightbox-prev:hover,
+  [data-theme="dark"] .lightbox-next:hover {
+    background: var(--color-primary-dark) !important;
+  }
+
+  [data-theme="dark"] .lightbox-counter {
+    color: rgba(255, 255, 255, 0.7) !important;
+  }
+
+  [data-theme="dark"] .speed-select {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: #fff !important;
+  }
+</style>
+
 <script>
   // Apply custom image order, edited images, and hide deleted images
   (async function initializeGallery() {
     const galleryGrid = document.querySelector('.gallery-grid');
+    const SETTINGS_STORAGE_KEY = 'islandgoodes_settings';
+
+    // Helper to get settings with localStorage fallback
+    async function getSettings() {
+      let settings = {};
+      try {
+        const response = await fetch('/.netlify/functions/data-store', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ store: 'settings', action: 'get', key: 'data' })
+        });
+        if (response.ok) settings = await response.json();
+      } catch (e) {}
+      // Fallback to localStorage
+      if (!settings || Object.keys(settings).length === 0) {
+        try {
+          const local = localStorage.getItem(SETTINGS_STORAGE_KEY);
+          if (local) settings = JSON.parse(local);
+        } catch (e) {}
+      }
+      return settings || {};
+    }
 
     try {
-      const [deletedResponse, orderResponse, editedResponse, settingsResponse] = await Promise.all([
+      const [deletedResponse, orderResponse, editedResponse, settings] = await Promise.all([
         fetch('/.netlify/functions/data-store', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -589,22 +699,17 @@ const categories = [...new Set(galleryImages.map(img => img.category))];
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ store: 'editedImages', action: 'get', key: 'data' })
         }),
-        fetch('/.netlify/functions/data-store', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ store: 'settings', action: 'get', key: 'data' })
-        })
+        getSettings()
       ]);
 
       const deleted = deletedResponse.ok ? await deletedResponse.json() : [];
       const imageOrder = orderResponse.ok ? await orderResponse.json() : {};
       const editedImages = editedResponse.ok ? await editedResponse.json() : {};
-      const settings = settingsResponse.ok ? await settingsResponse.json() : {};
 
       // Hide slideshow controls if slideshow is not enabled
       if (!settings.slideshowEnabled) {
         const controls = document.querySelector('.lightbox-controls');
-        if (controls) controls.style.display = 'none';
+        if (controls) (controls as HTMLElement).style.display = 'none';
       }
       const deletedPaths = Array.isArray(deleted) ? deleted.map((d: any) => d.path || d) : [];
 

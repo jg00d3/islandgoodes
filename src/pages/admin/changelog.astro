@@ -1,13 +1,38 @@
 ---
-import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import AdminLayout from '../../layouts/AdminLayout.astro';
 
-const title = "Changelog | Island Goodes Admin";
+const title = "Changelog";
 const description = "Version history and release notes";
+const pageTitle = "Changelog";
+const pageTip = "Version history and release notes";
 
-const CURRENT_VERSION = "2.8.2";
+const CURRENT_VERSION = "2.9.0";
 const RELEASE_DATE = "January 16, 2026";
 
 const changelog = [
+  {
+    version: "2.9.0",
+    date: "January 16, 2026",
+    type: "Feature & Enhancement",
+    changes: [
+      { type: "added", text: "Lightbox slideshow now fully functional on Gallery and all Room pages" },
+      { type: "added", text: "Slideshow controls: play/pause button, speed selector (slow/medium/fast), spacebar toggle" },
+      { type: "fixed", text: "Admin slideshow toggle now correctly saves and controls all lightboxes site-wide" },
+      { type: "added", text: "Site Settings toggles now fully functional (were previously non-working)" },
+      { type: "added", text: "Weather Widget toggle - show/hide on homepage" },
+      { type: "added", text: "Live Cameras toggle - show/hide camera feeds on homepage" },
+      { type: "added", text: "Social Share Buttons toggle - show/hide floating share button" },
+      { type: "added", text: "Language Selector toggle - show/hide Google Translate" },
+      { type: "added", text: "Live Chat Widget toggle - disabled by default (Tawk.to not set up yet)" },
+      { type: "improved", text: "Admin pages now use localStorage fallback for dev mode testing" },
+      { type: "improved", text: "Newsletter Subscribers: added sample data, trash/restore, dark mode" },
+      { type: "improved", text: "Photo Contributors: added sample data, trash/restore, dark mode, email modal for Accept/Reject" },
+      { type: "improved", text: "Blog Contributors: added sample data, trash/restore, dark mode, email modal for Accept/Reject" },
+      { type: "added", text: "Netlify function for sending contributor response emails" },
+      { type: "fixed", text: "Lightbox controls styling - dark pill bar with proper spacing" },
+      { type: "fixed", text: "Data-store API key mismatches between admin and frontend" },
+    ]
+  },
   {
     version: "2.8.2",
     date: "January 16, 2026",
@@ -254,11 +279,10 @@ const changelog = [
 ];
 ---
 
-<PreviewLayout title={title} description={description}>
+<AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
   <section class="changelog-hero">
     <div class="container">
       <div class="hero-content">
-        <a href="/admin" class="back-link">&larr; Back to Admin</a>
         <h1>Changelog</h1>
         <p>Version history and release notes for Island Goodes website</p>
         <div class="current-version">
@@ -292,7 +316,7 @@ const changelog = [
       ))}
     </div>
   </section>
-</PreviewLayout>
+</AdminLayout>
 
 <style>
   .changelog-hero {

@@ -992,22 +992,35 @@ const description = "Island Goodes is an adults-only accommodation near Hilo wit
 </style>
 
 <script>
-  // Check admin settings for homepage widgets (uses shared storage)
+  // Check admin settings for homepage widgets (uses shared storage with localStorage fallback)
   (async function() {
+    const SETTINGS_STORAGE_KEY = 'islandgoodes_settings';
+    let settings = {};
+
+    // Try SharedData API first
     try {
-      if (typeof SharedData === 'undefined') return;
-      const settings = await SharedData.getSettings() || {};
-
-      // Hide weather widget if disabled
-      if (settings.weatherWidgetEnabled === false) {
-        document.getElementById('weatherWidget')?.remove();
-      }
-
-      // Hide cameras section if disabled
-      if (settings.camerasEnabled === false) {
-        document.querySelector('.live-cameras')?.remove();
+      if (typeof SharedData !== 'undefined') {
+        settings = await SharedData.getSettings() || {};
       }
     } catch(e) {}
+
+    // Fallback to localStorage
+    if (!settings || Object.keys(settings).length === 0) {
+      try {
+        const local = localStorage.getItem(SETTINGS_STORAGE_KEY);
+        if (local) settings = JSON.parse(local);
+      } catch(e) {}
+    }
+
+    // Hide weather widget if disabled
+    if (settings.weatherEnabled === false) {
+      document.getElementById('weatherWidget')?.remove();
+    }
+
+    // Hide cameras section if disabled
+    if (settings.camerasEnabled === false) {
+      document.querySelector('.live-cameras')?.remove();
+    }
   })();
 
   // Weather Widget - Hawaii Time and Weather

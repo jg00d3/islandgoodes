@@ -1,11 +1,13 @@
 ---
-import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import AdminLayout from '../../layouts/AdminLayout.astro';
 
-const title = "AI Chat Assistant | Island Goodes Admin";
+const title = "AI Chat Assistant";
 const description = "Configure and test the AI chat assistant for visitor interactions";
+const pageTitle = "AI Chat Assistant";
+const pageTip = "Configure and test the AI chatbot";
 ---
 
-<PreviewLayout title={title} description={description}>
+<AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
   <div id="authCheck"></div>
 
   <div id="dashboard" class="dashboard" style="display: none;">
@@ -15,9 +17,6 @@ const description = "Configure and test the AI chat assistant for visitor intera
           <div>
             <h1>AI Chat Assistant</h1>
             <p>Intelligent visitor support powered by AI</p>
-          </div>
-          <div class="hero-actions">
-            <a href="/admin" class="btn btn-outline">Back to Dashboard</a>
           </div>
         </div>
       </div>
@@ -222,7 +221,7 @@ const description = "Configure and test the AI chat assistant for visitor intera
       </div>
     </section>
   </div>
-</PreviewLayout>
+</AdminLayout>
 
 <style>
   .dashboard-hero {
@@ -813,6 +812,140 @@ const description = "Configure and test the AI chat assistant for visitor intera
     .training-actions {
       flex-direction: column;
     }
+  }
+
+  /* Dark mode */
+  :global([data-theme="dark"]) .status-card,
+  :global([data-theme="dark"]) .info-card,
+  :global([data-theme="dark"]) .training-card,
+  :global([data-theme="dark"]) .test-card,
+  :global([data-theme="dark"]) .setup-card {
+    background: var(--color-bg-alt);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+
+  :global([data-theme="dark"]) .status-info h2,
+  :global([data-theme="dark"]) .info-card h2,
+  :global([data-theme="dark"]) .training-header h2,
+  :global([data-theme="dark"]) .test-header h2,
+  :global([data-theme="dark"]) .setup-card h2 {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .status-text,
+  :global([data-theme="dark"]) .training-header p,
+  :global([data-theme="dark"]) .test-header p,
+  :global([data-theme="dark"]) .setup-card > p {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .status-note {
+    background: rgba(59, 130, 246, 0.15);
+    color: #93c5fd;
+  }
+
+  :global([data-theme="dark"]) .note-icon {
+    background: #3b82f6;
+  }
+
+  :global([data-theme="dark"]) .toggle-label {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .toggle-slider {
+    background: #555;
+  }
+
+  :global([data-theme="dark"]) .info-item {
+    background: var(--color-bg);
+  }
+
+  :global([data-theme="dark"]) .info-content h3 {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .info-content p {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .training-form label {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .training-form textarea {
+    background: var(--color-bg);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .field-hint {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .chat-container {
+    border-color: var(--color-border);
+  }
+
+  :global([data-theme="dark"]) .chat-messages {
+    background: var(--color-bg);
+  }
+
+  :global([data-theme="dark"]) .chat-message.assistant .message-content {
+    background: var(--color-bg-alt);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .chat-input-form {
+    background: var(--color-bg-alt);
+    border-top-color: var(--color-border);
+  }
+
+  :global([data-theme="dark"]) .chat-input-form input {
+    background: var(--color-bg);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .test-suggestions span {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .suggestion-btn {
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .suggestion-btn:hover {
+    background: rgba(139, 92, 246, 0.2);
+    color: #a78bfa;
+  }
+
+  :global([data-theme="dark"]) .setup-status {
+    background: var(--color-bg);
+  }
+
+  :global([data-theme="dark"]) .setup-steps h3 {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .setup-steps li {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .setup-steps li p {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .pricing-info {
+    background: rgba(16, 185, 129, 0.1);
+    border-left-color: #10B981;
+  }
+
+  :global([data-theme="dark"]) .pricing-info h3,
+  :global([data-theme="dark"]) .pricing-info p,
+  :global([data-theme="dark"]) .pricing-info ul {
+    color: #6ee7b7;
   }
 </style>
 

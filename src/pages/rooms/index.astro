@@ -7,8 +7,17 @@ const description = "Four private oceanview rooms at Island Goodes near Hilo, Ha
 
 <PreviewLayout title={title} description={description}>
   <section class="page-hero">
-    <h1>Our Rooms</h1>
-    <p>Four uniquely decorated rooms—each with private entrance, bath, and lanai</p>
+    <div class="page-hero-bg">
+      <img src="/images/hero.webp" alt="Big Island Hawaii" />
+    </div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <nav class="breadcrumb">
+        <a href="/">Home</a> / Rooms
+      </nav>
+      <h1>Our Rooms</h1>
+      <p class="tagline">Four uniquely decorated rooms—each with private entrance, bath, and lanai</p>
+    </div>
   </section>
 
   <section class="rooms-intro">
@@ -232,6 +241,65 @@ const description = "Four private oceanview rooms at Island Goodes near Hilo, Ha
 </PreviewLayout>
 
 <style>
+  .page-hero {
+    position: relative;
+    min-height: 45vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    padding: 10rem 2rem 4rem;
+  }
+
+  .page-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .page-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .page-hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%);
+  }
+
+  .page-hero-content {
+    max-width: 800px;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .tagline {
+    font-size: 1.25rem;
+    opacity: 0.9;
+  }
+
+  .breadcrumb {
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+
+  .breadcrumb a {
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+
   .rooms-intro {
     padding: 4rem 0 2rem;
     text-align: center;

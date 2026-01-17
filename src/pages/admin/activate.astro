@@ -1,11 +1,13 @@
 ---
-import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import AdminLayout from '../../layouts/AdminLayout.astro';
 
-const title = "Activate Admin Account | Island Goodes";
+const title = "Activate Account";
 const description = "Set up your Island Goodes admin account";
+const pageTitle = "Activate Account";
+const pageTip = "Complete your admin account setup";
 ---
 
-<PreviewLayout title={title} description={description}>
+<AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
   <div class="activate-page">
     <div class="activate-card">
       <!-- Invalid/Expired Token -->
@@ -82,7 +84,7 @@ const description = "Set up your Island Goodes admin account";
       </div>
     </div>
   </div>
-</PreviewLayout>
+</AdminLayout>
 
 <style>
   .activate-page {

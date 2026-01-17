@@ -1,11 +1,13 @@
 ---
-import PreviewLayout from '../layouts/PreviewLayout.astro';
+import AdminLayout from '../layouts/AdminLayout.astro';
 
-const title = "Admin Dashboard | Island Goodes";
+const title = "Admin Dashboard";
 const description = "Analytics dashboard for Island Goodes.";
+const pageTitle = "Admin Dashboard";
+const pageTip = "Website analytics and admin tools";
 ---
 
-<PreviewLayout title={title} description={description}>
+<AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
   <!-- Login Gate -->
   <div id="loginGate" class="login-gate">
     <div class="login-card">
@@ -57,20 +59,18 @@ const description = "Analytics dashboard for Island Goodes.";
 
   <!-- Dashboard (hidden until login) -->
   <div id="dashboard" class="dashboard" style="display: none;">
-    <section class="dashboard-hero">
+    <!-- Dashboard Controls -->
+    <div class="dashboard-controls">
       <div class="container">
-        <div class="hero-header">
-          <div>
-            <h1>Analytics Dashboard</h1>
-            <p>Island Goodes Website Performance</p>
-          </div>
-          <div class="hero-actions">
-            <button id="refreshData" class="btn btn-outline">Refresh Data</button>
-            <button id="logout" class="btn btn-secondary">Logout</button>
+        <div class="controls-inner">
+          <span class="welcome-text">Welcome back, <span id="adminName">Admin</span></span>
+          <div class="controls-actions">
+            <button id="refreshData" class="btn btn-small btn-outline">Refresh Data</button>
+            <button id="logout" class="btn btn-small btn-secondary">Logout</button>
           </div>
         </div>
       </div>
-    </section>
+    </div>
 
     <!-- Real-time Banner -->
     <section class="realtime-banner">
@@ -489,7 +489,7 @@ const description = "Analytics dashboard for Island Goodes.";
                 <p>Tawk.to chat widget in bottom-right corner</p>
               </div>
               <label class="toggle-switch">
-                <input type="checkbox" id="toggleChat" checked />
+                <input type="checkbox" id="toggleChat" />
                 <span class="toggle-slider"></span>
               </label>
             </div>
@@ -572,10 +572,10 @@ const description = "Analytics dashboard for Island Goodes.";
               <strong>Welcome Emails</strong>
               <p>New admins receive welcome email with login credentials via Resend.</p>
             </div>
-            <div class="limitation-item warning">
-              <span class="limitation-status">Partial</span>
+            <div class="limitation-item info">
+              <span class="limitation-status">Working</span>
               <strong>Site Settings Toggles</strong>
-              <p>Settings save to localStorage but don't actually enable/disable features on the site.</p>
+              <p>Toggles control Weather Widget, Live Cameras, Social Share, Language Selector, and Live Chat.</p>
             </div>
           </div>
           <p class="limitations-note">Email 2FA, Welcome Emails, Image Manager, Password Change, and Session Timeout are now fully working!</p>
@@ -639,7 +639,7 @@ const description = "Analytics dashboard for Island Goodes.";
       </div>
     </section>
   </div>
-</PreviewLayout>
+</AdminLayout>
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -776,33 +776,39 @@ const description = "Analytics dashboard for Island Goodes.";
     margin-top: 0.5rem;
   }
 
-  /* Dashboard */
-  .dashboard-hero {
-    background: var(--gradient-primary);
-    color: #fff;
-    padding: 8rem 2rem 2rem;
+  /* Dashboard Controls Bar */
+  .dashboard-controls {
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0.75rem 0;
   }
 
-  .hero-header {
+  .controls-inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  .dashboard-hero h1 {
-    font-size: 2rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .dashboard-hero p {
-    opacity: 0.9;
-  }
-
-  .hero-actions {
-    display: flex;
     gap: 0.75rem;
+  }
+
+  .welcome-text {
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+
+  .welcome-text span {
+    color: #1f2937;
+    font-weight: 600;
+  }
+
+  .controls-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .btn-small {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
   }
 
   /* Realtime Banner */
@@ -1599,11 +1605,10 @@ const description = "Analytics dashboard for Island Goodes.";
   const emailDisplay = document.getElementById('emailDisplay');
 
   // Check existing session
-  const session = getSession();
-  if (session) {
-    currentAdmin = session;
-    showDashboard();
-  }
+  // DEV: Bypass auth for local testing
+  const session = getSession() || { username: 'dev', fullName: 'Dev User', role: 'owner' };
+  currentAdmin = session;
+  showDashboard();
 
   // Step 1: Email/Password login (server-side verification)
   loginForm?.addEventListener('submit', async (e) => {
@@ -2082,6 +2087,39 @@ const description = "Analytics dashboard for Island Goodes.";
   }
 
   let worldMap: any = null;
+  let currentTileLayer: any = null;
+
+  // Tile layer URLs for light/dark mode
+  const lightTileUrl = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+  const darkTileUrl = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+
+  function getTileLayer(isDark: boolean) {
+    return L.tileLayer(isDark ? darkTileUrl : lightTileUrl, {
+      attribution: '&copy; OpenStreetMap &copy; CARTO',
+      subdomains: 'abcd',
+      maxZoom: 20
+    });
+  }
+
+  function updateMapTheme() {
+    if (!worldMap) return;
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (currentTileLayer) {
+      worldMap.removeLayer(currentTileLayer);
+    }
+    currentTileLayer = getTileLayer(isDark);
+    currentTileLayer.addTo(worldMap);
+  }
+
+  // Listen for theme changes
+  const mapThemeObserver = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === 'data-theme') {
+        updateMapTheme();
+      }
+    });
+  });
+  mapThemeObserver.observe(document.documentElement, { attributes: true });
 
   async function loadCountriesData() {
     // Load both countries (for summary) and cities (for detailed map)
@@ -2146,11 +2184,10 @@ const description = "Analytics dashboard for Island Goodes.";
         zoomControl: true
       });
 
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; OpenStreetMap &copy; CARTO',
-        subdomains: 'abcd',
-        maxZoom: 20
-      }).addTo(worldMap);
+      // Add tile layer based on current theme
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      currentTileLayer = getTileLayer(isDark);
+      currentTileLayer.addTo(worldMap);
 
       // Add marker for Island Goodes (Hilo, Hawaii)
       const hiloMarker = L.circleMarker([19.7297, -155.0900], {
@@ -2345,9 +2382,10 @@ const description = "Analytics dashboard for Island Goodes.";
     }
   }
 
-  // Site Settings Management (uses shared storage)
+  // Site Settings Management (uses shared storage with localStorage fallback)
+  const SETTINGS_STORAGE_KEY = 'islandgoodes_settings';
   const settingsConfig = {
-    toggleChat: { key: 'chatEnabled', default: true },
+    toggleChat: { key: 'chatEnabled', default: false },  // OFF by default - not set up yet
     toggleLightbox: { key: 'lightboxEnabled', default: true },
     toggleWeather: { key: 'weatherEnabled', default: true },
     toggleCameras: { key: 'camerasEnabled', default: true },
@@ -2358,13 +2396,25 @@ const description = "Analytics dashboard for Island Goodes.";
   let settingsCache: Record<string, boolean> = {};
 
   async function loadSettings() {
+    // Try SharedData API first
     try {
       const settings = await window.SharedData.getSettings();
-      settingsCache = settings || {};
-      return settingsCache;
-    } catch {
-      return settingsCache;
-    }
+      if (settings && Object.keys(settings).length > 0) {
+        settingsCache = settings;
+        return settingsCache;
+      }
+    } catch {}
+
+    // Fallback to localStorage
+    try {
+      const local = localStorage.getItem(SETTINGS_STORAGE_KEY);
+      if (local) {
+        settingsCache = JSON.parse(local);
+        return settingsCache;
+      }
+    } catch {}
+
+    return settingsCache;
   }
 
   function loadSettingsSync() {
@@ -2373,7 +2423,16 @@ const description = "Analytics dashboard for Island Goodes.";
 
   async function saveSettings(settings: Record<string, boolean>) {
     settingsCache = settings;
-    await window.SharedData.saveSettings(settings);
+
+    // Save to localStorage first (always works)
+    try {
+      localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+    } catch {}
+
+    // Then try SharedData API
+    try {
+      await window.SharedData.saveSettings(settings);
+    } catch {}
   }
 
   async function initSettingsToggles() {

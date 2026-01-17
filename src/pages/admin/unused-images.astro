@@ -1,17 +1,13 @@
 ---
-import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import AdminLayout from '../../layouts/AdminLayout.astro';
 
-const title = "Unused Images Review | Island Goodes";
+const title = "Unused Images";
 const description = "Review unused images and decide where to use them";
+const pageTitle = "Unused Images";
+const pageTip = "Review and decide where to use unused images";
 
-// Images not currently used on the website
+// Images not currently used on the website (verified to exist)
 const unusedImages = [
-  {
-    path: "/images/property/hosts2.webp",
-    name: "Hosts Photo 2",
-    category: "Property",
-    suggestion: "Could be added to the Property page or About section"
-  },
   {
     path: "/images/property/sleep-number.webp",
     name: "Sleep Number Bed",
@@ -19,52 +15,10 @@ const unusedImages = [
     suggestion: "Could highlight the premium beds in room descriptions"
   },
   {
-    path: "/images/property/sleep-number2.webp",
-    name: "Sleep Number Bed 2",
-    category: "Property",
-    suggestion: "Another angle of the Sleep Number bed"
-  },
-  {
     path: "/images/property/kitchenette.webp",
     name: "Kitchenette",
     category: "Property",
     suggestion: "Could be added to room pages or amenities section"
-  },
-  {
-    path: "/images/property/kitchenette2.webp",
-    name: "Kitchenette 2",
-    category: "Property",
-    suggestion: "Another angle of the kitchenette"
-  },
-  {
-    path: "/images/rooms/hilo-bay-room.webp",
-    name: "Hilo Bay Room Card",
-    category: "Rooms",
-    suggestion: "Alternate image for Hilo Bay room listing"
-  },
-  {
-    path: "/images/rooms/orchid-room.webp",
-    name: "Orchid Room Card",
-    category: "Rooms",
-    suggestion: "Alternate image for Orchid room listing"
-  },
-  {
-    path: "/images/rooms/mauna-kea-room.webp",
-    name: "Mauna Kea Room Card",
-    category: "Rooms",
-    suggestion: "Alternate image for Mauna Kea room listing"
-  },
-  {
-    path: "/images/rooms/ginger-room.webp",
-    name: "Ginger Room Card",
-    category: "Rooms",
-    suggestion: "Alternate image for Ginger room listing"
-  },
-  {
-    path: "/images/ginger-room.webp",
-    name: "Ginger Room (duplicate)",
-    category: "Rooms",
-    suggestion: "Duplicate of room card - could be removed"
   },
   {
     path: "/images/birds/nene-goose.webp",
@@ -101,205 +55,331 @@ const unusedImages = [
     name: "Manta Ray",
     category: "Activities",
     suggestion: "Could add to activities page or night snorkeling blog"
-  },
-  {
-    path: "/images/rooms-hero.webp",
-    name: "Rooms Hero",
-    category: "Heroes",
-    suggestion: "Hero image - could replace current rooms page hero"
-  },
-  {
-    path: "/images/location-hero.webp",
-    name: "Location Hero",
-    category: "Heroes",
-    suggestion: "Hero image for a location/directions page"
-  },
-  {
-    path: "/images/amenities-hero.webp",
-    name: "Amenities Hero",
-    category: "Heroes",
-    suggestion: "Hero image for an amenities page"
-  },
-  {
-    path: "/images/contact-hero.webp",
-    name: "Contact Hero",
-    category: "Heroes",
-    suggestion: "Could replace current contact page hero"
   }
 ];
 
 const categories = [...new Set(unusedImages.map(img => img.category))];
 ---
 
-<PreviewLayout title={title} description={description}>
+<AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
   <section class="review-hero">
     <div class="container">
-      <a href="/admin" class="back-link">&larr; Back to Admin</a>
       <h1>Unused Images</h1>
-      <p>These {unusedImages.length} images exist but aren't displayed on the website</p>
+      <p id="imageCount">Loading...</p>
     </div>
   </section>
 
   <section class="review-section">
     <div class="container">
       <div class="review-intro">
-        <p>Review these images and let us know which ones you'd like to add to the website. You can approve, skip, or suggest where each image should go.</p>
+        <p><strong>Delete</strong> moves the image to the deleted folder.<br>
+        <strong>Use This</strong> requires you to specify WHERE to use it - an email will be sent so you can tell Claude to process it.</p>
       </div>
 
-      <form id="reviewForm" class="review-form">
+      <div id="imageContainer">
         {categories.map(category => (
-          <div class="category-section">
+          <div class="category-section" data-category={category}>
             <h2 class="category-title">{category}</h2>
             <div class="image-grid">
               {unusedImages.filter(img => img.category === category).map(image => (
-                <div class="image-card" data-path={image.path}>
+                <div class="image-card" data-path={image.path} data-name={image.name}>
                   <div class="image-preview">
                     <img src={image.path} alt={image.name} loading="lazy" />
                   </div>
                   <div class="image-info">
                     <h4>{image.name}</h4>
                     <p class="suggestion">{image.suggestion}</p>
+                    <code class="image-path">{image.path}</code>
                   </div>
                   <div class="image-actions">
-                    <label class="action-option">
-                      <input type="radio" name={`action-${image.path.replace(/\//g, '-')}`} value="use" />
-                      <span class="option-btn use">Use This</span>
-                    </label>
-                    <label class="action-option">
-                      <input type="radio" name={`action-${image.path.replace(/\//g, '-')}`} value="skip" />
-                      <span class="option-btn skip">Skip</span>
-                    </label>
-                    <label class="action-option">
-                      <input type="radio" name={`action-${image.path.replace(/\//g, '-')}`} value="delete" />
-                      <span class="option-btn delete">Delete</span>
-                    </label>
+                    <button class="action-btn use-btn" data-action="use">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                      </svg>
+                      Use This
+                    </button>
+                    <button class="action-btn delete-btn" data-action="delete">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3,6 5,6 21,6"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                      </svg>
+                      Delete
+                    </button>
                   </div>
-                  <textarea
-                    name={`comment-${image.path.replace(/\//g, '-')}`}
-                    placeholder="Where should this image go? Any notes..."
-                    rows="2"
-                  ></textarea>
+                  <div class="use-form" style="display: none;">
+                    <label>
+                      <strong>Where should this image go?</strong>
+                      <textarea placeholder="e.g., Add to the Hilo Bay Room page gallery, or use as hero image on the Activities page..." rows="3" required></textarea>
+                    </label>
+                    <div class="use-form-actions">
+                      <button class="btn btn-primary submit-use-btn">Submit Request</button>
+                      <button class="btn btn-outline cancel-use-btn">Cancel</button>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         ))}
+      </div>
 
-        <div class="review-summary">
-          <div class="reviewer-info">
-            <label>
-              Your Name
-              <input type="text" name="reviewerName" placeholder="e.g., Dad" required />
-            </label>
-          </div>
-          <button type="submit" class="btn btn-primary btn-large" id="submitBtn">
-            Submit Image Review
-          </button>
+      <div id="emptyState" class="empty-state" style="display: none;">
+        <div class="empty-icon">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
         </div>
-      </form>
-
-      <div id="successMessage" class="success-message" style="display: none;">
-        <div class="success-icon">✓</div>
-        <h2>Thank You!</h2>
-        <p>Your image review has been submitted. We'll update the website based on your feedback.</p>
+        <h2>All Done!</h2>
+        <p>You've reviewed all unused images. Check back later when new images are added.</p>
       </div>
     </div>
   </section>
-</PreviewLayout>
+</AdminLayout>
 
+<script is:inline src="/js/shared-data.js"></script>
 <script>
-  const form = document.getElementById('reviewForm');
-  const submitBtn = document.getElementById('submitBtn');
-  const successMessage = document.getElementById('successMessage');
+  const SESSION_KEY = 'islandgoodes_admin_session';
 
-  form?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Submitting...';
-
-    const formData = new FormData(form);
-    const reviewerName = formData.get('reviewerName');
-
-    // Collect image decisions
-    const imageDecisions = [];
-    const cards = document.querySelectorAll('.image-card');
-
-    cards.forEach(card => {
-      const path = card.dataset.path;
-      const safeKey = path.replace(/\//g, '-');
-      const action = formData.get(`action-${safeKey}`);
-      const comment = formData.get(`comment-${safeKey}`);
-      const name = card.querySelector('h4')?.textContent || '';
-
-      if (action) {
-        imageDecisions.push({
-          id: `image-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-          type: 'image-review',
-          priority: action === 'use' ? 'medium' : 'low',
-          page: '/admin/unused-images',
-          description: action === 'use'
-            ? `📸 USE IMAGE: ${name} (${path})${comment ? ` - "${comment}"` : ''}`
-            : action === 'delete'
-            ? `🗑️ DELETE IMAGE: ${name} (${path})${comment ? ` - "${comment}"` : ''}`
-            : `⏭️ SKIP IMAGE: ${name} (${path})${comment ? ` - "${comment}"` : ''}`,
-          status: 'pending',
-          requestedBy: reviewerName,
-          created: new Date().toISOString()
-        });
-      }
-    });
-
-    if (imageDecisions.length === 0) {
-      alert('Please make a decision on at least one image');
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Submit Image Review';
-      return;
-    }
-
+  // Check session
+  function getSession() {
     try {
-      // Get existing change requests
-      const getResponse = await fetch('/.netlify/functions/data-store', {
+      const stored = sessionStorage.getItem(SESSION_KEY);
+      return stored ? JSON.parse(stored) : null;
+    } catch { return null; }
+  }
+
+  // Redirect if not logged in
+  const session = getSession();
+  if (!session) {
+    window.location.href = '/admin';
+  }
+
+  // Track processed images
+  async function getProcessedImages(): Promise<string[]> {
+    try {
+      const result = await fetch('/.netlify/functions/data-store', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          store: 'changeRequests',
-          action: 'get',
-          key: 'data'
-        })
-      });
+        body: JSON.stringify({ store: 'processedUnusedImages', action: 'get', key: 'data' })
+      }).then(r => r.json());
+      return Array.isArray(result) ? result : [];
+    } catch { return []; }
+  }
 
-      let existing = [];
-      if (getResponse.ok) {
-        existing = await getResponse.json() || [];
-      }
-
-      // Add new decisions
-      const updated = [...existing, ...imageDecisions];
-
-      // Save back
+  async function markAsProcessed(path: string) {
+    const processed = await getProcessedImages();
+    if (!processed.includes(path)) {
+      processed.push(path);
       await fetch('/.netlify/functions/data-store', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          store: 'changeRequests',
-          action: 'set',
-          key: 'data',
-          data: updated
-        })
+        body: JSON.stringify({ store: 'processedUnusedImages', action: 'set', key: 'data', data: processed })
       });
-
-      // Show success
-      form.style.display = 'none';
-      successMessage.style.display = 'block';
-
-    } catch (error) {
-      console.error('Error submitting review:', error);
-      alert('There was an error submitting your review. Please try again.');
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Submit Image Review';
     }
+  }
+
+  // Hide already processed images on load
+  async function filterProcessedImages() {
+    const processed = await getProcessedImages();
+    const deleted = await window.SharedData.getDeletedImages() || [];
+    const allHidden = [...processed, ...deleted];
+
+    let visibleCount = 0;
+    document.querySelectorAll('.image-card').forEach(card => {
+      const path = (card as HTMLElement).dataset.path;
+      if (path && allHidden.includes(path)) {
+        card.remove();
+      } else {
+        visibleCount++;
+      }
+    });
+
+    // Remove empty categories
+    document.querySelectorAll('.category-section').forEach(section => {
+      const cards = section.querySelectorAll('.image-card');
+      if (cards.length === 0) {
+        section.remove();
+      }
+    });
+
+    // Update count
+    document.getElementById('imageCount')!.textContent =
+      visibleCount === 0
+        ? 'All images have been reviewed!'
+        : `${visibleCount} image${visibleCount !== 1 ? 's' : ''} to review`;
+
+    // Show empty state if no images left
+    if (visibleCount === 0) {
+      document.getElementById('imageContainer')!.style.display = 'none';
+      document.getElementById('emptyState')!.style.display = 'block';
+    }
+  }
+
+  // Delete button handler
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      const card = (btn as HTMLElement).closest('.image-card') as HTMLElement;
+      const path = card.dataset.path;
+      const name = card.dataset.name;
+
+      if (!confirm(`Delete "${name}"?\n\nThis will move the image to the deleted folder.`)) {
+        return;
+      }
+
+      try {
+        // Add to deleted images (hides from site)
+        const deleted = await window.SharedData.getDeletedImages() || [];
+        if (!deleted.includes(path)) {
+          deleted.push(path);
+          await window.SharedData.saveDeletedImages(deleted);
+        }
+
+        // Mark as processed
+        await markAsProcessed(path);
+
+        // Log activity
+        await window.SharedData.logActivity('image', 'Deleted unused image', `${name} (${path})`);
+
+        // Remove from page with animation
+        card.style.transition = 'all 0.3s ease';
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+          card.remove();
+          updateCounts();
+        }, 300);
+
+      } catch (err) {
+        console.error('Delete error:', err);
+        alert('Failed to delete image. Please try again.');
+      }
+    });
   });
+
+  // Use button handler - show the form
+  document.querySelectorAll('.use-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = (btn as HTMLElement).closest('.image-card') as HTMLElement;
+      const form = card.querySelector('.use-form') as HTMLElement;
+      const actions = card.querySelector('.image-actions') as HTMLElement;
+
+      actions.style.display = 'none';
+      form.style.display = 'block';
+      form.querySelector('textarea')?.focus();
+    });
+  });
+
+  // Cancel use form
+  document.querySelectorAll('.cancel-use-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = (btn as HTMLElement).closest('.image-card') as HTMLElement;
+      const form = card.querySelector('.use-form') as HTMLElement;
+      const actions = card.querySelector('.image-actions') as HTMLElement;
+      const textarea = form.querySelector('textarea') as HTMLTextAreaElement;
+
+      textarea.value = '';
+      form.style.display = 'none';
+      actions.style.display = 'flex';
+    });
+  });
+
+  // Submit use request
+  document.querySelectorAll('.submit-use-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const card = (btn as HTMLElement).closest('.image-card') as HTMLElement;
+      const path = card.dataset.path;
+      const name = card.dataset.name;
+      const textarea = card.querySelector('.use-form textarea') as HTMLTextAreaElement;
+      const location = textarea.value.trim();
+
+      if (!location) {
+        alert('Please specify where this image should be used.');
+        textarea.focus();
+        return;
+      }
+
+      (btn as HTMLButtonElement).disabled = true;
+      (btn as HTMLButtonElement).textContent = 'Submitting...';
+
+      try {
+        const adminName = session?.fullName || session?.username || 'Admin';
+
+        // Create change request
+        const request = {
+          id: `img-use-${Date.now()}`,
+          type: 'image',
+          priority: 'medium',
+          page: path,
+          description: `📸 USE IMAGE: ${name}\n\nImage path: ${path}\n\nWhere to use it:\n${location}`,
+          status: 'pending',
+          requestedBy: adminName,
+          created: new Date().toISOString()
+        };
+
+        // Save to change requests
+        const requests = await window.SharedData.getChangeRequests() || [];
+        requests.push(request);
+        await window.SharedData.saveChangeRequests(requests);
+
+        // Send email notification
+        await fetch('/.netlify/functions/change-request-notify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ request })
+        });
+
+        // Mark as processed
+        await markAsProcessed(path);
+
+        // Log activity
+        await window.SharedData.logActivity('image', 'Requested image use', `${name} → ${location.substring(0, 50)}...`);
+
+        // Remove from page with animation
+        card.style.transition = 'all 0.3s ease';
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+          card.remove();
+          updateCounts();
+        }, 300);
+
+        alert('Request submitted! You\'ll receive an email confirmation. Tell Claude to process the change request when ready.');
+
+      } catch (err) {
+        console.error('Submit error:', err);
+        alert('Failed to submit request. Please try again.');
+        (btn as HTMLButtonElement).disabled = false;
+        (btn as HTMLButtonElement).textContent = 'Submit Request';
+      }
+    });
+  });
+
+  // Update counts after removal
+  function updateCounts() {
+    const visibleCards = document.querySelectorAll('.image-card').length;
+
+    document.getElementById('imageCount')!.textContent =
+      visibleCards === 0
+        ? 'All images have been reviewed!'
+        : `${visibleCards} image${visibleCards !== 1 ? 's' : ''} to review`;
+
+    // Remove empty categories
+    document.querySelectorAll('.category-section').forEach(section => {
+      if (section.querySelectorAll('.image-card').length === 0) {
+        section.remove();
+      }
+    });
+
+    // Show empty state if no images left
+    if (visibleCards === 0) {
+      document.getElementById('imageContainer')!.style.display = 'none';
+      document.getElementById('emptyState')!.style.display = 'block';
+    }
+  }
+
+  // Initialize
+  filterProcessedImages();
 </script>
 
 <style>
@@ -307,18 +387,6 @@ const categories = [...new Set(unusedImages.map(img => img.category))];
     background: var(--gradient-primary);
     color: #fff;
     padding: 8rem 2rem 3rem;
-  }
-
-  .back-link {
-    color: rgba(255,255,255,0.8);
-    text-decoration: none;
-    font-size: 0.875rem;
-    display: inline-block;
-    margin-bottom: 1rem;
-  }
-
-  .back-link:hover {
-    color: #fff;
   }
 
   .review-hero h1 {
@@ -333,23 +401,24 @@ const categories = [...new Set(unusedImages.map(img => img.category))];
   .review-section {
     padding: 3rem 2rem;
     background: var(--color-bg-alt);
+    min-height: 50vh;
   }
 
   .review-intro {
     max-width: 700px;
     margin: 0 auto 2rem;
     text-align: center;
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   }
 
   .review-intro p {
     color: var(--color-text-light);
-    font-size: 1.0625rem;
+    font-size: 1rem;
     line-height: 1.7;
-  }
-
-  .review-form {
-    max-width: 1200px;
-    margin: 0 auto;
+    margin: 0;
   }
 
   .category-section {
@@ -366,7 +435,7 @@ const categories = [...new Set(unusedImages.map(img => img.category))];
 
   .image-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 1.5rem;
   }
 
@@ -380,6 +449,7 @@ const categories = [...new Set(unusedImages.map(img => img.category))];
   .image-preview {
     height: 200px;
     overflow: hidden;
+    background: #f0f0f0;
   }
 
   .image-preview img {
@@ -399,129 +469,111 @@ const categories = [...new Set(unusedImages.map(img => img.category))];
   }
 
   .suggestion {
-    margin: 0;
+    margin: 0 0 0.75rem;
     font-size: 0.875rem;
     color: var(--color-text-light);
     line-height: 1.5;
   }
 
+  .image-path {
+    display: block;
+    font-size: 0.75rem;
+    color: #888;
+    background: #f5f5f5;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+  }
+
   .image-actions {
     display: flex;
-    gap: 0.5rem;
-    padding: 0 1.25rem;
-    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid #eee;
   }
 
-  .action-option {
-    cursor: pointer;
+  .action-btn {
     flex: 1;
-    min-width: 80px;
-  }
-
-  .action-option input {
-    display: none;
-  }
-
-  .option-btn {
-    display: block;
-    text-align: center;
-    padding: 0.5rem 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
     border-radius: 8px;
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     font-weight: 600;
-    border: 2px solid #ddd;
+    cursor: pointer;
     transition: all 0.2s;
+    border: 2px solid;
   }
 
-  .option-btn.use {
+  .use-btn {
+    background: #10B981;
     border-color: #10B981;
-    color: #10B981;
+    color: #fff;
   }
 
-  .option-btn.skip {
-    border-color: #9CA3AF;
-    color: #9CA3AF;
+  .use-btn:hover {
+    background: #059669;
+    border-color: #059669;
   }
 
-  .option-btn.delete {
+  .delete-btn {
+    background: #fff;
     border-color: #EF4444;
     color: #EF4444;
   }
 
-  .action-option input:checked + .option-btn.use {
-    background: #10B981;
-    color: #fff;
-  }
-
-  .action-option input:checked + .option-btn.skip {
-    background: #9CA3AF;
-    color: #fff;
-  }
-
-  .action-option input:checked + .option-btn.delete {
+  .delete-btn:hover {
     background: #EF4444;
     color: #fff;
   }
 
-  .image-card textarea {
-    width: calc(100% - 2.5rem);
-    margin: 1rem 1.25rem;
+  .use-form {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid #eee;
+    background: #f9fafb;
+  }
+
+  .use-form label {
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .use-form label strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-text);
+  }
+
+  .use-form textarea {
+    width: 100%;
     padding: 0.75rem;
     border: 1px solid #ddd;
     border-radius: 8px;
     font-family: inherit;
     font-size: 0.875rem;
     resize: vertical;
+    box-sizing: border-box;
   }
 
-  .image-card textarea:focus {
+  .use-form textarea:focus {
     outline: none;
     border-color: var(--color-primary);
   }
 
-  .review-summary {
-    background: #fff;
-    border-radius: 16px;
-    padding: 2rem;
-    margin-top: 2rem;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
+  .use-form-actions {
+    display: flex;
+    gap: 0.75rem;
   }
 
-  .reviewer-info {
-    margin-bottom: 1.5rem;
+  .use-form-actions .btn {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
   }
 
-  .reviewer-info label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--color-text);
-  }
-
-  .reviewer-info input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-family: inherit;
-    font-size: 0.9375rem;
-  }
-
-  .reviewer-info input:focus {
-    outline: none;
-    border-color: var(--color-primary);
-  }
-
-  .btn-large {
-    width: 100%;
-    padding: 1rem;
-    font-size: 1.0625rem;
-  }
-
-  .success-message {
+  .empty-state {
     text-align: center;
     padding: 4rem 2rem;
     background: #fff;
@@ -530,26 +582,83 @@ const categories = [...new Set(unusedImages.map(img => img.category))];
     margin: 0 auto;
   }
 
-  .success-icon {
-    width: 80px;
-    height: 80px;
-    background: #10B981;
-    color: #fff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.5rem;
-    margin: 0 auto 1.5rem;
+  .empty-icon {
+    color: #10B981;
+    margin-bottom: 1.5rem;
   }
 
-  .success-message h2 {
+  .empty-state h2 {
     color: var(--color-text);
     margin-bottom: 0.5rem;
   }
 
-  .success-message p {
+  .empty-state p {
     color: var(--color-text-light);
+  }
+
+  /* Dark mode */
+  :global([data-theme="dark"]) .review-intro {
+    background: var(--color-bg-alt);
+  }
+
+  :global([data-theme="dark"]) .review-intro p {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .image-card {
+    background: var(--color-bg-alt);
+  }
+
+  :global([data-theme="dark"]) .image-preview {
+    background: var(--color-bg);
+  }
+
+  :global([data-theme="dark"]) .image-info h4 {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .suggestion {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .image-path {
+    background: var(--color-bg);
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .image-actions {
+    border-top-color: var(--color-border);
+  }
+
+  :global([data-theme="dark"]) .delete-btn {
+    background: var(--color-bg);
+  }
+
+  :global([data-theme="dark"]) .use-form {
+    background: var(--color-bg);
+    border-top-color: var(--color-border);
+  }
+
+  :global([data-theme="dark"]) .use-form label strong {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .use-form textarea {
+    background: var(--color-bg-alt);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .empty-state {
+    background: var(--color-bg-alt);
+  }
+
+  :global([data-theme="dark"]) .empty-state h2 {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .empty-state p {
+    color: var(--color-text-muted);
   }
 
   @media (max-width: 600px) {
@@ -559,6 +668,10 @@ const categories = [...new Set(unusedImages.map(img => img.category))];
 
     .review-hero {
       padding: 6rem 1.5rem 2rem;
+    }
+
+    .image-actions {
+      flex-direction: column;
     }
   }
 </style>

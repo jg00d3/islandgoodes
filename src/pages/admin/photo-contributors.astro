@@ -1,15 +1,16 @@
 ---
-import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import AdminLayout from '../../layouts/AdminLayout.astro';
 
-const title = "Photo Contributors | Island Goodes Admin";
+const title = "Photo Contributors";
 const description = "Manage photo contributor submissions";
+const pageTitle = "Photo Contributors";
+const pageTip = "Review and manage photo submissions";
 ---
 
-<PreviewLayout title={title} description={description}>
+<AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
   <section class="admin-hero">
     <div class="container">
       <div class="hero-content">
-        <a href="/admin" class="back-link">&larr; Back to Admin</a>
         <h1>Photo Contributors</h1>
         <p>Manage photo submissions from community contributors</p>
       </div>
@@ -61,6 +62,7 @@ const description = "Manage photo contributor submissions";
             <option value="reviewed">Reviewed</option>
             <option value="accepted">Accepted</option>
             <option value="rejected">Rejected</option>
+            <option value="deleted">Deleted</option>
           </select>
         </div>
         <div class="filter-group">
@@ -86,9 +88,35 @@ const description = "Manage photo contributor submissions";
       <div id="modalBody"></div>
     </div>
   </div>
-</PreviewLayout>
 
-<style>
+  <!-- Email Response Modal -->
+  <div id="emailModal" class="modal-overlay" style="display: none;">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 id="emailModalTitle">Send Response</h3>
+        <button class="modal-close-btn" id="closeEmailModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="recipient-info">
+          <label>To: <strong id="emailRecipient"></strong></label>
+        </div>
+        <div class="email-form">
+          <label for="emailSubject">Subject:</label>
+          <input type="text" id="emailSubject" />
+          <label for="emailBody">Message:</label>
+          <textarea id="emailBody" rows="10"></textarea>
+          <p class="email-hint">This will be sent as a nicely formatted email from Island Goodes.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="cancelEmail">Cancel</button>
+        <button class="btn btn-primary" id="sendEmail">Send & Update Status</button>
+      </div>
+    </div>
+  </div>
+</AdminLayout>
+
+<style is:global>
   .admin-hero {
     background: var(--gradient-primary);
     color: #fff;
@@ -429,6 +457,337 @@ const description = "Manage photo contributor submissions";
       flex: 1;
     }
   }
+
+  /* Deleted item styling */
+  .deleted-item {
+    opacity: 0.6;
+  }
+
+  .submission-status.deleted {
+    background: #fee2e2;
+    color: #dc2626;
+  }
+
+  /* Dark mode */
+  [data-theme="dark"] .admin-section {
+    background: var(--color-bg);
+  }
+
+  [data-theme="dark"] .settings-card {
+    background: #1e1e1e;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+
+  [data-theme="dark"] .settings-card h3 {
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .settings-row label {
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .email-input-group input {
+    background: #252525;
+    border-color: #444;
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .settings-note {
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .stat-card {
+    background: #1e1e1e;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+
+  [data-theme="dark"] .stat-label {
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .filter-group label {
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .filter-group select {
+    background: #252525;
+    border-color: #444;
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .loading-state,
+  [data-theme="dark"] .empty-state {
+    background: #1e1e1e;
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .submission-item {
+    background: #252525;
+    border: 1px solid #333;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  [data-theme="dark"] .submission-item:hover {
+    background: #2a2a2a;
+    border-color: #444;
+  }
+
+  [data-theme="dark"] .submission-info h4 {
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .submission-info .email {
+    color: #60a5fa;
+  }
+
+  [data-theme="dark"] .submission-status.new {
+    background: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+  }
+
+  [data-theme="dark"] .submission-status.reviewed {
+    background: rgba(217, 119, 6, 0.2);
+    color: #fbbf24;
+  }
+
+  [data-theme="dark"] .submission-status.accepted {
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+  }
+
+  [data-theme="dark"] .submission-status.rejected {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+  }
+
+  [data-theme="dark"] .submission-status.deleted {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+  }
+
+  [data-theme="dark"] .submission-details {
+    background: #1a1a1a;
+    color: #ccc;
+  }
+
+  [data-theme="dark"] .submission-details strong {
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .submission-details a {
+    color: #60a5fa;
+  }
+
+  [data-theme="dark"] .submission-footer {
+    border-top-color: #333;
+  }
+
+  [data-theme="dark"] .submission-date {
+    color: #888;
+  }
+
+  [data-theme="dark"] .btn-outline {
+    background: #252525;
+    border-color: #444;
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .btn-outline:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  /* Dark mode modal */
+  [data-theme="dark"] .modal-content {
+    background: #1e1e1e;
+  }
+
+  [data-theme="dark"] .modal-close {
+    background: #333;
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .modal-close:hover {
+    background: #444;
+  }
+
+  /* Email Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10002;
+    padding: 1rem;
+  }
+
+  .modal-container {
+    background: #fff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--color-text);
+  }
+
+  .modal-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.75rem;
+    color: #9ca3af;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+
+  .modal-close-btn:hover {
+    background: #f3f4f6;
+    color: #374151;
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    max-height: calc(90vh - 150px);
+  }
+
+  .recipient-info {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .recipient-info label {
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+
+  .recipient-info strong {
+    color: var(--color-primary);
+  }
+
+  .email-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
+    color: var(--color-text);
+  }
+
+  .email-form label:first-child {
+    margin-top: 0;
+  }
+
+  .email-form input,
+  .email-form textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.9375rem;
+    box-sizing: border-box;
+  }
+
+  .email-form textarea {
+    resize: vertical;
+    line-height: 1.6;
+  }
+
+  .email-form input:focus,
+  .email-form textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .email-hint {
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+    color: #9ca3af;
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e5e7eb;
+    background: #f9fafb;
+  }
+
+  /* Dark mode email modal */
+  [data-theme="dark"] .modal-container {
+    background: #1e1e1e;
+  }
+
+  [data-theme="dark"] .modal-header {
+    border-bottom-color: #333;
+  }
+
+  [data-theme="dark"] .modal-header h3 {
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .modal-close-btn:hover {
+    background: #333;
+    color: #fff;
+  }
+
+  [data-theme="dark"] .recipient-info {
+    border-bottom-color: #333;
+  }
+
+  [data-theme="dark"] .recipient-info label {
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .recipient-info strong {
+    color: #60a5fa;
+  }
+
+  [data-theme="dark"] .email-form label {
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .email-form input,
+  [data-theme="dark"] .email-form textarea {
+    background: #252525;
+    border-color: #444;
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .email-hint {
+    color: #888;
+  }
+
+  [data-theme="dark"] .modal-footer {
+    background: #252525;
+    border-top-color: #333;
+  }
 </style>
 
 <script is:inline src="/js/shared-data.js"></script>
@@ -466,18 +825,143 @@ const description = "Manage photo contributor submissions";
     photoLink: string;
     notes?: string;
     submittedAt: string;
-    status: 'new' | 'reviewed' | 'accepted' | 'rejected';
+    status: 'new' | 'reviewed' | 'accepted' | 'rejected' | 'deleted';
   }
+
+  // Email modal state
+  let currentEmailContributor: PhotoContributor | null = null;
+  let currentEmailAction: 'accepted' | 'rejected' | null = null;
+
+  // Email templates
+  function getAcceptanceEmail(contributor: PhotoContributor): { subject: string; body: string } {
+    return {
+      subject: 'Great News! Your Photo Submission Has Been Accepted',
+      body: `Aloha ${contributor.name},
+
+Thank you so much for sharing your beautiful photos of ${contributor.location} with us!
+
+We're thrilled to let you know that your submission has been accepted. Your photos capture the beauty of Hawaii wonderfully, and we'd love to feature them on our website.
+
+Here's what happens next:
+• We'll review and select the best photos from your submission
+• You'll receive credit as the photographer
+• We may reach out if we need any additional information
+
+If you have any questions or would like to submit more photos in the future, please don't hesitate to reach out.
+
+Mahalo for contributing to our community!
+
+Warm regards,
+The Island Goodes Team`
+    };
+  }
+
+  function getRejectionEmail(contributor: PhotoContributor): { subject: string; body: string } {
+    return {
+      subject: 'Regarding Your Photo Submission to Island Goodes',
+      body: `Aloha ${contributor.name},
+
+Thank you for taking the time to share your photos of ${contributor.location} with us. We truly appreciate your interest in contributing to Island Goodes.
+
+After careful review, we've decided not to move forward with this particular submission at this time. This doesn't reflect on the quality of your work – we simply have specific needs for our current content.
+
+We encourage you to:
+• Submit again in the future with different photos
+• Follow us on social media for updates on what we're looking for
+• Keep capturing the beauty of Hawaii!
+
+Thank you again for thinking of us, and we wish you all the best with your photography.
+
+Warm regards,
+The Island Goodes Team`
+    };
+  }
+
+  // Sample contributors for testing
+  const sampleContributors: PhotoContributor[] = [
+    {
+      id: 3001,
+      name: 'Maria Santos',
+      email: 'maria.santos@photography.com',
+      social: 'https://instagram.com/mariasantosphoto',
+      location: 'Hilo Bay at Sunrise',
+      photoLink: 'https://drive.google.com/folder/example1',
+      notes: 'Captured these beautiful sunrise shots during my stay last month. Would love to share them with your guests!',
+      submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
+      status: 'new'
+    },
+    {
+      id: 3002,
+      name: 'James Mitchell',
+      email: 'jmitchell@gmail.com',
+      location: 'Rainbow Falls Trail',
+      photoLink: 'https://dropbox.com/shared/example2',
+      notes: 'Professional quality waterfall photos from my recent hiking trip.',
+      submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
+      status: 'reviewed'
+    },
+    {
+      id: 3003,
+      name: 'Lisa Chang',
+      email: 'lisac.photos@yahoo.com',
+      social: 'https://flickr.com/lisachang',
+      location: 'Papaikou scenic views',
+      photoLink: 'https://flickr.com/albums/example3',
+      submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
+      status: 'accepted'
+    },
+    {
+      id: 3004,
+      name: 'Tom Richardson',
+      email: 'tom.r@email.com',
+      location: 'Garden area',
+      photoLink: 'https://photos.google.com/share/example4',
+      notes: 'Some casual phone photos of your beautiful garden.',
+      submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(),
+      status: 'rejected'
+    }
+  ];
+
+  // Local storage key for dev fallback
+  const LOCAL_STORAGE_KEY = 'islandgoodes_photo_contributors';
 
   async function getContributors(): Promise<PhotoContributor[]> {
     try {
+      // Try SharedData API first
       const data = await window.SharedData.getPhotoContributors();
-      return Array.isArray(data) ? data : [];
-    } catch { return []; }
+      if (Array.isArray(data) && data.length > 0) {
+        return data;
+      }
+    } catch (e) {
+      console.log('SharedData not available, using local storage');
+    }
+
+    // Fallback to localStorage for dev testing
+    try {
+      const local = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (local) {
+        const parsed = JSON.parse(local);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {}
+
+    return sampleContributors;
   }
 
   async function saveContributors(contributors: PhotoContributor[]) {
-    await window.SharedData.savePhotoContributors(contributors);
+    // Save to localStorage for dev fallback
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contributors));
+    } catch (e) {}
+
+    // Also try SharedData API
+    try {
+      await window.SharedData.savePhotoContributors(contributors);
+    } catch (e) {
+      console.log('SharedData save failed, using local storage only');
+    }
   }
 
   async function getNotificationEmail(): Promise<string> {
@@ -506,7 +990,8 @@ const description = "Manage photo contributor submissions";
 
   async function updateStats() {
     const contributors = await getContributors();
-    document.getElementById('totalCount')!.textContent = String(contributors.length);
+    const active = contributors.filter(c => c.status !== 'deleted');
+    document.getElementById('totalCount')!.textContent = String(active.length);
     document.getElementById('newCount')!.textContent = String(contributors.filter(c => c.status === 'new').length);
     document.getElementById('acceptedCount')!.textContent = String(contributors.filter(c => c.status === 'accepted').length);
     document.getElementById('rejectedCount')!.textContent = String(contributors.filter(c => c.status === 'rejected').length);
@@ -521,8 +1006,12 @@ const description = "Manage photo contributor submissions";
 
     let contributors = await getContributors();
 
-    // Filter
-    if (statusFilter !== 'all') {
+    // Filter - exclude deleted unless specifically viewing deleted
+    if (statusFilter === 'deleted') {
+      contributors = contributors.filter(c => c.status === 'deleted');
+    } else if (statusFilter === 'all') {
+      contributors = contributors.filter(c => c.status !== 'deleted');
+    } else {
       contributors = contributors.filter(c => c.status === statusFilter);
     }
 
@@ -534,12 +1023,13 @@ const description = "Manage photo contributor submissions";
     }
 
     if (contributors.length === 0) {
-      container.innerHTML = '<div class="empty-state">No photo contributor submissions yet.</div>';
+      const msg = statusFilter === 'deleted' ? 'No deleted submissions.' : 'No photo contributor submissions yet.';
+      container.innerHTML = `<div class="empty-state">${msg}</div>`;
       return;
     }
 
     container.innerHTML = contributors.map(c => `
-      <div class="submission-item" data-id="${c.id}">
+      <div class="submission-item ${c.status === 'deleted' ? 'deleted-item' : ''}" data-id="${c.id}">
         <div class="submission-header">
           <div class="submission-info">
             <h4>${escapeHtml(c.name)}</h4>
@@ -556,16 +1046,21 @@ const description = "Manage photo contributor submissions";
         <div class="submission-footer">
           <span class="submission-date">Submitted ${formatDate(c.submittedAt)}</span>
           <div class="submission-actions">
-            ${c.status === 'new' ? `
-              <button class="btn btn-outline btn-small mark-reviewed" data-id="${c.id}">Mark Reviewed</button>
-            ` : ''}
-            ${c.status !== 'accepted' ? `
-              <button class="btn btn-success btn-small accept-btn" data-id="${c.id}">Accept</button>
-            ` : ''}
-            ${c.status !== 'rejected' ? `
-              <button class="btn btn-danger btn-small reject-btn" data-id="${c.id}">Reject</button>
-            ` : ''}
-            <button class="btn btn-outline btn-small delete-btn" data-id="${c.id}">Delete</button>
+            ${c.status === 'deleted' ? `
+              <button class="btn btn-outline btn-small restore-btn" data-id="${c.id}">Restore</button>
+              <button class="btn btn-danger btn-small delete-forever-btn" data-id="${c.id}">Delete Forever</button>
+            ` : `
+              ${c.status === 'new' ? `
+                <button class="btn btn-outline btn-small mark-reviewed" data-id="${c.id}">Mark Reviewed</button>
+              ` : ''}
+              ${c.status !== 'accepted' ? `
+                <button class="btn btn-success btn-small accept-btn" data-id="${c.id}">Accept</button>
+              ` : ''}
+              ${c.status !== 'rejected' ? `
+                <button class="btn btn-danger btn-small reject-btn" data-id="${c.id}">Reject</button>
+              ` : ''}
+              <button class="btn btn-outline btn-small delete-btn" data-id="${c.id}">Delete</button>
+            `}
           </div>
         </div>
       </div>
@@ -576,13 +1071,19 @@ const description = "Manage photo contributor submissions";
       btn.addEventListener('click', () => updateStatus(parseInt(btn.getAttribute('data-id')!), 'reviewed'));
     });
     container.querySelectorAll('.accept-btn').forEach(btn => {
-      btn.addEventListener('click', () => updateStatus(parseInt(btn.getAttribute('data-id')!), 'accepted'));
+      btn.addEventListener('click', () => openEmailModal(parseInt(btn.getAttribute('data-id')!), 'accepted'));
     });
     container.querySelectorAll('.reject-btn').forEach(btn => {
-      btn.addEventListener('click', () => updateStatus(parseInt(btn.getAttribute('data-id')!), 'rejected'));
+      btn.addEventListener('click', () => openEmailModal(parseInt(btn.getAttribute('data-id')!), 'rejected'));
     });
     container.querySelectorAll('.delete-btn').forEach(btn => {
-      btn.addEventListener('click', () => deleteSubmission(parseInt(btn.getAttribute('data-id')!)));
+      btn.addEventListener('click', () => moveToTrash(parseInt(btn.getAttribute('data-id')!)));
+    });
+    container.querySelectorAll('.restore-btn').forEach(btn => {
+      btn.addEventListener('click', () => restoreSubmission(parseInt(btn.getAttribute('data-id')!)));
+    });
+    container.querySelectorAll('.delete-forever-btn').forEach(btn => {
+      btn.addEventListener('click', () => deleteForever(parseInt(btn.getAttribute('data-id')!)));
     });
 
     await updateStats();
@@ -599,13 +1100,131 @@ const description = "Manage photo contributor submissions";
     }
   }
 
-  async function deleteSubmission(id: number) {
-    if (!confirm('Delete this submission? This cannot be undone.')) return;
+  // Move to trash (soft delete)
+  async function moveToTrash(id: number) {
+    const contributors = await getContributors();
+    const contributor = contributors.find(c => c.id === id);
+    if (contributor) {
+      contributor.status = 'deleted';
+      await saveContributors(contributors);
+      await window.SharedData.logActivity('photo-contributors', 'Moved submission to trash', contributor.name);
+      await renderSubmissions();
+    }
+  }
+
+  // Restore from trash
+  async function restoreSubmission(id: number) {
+    const contributors = await getContributors();
+    const contributor = contributors.find(c => c.id === id);
+    if (contributor) {
+      contributor.status = 'new';
+      await saveContributors(contributors);
+      await window.SharedData.logActivity('photo-contributors', 'Restored submission from trash', contributor.name);
+      await renderSubmissions();
+    }
+  }
+
+  // Permanently delete
+  async function deleteForever(id: number) {
+    if (!confirm('Permanently delete this submission? This cannot be undone.')) return;
     const contributors = (await getContributors()).filter(c => c.id !== id);
     await saveContributors(contributors);
-    await window.SharedData.logActivity('photo-contributors', 'Deleted submission');
+    await window.SharedData.logActivity('photo-contributors', 'Permanently deleted submission');
     await renderSubmissions();
   }
+
+  // Email modal functions
+  async function openEmailModal(id: number, action: 'accepted' | 'rejected') {
+    const contributors = await getContributors();
+    const contributor = contributors.find(c => c.id === id);
+    if (!contributor) return;
+
+    currentEmailContributor = contributor;
+    currentEmailAction = action;
+
+    // Get email template based on action
+    const template = action === 'accepted'
+      ? getAcceptanceEmail(contributor)
+      : getRejectionEmail(contributor);
+
+    // Populate modal
+    document.getElementById('emailModalTitle')!.textContent = action === 'accepted'
+      ? 'Send Acceptance Email'
+      : 'Send Rejection Email';
+    document.getElementById('emailRecipient')!.textContent = `${contributor.name} (${contributor.email})`;
+    (document.getElementById('emailSubject') as HTMLInputElement).value = template.subject;
+    (document.getElementById('emailBody') as HTMLTextAreaElement).value = template.body;
+
+    // Show modal
+    document.getElementById('emailModal')!.style.display = 'flex';
+  }
+
+  function closeEmailModal() {
+    document.getElementById('emailModal')!.style.display = 'none';
+    currentEmailContributor = null;
+    currentEmailAction = null;
+  }
+
+  async function sendContributorEmail() {
+    if (!currentEmailContributor || !currentEmailAction) return;
+
+    const subject = (document.getElementById('emailSubject') as HTMLInputElement).value.trim();
+    const body = (document.getElementById('emailBody') as HTMLTextAreaElement).value.trim();
+
+    if (!subject || !body) {
+      alert('Please fill in both subject and message.');
+      return;
+    }
+
+    const sendBtn = document.getElementById('sendEmail') as HTMLButtonElement;
+    sendBtn.disabled = true;
+    sendBtn.textContent = 'Sending...';
+
+    try {
+      // Send the email via Netlify function
+      const response = await fetch('/.netlify/functions/send-contributor-response', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: currentEmailContributor.email,
+          toName: currentEmailContributor.name,
+          subject: subject,
+          message: body
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send email');
+      }
+
+      // Update status
+      const contributors = await getContributors();
+      const contributor = contributors.find(c => c.id === currentEmailContributor!.id);
+      if (contributor) {
+        contributor.status = currentEmailAction;
+        await saveContributors(contributors);
+        await window.SharedData.logActivity('photo-contributors', `${currentEmailAction === 'accepted' ? 'Accepted' : 'Rejected'} submission and sent email`, contributor.name);
+      }
+
+      closeEmailModal();
+      await renderSubmissions();
+      alert(`Email sent and submission marked as ${currentEmailAction}!`);
+    } catch (error) {
+      console.error('Error sending email:', error);
+      alert('Failed to send email. Please try again.');
+    } finally {
+      sendBtn.disabled = false;
+      sendBtn.textContent = 'Send & Update Status';
+    }
+  }
+
+  // Email modal event listeners
+  document.getElementById('closeEmailModal')?.addEventListener('click', closeEmailModal);
+  document.getElementById('cancelEmail')?.addEventListener('click', closeEmailModal);
+  document.getElementById('sendEmail')?.addEventListener('click', sendContributorEmail);
+  document.getElementById('emailModal')?.addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeEmailModal();
+  });
 
   // Load notification email
   async function loadEmailSetting() {

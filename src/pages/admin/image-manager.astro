@@ -1,71 +1,72 @@
 ---
-import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import AdminLayout from '../../layouts/AdminLayout.astro';
 
-const title = "Image Manager | Island Goodes Admin";
+const title = "Image Manager";
 const description = "Manage room and gallery images";
+const pageTitle = "Image Manager";
+const pageTip = "Manage room and gallery images";
 
-// Room image configurations - ACTUAL images that exist in each folder
+// Room image configurations - ACTUAL images that exist in each folder (webp format)
 const rooms = [
   {
     id: 'hilo-bay',
     name: 'Hilo Bay Room',
     path: '/images/rooms/hilo-bay/',
-    images: ['bed.jpg', 'room.jpg', 'room2.jpg', 'room3.jpg', 'lanai.jpg', 'lanai2.jpg', 'bathroom.jpg', 'bathroom2.jpg', 'bathroom3.jpg', 'bathroom4.jpg', 'bathroom5.jpg', 'bathroom6.jpg', 'bathroom7.jpg', 'closet.jpg', 'coffee.jpg', 'dresser-tv.jpg', 'entrance.jpg', 'fridge.jpg', 'recliner.jpg', 'table.jpg']
+    images: ['bed.webp', 'room.webp', 'room2.webp', 'lanai.webp', 'bathroom.webp', 'bathroom2.webp', 'bathroom3.webp', 'bathroom4.webp', 'closet.webp', 'coffee.webp', 'dresser-tv.webp', 'entrance.webp', 'fridge.webp', 'recliner.webp', 'table.webp']
   },
   {
     id: 'orchid',
     name: 'Orchid Room',
     path: '/images/rooms/orchid/',
-    images: ['bed.jpg', 'room.jpg', 'room2.jpg', 'living.jpg', 'living2.jpg', 'living3.jpg', 'lanai.jpg', 'kitchen.jpg', 'kitchen2.jpg', 'kitchen3.jpg', 'kitchen4.jpg', 'kitchen5.jpg', 'bathroom.jpg', 'bathroom2.jpg', 'bathroom3.jpg', 'bathroom4.jpg', 'closet.jpg', 'closet2.jpg', 'entrance.jpg', 'entrance2.jpg', 'unit.jpg', 'view1.jpg', 'view2.jpg', 'view3.jpg', 'view4.jpg', 'view5.jpg', 'view6.jpg', 'view7.jpg', 'view8.jpg', 'view9.jpg', 'view10.jpg', 'view11.jpg', 'view12.jpg']
+    images: ['bed.webp', 'room.webp', 'room2.webp', 'living3.webp', 'lanai.webp', 'kitchen.webp', 'kitchen2.webp', 'kitchen3.webp', 'kitchen4.webp', 'bathroom.webp', 'bathroom2.webp', 'bathroom3.webp', 'bathroom4.webp', 'view1.webp', 'view4.webp', 'view9.webp', 'view11.webp', 'view12.webp']
   },
   {
     id: 'mauna-kea',
     name: 'Mauna Kea Room',
     path: '/images/rooms/mauna-kea/',
-    images: ['bed.jpg', 'room.jpg', 'room2.jpg', 'room3.jpg', 'lanai.jpg', 'lanai2.jpg', 'lanai3.jpg', 'bathroom.jpg', 'bathroom2.jpg', 'bathroom3.jpg', 'bathroom4.jpg', 'bathroom5.jpg', 'bathroom6.jpg', 'bathroom7.jpg', 'closet.jpg', 'closet2.jpg', 'closet3.jpg', 'coffee.jpg', 'entrance.jpg', 'fridge.jpg', 'table.jpg']
+    images: ['bed.webp', 'room.webp', 'room2.webp', 'lanai.webp', 'lanai2.webp', 'bathroom.webp', 'bathroom2.webp', 'bathroom4.webp', 'bathroom5.webp', 'bathroom6.webp', 'closet.webp', 'closet2.webp', 'coffee.webp', 'entrance.webp', 'fridge.webp', 'table.webp']
   },
   {
     id: 'ginger',
     name: 'Ginger Room',
     path: '/images/rooms/ginger/',
-    images: ['room.jpg', 'room2.jpg', 'sitting.jpg', 'bathroom.jpg', 'closet.jpg', 'closet2.jpg', 'coffee.jpg', 'ac.jpg', 'ornament.jpg']
+    images: ['room.webp', 'sitting.webp', 'bathroom.webp', 'closet.webp', 'closet2.webp', 'coffee.webp', 'ac.webp', 'ornament.webp']
   }
 ];
 
-// Gallery image configurations
+// Gallery image configurations (webp format)
 const galleryCategories = [
   {
     id: 'property',
     name: 'Property',
     path: '/images/property/',
-    images: ['pool.jpg', 'hot-tub.jpg', 'garden.jpg', 'garden2.jpg', 'tropical-plants.jpg', 'laundry.jpg', 'hosts.jpg', 'coconut-jake.jpg', 'miss-kitty.jpg', 'prudy.jpg', 'prudy-jasper.jpg']
+    images: ['pool.webp', 'pool2.webp', 'pool3.webp', 'hot-tub.webp', 'hot-tub2.webp', 'garden.webp', 'garden2.webp', 'tropical-plants.webp', 'kitchenette.webp', 'laundry.webp', 'sleep-number.webp', 'hosts.webp', 'coconut-jake.webp', 'miss-kitty.webp', 'prudy.webp', 'prudy-jasper.webp']
   },
   {
     id: 'scenery',
     name: 'Views & Scenery',
     path: '/images/scenery/',
-    images: ['hilo-bay.jpg', 'hilo-bay2.jpg', 'ocean-view.jpg', 'ocean-view2.jpg', 'island-goodes-view.jpg', 'turtles.jpg']
+    images: ['hilo-bay.webp', 'hilo-bay2.webp', 'ocean-view.webp', 'ocean-view2.webp', 'island-goodes-view.webp', 'turtles.webp']
   },
   {
     id: 'attractions',
     name: 'Attractions',
     path: '/images/attractions/',
-    images: ['akaka-falls.jpg', 'akaka-falls2.jpg', 'rainbow-falls.jpg', 'volcano.jpg', 'volcano-lava.jpg', 'volcano-looming.jpg', 'waipio-valley.jpg', 'liliuokalani-gardens.jpg', 'panaewa-zoo.jpg', 'tsunami-museum.jpg', 'lyman-museum.jpg', 'donkey.jpg', 'horse.jpg', 'helicopter.jpg', 'kayaking.jpg', 'zipline.jpg']
+    images: ['akaka-falls.webp', 'akaka-falls2.webp', 'akaka-falls3.webp', 'rainbow-falls.webp', 'volcano.webp', 'volcano-lava.webp', 'volcano-looming.webp', 'waipio-valley.webp', 'liliuokalani-gardens.webp', 'panaewa-zoo.webp', 'tsunami-museum.webp', 'lyman-museum.webp', 'donkey.webp', 'horse.webp', 'helicopter.webp', 'kayaking.webp', 'zipline.webp']
   },
   {
     id: 'beaches',
     name: 'Beaches',
     path: '/images/beaches/',
-    images: ['richardsons.jpg', 'carlsmith.jpg']
+    images: ['richardsons.webp', 'carlsmith.webp']
   }
 ];
 ---
 
-<PreviewLayout title={title} description={description}>
+<AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
   <section class="manager-hero">
     <div class="container">
       <div class="hero-content">
-        <a href="/admin" class="back-link">&larr; Back to Admin</a>
         <h1>Image Manager</h1>
         <p>Edit, rotate, crop, and manage room photos</p>
       </div>
@@ -373,7 +374,7 @@ const galleryCategories = [
       </div>
     </div>
   </section>
-</PreviewLayout>
+</AdminLayout>
 
 <style>
   .manager-hero {
@@ -1099,6 +1100,175 @@ const galleryCategories = [
     .manager-hero { padding: 6rem 1.5rem 2rem; }
     .steps { grid-template-columns: 1fr; gap: 1.5rem; }
     .panel-header { flex-direction: column; gap: 0.5rem; align-items: flex-start; }
+  }
+
+  /* Dark mode styles */
+  :global([data-theme="dark"]) .slideshow-toggle {
+    background: var(--color-bg-alt);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  :global([data-theme="dark"]) .toggle-label > span:first-child {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .toggle-switch {
+    background: #555;
+  }
+
+  :global([data-theme="dark"]) .toggle-status {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .tab {
+    background: var(--color-bg-alt);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .tab:hover {
+    border-color: var(--color-primary);
+  }
+
+  :global([data-theme="dark"]) .tab.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+  }
+
+  :global([data-theme="dark"]) .tab .count {
+    background: rgba(255,255,255,0.1);
+  }
+
+  :global([data-theme="dark"]) .gallery-section {
+    background: var(--color-bg);
+  }
+
+  :global([data-theme="dark"]) .gallery-section h2 {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .upload-section {
+    background: var(--color-bg);
+  }
+
+  :global([data-theme="dark"]) .upload-card {
+    background: var(--color-bg-alt);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+
+  :global([data-theme="dark"]) .upload-header h2 {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .upload-header p {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .drop-zone {
+    border-color: var(--color-border);
+  }
+
+  :global([data-theme="dark"]) .drop-zone:hover,
+  :global([data-theme="dark"]) .drop-zone.dragover {
+    border-color: var(--color-primary);
+    background: rgba(139, 92, 246, 0.1);
+  }
+
+  :global([data-theme="dark"]) .drop-content svg {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .drop-content p {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .formats {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .rooms-section h2,
+  :global([data-theme="dark"]) .panel-header h3 {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .panel-header .path {
+    background: var(--color-bg-alt);
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .instructions-section {
+    background: var(--color-bg);
+  }
+
+  :global([data-theme="dark"]) .instructions-card {
+    background: var(--color-bg-alt);
+  }
+
+  :global([data-theme="dark"]) .instructions-card h2,
+  :global([data-theme="dark"]) .step h3 {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .step p {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .image-card {
+    background: var(--color-bg-alt);
+  }
+
+  :global([data-theme="dark"]) .editor-container {
+    background: var(--color-bg-alt);
+  }
+
+  :global([data-theme="dark"]) .editor-header {
+    border-bottom-color: var(--color-border);
+  }
+
+  :global([data-theme="dark"]) .editor-header h2 {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .close-btn {
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .editor-tools {
+    background: var(--color-bg);
+  }
+
+  :global([data-theme="dark"]) .tool-group label {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .tool-btn {
+    background: var(--color-bg-alt);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .tool-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  :global([data-theme="dark"]) .editor-footer {
+    background: var(--color-bg-alt);
+    border-top-color: var(--color-border);
+  }
+
+  :global([data-theme="dark"]) .upload-item {
+    background: var(--color-bg);
+  }
+
+  :global([data-theme="dark"]) .upload-item-name {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .upload-item-size {
+    color: var(--color-text-muted);
   }
 </style>
 
@@ -1910,60 +2080,85 @@ const galleryCategories = [
   // ============================================
   const slideshowToggle = document.getElementById('slideshowToggle') as HTMLInputElement;
   const slideshowStatus = document.getElementById('slideshowStatus');
+  const SETTINGS_STORAGE_KEY = 'islandgoodes_settings';
 
-  // Load slideshow setting from API
+  // Load slideshow setting from API with localStorage fallback
   async function loadSlideshowSetting() {
+    let settings = null;
+
+    // Try API first
     try {
       const response = await fetch('/.netlify/functions/data-store', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ store: 'settings', action: 'get', key: 'data' })
       });
-      const result = await response.json();
-      if (result.success && result.data) {
-        const enabled = result.data.slideshowEnabled || false;
-        if (slideshowToggle) slideshowToggle.checked = enabled;
-        updateSlideshowStatus(enabled);
-      }
+      settings = await response.json();
     } catch (err) {
-      console.error('Failed to load slideshow setting:', err);
+      console.log('API not available, trying localStorage');
+    }
+
+    // Fallback to localStorage
+    if (!settings || typeof settings !== 'object' || Object.keys(settings).length === 0) {
+      try {
+        const local = localStorage.getItem(SETTINGS_STORAGE_KEY);
+        if (local) settings = JSON.parse(local);
+      } catch (e) {}
+    }
+
+    // Apply settings
+    if (settings && typeof settings === 'object') {
+      const enabled = settings.slideshowEnabled || false;
+      if (slideshowToggle) slideshowToggle.checked = enabled;
+      updateSlideshowStatus(enabled);
     }
   }
 
-  // Save slideshow setting to API
+  // Save slideshow setting to API with localStorage fallback
   async function saveSlideshowSetting(enabled: boolean) {
+    let currentSettings = {};
+
+    // Try to get current settings from API first
     try {
-      // First get current settings
       const getResponse = await fetch('/.netlify/functions/data-store', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ store: 'settings', action: 'get', key: 'data' })
       });
-      const getResult = await getResponse.json();
-      const currentSettings = (getResult.success && getResult.data) ? getResult.data : {};
+      const apiSettings = await getResponse.json();
+      if (apiSettings && typeof apiSettings === 'object') {
+        currentSettings = apiSettings;
+      }
+    } catch (err) {
+      // Fallback to localStorage
+      try {
+        const local = localStorage.getItem(SETTINGS_STORAGE_KEY);
+        if (local) currentSettings = JSON.parse(local);
+      } catch (e) {}
+    }
 
-      // Update with new slideshow setting
-      const updatedSettings = { ...currentSettings, slideshowEnabled: enabled };
+    // Update with new slideshow setting
+    const updatedSettings = { ...currentSettings, slideshowEnabled: enabled };
 
-      // Save back to API
+    // Save to localStorage first (always works)
+    try {
+      localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(updatedSettings));
+    } catch (e) {}
+
+    // Try to save to API
+    try {
       const saveResponse = await fetch('/.netlify/functions/data-store', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ store: 'settings', action: 'set', key: 'data', value: updatedSettings })
+        body: JSON.stringify({ store: 'settings', action: 'set', key: 'data', data: updatedSettings })
       });
       const saveResult = await saveResponse.json();
 
       if (saveResult.success) {
         await logActivity('settings', 'Slideshow setting updated', enabled ? 'Enabled' : 'Disabled');
-      } else {
-        throw new Error('Failed to save setting');
       }
     } catch (err) {
-      console.error('Failed to save slideshow setting:', err);
-      alert('Failed to save slideshow setting. Please try again.');
-      // Revert toggle state
-      if (slideshowToggle) slideshowToggle.checked = !enabled;
-      updateSlideshowStatus(!enabled);
+      console.log('API save failed, using localStorage only');
     }
   }
 

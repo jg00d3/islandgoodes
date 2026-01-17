@@ -1,15 +1,16 @@
 ---
-import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import AdminLayout from '../../layouts/AdminLayout.astro';
 
-const title = "Website Review Report | Island Goodes Admin";
+const title = "Website Review";
 const description = "Expert website audit and recommendations";
+const pageTitle = "Website Review";
+const pageTip = "Expert audit and improvement recommendations";
 ---
 
-<PreviewLayout title={title} description={description}>
+<AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
   <section class="review-hero">
     <div class="container">
       <div class="hero-content">
-        <a href="/admin" class="back-link">&larr; Back to Admin</a>
         <h1>Website Expert Review</h1>
         <p>Comprehensive audit by Code, Design/UX, and Image experts</p>
         <div class="review-date">January 2026</div>
@@ -322,7 +323,7 @@ const description = "Expert website audit and recommendations";
       </div>
     </div>
   </section>
-</PreviewLayout>
+</AdminLayout>
 
 <style>
   .review-hero {

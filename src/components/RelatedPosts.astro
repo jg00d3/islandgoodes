@@ -11,21 +11,38 @@ interface Props {
 }
 
 const { posts } = Astro.props;
+
+// Images that could use better local photos
+const needsBetterPhoto = [
+  "/images/blog/hilo-town.webp",
+  "/images/blog/night-market.webp",
+];
 ---
 
 <section class="related-posts">
   <h2>You Might Also Enjoy</h2>
   <div class="related-grid">
     {posts.map(post => (
-      <a href={`/blog/${post.slug}`} class="related-card">
-        <div class="related-image">
-          <img src={post.image} alt={post.title} loading="lazy" />
-        </div>
-        <div class="related-content">
-          <span class="related-category">{post.category}</span>
-          <h3>{post.title}</h3>
-        </div>
-      </a>
+      <div class="related-card-wrapper">
+        <a href={`/blog/${post.slug}`} class="related-card">
+          <div class="related-image">
+            <img src={post.image} alt={post.title} loading="lazy" />
+          </div>
+          <div class="related-content">
+            <span class="related-category">{post.category}</span>
+            <h3>{post.title}</h3>
+          </div>
+        </a>
+        {needsBetterPhoto.includes(post.image) && (
+          <a href="/contribute#photos" class="photo-request" title="Have a better photo? Share it with us!">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+            <span>Share a photo</span>
+          </a>
+        )}
+      </div>
     ))}
   </div>
 </section>
@@ -49,6 +66,10 @@ const { posts } = Astro.props;
     gap: 1.5rem;
   }
 
+  .related-card-wrapper {
+    position: relative;
+  }
+
   .related-card {
     display: block;
     text-decoration: none;
@@ -61,6 +82,36 @@ const { posts } = Astro.props;
   .related-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  }
+
+  .photo-request {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 0.375rem 0.625rem;
+    border-radius: 6px;
+    font-size: 0.6875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.3s ease, background 0.2s ease;
+    z-index: 2;
+  }
+
+  .photo-request svg {
+    flex-shrink: 0;
+  }
+
+  .related-card-wrapper:hover .photo-request {
+    opacity: 1;
+  }
+
+  .photo-request:hover {
+    background: var(--color-primary);
   }
 
   .related-image {

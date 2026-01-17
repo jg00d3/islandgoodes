@@ -1,15 +1,16 @@
 ---
-import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import AdminLayout from '../../layouts/AdminLayout.astro';
 
-const title = "Contact Inquiries | Island Goodes Admin";
+const title = "Contact Inquiries";
 const description = "Manage contact form submissions";
+const pageTitle = "Contact Inquiries";
+const pageTip = "View and respond to contact form submissions";
 ---
 
-<PreviewLayout title={title} description={description}>
+<AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
   <section class="admin-hero">
     <div class="container">
       <div class="hero-content">
-        <a href="/admin" class="back-link">&larr; Back to Admin</a>
         <h1>Contact Inquiries</h1>
         <p>Manage messages from the contact form</p>
       </div>
@@ -56,6 +57,7 @@ const description = "Manage contact form submissions";
             <option value="new">Unread Only</option>
             <option value="read">Read</option>
             <option value="replied">Replied</option>
+            <option value="deleted">Deleted</option>
           </select>
         </div>
         <div class="filter-group">
@@ -74,9 +76,34 @@ const description = "Manage contact form submissions";
       </div>
     </div>
   </section>
-</PreviewLayout>
 
-<style>
+  <!-- Reply Modal -->
+  <div id="replyModal" class="modal-overlay" style="display: none;">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>Reply to Inquiry</h3>
+        <button class="modal-close" id="closeReplyModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="original-message">
+          <label>Original message from <strong id="replyToName"></strong>:</label>
+          <div id="originalMessage" class="original-message-text"></div>
+        </div>
+        <div class="reply-form">
+          <label for="replyText">Your reply:</label>
+          <textarea id="replyText" rows="6" placeholder="Type your response here..."></textarea>
+          <p class="reply-hint">This will be sent to <span id="replyToEmail"></span> as a nicely formatted email from Island Goodes.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="cancelReply">Cancel</button>
+        <button class="btn btn-primary" id="sendReply">Send Reply</button>
+      </div>
+    </div>
+  </div>
+</AdminLayout>
+
+<style is:global>
   .admin-hero {
     background: var(--gradient-primary);
     color: #fff;
@@ -364,6 +391,304 @@ const description = "Manage contact form submissions";
       flex: 1;
     }
   }
+
+  /* Reply Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+  }
+
+  .modal-container {
+    background: #fff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--color-text);
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.75rem;
+    color: #9ca3af;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+
+  .modal-close:hover {
+    background: #f3f4f6;
+    color: #374151;
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    max-height: calc(90vh - 150px);
+  }
+
+  .original-message {
+    margin-bottom: 1.5rem;
+  }
+
+  .original-message label {
+    display: block;
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+  }
+
+  .original-message-text {
+    background: #f9fafb;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: #374151;
+    border-left: 3px solid #d1d5db;
+    white-space: pre-wrap;
+  }
+
+  .reply-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+  }
+
+  .reply-form textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.9375rem;
+    resize: vertical;
+    box-sizing: border-box;
+  }
+
+  .reply-form textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .reply-hint {
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+    color: #9ca3af;
+  }
+
+  .reply-hint span {
+    color: #3b82f6;
+    font-weight: 500;
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e5e7eb;
+    background: #f9fafb;
+  }
+
+  /* Deleted inquiry styling */
+  .inquiry-item.deleted {
+    opacity: 0.6;
+    border-left: 4px solid #ef4444;
+  }
+
+  .inquiry-status.deleted {
+    background: #fee2e2;
+    color: #dc2626;
+  }
+
+  /* Dark mode */
+  [data-theme="dark"] .admin-section {
+    background: var(--color-bg);
+  }
+
+  [data-theme="dark"] .settings-card {
+    background: #1e1e1e;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+
+  [data-theme="dark"] .settings-card h3 {
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .settings-row label {
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .email-input-group input {
+    background: #252525;
+    border-color: #444;
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .settings-note {
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .stat-card {
+    background: #1e1e1e;
+    border-color: #333;
+  }
+
+  [data-theme="dark"] .stat-label {
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .filter-controls {
+    background: #1e1e1e;
+  }
+
+  [data-theme="dark"] .filter-group label {
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .filter-group select {
+    background: #252525;
+    border-color: #444;
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .inquiry-item {
+    background: #252525;
+    border: 1px solid #333;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  [data-theme="dark"] .inquiry-item:hover {
+    background: #2a2a2a;
+    border-color: #444;
+  }
+
+  [data-theme="dark"] .inquiry-item.unread {
+    border-left: 4px solid #3B82F6;
+  }
+
+  [data-theme="dark"] .inquiry-info h4 {
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .inquiry-contact {
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .inquiry-contact a {
+    color: #60a5fa;
+  }
+
+  [data-theme="dark"] .inquiry-status.new { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+  [data-theme="dark"] .inquiry-status.read { background: rgba(217, 119, 6, 0.2); color: #fbbf24; }
+  [data-theme="dark"] .inquiry-status.replied { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+
+  [data-theme="dark"] .inquiry-message {
+    color: #ccc;
+    background: #1a1a1a;
+  }
+
+  [data-theme="dark"] .inquiry-date {
+    color: #888;
+  }
+
+  [data-theme="dark"] .loading-state,
+  [data-theme="dark"] .empty-state {
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .btn-outline {
+    background: #252525;
+    border-color: #444;
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .btn-outline:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  /* Dark mode modal */
+  [data-theme="dark"] .modal-container {
+    background: #1e1e1e;
+  }
+
+  [data-theme="dark"] .modal-header {
+    border-bottom-color: #333;
+  }
+
+  [data-theme="dark"] .modal-header h3 {
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .modal-close:hover {
+    background: #333;
+    color: #fff;
+  }
+
+  [data-theme="dark"] .original-message label {
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .original-message-text {
+    background: #252525;
+    color: #ccc;
+    border-left-color: #444;
+  }
+
+  [data-theme="dark"] .reply-form label {
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .reply-form textarea {
+    background: #252525;
+    border-color: #444;
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .reply-hint {
+    color: #888;
+  }
+
+  [data-theme="dark"] .modal-footer {
+    background: #252525;
+    border-top-color: #333;
+  }
+
+  [data-theme="dark"] .inquiry-status.deleted {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+  }
 </style>
 
 <script is:inline src="/js/shared-data.js"></script>
@@ -400,18 +725,82 @@ const description = "Manage contact form submissions";
     subject?: string;
     message: string;
     submittedAt: string;
-    status: 'new' | 'read' | 'replied';
+    status: 'new' | 'read' | 'replied' | 'deleted';
   }
+
+  // Track current inquiry being replied to
+  let currentReplyInquiry: ContactInquiry | null = null;
+
+  // Sample inquiries for testing
+  const sampleInquiries: ContactInquiry[] = [
+    {
+      id: 1001,
+      name: 'Sarah Johnson',
+      email: 'sarah.johnson@email.com',
+      phone: '(555) 123-4567',
+      message: 'Hi! My husband and I are planning our 25th anniversary trip to Hawaii in March. We\'re interested in the Orchid Room for about 5 nights. Is it available March 15-20? Also, do you offer any special packages for anniversaries?',
+      status: 'new',
+      submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString()
+    },
+    {
+      id: 1002,
+      name: 'Mike Chen',
+      email: 'mchen@gmail.com',
+      phone: '',
+      message: 'Quick question - is the hot tub available for all guests or just certain rooms? Thanks!',
+      status: 'replied',
+      submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString()
+    },
+    {
+      id: 1003,
+      name: 'Jennifer Williams',
+      email: 'jwilliams@yahoo.com',
+      phone: '(808) 555-9876',
+      message: 'We stayed at Island Goodes last year and loved it! Planning to come back in June. Do you have availability for the Hilo Bay Room June 10-14? Also wondering if you still have Miss Kitty - our daughter keeps asking about her!',
+      status: 'read',
+      submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString()
+    }
+  ];
+
+  // Local storage key for dev fallback
+  const LOCAL_STORAGE_KEY = 'islandgoodes_contact_inquiries';
 
   async function getInquiries(): Promise<ContactInquiry[]> {
     try {
       const data = await window.SharedData.getContactInquiries();
-      return Array.isArray(data) ? data : [];
-    } catch { return []; }
+      if (Array.isArray(data) && data.length > 0) {
+        return data;
+      }
+    } catch (e) {
+      console.log('SharedData not available, using local storage');
+    }
+
+    // Fallback to localStorage for dev testing
+    try {
+      const local = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (local) {
+        const parsed = JSON.parse(local);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {}
+
+    return sampleInquiries;
   }
 
   async function saveInquiries(inquiries: ContactInquiry[]) {
-    await window.SharedData.saveContactInquiries(inquiries);
+    // Save to localStorage for dev fallback
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(inquiries));
+    } catch (e) {}
+
+    // Also try SharedData API
+    try {
+      await window.SharedData.saveContactInquiries(inquiries);
+    } catch (e) {
+      console.log('SharedData save failed, using local storage only');
+    }
   }
 
   async function getNotificationEmail(): Promise<string> {
@@ -440,9 +829,10 @@ const description = "Manage contact form submissions";
 
   async function updateStats() {
     const inquiries = await getInquiries();
-    document.getElementById('totalCount')!.textContent = String(inquiries.length);
-    document.getElementById('newCount')!.textContent = String(inquiries.filter(i => i.status === 'new').length);
-    document.getElementById('repliedCount')!.textContent = String(inquiries.filter(i => i.status === 'replied').length);
+    const active = inquiries.filter(i => i.status !== 'deleted');
+    document.getElementById('totalCount')!.textContent = String(active.length);
+    document.getElementById('newCount')!.textContent = String(active.filter(i => i.status === 'new').length);
+    document.getElementById('repliedCount')!.textContent = String(active.filter(i => i.status === 'replied').length);
   }
 
   async function renderInquiries() {
@@ -454,8 +844,12 @@ const description = "Manage contact form submissions";
 
     let inquiries = await getInquiries();
 
-    // Filter
-    if (statusFilter !== 'all') {
+    // Filter - exclude deleted unless specifically viewing deleted
+    if (statusFilter === 'deleted') {
+      inquiries = inquiries.filter(i => i.status === 'deleted');
+    } else if (statusFilter === 'all') {
+      inquiries = inquiries.filter(i => i.status !== 'deleted');
+    } else {
       inquiries = inquiries.filter(i => i.status === statusFilter);
     }
 
@@ -467,12 +861,13 @@ const description = "Manage contact form submissions";
     }
 
     if (inquiries.length === 0) {
-      container.innerHTML = '<div class="empty-state">No contact inquiries yet.</div>';
+      const msg = statusFilter === 'deleted' ? 'No deleted inquiries.' : 'No contact inquiries yet.';
+      container.innerHTML = `<div class="empty-state">${msg}</div>`;
       return;
     }
 
     container.innerHTML = inquiries.map(i => `
-      <div class="inquiry-item ${i.status === 'new' ? 'unread' : ''}" data-id="${i.id}">
+      <div class="inquiry-item ${i.status === 'new' ? 'unread' : ''} ${i.status === 'deleted' ? 'deleted' : ''}" data-id="${i.id}">
         <div class="inquiry-header">
           <div class="inquiry-info">
             <h4>${escapeHtml(i.name)}</h4>
@@ -486,28 +881,30 @@ const description = "Manage contact form submissions";
         <div class="inquiry-footer">
           <span class="inquiry-date">Received ${formatDate(i.submittedAt)}</span>
           <div class="inquiry-actions">
-            ${i.status === 'new' ? `
-              <button class="btn btn-outline btn-small mark-read" data-id="${i.id}">Mark Read</button>
-            ` : ''}
-            ${i.status !== 'replied' ? `
-              <button class="btn btn-success btn-small mark-replied" data-id="${i.id}">Mark Replied</button>
-            ` : ''}
-            <a href="mailto:${escapeHtml(i.email)}?subject=Re: ${escapeHtml(i.subject) || 'Your Island Goodes Inquiry'}" class="btn btn-primary btn-small">Reply</a>
-            <button class="btn btn-outline btn-small delete-btn" data-id="${i.id}">Delete</button>
+            ${i.status === 'deleted' ? `
+              <button class="btn btn-outline btn-small restore-btn" data-id="${i.id}">Restore</button>
+              <button class="btn btn-danger btn-small delete-forever-btn" data-id="${i.id}">Delete Forever</button>
+            ` : `
+              <button class="btn btn-primary btn-small reply-btn" data-id="${i.id}">Reply</button>
+              <button class="btn btn-danger btn-small delete-btn" data-id="${i.id}">Delete</button>
+            `}
           </div>
         </div>
       </div>
     `).join('');
 
     // Attach event handlers
-    container.querySelectorAll('.mark-read').forEach(btn => {
-      btn.addEventListener('click', () => updateStatus(parseInt(btn.getAttribute('data-id')!), 'read'));
-    });
-    container.querySelectorAll('.mark-replied').forEach(btn => {
-      btn.addEventListener('click', () => updateStatus(parseInt(btn.getAttribute('data-id')!), 'replied'));
+    container.querySelectorAll('.reply-btn').forEach(btn => {
+      btn.addEventListener('click', () => openReplyModal(parseInt(btn.getAttribute('data-id')!)));
     });
     container.querySelectorAll('.delete-btn').forEach(btn => {
-      btn.addEventListener('click', () => deleteInquiry(parseInt(btn.getAttribute('data-id')!)));
+      btn.addEventListener('click', () => moveToTrash(parseInt(btn.getAttribute('data-id')!)));
+    });
+    container.querySelectorAll('.restore-btn').forEach(btn => {
+      btn.addEventListener('click', () => restoreInquiry(parseInt(btn.getAttribute('data-id')!)));
+    });
+    container.querySelectorAll('.delete-forever-btn').forEach(btn => {
+      btn.addEventListener('click', () => deleteForever(parseInt(btn.getAttribute('data-id')!)));
     });
 
     await updateStats();
@@ -524,13 +921,129 @@ const description = "Manage contact form submissions";
     }
   }
 
-  async function deleteInquiry(id: number) {
-    if (!confirm('Delete this inquiry? This cannot be undone.')) return;
+  // Move to trash (soft delete)
+  async function moveToTrash(id: number) {
+    const inquiries = await getInquiries();
+    const inquiry = inquiries.find(i => i.id === id);
+    if (inquiry) {
+      inquiry.status = 'deleted';
+      await saveInquiries(inquiries);
+      await window.SharedData.logActivity('contact-inquiries', 'Moved inquiry to trash', inquiry.name);
+      await renderInquiries();
+    }
+  }
+
+  // Restore from trash
+  async function restoreInquiry(id: number) {
+    const inquiries = await getInquiries();
+    const inquiry = inquiries.find(i => i.id === id);
+    if (inquiry) {
+      inquiry.status = 'read';
+      await saveInquiries(inquiries);
+      await window.SharedData.logActivity('contact-inquiries', 'Restored inquiry from trash', inquiry.name);
+      await renderInquiries();
+    }
+  }
+
+  // Permanently delete
+  async function deleteForever(id: number) {
+    if (!confirm('Permanently delete this inquiry? This cannot be undone.')) return;
     const inquiries = (await getInquiries()).filter(i => i.id !== id);
     await saveInquiries(inquiries);
-    await window.SharedData.logActivity('contact-inquiries', 'Deleted inquiry');
+    await window.SharedData.logActivity('contact-inquiries', 'Permanently deleted inquiry');
     await renderInquiries();
   }
+
+  // Reply modal functionality
+  async function openReplyModal(id: number) {
+    const inquiries = await getInquiries();
+    const inquiry = inquiries.find(i => i.id === id);
+    if (!inquiry) return;
+
+    currentReplyInquiry = inquiry;
+
+    // Populate modal
+    document.getElementById('replyToName')!.textContent = inquiry.name;
+    document.getElementById('replyToEmail')!.textContent = inquiry.email;
+    document.getElementById('originalMessage')!.textContent = inquiry.message;
+    (document.getElementById('replyText') as HTMLTextAreaElement).value = '';
+
+    // Show modal
+    document.getElementById('replyModal')!.style.display = 'flex';
+
+    // Mark as read if it was new
+    if (inquiry.status === 'new') {
+      inquiry.status = 'read';
+      await saveInquiries(inquiries);
+      await renderInquiries();
+    }
+  }
+
+  function closeReplyModal() {
+    document.getElementById('replyModal')!.style.display = 'none';
+    currentReplyInquiry = null;
+  }
+
+  async function sendReply() {
+    if (!currentReplyInquiry) return;
+
+    const replyText = (document.getElementById('replyText') as HTMLTextAreaElement).value.trim();
+    if (!replyText) {
+      alert('Please enter a reply message.');
+      return;
+    }
+
+    const sendBtn = document.getElementById('sendReply') as HTMLButtonElement;
+    sendBtn.disabled = true;
+    sendBtn.textContent = 'Sending...';
+
+    try {
+      // Send the reply email via Netlify function
+      const response = await fetch('/.netlify/functions/send-inquiry-reply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: currentReplyInquiry.email,
+          toName: currentReplyInquiry.name,
+          replyText: replyText,
+          originalMessage: currentReplyInquiry.message
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send email');
+      }
+
+      // Mark as replied
+      const inquiries = await getInquiries();
+      const inquiry = inquiries.find(i => i.id === currentReplyInquiry!.id);
+      if (inquiry) {
+        inquiry.status = 'replied';
+        await saveInquiries(inquiries);
+        await window.SharedData.logActivity('contact-inquiries', 'Replied to inquiry', inquiry.name);
+      }
+
+      closeReplyModal();
+      await renderInquiries();
+      alert('Reply sent successfully!');
+    } catch (error) {
+      console.error('Error sending reply:', error);
+      alert('Failed to send reply. Please try again.');
+    } finally {
+      sendBtn.disabled = false;
+      sendBtn.textContent = 'Send Reply';
+    }
+  }
+
+  // Modal event listeners
+  document.getElementById('closeReplyModal')?.addEventListener('click', closeReplyModal);
+  document.getElementById('cancelReply')?.addEventListener('click', closeReplyModal);
+  document.getElementById('sendReply')?.addEventListener('click', sendReply);
+
+  // Close modal on overlay click
+  document.getElementById('replyModal')?.addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeReplyModal();
+  });
 
   // Mark all as read
   document.getElementById('markAllRead')?.addEventListener('click', async () => {

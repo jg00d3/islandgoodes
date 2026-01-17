@@ -1,8 +1,10 @@
 ---
-import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import AdminLayout from '../../layouts/AdminLayout.astro';
 
-const title = "Copyright Audit - Images & Text";
+const title = "Copyright Audit";
 const description = "Review all images and text content for copyright compliance";
+const pageTitle = "Copyright Audit";
+const pageTip = "Review images and text for copyright compliance";
 
 // TEXT CONTENT AUDIT
 const textContentSafe = [
@@ -198,11 +200,9 @@ const recommendations = [
 ];
 ---
 
-<PreviewLayout title={title} description={description}>
+<AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
   <section class="audit-header">
     <div class="container">
-      <h1>Copyright Audit</h1>
-      <p class="subtitle">Review all images and text content for copyright compliance</p>
       <div class="summary-cards">
         <div class="summary-card safe">
           <span class="count">{ownerImages.length}</span>
@@ -316,7 +316,7 @@ const recommendations = [
       </div>
     </div>
   </section>
-</PreviewLayout>
+</AdminLayout>
 
 <style>
   .audit-header {
@@ -587,4 +587,5 @@ const recommendations = [
       grid-template-columns: 1fr;
     }
   }
+
 </style>

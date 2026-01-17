@@ -48,15 +48,18 @@ function sanitizeAdmins(admins) {
   return admins.map(sanitizeAdmin);
 }
 
-// Default site settings
+// Default site settings (keys match admin.astro settingsConfig)
 const DEFAULT_SETTINGS = {
-  liveChatEnabled: true,
-  weatherWidgetEnabled: true,
-  tripAdvisorEnabled: true,
+  chatEnabled: false,        // Live Chat Widget - OFF by default (not set up yet)
+  lightboxEnabled: true,     // Image Lightbox
+  weatherEnabled: true,      // Weather Widget
+  camerasEnabled: true,      // Live Cameras
+  shareEnabled: true,        // Social Share Buttons
+  languageEnabled: true,     // Language Selector
+  slideshowEnabled: false,   // Lightbox Slideshow
   announcementEnabled: false,
   announcementText: '',
-  aiChatEnabled: false,
-  slideshowEnabled: false
+  aiChatEnabled: false
 };
 
 // CORS headers

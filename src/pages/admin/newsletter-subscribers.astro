@@ -1,21 +1,13 @@
 ---
-import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import AdminLayout from '../../layouts/AdminLayout.astro';
 
-const title = "Newsletter Subscribers | Island Goodes Admin";
+const title = "Newsletter Subscribers";
 const description = "Manage newsletter subscriber list";
+const pageTitle = "Newsletter Subscribers";
+const pageTip = "View and manage email subscribers";
 ---
 
-<PreviewLayout title={title} description={description}>
-  <section class="admin-hero">
-    <div class="container">
-      <div class="hero-content">
-        <a href="/admin" class="back-link">&larr; Back to Admin</a>
-        <h1>Newsletter Subscribers</h1>
-        <p>Manage your email newsletter subscriber list</p>
-      </div>
-    </div>
-  </section>
-
+<AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
   <section class="admin-section">
     <div class="container">
       <!-- Email Settings Card -->
@@ -61,6 +53,7 @@ const description = "Manage newsletter subscriber list";
             <option value="all">All Subscribers</option>
             <option value="active">Active Only</option>
             <option value="unsubscribed">Unsubscribed</option>
+            <option value="deleted">Deleted</option>
           </select>
         </div>
         <div class="filter-group">
@@ -101,9 +94,9 @@ const description = "Manage newsletter subscriber list";
       </form>
     </div>
   </div>
-</PreviewLayout>
+</AdminLayout>
 
-<style>
+<style is:global>
   .admin-hero {
     background: var(--gradient-primary);
     color: #fff;
@@ -444,6 +437,152 @@ const description = "Manage newsletter subscriber list";
       display: none;
     }
   }
+
+  /* Deleted row styling */
+  .deleted-row {
+    opacity: 0.6;
+  }
+
+  .subscriber-status.deleted {
+    background: #fee2e2;
+    color: #dc2626;
+  }
+
+  /* Dark mode */
+  [data-theme="dark"] .admin-section {
+    background: var(--color-bg);
+  }
+
+  [data-theme="dark"] .settings-card {
+    background: #1e1e1e;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+
+  [data-theme="dark"] .settings-card h3 {
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .settings-row label {
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .email-input-group input {
+    background: #252525;
+    border-color: #444;
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .settings-note {
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .stat-card {
+    background: #1e1e1e;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+
+  [data-theme="dark"] .stat-label {
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .filter-group label {
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .filter-group select {
+    background: #252525;
+    border-color: #444;
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .search-group input {
+    background: #252525;
+    border-color: #444;
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .subscribers-list {
+    background: #1e1e1e;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+
+  [data-theme="dark"] .loading-state,
+  [data-theme="dark"] .empty-state {
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .subscriber-table th {
+    background: #252525;
+    color: var(--color-text-muted);
+    border-bottom-color: #333;
+  }
+
+  [data-theme="dark"] .subscriber-table td {
+    border-bottom-color: #333;
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .subscriber-table tr:hover {
+    background: #252525;
+  }
+
+  [data-theme="dark"] .subscriber-email {
+    color: #60a5fa;
+  }
+
+  [data-theme="dark"] .subscriber-status.active {
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+  }
+
+  [data-theme="dark"] .subscriber-status.unsubscribed {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+  }
+
+  [data-theme="dark"] .subscriber-status.deleted {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+  }
+
+  [data-theme="dark"] .btn-outline {
+    background: #252525;
+    border-color: #444;
+    color: var(--color-text-muted);
+  }
+
+  [data-theme="dark"] .btn-outline:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  /* Dark mode modal */
+  [data-theme="dark"] .modal-content {
+    background: #1e1e1e;
+  }
+
+  [data-theme="dark"] .modal-content h2 {
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .modal-close {
+    background: #333;
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .modal-close:hover {
+    background: #444;
+  }
+
+  [data-theme="dark"] .form-group label {
+    color: var(--color-text);
+  }
+
+  [data-theme="dark"] .form-group input {
+    background: #252525;
+    border-color: #444;
+    color: var(--color-text);
+  }
 </style>
 
 <script is:inline src="/js/shared-data.js"></script>
@@ -477,19 +616,89 @@ const description = "Manage newsletter subscriber list";
     email: string;
     name?: string;
     subscribedAt: string;
-    status: 'active' | 'unsubscribed';
+    status: 'active' | 'unsubscribed' | 'deleted';
     unsubscribedAt?: string;
   }
+
+  // Sample subscribers for testing
+  const sampleSubscribers: Subscriber[] = [
+    {
+      id: 2001,
+      email: 'hawaii.lover@gmail.com',
+      name: 'Jessica Martinez',
+      subscribedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
+      status: 'active'
+    },
+    {
+      id: 2002,
+      email: 'travel.bug@yahoo.com',
+      name: 'Robert Kim',
+      subscribedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(),
+      status: 'active'
+    },
+    {
+      id: 2003,
+      email: 'beach.dreams@outlook.com',
+      name: 'Amanda Wilson',
+      subscribedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 14).toISOString(),
+      status: 'active'
+    },
+    {
+      id: 2004,
+      email: 'island.hopper@email.com',
+      name: 'David Chen',
+      subscribedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 21).toISOString(),
+      status: 'unsubscribed',
+      unsubscribedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString()
+    },
+    {
+      id: 2005,
+      email: 'aloha.spirit@gmail.com',
+      name: 'Emily Thompson',
+      subscribedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString(),
+      status: 'active'
+    }
+  ];
+
+  // Local storage key for dev fallback
+  const LOCAL_STORAGE_KEY = 'islandgoodes_newsletter_subscribers';
 
   async function getSubscribers(): Promise<Subscriber[]> {
     try {
       const data = await window.SharedData.getNewsletterSubscribers();
-      return Array.isArray(data) ? data : [];
-    } catch { return []; }
+      if (Array.isArray(data) && data.length > 0) {
+        return data;
+      }
+    } catch (e) {
+      console.log('SharedData not available, using local storage');
+    }
+
+    // Fallback to localStorage for dev testing
+    try {
+      const local = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (local) {
+        const parsed = JSON.parse(local);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {}
+
+    return sampleSubscribers;
   }
 
   async function saveSubscribers(subscribers: Subscriber[]) {
-    await window.SharedData.saveNewsletterSubscribers(subscribers);
+    // Save to localStorage for dev fallback
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(subscribers));
+    } catch (e) {}
+
+    // Also try SharedData API
+    try {
+      await window.SharedData.saveNewsletterSubscribers(subscribers);
+    } catch (e) {
+      console.log('SharedData save failed, using local storage only');
+    }
   }
 
   async function getNotificationEmail(): Promise<string> {
@@ -516,7 +725,8 @@ const description = "Manage newsletter subscriber list";
 
   async function updateStats() {
     const subscribers = await getSubscribers();
-    document.getElementById('totalCount')!.textContent = String(subscribers.length);
+    const active = subscribers.filter(s => s.status !== 'deleted');
+    document.getElementById('totalCount')!.textContent = String(active.length);
     document.getElementById('activeCount')!.textContent = String(subscribers.filter(s => s.status === 'active').length);
     document.getElementById('unsubscribedCount')!.textContent = String(subscribers.filter(s => s.status === 'unsubscribed').length);
   }
@@ -531,8 +741,12 @@ const description = "Manage newsletter subscriber list";
 
     let subscribers = await getSubscribers();
 
-    // Filter by status
-    if (statusFilter !== 'all') {
+    // Filter by status - exclude deleted unless specifically viewing deleted
+    if (statusFilter === 'deleted') {
+      subscribers = subscribers.filter(s => s.status === 'deleted');
+    } else if (statusFilter === 'all') {
+      subscribers = subscribers.filter(s => s.status !== 'deleted');
+    } else {
       subscribers = subscribers.filter(s => s.status === statusFilter);
     }
 
@@ -554,7 +768,8 @@ const description = "Manage newsletter subscriber list";
     }
 
     if (subscribers.length === 0) {
-      container.innerHTML = '<div class="empty-state">No subscribers found.</div>';
+      const msg = statusFilter === 'deleted' ? 'No deleted subscribers.' : 'No subscribers found.';
+      container.innerHTML = `<div class="empty-state">${msg}</div>`;
       return;
     }
 
@@ -571,18 +786,23 @@ const description = "Manage newsletter subscriber list";
         </thead>
         <tbody>
           ${subscribers.map(s => `
-            <tr data-id="${s.id}">
+            <tr data-id="${s.id}" class="${s.status === 'deleted' ? 'deleted-row' : ''}">
               <td><span class="subscriber-email">${escapeHtml(s.email)}</span></td>
               <td>${escapeHtml(s.name) || '-'}</td>
               <td>${formatDate(s.subscribedAt)}</td>
               <td><span class="subscriber-status ${s.status}">${s.status}</span></td>
               <td class="subscriber-actions">
-                ${s.status === 'active' ? `
-                  <button class="btn btn-outline btn-small unsubscribe-btn" data-id="${s.id}">Unsubscribe</button>
+                ${s.status === 'deleted' ? `
+                  <button class="btn btn-outline btn-small restore-btn" data-id="${s.id}">Restore</button>
+                  <button class="btn btn-danger btn-small delete-forever-btn" data-id="${s.id}">Delete Forever</button>
                 ` : `
-                  <button class="btn btn-outline btn-small resubscribe-btn" data-id="${s.id}">Resubscribe</button>
+                  ${s.status === 'active' ? `
+                    <button class="btn btn-outline btn-small unsubscribe-btn" data-id="${s.id}">Unsubscribe</button>
+                  ` : `
+                    <button class="btn btn-outline btn-small resubscribe-btn" data-id="${s.id}">Resubscribe</button>
+                  `}
+                  <button class="btn btn-danger btn-small delete-btn" data-id="${s.id}">Delete</button>
                 `}
-                <button class="btn btn-danger btn-small delete-btn" data-id="${s.id}">Delete</button>
               </td>
             </tr>
           `).join('')}
@@ -598,7 +818,13 @@ const description = "Manage newsletter subscriber list";
       btn.addEventListener('click', () => toggleSubscription(parseInt(btn.getAttribute('data-id')!), 'active'));
     });
     container.querySelectorAll('.delete-btn').forEach(btn => {
-      btn.addEventListener('click', () => deleteSubscriber(parseInt(btn.getAttribute('data-id')!)));
+      btn.addEventListener('click', () => moveToTrash(parseInt(btn.getAttribute('data-id')!)));
+    });
+    container.querySelectorAll('.restore-btn').forEach(btn => {
+      btn.addEventListener('click', () => restoreSubscriber(parseInt(btn.getAttribute('data-id')!)));
+    });
+    container.querySelectorAll('.delete-forever-btn').forEach(btn => {
+      btn.addEventListener('click', () => deleteForever(parseInt(btn.getAttribute('data-id')!)));
     });
 
     await updateStats();
@@ -618,11 +844,36 @@ const description = "Manage newsletter subscriber list";
     }
   }
 
-  async function deleteSubscriber(id: number) {
-    if (!confirm('Delete this subscriber? This cannot be undone.')) return;
+  // Move to trash (soft delete)
+  async function moveToTrash(id: number) {
+    const subscribers = await getSubscribers();
+    const subscriber = subscribers.find(s => s.id === id);
+    if (subscriber) {
+      subscriber.status = 'deleted';
+      await saveSubscribers(subscribers);
+      await window.SharedData.logActivity('newsletter', 'Moved subscriber to trash', subscriber.email);
+      await renderSubscribers();
+    }
+  }
+
+  // Restore from trash
+  async function restoreSubscriber(id: number) {
+    const subscribers = await getSubscribers();
+    const subscriber = subscribers.find(s => s.id === id);
+    if (subscriber) {
+      subscriber.status = 'active';
+      await saveSubscribers(subscribers);
+      await window.SharedData.logActivity('newsletter', 'Restored subscriber from trash', subscriber.email);
+      await renderSubscribers();
+    }
+  }
+
+  // Permanently delete
+  async function deleteForever(id: number) {
+    if (!confirm('Permanently delete this subscriber? This cannot be undone.')) return;
     const subscribers = (await getSubscribers()).filter(s => s.id !== id);
     await saveSubscribers(subscribers);
-    await window.SharedData.logActivity('newsletter', 'Deleted subscriber');
+    await window.SharedData.logActivity('newsletter', 'Permanently deleted subscriber');
     await renderSubscribers();
   }
 

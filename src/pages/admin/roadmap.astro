@@ -1,8 +1,10 @@
 ---
-import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import AdminLayout from '../../layouts/AdminLayout.astro';
 
-const title = "Future Roadmap | Island Goodes Admin";
+const title = "Future Roadmap";
 const description = "Planned features and improvements";
+const pageTitle = "Future Roadmap";
+const pageTip = "Track planned features, in-progress work, and completed improvements";
 
 // Default roadmap items
 const defaultRoadmap = [
@@ -159,17 +161,7 @@ const defaultRoadmap = [
 ];
 ---
 
-<PreviewLayout title={title} description={description}>
-  <section class="roadmap-hero">
-    <div class="container">
-      <div class="hero-content">
-        <a href="/admin" class="back-link">&larr; Back to Admin</a>
-        <h1>Future Roadmap</h1>
-        <p>Planned features and improvements for Island Goodes website</p>
-      </div>
-    </div>
-  </section>
-
+<AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
   <section class="roadmap-section">
     <div class="container">
       <!-- Status filters -->
@@ -269,36 +261,9 @@ const defaultRoadmap = [
       </div>
     </div>
   </section>
-</PreviewLayout>
+</AdminLayout>
 
-<style>
-  .roadmap-hero {
-    background: var(--gradient-primary);
-    color: #fff;
-    padding: 8rem 2rem 3rem;
-  }
-
-  .back-link {
-    display: inline-block;
-    color: rgba(255,255,255,0.7);
-    font-size: 0.875rem;
-    margin-bottom: 1rem;
-    transition: color 0.2s;
-  }
-
-  .back-link:hover {
-    color: #fff;
-  }
-
-  .roadmap-hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .hero-content > p {
-    opacity: 0.9;
-  }
-
+<style is:global>
   .roadmap-section {
     padding: 2rem;
     background: var(--color-bg-alt);
@@ -336,179 +301,227 @@ const defaultRoadmap = [
 
   .add-item-card {
     background: #fff;
-    border-radius: 16px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid #e5e7eb;
   }
 
   .add-item-card h3 {
-    font-family: var(--font-body);
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    color: var(--color-text);
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 16px;
+    color: #374151;
   }
 
   .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    gap: 16px;
   }
 
   .form-group {
-    margin-bottom: 1rem;
+    margin-bottom: 14px;
   }
 
   .form-group label {
     display: block;
-    font-size: 0.8125rem;
+    font-size: 13px;
     font-weight: 600;
-    margin-bottom: 0.375rem;
-    color: var(--color-text);
+    margin-bottom: 6px;
+    color: #4b5563;
   }
 
   .form-group input,
   .form-group select,
   .form-group textarea {
     width: 100%;
-    padding: 0.625rem 0.875rem;
-    border: 2px solid var(--color-bg-alt);
+    padding: 10px 12px;
+    border: 1px solid #e5e7eb;
     border-radius: 8px;
-    font-size: 0.9375rem;
-    font-family: var(--font-body);
+    font-size: 14px;
+    font-family: inherit;
+    background: #fafbfc;
+    color: #1f2937;
+    box-sizing: border-box;
   }
 
   .form-group input:focus,
   .form-group select:focus,
   .form-group textarea:focus {
     outline: none;
-    border-color: var(--color-primary);
+    border-color: #8B5CF6;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: #9ca3af;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #8B5CF6 0%, #7c3aed 100%);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
   }
 
   .roadmap-columns {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
+    gap: 20px;
   }
 
   .roadmap-column {
     min-height: 300px;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid #e5e7eb;
   }
 
   .column-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
-    border-radius: 12px 12px 0 0;
+    padding: 14px 16px;
     margin-bottom: 0;
   }
 
   .column-header h2 {
-    font-family: var(--font-body);
-    font-size: 0.9375rem;
+    font-size: 14px;
     font-weight: 600;
     margin: 0;
     color: #fff;
+    letter-spacing: 0.01em;
   }
 
   .column-header .count {
-    background: rgba(255,255,255,0.2);
-    padding: 0.25rem 0.625rem;
+    background: rgba(255,255,255,0.25);
+    padding: 3px 10px;
     border-radius: 50px;
-    font-size: 0.75rem;
+    font-size: 12px;
     font-weight: 700;
     color: #fff;
   }
 
-  .column-header.in-progress { background: #3B82F6; }
-  .column-header.planned { background: #8B5CF6; }
-  .column-header.backlog { background: #6B7280; }
-  .column-header.completed { background: #10B981; }
+  .column-header.in-progress { background: linear-gradient(135deg, #3B82F6 0%, #2563eb 100%); }
+  .column-header.planned { background: linear-gradient(135deg, #8B5CF6 0%, #7c3aed 100%); }
+  .column-header.backlog { background: linear-gradient(135deg, #6B7280 0%, #4b5563 100%); }
+  .column-header.completed { background: linear-gradient(135deg, #10B981 0%, #059669 100%); }
 
   .column-items {
-    background: #fff;
-    border-radius: 0 0 12px 12px;
-    padding: 1rem;
+    background: #f9fafb;
+    padding: 12px;
     min-height: 250px;
   }
 
-  .roadmap-item {
-    background: var(--color-bg-alt);
+  .roadmap-task {
+    background: #fff;
+    border: 1px solid #e5e7eb;
     border-radius: 10px;
-    padding: 1rem;
-    margin-bottom: 0.75rem;
+    padding: 14px;
+    margin-bottom: 10px;
     cursor: pointer;
     transition: all 0.2s;
     position: relative;
   }
 
-  .roadmap-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  .roadmap-task:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transform: translateY(-1px);
   }
 
-  .roadmap-item:last-child {
+  .roadmap-task:last-child {
     margin-bottom: 0;
   }
 
-  .item-header {
+  .task-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 0.5rem;
+    margin-bottom: 8px;
+    gap: 8px;
+    background: transparent;
   }
 
-  .item-title {
+  .task-title {
     font-weight: 600;
-    font-size: 0.9375rem;
-    color: var(--color-text);
+    font-size: 14px;
+    color: #1f2937;
     flex: 1;
-    margin-right: 0.5rem;
+    line-height: 1.4;
+    background: transparent;
   }
 
-  .item-delete {
+  .task-delete {
     background: none;
     border: none;
-    color: #9CA3AF;
+    color: #d1d5db;
     cursor: pointer;
-    padding: 0.25rem;
-    transition: color 0.2s;
+    padding: 4px;
+    border-radius: 6px;
+    transition: all 0.2s;
+    opacity: 0;
+    flex-shrink: 0;
   }
 
-  .item-delete:hover {
-    color: #EF4444;
+  .roadmap-task:hover .task-delete {
+    opacity: 1;
   }
 
-  .item-description {
-    font-size: 0.8125rem;
-    color: var(--color-text-light);
-    margin-bottom: 0.75rem;
+  .task-delete:hover {
+    color: #ef4444;
+    background: #fef2f2;
+  }
+
+  .task-desc {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 12px;
     line-height: 1.5;
+    background: transparent;
   }
 
-  .item-meta {
+  .task-meta {
     display: flex;
-    gap: 0.5rem;
+    gap: 6px;
     flex-wrap: wrap;
+    background: transparent;
   }
 
-  .item-badge {
-    padding: 0.125rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.6875rem;
+  .task-badge {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
+    letter-spacing: 0.02em;
   }
 
-  .priority-critical { background: #FEE2E2; color: #DC2626; }
-  .priority-high { background: #FEF3C7; color: #D97706; }
-  .priority-medium { background: #E0F2FE; color: #0369A1; }
-  .priority-low { background: #F3F4F6; color: #6B7280; }
+  .priority-critical { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+  .priority-high { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
+  .priority-medium { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+  .priority-low { background: #f9fafb; color: #6b7280; border: 1px solid #e5e7eb; }
 
   .category-badge {
-    background: var(--color-primary-subtle);
-    color: var(--color-primary);
+    background: #f0fdf4;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
   }
 
   @media (max-width: 1024px) {
@@ -524,9 +537,31 @@ const defaultRoadmap = [
     .form-row {
       grid-template-columns: 1fr;
     }
-    .roadmap-hero {
-      padding: 6rem 1.5rem 2rem;
-    }
+  }
+
+  /* Dark mode overrides */
+  :global([data-theme="dark"]) .roadmap-task {
+    background: #27272a;
+    border-color: #3f3f46;
+  }
+
+  :global([data-theme="dark"]) .task-title {
+    color: #f4f4f5;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  :global([data-theme="dark"]) .task-desc {
+    color: #a1a1aa;
+  }
+
+  :global([data-theme="dark"]) .task-delete {
+    color: #71717a;
+  }
+
+  :global([data-theme="dark"]) .task-delete:hover {
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.1);
   }
 </style>
 
@@ -577,20 +612,20 @@ const defaultRoadmap = [
         if (container) {
           counts[item.status]++;
           container.innerHTML += `
-            <div class="roadmap-item" data-id="${item.id}">
-              <div class="item-header">
-                <span class="item-title">${item.title}</span>
-                <button class="item-delete" onclick="deleteItem(${item.id})" title="Delete">
+            <div class="roadmap-task" data-id="${item.id}">
+              <div class="task-header">
+                <span class="task-title">${item.title}</span>
+                <button class="task-delete" onclick="deleteItem(${item.id})" title="Delete">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="18" y1="6" x2="6" y2="18"/>
                     <line x1="6" y1="6" x2="18" y2="18"/>
                   </svg>
                 </button>
               </div>
-              ${item.description ? `<p class="item-description">${item.description}</p>` : ''}
-              <div class="item-meta">
-                <span class="item-badge priority-${item.priority}">${item.priority}</span>
-                <span class="item-badge category-badge">${item.category}</span>
+              ${item.description ? `<p class="task-desc">${item.description}</p>` : ''}
+              <div class="task-meta">
+                <span class="task-badge priority-${item.priority}">${item.priority}</span>
+                <span class="task-badge category-badge">${item.category}</span>
               </div>
             </div>
           `;

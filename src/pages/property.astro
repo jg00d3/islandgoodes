@@ -194,14 +194,7 @@ const description = "Explore Island Goodes property amenities including pool, ho
           </div>
         </div>
         <div class="location-map">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3784.1!2d-155.0939!3d19.8075!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTnCsDQ4JzI3LjAiTiAxNTXCsDA1JzM4LjAiVw!5e0!3m2!1sen!2sus!4v1234567890"
-            width="100%"
-            height="350"
-            style="border:0; border-radius: 16px;"
-            allowfullscreen=""
-            loading="lazy">
-          </iframe>
+          <div id="google-map" style="width: 100%; height: 350px; border-radius: 16px;"></div>
         </div>
       </div>
     </div>
@@ -479,3 +472,66 @@ const description = "Explore Island Goodes property amenities including pool, ho
     }
   }
 </style>
+
+<script is:inline src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaw9qXpSFuL_GgC3fzYFLlRPpfMwd10kc&callback=initMap" async defer></script>
+
+<script is:inline>
+  // Dark mode map styles
+  const darkMapStyles = [
+    { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
+    { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
+    { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
+    { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [{ color: "#d59563" }] },
+    { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#d59563" }] },
+    { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#263c3f" }] },
+    { featureType: "poi.park", elementType: "labels.text.fill", stylers: [{ color: "#6b9a76" }] },
+    { featureType: "road", elementType: "geometry", stylers: [{ color: "#38414e" }] },
+    { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#212a37" }] },
+    { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#9ca5b3" }] },
+    { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#746855" }] },
+    { featureType: "road.highway", elementType: "geometry.stroke", stylers: [{ color: "#1f2835" }] },
+    { featureType: "road.highway", elementType: "labels.text.fill", stylers: [{ color: "#f3d19c" }] },
+    { featureType: "transit", elementType: "geometry", stylers: [{ color: "#2f3948" }] },
+    { featureType: "transit.station", elementType: "labels.text.fill", stylers: [{ color: "#d59563" }] },
+    { featureType: "water", elementType: "geometry", stylers: [{ color: "#17263c" }] },
+    { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#515c6d" }] },
+    { featureType: "water", elementType: "labels.text.stroke", stylers: [{ color: "#17263c" }] }
+  ];
+
+  // Light mode (default Google styles)
+  const lightMapStyles = [];
+
+  let map;
+
+  function initMap() {
+    const islandGoodes = { lat: 19.8075, lng: -155.0939 };
+    const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+
+    map = new google.maps.Map(document.getElementById("google-map"), {
+      zoom: 14,
+      center: islandGoodes,
+      styles: isDarkMode ? darkMapStyles : lightMapStyles,
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: true
+    });
+
+    new google.maps.Marker({
+      position: islandGoodes,
+      map: map,
+      title: "Island Goodes B&B"
+    });
+
+    // Listen for theme changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'data-theme') {
+          const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+          map.setOptions({ styles: isDark ? darkMapStyles : lightMapStyles });
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, { attributes: true });
+  }
+</script>

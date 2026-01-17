@@ -1,1560 +1,567 @@
 ---
-import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import AdminLayout from '../../layouts/AdminLayout.astro';
 
-const title = "Feature Planning | Island Goodes Admin";
+const title = "Feature Planning";
 const description = "Collaborative planning for Virtual Trip Planner and Guest Check-in System";
-
-// Default planning data structure
-const defaultPlanningData = {
-  sections: [
-    {
-      id: "virtual-trip-planner",
-      title: "Virtual Trip Planner",
-      icon: "map",
-      description: "Help guests plan their perfect Big Island adventure",
-      color: "#8B5CF6",
-      expanded: true,
-      items: [
-        {
-          id: "vtp-inputs",
-          title: "Guest Input Fields",
-          type: "category",
-          status: "not_started",
-          priority: "high",
-          notes: "",
-          children: [
-            { id: "vtp-input-001", title: "Trip dates (arrival/departure)", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "vtp-input-002", title: "Origin city/airport", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "vtp-input-003", title: "Flight information (optional)", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "vtp-input-004", title: "Number of travelers", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "vtp-input-005", title: "Interest categories (beaches, hiking, culture, food)", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "vtp-input-006", title: "Mobility/accessibility needs", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "vtp-input-007", title: "Budget preference", checked: false, notes: "", status: "not_started", priority: "low" },
-            { id: "vtp-input-008", title: "Preferred pace (relaxed/moderate/packed)", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "vtp-input-009", title: "Rental car needed?", checked: false, notes: "", status: "not_started", priority: "high" }
-          ]
-        },
-        {
-          id: "vtp-itinerary",
-          title: "Itinerary Generation",
-          type: "category",
-          status: "not_started",
-          priority: "high",
-          notes: "",
-          children: [
-            { id: "vtp-itin-001", title: "Day-by-day activity suggestions", checked: false, notes: "", status: "not_started", priority: "critical" },
-            { id: "vtp-itin-002", title: "Distance/drive time between locations", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "vtp-itin-003", title: "Insider tips for each activity", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "vtp-itin-004", title: "Weather considerations by season", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "vtp-itin-005", title: "Restaurant/food recommendations", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "vtp-itin-006", title: "Drag-and-drop itinerary editing", checked: false, notes: "", status: "not_started", priority: "low" },
-            { id: "vtp-itin-007", title: "Alternative activity suggestions", checked: false, notes: "", status: "not_started", priority: "low" }
-          ]
-        },
-        {
-          id: "vtp-output",
-          title: "Output & Sharing",
-          type: "category",
-          status: "not_started",
-          priority: "medium",
-          notes: "",
-          children: [
-            { id: "vtp-out-001", title: "Interactive web view", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "vtp-out-002", title: "Printable PDF itinerary", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "vtp-out-003", title: "Email itinerary to guest", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "vtp-out-004", title: "Save/bookmark for later", checked: false, notes: "", status: "not_started", priority: "medium" }
-          ]
-        },
-        {
-          id: "vtp-integration",
-          title: "Content Integration",
-          type: "category",
-          status: "not_started",
-          priority: "high",
-          notes: "",
-          children: [
-            { id: "vtp-int-001", title: "Link to blog posts for destinations", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "vtp-int-002", title: "Link to guide pages", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "vtp-int-003", title: "Room recommendation based on interests", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "vtp-int-004", title: "Use existing photo gallery images", checked: false, notes: "", status: "not_started", priority: "low" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "guest-checkin",
-      title: "Guest Check-in System",
-      icon: "key",
-      description: "Automate pre-arrival communications and check-in packets",
-      color: "#10B981",
-      expanded: true,
-      items: [
-        {
-          id: "gci-booking",
-          title: "Booking Management",
-          type: "category",
-          status: "not_started",
-          priority: "high",
-          notes: "",
-          children: [
-            { id: "gci-book-001", title: "Manual entry form for booking details", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "gci-book-002", title: "Import from booking platform API", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "gci-book-003", title: "CSV/spreadsheet upload", checked: false, notes: "", status: "not_started", priority: "low" },
-            { id: "gci-book-004", title: "Calendar sync integration", checked: false, notes: "", status: "not_started", priority: "low" }
-          ]
-        },
-        {
-          id: "gci-packet",
-          title: "Check-in Packet Contents",
-          type: "category",
-          status: "not_started",
-          priority: "critical",
-          notes: "",
-          children: [
-            { id: "gci-pkt-001", title: "Room details and photos", checked: false, notes: "", status: "not_started", priority: "critical" },
-            { id: "gci-pkt-002", title: "Check-in/check-out times", checked: false, notes: "", status: "not_started", priority: "critical" },
-            { id: "gci-pkt-003", title: "Access codes/instructions", checked: false, notes: "", status: "not_started", priority: "critical" },
-            { id: "gci-pkt-004", title: "House rules summary", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "gci-pkt-005", title: "WiFi password", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "gci-pkt-006", title: "Emergency contacts", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "gci-pkt-007", title: "Directions from airport", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "gci-pkt-008", title: "Recommended first-day activities", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "gci-pkt-009", title: "Link to Virtual Trip Planner", checked: false, notes: "", status: "not_started", priority: "medium" }
-          ]
-        },
-        {
-          id: "gci-email",
-          title: "Email Automation",
-          type: "category",
-          status: "not_started",
-          priority: "high",
-          notes: "",
-          children: [
-            { id: "gci-eml-001", title: "Booking confirmation email", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "gci-eml-002", title: "Pre-arrival email (X days before)", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "gci-eml-003", title: "Day-of-arrival reminder", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "gci-eml-004", title: "Post-checkout thank you/review request", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "gci-eml-005", title: "Configurable email templates", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "gci-eml-006", title: "Manual send override", checked: false, notes: "", status: "not_started", priority: "low" }
-          ]
-        },
-        {
-          id: "gci-integration",
-          title: "Platform Integration",
-          type: "category",
-          status: "not_started",
-          priority: "medium",
-          notes: "",
-          children: [
-            { id: "gci-int-001", title: "ReservationKey integration", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "gci-int-002", title: "Airbnb API integration", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "gci-int-003", title: "Booking.com API integration", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "gci-int-004", title: "Google Calendar sync", checked: false, notes: "", status: "not_started", priority: "low" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "technical-requirements",
-      title: "Technical Requirements",
-      icon: "code",
-      description: "Infrastructure and APIs needed for implementation",
-      color: "#F59E0B",
-      expanded: false,
-      items: [
-        {
-          id: "tech-api",
-          title: "API Integrations",
-          type: "category",
-          status: "not_started",
-          priority: "high",
-          notes: "",
-          children: [
-            { id: "tech-api-001", title: "Google Maps API (distances, directions)", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "tech-api-002", title: "AI API for itinerary generation (Claude/OpenAI)", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "tech-api-003", title: "Weather API (forecast data)", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "tech-api-004", title: "Booking platform APIs", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "tech-api-005", title: "PDF generation library", checked: false, notes: "", status: "not_started", priority: "medium" }
-          ]
-        },
-        {
-          id: "tech-storage",
-          title: "Data Storage",
-          type: "category",
-          status: "not_started",
-          priority: "high",
-          notes: "",
-          children: [
-            { id: "tech-str-001", title: "Destination/activity database", checked: false, notes: "Extract from existing guide pages", status: "not_started", priority: "critical" },
-            { id: "tech-str-002", title: "Guest booking records", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "tech-str-003", title: "Saved itineraries", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "tech-str-004", title: "Email templates storage", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "tech-str-005", title: "Audit log for automated actions", checked: false, notes: "", status: "not_started", priority: "low" }
-          ]
-        },
-        {
-          id: "tech-email",
-          title: "Email Infrastructure",
-          type: "category",
-          status: "not_started",
-          priority: "high",
-          notes: "",
-          children: [
-            { id: "tech-eml-001", title: "Resend email service (already configured)", checked: true, notes: "Using noreply@islandgoodes.com", status: "complete", priority: "high" },
-            { id: "tech-eml-002", title: "HTML email templates", checked: false, notes: "", status: "not_started", priority: "high" },
-            { id: "tech-eml-003", title: "Email scheduling capability", checked: false, notes: "", status: "not_started", priority: "medium" },
-            { id: "tech-eml-004", title: "Email delivery tracking", checked: false, notes: "", status: "not_started", priority: "low" }
-          ]
-        }
-      ]
-    }
-  ],
-  lastUpdated: null,
-  updatedBy: null
-};
+const pageTitle = "Feature Planning";
+const pageTip = "Plan Virtual Trip Planner and Guest Check-in features";
 ---
 
-<PreviewLayout title={title} description={description}>
+<AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
   <div class="planning-page">
-    <!-- Hero -->
-    <section class="hero">
-      <div class="hero-bg"></div>
-      <div class="container">
-        <a href="/admin" class="back-link">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M19 12H5M12 19l-7-7 7-7"/>
-          </svg>
-          Back to Admin
-        </a>
-        <div class="hero-content">
-          <h1>Feature Planning</h1>
-          <p class="hero-subtitle">Designing the next generation of guest experiences</p>
+
+    <div class="planning-wrapper">
+      <div class="intro-card">
+        <h2>What is this page?</h2>
+        <p>This is where we plan and track two upcoming features:</p>
+        <ul>
+          <li><strong>Virtual Trip Planner</strong> - Help guests plan their perfect Big Island adventure</li>
+          <li><strong>Guest Check-in System</strong> - Automate pre-arrival emails and check-in packets</li>
+        </ul>
+        <div class="instructions">Check off items as we discuss and approve them. Add notes to capture decisions.</div>
+      </div>
+
+      <!-- FEATURE 1: Virtual Trip Planner -->
+      <div class="feature-card">
+        <div class="feature-title">
+          <span class="feature-icon purple">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+          </span>
+          <div>
+            <h2>Virtual Trip Planner</h2>
+            <span class="feature-desc">Help guests create personalized itineraries based on their interests</span>
+          </div>
+          <span class="feature-percent" id="vtp-progress">0%</span>
         </div>
 
-        <!-- Big Progress Ring -->
-        <div class="hero-progress">
-          <div class="progress-ring-container">
-            <svg class="progress-ring" viewBox="0 0 120 120">
-              <circle class="progress-ring-bg" cx="60" cy="60" r="54"/>
-              <circle class="progress-ring-fill" cx="60" cy="60" r="54" id="progressRing"/>
-            </svg>
-            <div class="progress-ring-text">
-              <span class="progress-percent" id="progressPercent">0</span>
-              <span class="progress-label">% Complete</span>
-            </div>
+        <div class="category-box">
+          <h3>Guest Input Fields</h3>
+          <p class="cat-question">What information do we collect from guests?</p>
+          <div class="checklist">
+            <label><input type="checkbox" data-id="vtp-001"><span>Trip dates (arrival & departure)</span></label>
+            <label><input type="checkbox" data-id="vtp-002"><span>Where they're visiting from</span></label>
+            <label><input type="checkbox" data-id="vtp-003"><span>Flight information (optional)</span></label>
+            <label><input type="checkbox" data-id="vtp-004"><span>Number of travelers</span></label>
+            <label><input type="checkbox" data-id="vtp-005"><span>Interest categories (beaches, hiking, food, culture)</span></label>
+            <label><input type="checkbox" data-id="vtp-006"><span>Mobility/accessibility needs</span></label>
+            <label><input type="checkbox" data-id="vtp-007"><span>Budget preference</span></label>
+            <label><input type="checkbox" data-id="vtp-008"><span>Pace preference (relaxed vs packed)</span></label>
+            <label><input type="checkbox" data-id="vtp-009"><span>Need rental car?</span></label>
           </div>
-          <div class="progress-meta">
-            <div class="progress-stat">
-              <span class="stat-num" id="completedCount">0</span>
-              <span class="stat-label">Done</span>
-            </div>
-            <div class="progress-stat">
-              <span class="stat-num" id="inProgressCount">0</span>
-              <span class="stat-label">In Progress</span>
-            </div>
-            <div class="progress-stat">
-              <span class="stat-num" id="totalCount">0</span>
-              <span class="stat-label">Total</span>
-            </div>
+          <div class="notes-area">
+            <label>Notes & Decisions:</label>
+            <textarea data-notes="vtp-inputs" placeholder="Add notes about what inputs we need..."></textarea>
+          </div>
+        </div>
+
+        <div class="category-box">
+          <h3>Itinerary Generation</h3>
+          <p class="cat-question">What does the generated itinerary include?</p>
+          <div class="checklist">
+            <label><input type="checkbox" data-id="vtp-010"><span>Day-by-day activity suggestions</span></label>
+            <label><input type="checkbox" data-id="vtp-011"><span>Drive times between locations</span></label>
+            <label><input type="checkbox" data-id="vtp-012"><span>Insider tips for each activity</span></label>
+            <label><input type="checkbox" data-id="vtp-013"><span>Weather considerations</span></label>
+            <label><input type="checkbox" data-id="vtp-014"><span>Restaurant recommendations</span></label>
+            <label><input type="checkbox" data-id="vtp-015"><span>Alternative suggestions if plans change</span></label>
+          </div>
+          <div class="notes-area">
+            <label>Notes & Decisions:</label>
+            <textarea data-notes="vtp-itinerary" placeholder="Add notes about itinerary features..."></textarea>
+          </div>
+        </div>
+
+        <div class="category-box">
+          <h3>Output & Sharing</h3>
+          <p class="cat-question">How do guests receive their itinerary?</p>
+          <div class="checklist">
+            <label><input type="checkbox" data-id="vtp-016"><span>Interactive web view</span></label>
+            <label><input type="checkbox" data-id="vtp-017"><span>Printable PDF version</span></label>
+            <label><input type="checkbox" data-id="vtp-018"><span>Email to guest</span></label>
+            <label><input type="checkbox" data-id="vtp-019"><span>Save/bookmark for later</span></label>
+          </div>
+          <div class="notes-area">
+            <label>Notes & Decisions:</label>
+            <textarea data-notes="vtp-output" placeholder="Add notes about output options..."></textarea>
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- Feature Tabs -->
-    <section class="tabs-section">
-      <div class="container">
-        <div class="tabs" id="featureTabs">
-          <!-- Tabs generated by JS -->
+      <!-- FEATURE 2: Guest Check-in System -->
+      <div class="feature-card">
+        <div class="feature-title">
+          <span class="feature-icon green">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          </span>
+          <div>
+            <h2>Guest Check-in System</h2>
+            <span class="feature-desc">Automate pre-arrival communications and check-in packets</span>
+          </div>
+          <span class="feature-percent" id="gci-progress">0%</span>
+        </div>
+
+        <div class="category-box">
+          <h3>Booking Management</h3>
+          <p class="cat-question">How does Dad enter guest booking info?</p>
+          <div class="checklist">
+            <label><input type="checkbox" data-id="gci-001"><span>Manual entry form in admin</span></label>
+            <label><input type="checkbox" data-id="gci-002"><span>Import from ReservationKey API</span></label>
+            <label><input type="checkbox" data-id="gci-003"><span>CSV/spreadsheet upload</span></label>
+            <label><input type="checkbox" data-id="gci-004"><span>Calendar sync integration</span></label>
+          </div>
+          <div class="notes-area">
+            <label>Notes & Decisions:</label>
+            <textarea data-notes="gci-booking" placeholder="How should Dad enter booking data?"></textarea>
+          </div>
+        </div>
+
+        <div class="category-box">
+          <h3>Check-in Packet Contents</h3>
+          <p class="cat-question">What info goes in the guest welcome packet?</p>
+          <div class="checklist">
+            <label><input type="checkbox" data-id="gci-005"><span>Room details and photos</span></label>
+            <label><input type="checkbox" data-id="gci-006"><span>Check-in/check-out times</span></label>
+            <label><input type="checkbox" data-id="gci-007"><span>Access codes & instructions</span></label>
+            <label><input type="checkbox" data-id="gci-008"><span>House rules summary</span></label>
+            <label><input type="checkbox" data-id="gci-009"><span>WiFi password</span></label>
+            <label><input type="checkbox" data-id="gci-010"><span>Emergency contacts</span></label>
+            <label><input type="checkbox" data-id="gci-011"><span>Directions from airport</span></label>
+            <label><input type="checkbox" data-id="gci-012"><span>First-day activity suggestions</span></label>
+            <label><input type="checkbox" data-id="gci-013"><span>Link to Trip Planner</span></label>
+          </div>
+          <div class="notes-area">
+            <label>Notes & Decisions:</label>
+            <textarea data-notes="gci-packet" placeholder="What should the welcome packet include?"></textarea>
+          </div>
+        </div>
+
+        <div class="category-box">
+          <h3>Email Automation</h3>
+          <p class="cat-question">When do automated emails go out?</p>
+          <div class="checklist">
+            <label><input type="checkbox" data-id="gci-014"><span>Booking confirmation email</span></label>
+            <label><input type="checkbox" data-id="gci-015"><span>Pre-arrival email (7 days before)</span></label>
+            <label><input type="checkbox" data-id="gci-016"><span>Day-of arrival reminder</span></label>
+            <label><input type="checkbox" data-id="gci-017"><span>Post-checkout thank you</span></label>
+            <label><input type="checkbox" data-id="gci-018"><span>Review request email</span></label>
+          </div>
+          <div class="notes-area">
+            <label>Notes & Decisions:</label>
+            <textarea data-notes="gci-email" placeholder="What automated emails do we need?"></textarea>
+          </div>
         </div>
       </div>
-    </section>
 
-    <!-- Main Content -->
-    <section class="main-content">
-      <div class="container">
-        <div id="featureContent">
-          <!-- Content generated by JS -->
-        </div>
-      </div>
-    </section>
-
-    <!-- Add Item Modal -->
-    <div id="addModal" class="modal">
-      <div class="modal-backdrop"></div>
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>Add New Task</h3>
-          <button class="modal-close" id="closeAddModal">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-          </button>
-        </div>
-        <form id="addItemForm">
-          <input type="hidden" id="parentSectionId" />
-          <input type="hidden" id="parentCategoryId" />
-          <div class="form-group">
-            <label>Task Description</label>
-            <input type="text" id="newItemTitle" placeholder="What needs to be done?" required />
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Priority</label>
-              <div class="priority-select" id="prioritySelect">
-                <button type="button" class="priority-btn" data-value="low">Low</button>
-                <button type="button" class="priority-btn active" data-value="medium">Medium</button>
-                <button type="button" class="priority-btn" data-value="high">High</button>
-                <button type="button" class="priority-btn" data-value="critical">Critical</button>
-              </div>
-              <input type="hidden" id="newItemPriority" value="medium" />
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Notes (optional)</label>
-            <textarea id="newItemNotes" rows="3" placeholder="Additional context or requirements..."></textarea>
-          </div>
-          <div class="form-actions">
-            <button type="button" class="btn-cancel" id="cancelAdd">Cancel</button>
-            <button type="submit" class="btn-submit">Add Task</button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <!-- Notes Modal -->
-    <div id="notesModal" class="modal">
-      <div class="modal-backdrop"></div>
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>Task Notes</h3>
-          <button class="modal-close" id="closeNotesModal">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-          </button>
-        </div>
-        <form id="editNotesForm">
-          <input type="hidden" id="editItemId" />
-          <div class="form-group">
-            <label id="editItemTitle">Task</label>
-            <textarea id="editItemNotes" rows="6" placeholder="Add notes, questions, or discussion points..."></textarea>
-          </div>
-          <div class="form-actions">
-            <button type="button" class="btn-cancel" id="cancelNotes">Cancel</button>
-            <button type="submit" class="btn-submit">Save Notes</button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <!-- Last Updated -->
-    <div class="last-updated-bar" id="lastUpdatedBar">
-      <span id="lastUpdatedText">Loading...</span>
+      <div class="save-indicator" id="saveStatus">Changes auto-save to your browser</div>
     </div>
   </div>
-</PreviewLayout>
+</AdminLayout>
 
 <style>
   .planning-page {
     min-height: 100vh;
-    background: #0f0f0f;
+    background: #f5f7fa;
   }
 
-  /* Hero */
-  .hero {
-    position: relative;
-    padding: 6rem 2rem 3rem;
+  .planning-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  .intro-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  .intro-card h2 {
+    font-size: 18px;
+    color: #1e3a5f;
+    margin: 0 0 12px;
+  }
+
+  .intro-card p {
+    color: #4a5568;
+    margin: 0 0 12px;
+    line-height: 1.5;
+  }
+
+  .intro-card ul {
+    margin: 0 0 16px;
+    padding-left: 20px;
+    color: #4a5568;
+  }
+
+  .intro-card ul li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+
+  .instructions {
+    background: #e8f4f8;
+    color: #1e3a5f;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .feature-card {
+    background: white;
+    border-radius: 16px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     overflow: hidden;
-  }
-
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-    z-index: 0;
-  }
-
-  .hero-bg::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  }
-
-  .hero .container {
-    position: relative;
-    z-index: 1;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: rgba(255,255,255,0.6);
-    font-size: 0.875rem;
-    text-decoration: none;
-    margin-bottom: 2rem;
-    transition: color 0.2s;
-  }
-
-  .back-link:hover {
-    color: #fff;
-  }
-
-  .hero-content {
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-
-  .hero h1 {
-    font-size: 3rem;
-    font-weight: 700;
-    color: #fff;
-    margin: 0 0 0.5rem;
-    letter-spacing: -0.02em;
-  }
-
-  .hero-subtitle {
-    font-size: 1.125rem;
-    color: rgba(255,255,255,0.6);
-    margin: 0;
-  }
-
-  /* Progress Ring */
-  .hero-progress {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 3rem;
-    flex-wrap: wrap;
-  }
-
-  .progress-ring-container {
-    position: relative;
-    width: 140px;
-    height: 140px;
-  }
-
-  .progress-ring {
-    transform: rotate(-90deg);
-    width: 100%;
-    height: 100%;
-  }
-
-  .progress-ring-bg {
-    fill: none;
-    stroke: rgba(255,255,255,0.1);
-    stroke-width: 8;
-  }
-
-  .progress-ring-fill {
-    fill: none;
-    stroke: url(#progressGradient);
-    stroke-width: 8;
-    stroke-linecap: round;
-    stroke-dasharray: 339.292;
-    stroke-dashoffset: 339.292;
-    transition: stroke-dashoffset 1s ease-out;
-  }
-
-  .progress-ring-text {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .progress-percent {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #fff;
-    line-height: 1;
-  }
-
-  .progress-label {
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.5);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .progress-meta {
-    display: flex;
-    gap: 2rem;
-  }
-
-  .progress-stat {
-    text-align: center;
-  }
-
-  .stat-num {
-    display: block;
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: #fff;
-  }
-
-  .stat-label {
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.5);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  /* Tabs */
-  .tabs-section {
-    background: #0f0f0f;
-    padding: 0 2rem;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-  }
-
-  .tabs-section .container {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .tabs {
-    display: flex;
-    gap: 0;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-
-  .tabs::-webkit-scrollbar {
-    display: none;
-  }
-
-  .tab-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 1.25rem 1.5rem;
-    background: none;
-    border: none;
-    color: rgba(255,255,255,0.5);
-    font-size: 0.9375rem;
-    font-weight: 500;
-    cursor: pointer;
-    white-space: nowrap;
-    position: relative;
-    transition: all 0.2s;
-  }
-
-  .tab-btn:hover {
-    color: rgba(255,255,255,0.8);
-  }
-
-  .tab-btn.active {
-    color: #fff;
-  }
-
-  .tab-btn::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--tab-color, #8B5CF6);
-    transform: scaleX(0);
-    transition: transform 0.2s;
-  }
-
-  .tab-btn.active::after {
-    transform: scaleX(1);
-  }
-
-  .tab-icon {
-    width: 24px;
-    height: 24px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--tab-color, #8B5CF6);
-  }
-
-  .tab-icon svg {
-    width: 14px;
-    height: 14px;
-    stroke: #fff;
-  }
-
-  .tab-progress {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
-    background: rgba(255,255,255,0.1);
-    border-radius: 10px;
-    color: rgba(255,255,255,0.6);
-  }
-
-  /* Main Content */
-  .main-content {
-    padding: 2rem;
-    background: #0f0f0f;
-    min-height: 60vh;
-  }
-
-  .main-content .container {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .feature-content {
-    display: none;
-  }
-
-  .feature-content.active {
-    display: block;
-    animation: fadeIn 0.3s ease;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .feature-header {
-    margin-bottom: 2rem;
   }
 
   .feature-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #fff;
-    margin: 0 0 0.5rem;
-  }
-
-  .feature-description {
-    color: rgba(255,255,255,0.5);
-    margin: 0;
-  }
-
-  /* Categories */
-  .categories-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .category-card {
-    background: linear-gradient(145deg, #1a1a1a 0%, #141414 100%);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 16px;
-    overflow: hidden;
-    transition: all 0.3s;
-  }
-
-  .category-card:hover {
-    border-color: rgba(255,255,255,0.15);
-    transform: translateY(-2px);
-  }
-
-  .category-header {
-    padding: 1.25rem 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
-
-  .category-title-area {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 16px;
+    padding: 20px 24px;
+    background: #fafbfc;
+    border-bottom: 1px solid #e9ecef;
   }
 
-  .category-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #fff;
-    margin: 0;
-  }
-
-  .category-count {
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.4);
-    background: rgba(255,255,255,0.05);
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-  }
-
-  .category-progress {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .mini-progress {
-    width: 60px;
-    height: 4px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  .mini-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #10B981, #34D399);
-    border-radius: 2px;
-    transition: width 0.5s ease;
-  }
-
-  .category-percent {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: rgba(255,255,255,0.6);
-    min-width: 36px;
-    text-align: right;
-  }
-
-  .category-items {
-    padding: 0.75rem;
-  }
-
-  /* Task Items */
-  .task-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    padding: 0.875rem;
+  .feature-icon {
+    width: 44px;
+    height: 44px;
     border-radius: 10px;
-    transition: all 0.2s;
-    cursor: default;
-  }
-
-  .task-item:hover {
-    background: rgba(255,255,255,0.03);
-  }
-
-  .task-checkbox {
-    position: relative;
-    width: 22px;
-    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
     flex-shrink: 0;
-    margin-top: 1px;
   }
 
-  .task-checkbox input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
+  .feature-icon.purple {
+    background: #8B5CF6;
   }
 
-  .task-checkbox .checkmark {
-    position: absolute;
-    inset: 0;
-    background: rgba(255,255,255,0.05);
-    border: 2px solid rgba(255,255,255,0.2);
-    border-radius: 6px;
-    transition: all 0.2s;
-  }
-
-  .task-checkbox input:hover + .checkmark {
-    border-color: rgba(255,255,255,0.4);
-  }
-
-  .task-checkbox input:checked + .checkmark {
+  .feature-icon.green {
     background: #10B981;
-    border-color: #10B981;
   }
 
-  .task-checkbox .checkmark::after {
-    content: '';
-    position: absolute;
-    left: 6px;
-    top: 2px;
-    width: 6px;
-    height: 10px;
-    border: solid #fff;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg) scale(0);
-    transition: transform 0.2s;
+  .feature-title h2 {
+    font-size: 20px;
+    color: #1a202c;
+    margin: 0 0 4px;
   }
 
-  .task-checkbox input:checked + .checkmark::after {
-    transform: rotate(45deg) scale(1);
+  .feature-desc {
+    font-size: 14px;
+    color: #718096;
   }
 
-  .task-content {
-    flex: 1;
-    min-width: 0;
+  .feature-percent {
+    margin-left: auto;
+    font-size: 24px;
+    font-weight: 700;
+    color: #10B981;
   }
 
-  .task-title {
-    font-size: 0.9375rem;
-    color: rgba(255,255,255,0.85);
-    line-height: 1.4;
-    margin-bottom: 0.375rem;
-    transition: all 0.2s;
+  .category-box {
+    padding: 24px;
+    border-bottom: 1px solid #e9ecef;
   }
 
-  .task-item.completed .task-title {
-    color: rgba(255,255,255,0.35);
-    text-decoration: line-through;
+  .category-box:last-child {
+    border-bottom: none;
   }
 
-  .task-meta {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .priority-tag {
-    font-size: 0.6875rem;
+  .category-box h3 {
+    font-size: 16px;
+    color: #2d3748;
+    margin: 0 0 8px;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
   }
 
-  .priority-tag.low { background: rgba(107,114,128,0.2); color: #9CA3AF; }
-  .priority-tag.medium { background: rgba(59,130,246,0.2); color: #60A5FA; }
-  .priority-tag.high { background: rgba(245,158,11,0.2); color: #FBBF24; }
-  .priority-tag.critical { background: rgba(239,68,68,0.2); color: #F87171; }
+  .cat-question {
+    font-size: 14px;
+    color: #718096;
+    margin: 0 0 16px;
+  }
 
-  .task-note-indicator {
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.4);
+  .checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .checklist label {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
-  }
-
-  .task-note-indicator svg {
-    width: 12px;
-    height: 12px;
-  }
-
-  .task-actions {
-    display: flex;
-    gap: 0.25rem;
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
-  .task-item:hover .task-actions {
-    opacity: 1;
-  }
-
-  .task-action-btn {
-    width: 32px;
-    height: 32px;
-    border: none;
+    gap: 12px;
+    padding: 12px 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
     border-radius: 8px;
-    background: rgba(255,255,255,0.05);
-    color: rgba(255,255,255,0.5);
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
+    transition: all 0.15s ease;
+    font-size: 15px;
+    color: #4a5568;
   }
 
-  .task-action-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
+  .checklist label:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e0;
   }
 
-  .task-action-btn.delete:hover {
-    background: rgba(239,68,68,0.2);
-    color: #F87171;
+  .checklist label:has(input:checked) {
+    background: #ecfdf5;
+    border-color: #86efac;
+    color: #166534;
   }
 
-  .task-action-btn svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  /* Add Task Button */
-  .add-task-btn {
-    width: 100%;
-    padding: 0.875rem;
-    border: 2px dashed rgba(255,255,255,0.1);
-    border-radius: 10px;
-    background: none;
-    color: rgba(255,255,255,0.4);
-    font-size: 0.875rem;
+  .checklist input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    transition: all 0.2s;
-    margin-top: 0.5rem;
+    accent-color: #10B981;
+    flex-shrink: 0;
   }
 
-  .add-task-btn:hover {
-    border-color: rgba(255,255,255,0.2);
-    color: rgba(255,255,255,0.7);
-    background: rgba(255,255,255,0.02);
+  .checklist label span {
+    flex: 1;
   }
 
-  .add-task-btn svg {
-    width: 18px;
-    height: 18px;
+  .notes-area {
+    padding-top: 16px;
+    border-top: 1px solid #e9ecef;
   }
 
-  /* Modal */
-  .modal {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-  }
-
-  .modal.active {
-    display: flex;
-  }
-
-  .modal-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.8);
-    backdrop-filter: blur(4px);
-  }
-
-  .modal-content {
-    position: relative;
-    background: #1a1a1a;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 20px;
-    width: 100%;
-    max-width: 480px;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-
-  .modal-header {
-    padding: 1.5rem;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .modal-header h3 {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #fff;
-  }
-
-  .modal-close {
-    width: 36px;
-    height: 36px;
-    border: none;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.05);
-    color: rgba(255,255,255,0.5);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-  }
-
-  .modal-close:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-  }
-
-  #addItemForm,
-  #editNotesForm {
-    padding: 1.5rem;
-  }
-
-  .form-group {
-    margin-bottom: 1.25rem;
-  }
-
-  .form-group label {
+  .notes-area label {
     display: block;
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: rgba(255,255,255,0.6);
-    margin-bottom: 0.5rem;
-  }
-
-  .form-group input,
-  .form-group textarea {
-    width: 100%;
-    padding: 0.875rem 1rem;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 10px;
-    color: #fff;
-    font-size: 0.9375rem;
-    font-family: inherit;
-    transition: all 0.2s;
-  }
-
-  .form-group input::placeholder,
-  .form-group textarea::placeholder {
-    color: rgba(255,255,255,0.3);
-  }
-
-  .form-group input:focus,
-  .form-group textarea:focus {
-    outline: none;
-    border-color: rgba(139,92,246,0.5);
-    background: rgba(255,255,255,0.08);
-  }
-
-  .form-row {
-    display: grid;
-    gap: 1rem;
-  }
-
-  .priority-select {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .priority-btn {
-    flex: 1;
-    padding: 0.625rem;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    background: rgba(255,255,255,0.03);
-    color: rgba(255,255,255,0.5);
-    font-size: 0.8125rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .priority-btn:hover {
-    background: rgba(255,255,255,0.06);
-    color: rgba(255,255,255,0.8);
-  }
-
-  .priority-btn.active {
-    background: rgba(139,92,246,0.2);
-    border-color: rgba(139,92,246,0.5);
-    color: #A78BFA;
-  }
-
-  .form-actions {
-    display: flex;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-  }
-
-  .btn-cancel {
-    flex: 1;
-    padding: 0.875rem;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 10px;
-    background: none;
-    color: rgba(255,255,255,0.6);
-    font-size: 0.9375rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn-cancel:hover {
-    background: rgba(255,255,255,0.05);
-    color: #fff;
-  }
-
-  .btn-submit {
-    flex: 1;
-    padding: 0.875rem;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
-    color: #fff;
-    font-size: 0.9375rem;
+    font-size: 13px;
     font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
+    color: #4a5568;
+    margin-bottom: 8px;
   }
 
-  .btn-submit:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 20px rgba(139,92,246,0.4);
+  .notes-area textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    color: #2d3748;
+    resize: vertical;
+    background: #fafbfc;
+    box-sizing: border-box;
   }
 
-  /* Last Updated Bar */
-  .last-updated-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 0.75rem 2rem;
-    background: rgba(15,15,15,0.95);
-    border-top: 1px solid rgba(255,255,255,0.08);
+  .notes-area textarea:focus {
+    outline: none;
+    border-color: #8B5CF6;
+    background: white;
+  }
+
+  .notes-area textarea::placeholder {
+    color: #a0aec0;
+  }
+
+  .save-indicator {
     text-align: center;
-    font-size: 0.8125rem;
-    color: rgba(255,255,255,0.4);
-    backdrop-filter: blur(10px);
+    padding: 16px;
+    font-size: 14px;
+    color: #718096;
   }
 
-  /* SVG Gradient Definition */
-  .svg-defs {
-    position: absolute;
-    width: 0;
-    height: 0;
-  }
-
-  /* Responsive */
-  @media (max-width: 768px) {
-    .hero {
-      padding: 5rem 1.5rem 2rem;
+  @media (max-width: 600px) {
+    .planning-wrapper {
+      padding: 16px;
     }
 
-    .hero h1 {
-      font-size: 2rem;
-    }
-
-    .hero-progress {
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    .progress-meta {
-      justify-content: center;
-    }
-
-    .tabs-section {
-      padding: 0 1rem;
-    }
-
-    .tab-btn {
-      padding: 1rem;
-      font-size: 0.875rem;
-    }
-
-    .main-content {
-      padding: 1.5rem 1rem;
-    }
-
-    .categories-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .priority-select {
+    .feature-title {
       flex-wrap: wrap;
+      gap: 12px;
     }
 
-    .priority-btn {
-      flex: 0 0 calc(50% - 0.25rem);
+    .feature-percent {
+      width: 100%;
+      text-align: left;
+      margin: 0;
     }
+
+    .checklist label {
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+  }
+
+  /* Dark mode styles */
+  :global([data-theme="dark"]) .planning-page {
+    background: var(--color-bg);
+  }
+
+  :global([data-theme="dark"]) .intro-card {
+    background: var(--color-bg-alt);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  :global([data-theme="dark"]) .intro-card h2 {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .intro-card p,
+  :global([data-theme="dark"]) .intro-card ul {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .instructions {
+    background: rgba(139, 92, 246, 0.15);
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .feature-card {
+    background: var(--color-bg-alt);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+
+  :global([data-theme="dark"]) .feature-title {
+    background: var(--color-bg);
+    border-bottom-color: var(--color-border);
+  }
+
+  :global([data-theme="dark"]) .feature-title h2 {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .feature-desc {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .category-box {
+    border-bottom-color: var(--color-border);
+  }
+
+  :global([data-theme="dark"]) .category-box h3 {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .cat-question {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .checklist label {
+    background: var(--color-bg);
+    border-color: var(--color-border);
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .checklist label:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: var(--color-border);
+  }
+
+  :global([data-theme="dark"]) .checklist label:has(input:checked) {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.4);
+    color: #34d399;
+  }
+
+  :global([data-theme="dark"]) .notes-area {
+    border-top-color: var(--color-border);
+  }
+
+  :global([data-theme="dark"]) .notes-area label {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .notes-area textarea {
+    background: var(--color-bg);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .notes-area textarea:focus {
+    background: var(--color-bg-alt);
+    border-color: #8B5CF6;
+  }
+
+  :global([data-theme="dark"]) .notes-area textarea::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .save-indicator {
+    color: var(--color-text-muted);
   }
 </style>
 
-<!-- SVG Gradient Definition -->
-<svg class="svg-defs">
-  <defs>
-    <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#8B5CF6"/>
-      <stop offset="100%" stop-color="#10B981"/>
-    </linearGradient>
-  </defs>
-</svg>
+<script>
+  let planningData = { checked: {}, notes: {} };
 
-<script is:inline src="/js/shared-data.js"></script>
-<script define:vars={{ defaultPlanningData }}>
-  const SESSION_KEY = 'islandgoodes_admin_session';
-
-  function getSession() {
+  function loadData() {
     try {
-      const stored = sessionStorage.getItem(SESSION_KEY);
-      return stored ? JSON.parse(stored) : null;
-    } catch { return null; }
-  }
-
-  if (!getSession()) {
-    window.location.href = '/admin';
-  }
-
-  let planningData = null;
-  let activeSection = 0;
-
-  async function getPlanningData() {
-    try {
-      const response = await fetch('/.netlify/functions/data-store', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ store: 'planningWorkflow', action: 'get', key: 'data' })
-      });
-      if (response.ok) {
-        const data = await response.json();
-        if (data && data.sections && data.sections.length > 0) {
-          return data;
-        }
+      const saved = localStorage.getItem('islandgoodes_planning');
+      if (saved) {
+        planningData = JSON.parse(saved);
+        applyData();
       }
-    } catch (e) {
-      console.error('Failed to load:', e);
-    }
-    return JSON.parse(JSON.stringify(defaultPlanningData));
+    } catch (e) {}
   }
 
-  async function savePlanningData() {
-    const session = getSession();
-    planningData.lastUpdated = new Date().toISOString();
-    planningData.updatedBy = session?.fullName || session?.username || 'Unknown';
-
-    try {
-      await fetch('/.netlify/functions/data-store', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ store: 'planningWorkflow', action: 'set', key: 'data', data: planningData })
-      });
-      updateLastUpdated();
-    } catch (e) {
-      console.error('Failed to save:', e);
-    }
-  }
-
-  function countItems() {
-    let total = 0, completed = 0, inProgress = 0;
-    planningData.sections.forEach(section => {
-      section.items.forEach(cat => {
-        if (cat.children) {
-          cat.children.forEach(item => {
-            total++;
-            if (item.checked || item.status === 'complete') completed++;
-            else if (item.status === 'in_progress') inProgress++;
-          });
-        }
-      });
+  function applyData() {
+    Object.keys(planningData.checked).forEach(id => {
+      const cb = document.querySelector('input[data-id="' + id + '"]');
+      if (cb) cb.checked = planningData.checked[id];
     });
-    return { total, completed, inProgress };
-  }
-
-  function countSectionItems(section) {
-    let total = 0, completed = 0;
-    section.items.forEach(cat => {
-      if (cat.children) {
-        cat.children.forEach(item => {
-          total++;
-          if (item.checked || item.status === 'complete') completed++;
-        });
-      }
+    Object.keys(planningData.notes).forEach(key => {
+      const ta = document.querySelector('textarea[data-notes="' + key + '"]');
+      if (ta) ta.value = planningData.notes[key];
     });
-    return { total, completed, percent: total > 0 ? Math.round((completed / total) * 100) : 0 };
-  }
-
-  function countCategoryItems(category) {
-    if (!category.children) return { total: 0, completed: 0, percent: 0 };
-    const total = category.children.length;
-    const completed = category.children.filter(i => i.checked || i.status === 'complete').length;
-    return { total, completed, percent: total > 0 ? Math.round((completed / total) * 100) : 0 };
-  }
-
-  function updateProgress() {
-    const { total, completed, inProgress } = countItems();
-    const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
-
-    document.getElementById('progressPercent').textContent = percent;
-    document.getElementById('completedCount').textContent = completed;
-    document.getElementById('inProgressCount').textContent = inProgress;
-    document.getElementById('totalCount').textContent = total;
-
-    const circumference = 2 * Math.PI * 54;
-    const offset = circumference - (percent / 100) * circumference;
-    document.getElementById('progressRing').style.strokeDashoffset = offset;
-  }
-
-  function updateLastUpdated() {
-    if (planningData.lastUpdated) {
-      const date = new Date(planningData.lastUpdated);
-      const formatted = date.toLocaleDateString('en-US', {
-        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
-      });
-      document.getElementById('lastUpdatedText').textContent =
-        `Last updated ${formatted}${planningData.updatedBy ? ` by ${planningData.updatedBy}` : ''}`;
-    } else {
-      document.getElementById('lastUpdatedText').textContent = 'Not yet saved';
-    }
-  }
-
-  function getIcon(type) {
-    const icons = {
-      map: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>',
-      key: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>',
-      code: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>'
-    };
-    return icons[type] || icons.map;
-  }
-
-  function renderTabs() {
-    const container = document.getElementById('featureTabs');
-    container.innerHTML = planningData.sections.map((section, idx) => {
-      const { total, completed, percent } = countSectionItems(section);
-      return `
-        <button class="tab-btn ${idx === activeSection ? 'active' : ''}"
-                data-index="${idx}"
-                style="--tab-color: ${section.color}">
-          <span class="tab-icon" style="background: ${section.color}">${getIcon(section.icon)}</span>
-          <span>${section.title}</span>
-          <span class="tab-progress">${percent}%</span>
-        </button>
-      `;
-    }).join('');
-
-    container.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        activeSection = parseInt(btn.dataset.index);
-        renderTabs();
-        renderContent();
-      });
-    });
-  }
-
-  function renderContent() {
-    const container = document.getElementById('featureContent');
-    const section = planningData.sections[activeSection];
-
-    container.innerHTML = `
-      <div class="feature-content active">
-        <div class="feature-header">
-          <h2 class="feature-title">${section.title}</h2>
-          <p class="feature-description">${section.description}</p>
-        </div>
-        <div class="categories-grid">
-          ${section.items.map(category => renderCategory(section.id, category)).join('')}
-        </div>
-      </div>
-    `;
-
-    attachEventHandlers();
     updateProgress();
   }
 
-  function renderCategory(sectionId, category) {
-    const { total, completed, percent } = countCategoryItems(category);
-    return `
-      <div class="category-card" data-category-id="${category.id}">
-        <div class="category-header">
-          <div class="category-title-area">
-            <h3 class="category-title">${category.title}</h3>
-            <span class="category-count">${completed}/${total}</span>
-          </div>
-          <div class="category-progress">
-            <div class="mini-progress">
-              <div class="mini-progress-fill" style="width: ${percent}%"></div>
-            </div>
-            <span class="category-percent">${percent}%</span>
-          </div>
-        </div>
-        <div class="category-items">
-          ${category.children ? category.children.map(item => renderTask(sectionId, category.id, item)).join('') : ''}
-          <button class="add-task-btn" data-section="${sectionId}" data-category="${category.id}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-            Add Task
-          </button>
-        </div>
-      </div>
-    `;
+  function saveData() {
+    try {
+      localStorage.setItem('islandgoodes_planning', JSON.stringify(planningData));
+      document.getElementById('saveStatus').textContent = 'Saved!';
+      setTimeout(() => {
+        document.getElementById('saveStatus').textContent = 'Changes auto-save to your browser';
+      }, 2000);
+    } catch (e) {}
   }
 
-  function renderTask(sectionId, categoryId, item) {
-    const isComplete = item.checked || item.status === 'complete';
-    const hasNotes = item.notes && item.notes.trim().length > 0;
-    return `
-      <div class="task-item ${isComplete ? 'completed' : ''}" data-item-id="${item.id}">
-        <label class="task-checkbox">
-          <input type="checkbox" ${isComplete ? 'checked' : ''}
-                 data-section="${sectionId}" data-category="${categoryId}" data-item="${item.id}">
-          <span class="checkmark"></span>
-        </label>
-        <div class="task-content">
-          <div class="task-title">${item.title}</div>
-          <div class="task-meta">
-            <span class="priority-tag ${item.priority}">${item.priority}</span>
-            ${hasNotes ? `<span class="task-note-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Note</span>` : ''}
-          </div>
-        </div>
-        <div class="task-actions">
-          <button class="task-action-btn notes" data-section="${sectionId}" data-category="${categoryId}" data-item="${item.id}" title="Notes">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-            </svg>
-          </button>
-          <button class="task-action-btn delete" data-section="${sectionId}" data-category="${categoryId}" data-item="${item.id}" title="Delete">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-    `;
+  function updateProgress() {
+    // Virtual Trip Planner
+    const vtpAll = document.querySelectorAll('input[data-id^="vtp-"]');
+    const vtpChecked = document.querySelectorAll('input[data-id^="vtp-"]:checked');
+    const vtpPct = vtpAll.length > 0 ? Math.round((vtpChecked.length / vtpAll.length) * 100) : 0;
+    document.getElementById('vtp-progress').textContent = vtpPct + '%';
+
+    // Guest Check-in
+    const gciAll = document.querySelectorAll('input[data-id^="gci-"]');
+    const gciChecked = document.querySelectorAll('input[data-id^="gci-"]:checked');
+    const gciPct = gciAll.length > 0 ? Math.round((gciChecked.length / gciAll.length) * 100) : 0;
+    document.getElementById('gci-progress').textContent = gciPct + '%';
   }
 
-  function findItem(sectionId, categoryId, itemId) {
-    const section = planningData.sections.find(s => s.id === sectionId);
-    if (!section) return null;
-    const category = section.items.find(c => c.id === categoryId);
-    if (!category) return null;
-    if (itemId) return category.children?.find(i => i.id === itemId) || null;
-    return category;
-  }
-
-  function attachEventHandlers() {
-    // Checkboxes
-    document.querySelectorAll('.task-checkbox input').forEach(checkbox => {
-      checkbox.addEventListener('change', async (e) => {
-        const { section, category, item } = e.target.dataset;
-        const itemData = findItem(section, category, item);
-        if (itemData) {
-          itemData.checked = e.target.checked;
-          itemData.status = e.target.checked ? 'complete' : 'not_started';
-          await savePlanningData();
-          renderTabs();
-          renderContent();
-        }
-      });
-    });
-
-    // Add buttons
-    document.querySelectorAll('.add-task-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.getElementById('parentSectionId').value = btn.dataset.section;
-        document.getElementById('parentCategoryId').value = btn.dataset.category;
-        document.getElementById('addModal').classList.add('active');
-        document.getElementById('newItemTitle').focus();
-      });
-    });
-
-    // Notes buttons
-    document.querySelectorAll('.task-action-btn.notes').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const { section, category, item } = btn.dataset;
-        const itemData = findItem(section, category, item);
-        if (itemData) {
-          document.getElementById('editItemId').value = `${section}|${category}|${item}`;
-          document.getElementById('editItemTitle').textContent = itemData.title;
-          document.getElementById('editItemNotes').value = itemData.notes || '';
-          document.getElementById('notesModal').classList.add('active');
-          document.getElementById('editItemNotes').focus();
-        }
-      });
-    });
-
-    // Delete buttons
-    document.querySelectorAll('.task-action-btn.delete').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        if (!confirm('Delete this task?')) return;
-        const { section, category, item } = btn.dataset;
-        const sectionData = planningData.sections.find(s => s.id === section);
-        const categoryData = sectionData?.items.find(c => c.id === category);
-        if (categoryData?.children) {
-          categoryData.children = categoryData.children.filter(i => i.id !== item);
-          await savePlanningData();
-          renderTabs();
-          renderContent();
-        }
-      });
-    });
-  }
-
-  // Priority buttons
-  document.querySelectorAll('.priority-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('newItemPriority').value = btn.dataset.value;
+  // Checkbox listeners
+  document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', function() {
+      planningData.checked[this.dataset.id] = this.checked;
+      updateProgress();
+      saveData();
     });
   });
 
-  // Modal handlers
-  function closeModals() {
-    document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
-  }
-
-  document.getElementById('closeAddModal').addEventListener('click', closeModals);
-  document.getElementById('cancelAdd').addEventListener('click', closeModals);
-  document.getElementById('closeNotesModal').addEventListener('click', closeModals);
-  document.getElementById('cancelNotes').addEventListener('click', closeModals);
-
-  document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
-    backdrop.addEventListener('click', closeModals);
+  // Textarea listeners
+  document.querySelectorAll('textarea').forEach(ta => {
+    let timeout;
+    ta.addEventListener('input', function() {
+      planningData.notes[this.dataset.notes] = this.value;
+      clearTimeout(timeout);
+      document.getElementById('saveStatus').textContent = 'Saving...';
+      timeout = setTimeout(saveData, 1000);
+    });
   });
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModals();
-  });
-
-  // Add form
-  document.getElementById('addItemForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const sectionId = document.getElementById('parentSectionId').value;
-    const categoryId = document.getElementById('parentCategoryId').value;
-    const title = document.getElementById('newItemTitle').value;
-    const priority = document.getElementById('newItemPriority').value;
-    const notes = document.getElementById('newItemNotes').value;
-
-    const sectionData = planningData.sections.find(s => s.id === sectionId);
-    const categoryData = sectionData?.items.find(c => c.id === categoryId);
-
-    if (categoryData) {
-      if (!categoryData.children) categoryData.children = [];
-      categoryData.children.push({
-        id: `${categoryId}-${Date.now()}`,
-        title,
-        checked: false,
-        notes,
-        status: 'not_started',
-        priority,
-        createdAt: new Date().toISOString()
-      });
-      await savePlanningData();
-      closeModals();
-      document.getElementById('addItemForm').reset();
-      document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('active'));
-      document.querySelector('.priority-btn[data-value="medium"]').classList.add('active');
-      renderTabs();
-      renderContent();
-    }
-  });
-
-  // Notes form
-  document.getElementById('editNotesForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const ids = document.getElementById('editItemId').value.split('|');
-    const notes = document.getElementById('editItemNotes').value;
-
-    if (ids.length === 3) {
-      const itemData = findItem(ids[0], ids[1], ids[2]);
-      if (itemData) {
-        itemData.notes = notes;
-        await savePlanningData();
-        closeModals();
-        renderContent();
-      }
-    }
-  });
-
-  // Init
-  async function init() {
-    planningData = await getPlanningData();
-    renderTabs();
-    renderContent();
-    updateLastUpdated();
-  }
-
-  init();
+  loadData();
+  updateProgress();
 </script>

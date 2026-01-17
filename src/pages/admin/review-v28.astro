@@ -1,8 +1,10 @@
 ---
-import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import AdminLayout from '../../layouts/AdminLayout.astro';
 
-const title = "Review v2.8 Changes | Island Goodes";
+const title = "Review v2.8 Changes";
 const description = "Review and approve website changes before going live";
+const pageTitle = "Review v2.8 Changes";
+const pageTip = "Review and approve website changes";
 
 const changes = [
   {
@@ -48,7 +50,7 @@ const changes = [
 ];
 ---
 
-<PreviewLayout title={title} description={description}>
+<AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
   <section class="review-hero">
     <div class="container">
       <h1>Review v2.8 Changes</h1>
@@ -133,7 +135,7 @@ const changes = [
       </div>
     </div>
   </section>
-</PreviewLayout>
+</AdminLayout>
 
 <script>
   const form = document.getElementById('reviewForm');

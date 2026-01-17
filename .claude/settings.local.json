@@ -85,7 +85,16 @@
       "Bash(ttyd:*)",
       "Bash(systemctl daemon-reload:*)",
       "Bash(systemctl restart:*)",
-      "Bash(systemctl status:*)"
+      "Bash(systemctl status:*)",
+      "Bash(npm run dev:*)",
+      "Bash(do)",
+      "Bash(fullpath=\"/root/projects/islandgoodes/public$img\")",
+      "Bash(if [ -f \"$fullpath\" ])",
+      "Bash(then)",
+      "Bash(echo:*)",
+      "Bash(else)",
+      "Bash(fi)",
+      "Bash(git log:*)"
     ]
   }
 }

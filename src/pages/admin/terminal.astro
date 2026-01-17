@@ -1,14 +1,16 @@
 ---
-import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import AdminLayout from '../../layouts/AdminLayout.astro';
 
-const title = "Secure Terminal | Island Goodes Admin";
+const title = "Secure Terminal";
 const description = "Web-based terminal access";
+const pageTitle = "Secure Terminal";
+const pageTip = "Select: Shift+drag | Copy: Ctrl+C | Paste: Ctrl+Shift+V";
 
 // Terminal server - proxied through nginx with SSL
 const TERMINAL_URL = "https://terminal.islandgoodes.com";
 ---
 
-<PreviewLayout title={title} description={description}>
+<AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
   <div id="authCheck"></div>
 
   <div id="terminal-page" style="display: none;">
@@ -30,7 +32,7 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
       <a href="/admin" class="btn btn-primary">Go to Admin Login</a>
     </div>
   </div>
-</PreviewLayout>
+</AdminLayout>
 
 <script is:inline>
   const SESSION_KEY = 'islandgoodes_admin_session';
@@ -62,142 +64,10 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
 </script>
 
 <style is:global>
-  /* Hide everything except minimal header on terminal page */
-  body.terminal-page-active .share-buttons,
-  body.terminal-page-active .site-footer,
-  body.terminal-page-active .cookie-banner,
-  body.terminal-page-active .mobile-menu-overlay,
-  body.terminal-page-active .skip-link {
-    display: none !important;
-  }
-
-  /* Minimal header bar */
-  body.terminal-page-active .site-header {
-    background: #1a1a2e !important;
-    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
-  }
-
-  body.terminal-page-active .site-header .nav-container {
-    padding: 0.4rem 1rem !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-  }
-
-  body.terminal-page-active .site-header .logo-container {
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.75rem !important;
-  }
-
-  body.terminal-page-active .site-header .logo-text {
-    font-size: 1rem !important;
-    color: #fff !important;
-  }
-
-  body.terminal-page-active .site-header .permit-number,
-  body.terminal-page-active .site-header .nav-links,
-  body.terminal-page-active .site-header .mobile-menu-toggle {
-    display: none !important;
-  }
-
-  /* Injected secure badge */
-  .terminal-secure-badge {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    color: #10B981;
-    font-size: 0.75rem;
-    font-weight: 500;
-  }
-
-  /* Injected header tips */
-  .terminal-header-tips {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    color: #6B7280;
-    font-size: 0.65rem;
-    flex: 1;
-    justify-content: center;
-  }
-
-  .terminal-header-tips span {
-    white-space: nowrap;
-  }
-
-  .terminal-header-tips code {
-    background: rgba(255,255,255,0.1);
-    padding: 0.1rem 0.3rem;
-    border-radius: 3px;
-    font-family: monospace;
-    color: #9CA3AF;
-  }
-
-  /* Injected dashboard link */
-  .terminal-header-actions {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .terminal-dashboard-link {
-    color: #9CA3AF !important;
-    font-size: 0.75rem;
-    text-decoration: none;
-    transition: color 0.2s;
-    white-space: nowrap;
-  }
-
-  .terminal-dashboard-link:hover {
-    color: #fff !important;
-  }
-
-  @media (max-width: 900px) {
-    .terminal-header-tips {
-      display: none;
-    }
-  }
-</style>
-
-<script is:inline>
-  // Add class to body immediately for CSS to work
-  document.body.classList.add('terminal-page-active');
-
-  // Inject header elements
-  document.addEventListener('DOMContentLoaded', function() {
-    const logoContainer = document.querySelector('.logo-container');
-    if (logoContainer && !document.querySelector('.terminal-secure-badge')) {
-      const badge = document.createElement('span');
-      badge.className = 'terminal-secure-badge';
-      badge.innerHTML = '🔒 Secure';
-      logoContainer.appendChild(badge);
-    }
-
-    const navContainer = document.querySelector('.nav-container');
-
-    // Inject tips in center
-    if (navContainer && !document.querySelector('.terminal-header-tips')) {
-      const tips = document.createElement('div');
-      tips.className = 'terminal-header-tips';
-      tips.innerHTML = '<span>Select: <code>Shift</code>+drag</span><span>Copy: <code>Ctrl+C</code></span><span>Paste: <code>Ctrl+Shift+V</code></span>';
-      navContainer.appendChild(tips);
-    }
-
-    // Inject dashboard link on right
-    if (navContainer && !document.querySelector('.terminal-header-actions')) {
-      const actions = document.createElement('div');
-      actions.className = 'terminal-header-actions';
-      actions.innerHTML = '<a href="/admin" class="terminal-dashboard-link">← Dashboard</a>';
-      navContainer.appendChild(actions);
-    }
-  });
-</script>
-
-<style>
+  /* Terminal page specific styles */
   .terminal-container {
     position: fixed;
-    top: 40px; /* Height of minimal header */
+    top: 60px; /* AdminLayout header height */
     left: 0;
     right: 0;
     bottom: 0;
@@ -212,11 +82,11 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
   }
 
   .access-denied {
-    min-height: 100vh;
+    min-height: calc(100vh - 60px);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--color-bg-alt);
+    background: #f7f5f2;
     padding: 2rem;
   }
 
@@ -231,12 +101,12 @@ const TERMINAL_URL = "https://terminal.islandgoodes.com";
   }
 
   .denied-content h2 {
-    color: var(--color-text);
+    color: #2D3436;
     margin-bottom: 0.5rem;
   }
 
   .denied-content p {
-    color: var(--color-text-light);
+    color: #636E72;
     margin-bottom: 1.5rem;
   }
 
