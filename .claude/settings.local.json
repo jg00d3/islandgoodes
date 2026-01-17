@@ -97,7 +97,9 @@
       "Bash(git log:*)",
       "Bash(systemctl cat:*)",
       "Bash(do echo \"=== $commit ===\")",
-      "Bash(node --check:*)"
+      "Bash(node --check:*)",
+      "Bash(openssl dgst:*)",
+      "Bash(openssl base64:*)"
     ]
   }
 }
