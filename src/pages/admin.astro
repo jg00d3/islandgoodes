@@ -48,6 +48,10 @@ const pageTip = "Website analytics and admin tools";
             <input type="text" maxlength="1" class="code-input" data-index="4" inputmode="numeric" />
             <input type="text" maxlength="1" class="code-input" data-index="5" inputmode="numeric" />
           </div>
+          <label class="remember-device">
+            <input type="checkbox" id="rememberDevice" />
+            <span>Remember this device for 7 days</span>
+          </label>
           <button type="submit" class="btn btn-primary">Verify & Login</button>
         </form>
         <p id="codeError" class="error-message"></p>
@@ -748,6 +752,28 @@ const pageTip = "Website analytics and admin tools";
     display: flex;
     flex-direction: column;
     gap: 1rem;
+  }
+
+  .remember-device {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    cursor: pointer;
+    margin: 0.5rem 0;
+  }
+
+  .remember-device input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+  }
+
+  .remember-device span {
+    user-select: none;
   }
 
   .resend-btn, .back-btn {
@@ -1766,8 +1792,11 @@ const pageTip = "Website analytics and admin tools";
     }
 
     if (result.success) {
-      // Set device as trusted for 7 days
-      setDeviceTrusted(currentAdmin.email);
+      // Only trust device if checkbox is checked
+      const rememberDevice = (document.getElementById('rememberDevice') as HTMLInputElement)?.checked;
+      if (rememberDevice) {
+        setDeviceTrusted(currentAdmin.email);
+      }
       setSession(currentAdmin);
       showDashboard();
     } else {
