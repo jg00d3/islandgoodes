@@ -1604,11 +1604,13 @@ const pageTip = "Website analytics and admin tools";
   const codeError = document.getElementById('codeError');
   const emailDisplay = document.getElementById('emailDisplay');
 
-  // Check existing session
-  // DEV: Bypass auth for local testing
-  const session = getSession() || { username: 'dev', fullName: 'Dev User', role: 'owner' };
-  currentAdmin = session;
-  showDashboard();
+  // Check existing session - only show dashboard if logged in
+  const existingSession = getSession();
+  if (existingSession) {
+    currentAdmin = existingSession;
+    showDashboard();
+  }
+  // Otherwise stay on login page (loginGate visible by default)
 
   // Step 1: Email/Password login (server-side verification)
   loginForm?.addEventListener('submit', async (e) => {
