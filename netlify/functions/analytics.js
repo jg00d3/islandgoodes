@@ -57,6 +57,30 @@ exports.handler = async (event) => {
       };
     }
 
+    if (reportType === 'realtime-locations') {
+      // Real-time active users by city for map display
+      [response] = await analyticsDataClient.runRealtimeReport({
+        property: `properties/${propertyId}`,
+        dimensions: [
+          { name: 'city' },
+          { name: 'country' }
+        ],
+        metrics: [{ name: 'activeUsers' }],
+      });
+
+      const locations = (response.rows || []).map(row => ({
+        city: row.dimensionValues?.[0]?.value || 'Unknown',
+        country: row.dimensionValues?.[1]?.value || 'Unknown',
+        activeUsers: parseInt(row.metricValues?.[0]?.value || '0')
+      })).filter(loc => loc.city !== '(not set)' && loc.activeUsers > 0);
+
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ locations })
+      };
+    }
+
     if (reportType === 'overview') {
       // Get multiple metrics for the overview
       const [todayResponse] = await analyticsDataClient.runReport({

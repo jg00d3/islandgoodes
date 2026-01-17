@@ -131,7 +131,7 @@ const amenityLabels = {
           <div class="compare-card">
             <div class="card-image">
               <img src={room.image} alt={room.name} loading="lazy" />
-              <span class="card-price">${room.price}/night</span>
+              <span class="card-price">${room.price} USD/night</span>
             </div>
             <div class="card-content">
               <h2>{room.name}</h2>
@@ -165,7 +165,7 @@ const amenityLabels = {
           <tbody>
             <tr>
               <td>Price per night</td>
-              {rooms.map(room => <td class="price-cell">${room.price}</td>)}
+              {rooms.map(room => <td class="price-cell">${room.price} USD</td>)}
             </tr>
             <tr>
               <td>Room Size</td>

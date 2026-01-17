@@ -329,6 +329,7 @@ const pageTip = "Website analytics and admin tools";
             </a>
             <a href="/admin/unused-images" class="tool-item">
               <div class="tool-icon" style="background: #f59e0b;">
+                <span class="tool-badge" id="badge-unused-images"></span>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
                   <circle cx="8.5" cy="8.5" r="1.5"/>
@@ -338,7 +339,7 @@ const pageTip = "Website analytics and admin tools";
               </div>
               <div class="tool-info">
                 <strong>Unused Images</strong>
-                <p>Review 20 images not used on site</p>
+                <p id="unused-images-desc">Review images not used on site</p>
               </div>
               <svg class="tool-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="9,18 15,12 9,6"/>
@@ -363,6 +364,7 @@ const pageTip = "Website analytics and admin tools";
             </a>
             <a href="/admin/change-requests" class="tool-item">
               <div class="tool-icon">
+                <span class="tool-badge" id="badge-change-requests"></span>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M9 11l3 3L22 4"/>
                   <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
@@ -370,7 +372,7 @@ const pageTip = "Website analytics and admin tools";
               </div>
               <div class="tool-info">
                 <strong>Change Requests</strong>
-                <p>Track content updates & fixes needed</p>
+                <p id="change-requests-desc">Track content updates & fixes needed</p>
               </div>
               <svg class="tool-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="9,18 15,12 9,6"/>
@@ -396,6 +398,7 @@ const pageTip = "Website analytics and admin tools";
             </a>
             <a href="/admin/contact-inquiries" class="tool-item">
               <div class="tool-icon">
+                <span class="tool-badge" id="badge-contact-inquiries"></span>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                   <polyline points="22,6 12,13 2,6"/>
@@ -403,7 +406,7 @@ const pageTip = "Website analytics and admin tools";
               </div>
               <div class="tool-info">
                 <strong>Contact Inquiries</strong>
-                <p>Manage contact form messages</p>
+                <p id="contact-inquiries-desc">Manage contact form messages</p>
               </div>
               <svg class="tool-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="9,18 15,12 9,6"/>
@@ -428,6 +431,7 @@ const pageTip = "Website analytics and admin tools";
             </a>
             <a href="/admin/photo-contributors" class="tool-item">
               <div class="tool-icon">
+                <span class="tool-badge" id="badge-photo-contributors"></span>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
                   <circle cx="8.5" cy="8.5" r="1.5"/>
@@ -436,7 +440,7 @@ const pageTip = "Website analytics and admin tools";
               </div>
               <div class="tool-info">
                 <strong>Photo Contributors</strong>
-                <p>Review community photo submissions</p>
+                <p id="photo-contributors-desc">Review community photo submissions</p>
               </div>
               <svg class="tool-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="9,18 15,12 9,6"/>
@@ -444,6 +448,7 @@ const pageTip = "Website analytics and admin tools";
             </a>
             <a href="/admin/blog-contributors" class="tool-item">
               <div class="tool-icon">
+                <span class="tool-badge" id="badge-blog-contributors"></span>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M12 19l7-7 3 3-7 7-3-3z"/>
                   <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
@@ -453,7 +458,7 @@ const pageTip = "Website analytics and admin tools";
               </div>
               <div class="tool-info">
                 <strong>Blog Contributors</strong>
-                <p>Review guest article pitches</p>
+                <p id="blog-contributors-desc">Review guest article pitches</p>
               </div>
               <svg class="tool-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="9,18 15,12 9,6"/>
@@ -1468,6 +1473,77 @@ const pageTip = "Website analytics and admin tools";
       min-width: 80px;
     }
   }
+
+  /* Pulsing animation for active visitors on map */
+  @keyframes pulse-ring {
+    0% {
+      transform: scale(1);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(2.5);
+      opacity: 0;
+    }
+  }
+
+  .realtime-marker-pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #00ff88;
+    animation: pulse-ring 1.5s ease-out infinite;
+  }
+
+  .realtime-marker-dot {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    background: #00ff88;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+    z-index: 10;
+  }
+
+  /* Pulsing notification badge for tool items */
+  .tool-badge {
+    display: none;
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 10px;
+    line-height: 20px;
+    text-align: center;
+    animation: badge-pulse 2s ease-in-out infinite;
+    z-index: 10;
+  }
+
+  .tool-badge.show {
+    display: block;
+  }
+
+  @keyframes badge-pulse {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+    }
+    50% {
+      transform: scale(1.1);
+      box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+    }
+  }
+
+  .tool-icon {
+    position: relative;
+  }
 </style>
 
 <script is:inline src="/js/shared-data.js"></script>
@@ -1896,12 +1972,247 @@ const pageTip = "Website analytics and admin tools";
     loadPagesData();
     loadSourcesData();
     loadDevicesData();
+    loadReviewBadges();
+  }
+
+  // Load and display review count badges on admin tools
+  async function loadReviewBadges() {
+    try {
+      // Unused Images - fetch from API or use cached count
+      const unusedImagesCount = await getUnusedImagesCount();
+      updateBadge('badge-unused-images', unusedImagesCount, 'unused-images-desc', 'image');
+
+      // Change Requests - get from SharedData
+      const changeRequests = await getChangeRequestsCount();
+      updateBadge('badge-change-requests', changeRequests, 'change-requests-desc', 'request');
+
+      // Contact Inquiries - get unread count from SharedData
+      const contactInquiries = await getContactInquiriesCount();
+      updateBadge('badge-contact-inquiries', contactInquiries, 'contact-inquiries-desc', 'message');
+
+      // Photo Contributors - get pending submissions
+      const photoSubmissions = await getPhotoSubmissionsCount();
+      updateBadge('badge-photo-contributors', photoSubmissions, 'photo-contributors-desc', 'submission');
+
+      // Blog Contributors - get pending pitches
+      const blogPitches = await getBlogPitchesCount();
+      updateBadge('badge-blog-contributors', blogPitches, 'blog-contributors-desc', 'pitch');
+
+    } catch (error) {
+      console.error('Error loading review badges:', error);
+    }
+  }
+
+  function updateBadge(badgeId: string, count: number, descId: string, itemType: string) {
+    const badge = document.getElementById(badgeId);
+    const desc = document.getElementById(descId);
+
+    if (badge) {
+      if (count > 0) {
+        badge.textContent = count > 99 ? '99+' : String(count);
+        badge.classList.add('show');
+      } else {
+        badge.classList.remove('show');
+      }
+    }
+
+    if (desc && count > 0) {
+      const plural = count !== 1 ? 's' : '';
+      switch (itemType) {
+        case 'image':
+          desc.textContent = `Review ${count} unused image${plural}`;
+          break;
+        case 'request':
+          desc.textContent = `${count} pending request${plural} to review`;
+          break;
+        case 'message':
+          desc.textContent = `${count} unread message${plural}`;
+          break;
+        case 'submission':
+          desc.textContent = `${count} photo${plural} awaiting review`;
+          break;
+        case 'pitch':
+          desc.textContent = `${count} article pitch${plural} to review`;
+          break;
+      }
+    }
+  }
+
+  // Count fetchers - these check SharedData or APIs for pending items
+  async function getUnusedImagesCount(): Promise<number> {
+    try {
+      // Try to get from SharedData first
+      const data = await window.SharedData.get('unusedImagesCount');
+      if (data && typeof data.count === 'number') {
+        return data.count;
+      }
+      // Default: return a reasonable count (can be updated when unused-images page loads)
+      return 20;
+    } catch {
+      return 20;
+    }
+  }
+
+  async function getChangeRequestsCount(): Promise<number> {
+    try {
+      const requests = await window.SharedData.get('changeRequests');
+      if (Array.isArray(requests)) {
+        return requests.filter((r: any) => r.status === 'pending').length;
+      }
+      return 0;
+    } catch {
+      return 0;
+    }
+  }
+
+  async function getContactInquiriesCount(): Promise<number> {
+    try {
+      const inquiries = await window.SharedData.get('contactInquiries');
+      if (Array.isArray(inquiries)) {
+        return inquiries.filter((i: any) => !i.read).length;
+      }
+      return 0;
+    } catch {
+      return 0;
+    }
+  }
+
+  async function getPhotoSubmissionsCount(): Promise<number> {
+    try {
+      const submissions = await window.SharedData.get('photoSubmissions');
+      if (Array.isArray(submissions)) {
+        return submissions.filter((s: any) => s.status === 'pending').length;
+      }
+      return 0;
+    } catch {
+      return 0;
+    }
+  }
+
+  async function getBlogPitchesCount(): Promise<number> {
+    try {
+      const pitches = await window.SharedData.get('blogPitches');
+      if (Array.isArray(pitches)) {
+        return pitches.filter((p: any) => p.status === 'pending').length;
+      }
+      return 0;
+    } catch {
+      return 0;
+    }
   }
 
   async function loadRealtimeData() {
     const data = await fetchAnalytics('realtime');
     const el = document.getElementById('realtimeUsers');
     if (el) el.textContent = data?.activeUsers || '0';
+
+    // Also update realtime visitor locations on map
+    await loadRealtimeLocations();
+  }
+
+  // Load and display real-time visitor locations on the map with pulsing markers
+  async function loadRealtimeLocations() {
+    if (!worldMap) return; // Map not initialized yet
+
+    try {
+      const data = await fetchAnalytics('realtime-locations');
+      if (!data?.locations) return;
+
+      // Clear existing realtime markers
+      if (realtimeMarkersLayer) {
+        worldMap.removeLayer(realtimeMarkersLayer);
+      }
+
+      // Create a layer group for realtime markers
+      realtimeMarkersLayer = L.layerGroup().addTo(worldMap);
+
+      // Add pulsing markers for each active visitor location
+      data.locations.forEach((loc: { city: string; country: string; activeUsers: number }) => {
+        // Try to get coordinates for this city
+        const coords = getCityCoords(loc.city, getCountryCode(loc.country));
+        if (!coords) return;
+
+        // Create custom pulsing marker using DivIcon
+        const pulseIcon = L.divIcon({
+          className: 'realtime-marker-container',
+          html: `
+            <div style="position: relative; width: 24px; height: 24px;">
+              <div class="realtime-marker-pulse"></div>
+              <div class="realtime-marker-dot" style="position: absolute; top: 6px; left: 6px;"></div>
+            </div>
+          `,
+          iconSize: [24, 24],
+          iconAnchor: [12, 12]
+        });
+
+        const marker = L.marker(coords, { icon: pulseIcon }).addTo(realtimeMarkersLayer);
+
+        marker.bindPopup(`
+          <div class="marker-popup">
+            <div style="color: #00ff88; font-weight: bold; margin-bottom: 4px;">🟢 Active Now</div>
+            <strong>${loc.city}, ${loc.country}</strong><br>
+            <span class="visitor-count" style="color: #00ff88;">${loc.activeUsers}</span> active visitor${loc.activeUsers > 1 ? 's' : ''}
+          </div>
+        `);
+      });
+
+    } catch (error) {
+      console.error('Error loading realtime locations:', error);
+    }
+  }
+
+  // Helper to get country code from country name (reverse lookup)
+  function getCountryCode(countryName: string): string {
+    const countryNameToCode: Record<string, string> = {
+      'United States': 'US',
+      'United Kingdom': 'GB',
+      'Canada': 'CA',
+      'Australia': 'AU',
+      'Germany': 'DE',
+      'France': 'FR',
+      'Japan': 'JP',
+      'China': 'CN',
+      'India': 'IN',
+      'Brazil': 'BR',
+      'Mexico': 'MX',
+      'Spain': 'ES',
+      'Italy': 'IT',
+      'Netherlands': 'NL',
+      'South Korea': 'KR',
+      'Russia': 'RU',
+      'New Zealand': 'NZ',
+      'Singapore': 'SG',
+      'Hong Kong': 'HK',
+      'Taiwan': 'TW',
+      'Thailand': 'TH',
+      'Philippines': 'PH',
+      'Indonesia': 'ID',
+      'Malaysia': 'MY',
+      'Vietnam': 'VN',
+      'South Africa': 'ZA',
+      'United Arab Emirates': 'AE',
+      'Saudi Arabia': 'SA',
+      'Israel': 'IL',
+      'Sweden': 'SE',
+      'Norway': 'NO',
+      'Denmark': 'DK',
+      'Finland': 'FI',
+      'Poland': 'PL',
+      'Austria': 'AT',
+      'Switzerland': 'CH',
+      'Belgium': 'BE',
+      'Ireland': 'IE',
+      'Portugal': 'PT',
+      'Greece': 'GR',
+      'Argentina': 'AR',
+      'Chile': 'CL',
+      'Colombia': 'CO',
+      'Peru': 'PE',
+      'Guam': 'GU',
+      'Puerto Rico': 'PR',
+      'U.S. Virgin Islands': 'VI'
+    };
+    return countryNameToCode[countryName] || '';
   }
 
   async function loadOverviewData() {
@@ -2134,6 +2445,7 @@ const pageTip = "Website analytics and admin tools";
 
   let worldMap: any = null;
   let currentTileLayer: any = null;
+  let realtimeMarkersLayer: any = null;
 
   // Tile layer URLs for light/dark mode
   const lightTileUrl = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
