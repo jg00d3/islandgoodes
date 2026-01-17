@@ -1,3 +1,9 @@
+import { getStore } from '@netlify/blobs';
+import crypto from 'crypto';
+
+const SITE_ID = "347c1eb9-e6b5-4736-b000-f6908c1f85fc";
+const SESSION_DURATION = 7 * 24 * 60 * 60 * 1000; // 7 days
+
 // Simple hash function - must match send-2fa.js
 function createToken(code, email, timestamp, secret) {
   const data = `${code}:${email}:${timestamp}:${secret}`;
@@ -8,6 +14,11 @@ function createToken(code, email, timestamp, secret) {
     hash = hash & hash;
   }
   return Math.abs(hash).toString(36);
+}
+
+// Generate secure session token
+function generateSessionToken() {
+  return crypto.randomBytes(32).toString('hex');
 }
 
 export async function handler(event) {
@@ -48,8 +59,34 @@ export async function handler(event) {
 
     // Verify
     if (expectedToken === originalToken) {
+      // Create server-side session
+      const sessionToken = generateSessionToken();
+      const expiresAt = Date.now() + SESSION_DURATION;
+
+      // Store session in Netlify Blobs
+      const sessionStore = getStore({
+        name: 'admin-sessions',
+        siteID: SITE_ID,
+        token: process.env.NETLIFY_AUTH_TOKEN
+      });
+
+      await sessionStore.setJSON(sessionToken, {
+        email: email.toLowerCase(),
+        createdAt: Date.now(),
+        expiresAt: expiresAt
+      });
+
+      // Set secure HTTP-only cookie
+      const cookieExpires = new Date(expiresAt).toUTCString();
+      const isProduction = process.env.URL?.includes('netlify.app') || process.env.URL?.includes('islandgoodes.com');
+      const secureCookie = isProduction ? '; Secure' : '';
+
       return {
         statusCode: 200,
+        headers: {
+          'Set-Cookie': `admin_session=${sessionToken}; Path=/; HttpOnly; SameSite=Strict${secureCookie}; Expires=${cookieExpires}`,
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({ success: true, message: 'Code verified' })
       };
     } else {

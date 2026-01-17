@@ -1665,6 +1665,16 @@ const pageTip = "Website analytics and admin tools";
       // Check if this device is already trusted (2FA verified within 7 days)
       if (isDeviceTrusted(admin.email)) {
         console.log('[2FA] Device is trusted, skipping 2FA');
+        // Create server-side session for trusted device
+        try {
+          await fetch('/.netlify/functions/admin-create-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: admin.email, trustedDevice: true })
+          });
+        } catch (e) {
+          console.log('Failed to create server session, continuing anyway');
+        }
         setSession(admin);
         showDashboard();
         return;
@@ -1800,8 +1810,13 @@ const pageTip = "Website analytics and admin tools";
     if (codeError) codeError.textContent = '';
   });
 
-  // Logout handler
-  document.getElementById('logout')?.addEventListener('click', () => {
+  // Logout handler - calls server to clear session cookie
+  document.getElementById('logout')?.addEventListener('click', async () => {
+    try {
+      await fetch('/.netlify/functions/admin-logout', { method: 'POST' });
+    } catch (e) {
+      console.log('Logout request failed, continuing anyway');
+    }
     sessionStorage.removeItem(SESSION_KEY);
     location.reload();
   });
