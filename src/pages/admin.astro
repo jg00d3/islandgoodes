@@ -246,7 +246,7 @@ const pageTip = "Website analytics and admin tools";
               </svg>
             </a>
             <a href="/admin/change-requests" class="tool-item">
-              <div class="tool-icon">
+              <div class="tool-icon" style="background: #3b82f6;">
                 <span class="tool-badge" id="badge-change-requests"></span>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M9 11l3 3L22 4"/>
@@ -280,7 +280,7 @@ const pageTip = "Website analytics and admin tools";
               </svg>
             </a>
             <a href="/admin/contact-inquiries" class="tool-item">
-              <div class="tool-icon">
+              <div class="tool-icon" style="background: #10b981;">
                 <span class="tool-badge" id="badge-contact-inquiries"></span>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
@@ -313,7 +313,7 @@ const pageTip = "Website analytics and admin tools";
               </svg>
             </a>
             <a href="/admin/photo-contributors" class="tool-item">
-              <div class="tool-icon">
+              <div class="tool-icon" style="background: #ec4899;">
                 <span class="tool-badge" id="badge-photo-contributors"></span>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
@@ -330,7 +330,7 @@ const pageTip = "Website analytics and admin tools";
               </svg>
             </a>
             <a href="/admin/blog-contributors" class="tool-item">
-              <div class="tool-icon">
+              <div class="tool-icon" style="background: #6366f1;">
                 <span class="tool-badge" id="badge-blog-contributors"></span>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M12 19l7-7 3 3-7 7-3-3z"/>
@@ -1495,17 +1495,17 @@ const pageTip = "Website analytics and admin tools";
 
   .tool-badge.show {
     display: block;
-    animation: badge-pulse 2s ease-in-out infinite;
+    animation: badge-blink 1s ease-in-out infinite;
   }
 
-  @keyframes badge-pulse {
+  @keyframes badge-blink {
     0%, 100% {
+      opacity: 1;
       transform: scale(1);
-      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
     }
     50% {
-      transform: scale(1.1);
-      box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+      opacity: 0.3;
+      transform: scale(1.15);
     }
   }
 
