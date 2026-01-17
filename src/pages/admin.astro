@@ -2151,7 +2151,7 @@ const pageTip = "Website analytics and admin tools";
         const pulseIcon = L.divIcon({
           className: '',
           html: `<div style="position:relative;width:24px;height:24px;background:transparent;">
-            <div style="position:absolute;top:0;left:0;width:24px;height:24px;border-radius:50%;background:rgba(0,255,136,0.4);animation:realtime-pulse 1.5s ease-out infinite;"></div>
+            <div style="position:absolute;top:0;left:0;width:24px;height:24px;border-radius:50%;background:rgba(0,255,136,0.4);animation:realtime-pulse 0.8s ease-out infinite;"></div>
             <div style="position:absolute;top:6px;left:6px;width:12px;height:12px;background:#00ff88;border:2px solid #fff;border-radius:50%;box-shadow:0 0 8px rgba(0,255,136,0.6);"></div>
           </div>`,
           iconSize: [24, 24],
@@ -2622,6 +2622,9 @@ const pageTip = "Website analytics and admin tools";
         const bounds = L.latLngBounds(allCoords);
         worldMap.fitBounds(bounds, { padding: [40, 40], maxZoom: 5 });
       }
+
+      // Now that map is initialized, load realtime visitor locations
+      loadRealtimeLocations();
     }
   }
 
