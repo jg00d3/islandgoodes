@@ -1516,14 +1516,13 @@ const pageTip = "Website analytics and admin tools";
 
 <style is:global>
   /* Global styles for Leaflet markers (dynamically created, not scoped) */
-  .leaflet-div-icon {
-    background: transparent !important;
-    border: none !important;
-  }
-
+  .leaflet-div-icon,
+  .leaflet-div-icon.realtime-marker-container,
   .realtime-marker-container {
-    background: transparent !important;
+    background: none !important;
+    background-color: transparent !important;
     border: none !important;
+    box-shadow: none !important;
   }
 
   .realtime-marker-pulse {
