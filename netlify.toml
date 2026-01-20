@@ -16,13 +16,6 @@
   path = "/admin/*"
   function = "admin-auth"
 
-# Redirect non-www to www (SEO canonical)
-[[redirects]]
-  from = "https://islandgoodes.com/*"
-  to = "https://www.islandgoodes.com/:splat"
-  status = 301
-  force = true
-
 [[redirects]]
   from = "/*"
   to = "/404"
