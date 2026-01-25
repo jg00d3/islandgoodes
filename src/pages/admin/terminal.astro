@@ -33,10 +33,18 @@ const TERMINAL_URL = "https://dev.tail68ddf4.ts.net";
     </div>
 
     <div class="terminal-container" id="terminalContainer">
+      <div id="connectPrompt" class="connect-prompt">
+        <div class="connect-content">
+          <div class="connect-icon">🔐</div>
+          <h2>Secure Terminal</h2>
+          <p>Connect to your development server via Tailscale + Duo MFA</p>
+          <button id="connectBtn" class="btn-connect">Connect</button>
+        </div>
+      </div>
       <iframe
         id="terminalFrame"
-        src={TERMINAL_URL}
         class="terminal-frame"
+        style="display: none;"
         allow="clipboard-read; clipboard-write"
       ></iframe>
     </div>
@@ -71,6 +79,15 @@ const TERMINAL_URL = "https://dev.tail68ddf4.ts.net";
   } else {
     document.getElementById('accessDenied').style.display = 'flex';
   }
+
+  // Connect button - load terminal in iframe
+  document.getElementById('connectBtn')?.addEventListener('click', () => {
+    const iframe = document.getElementById('terminalFrame');
+    const prompt = document.getElementById('connectPrompt');
+    iframe.src = TERMINAL_URL;
+    iframe.style.display = 'block';
+    prompt.style.display = 'none';
+  });
 
   // Pop out - open terminal in new window (note: requires new Duo auth)
   document.getElementById('popOutBtn')?.addEventListener('click', () => {
@@ -173,6 +190,52 @@ const TERMINAL_URL = "https://dev.tail68ddf4.ts.net";
     border-radius: 6px;
     cursor: pointer;
     padding: 0.5rem 1rem;
+  }
+
+  .connect-prompt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+  }
+
+  .connect-content {
+    text-align: center;
+    color: #c9d1d9;
+  }
+
+  .connect-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+
+  .connect-content h2 {
+    color: #fff;
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+  }
+
+  .connect-content p {
+    color: #8b949e;
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-connect {
+    background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 2rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(35, 134, 54, 0.3);
+  }
+
+  .btn-connect:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(35, 134, 54, 0.4);
   }
 
   .tailscale-badge {
