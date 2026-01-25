@@ -16,8 +16,16 @@ const TERMINAL_URL = "https://dev.tail68ddf4.ts.net";
   <div id="terminal-page" style="display: none;">
     <!-- Session Controls -->
     <div class="session-controls">
-      <div class="session-selector">
-        <button id="newTerminalBtn" class="btn btn-sm btn-primary">Open New Terminal Window</button>
+      <div class="session-buttons">
+        <button id="popOutBtn" class="btn btn-sm" title="Pop out to separate window">
+          <span class="btn-icon">↗</span> Pop Out
+        </button>
+        <button id="fullscreenBtn" class="btn btn-sm" title="Toggle fullscreen">
+          <span class="btn-icon">⛶</span> Fullscreen
+        </button>
+        <button id="newTerminalBtn" class="btn btn-sm btn-primary" title="Open additional terminal">
+          <span class="btn-icon">+</span> New Terminal
+        </button>
       </div>
       <div class="tailscale-badge">
         <span class="ts-icon">🔒</span> Tailscale + Duo MFA
@@ -64,6 +72,29 @@ const TERMINAL_URL = "https://dev.tail68ddf4.ts.net";
     document.getElementById('accessDenied').style.display = 'flex';
   }
 
+  // Pop out - open terminal in new window (note: requires new Duo auth)
+  document.getElementById('popOutBtn')?.addEventListener('click', () => {
+    const win = window.open(TERMINAL_URL, `terminal-popout-${Date.now()}`, 'width=1200,height=800');
+    if (win) {
+      // Optionally hide the iframe after pop-out
+      const iframe = document.getElementById('terminalFrame');
+      iframe.style.display = 'none';
+      iframe.insertAdjacentHTML('afterend',
+        '<div class="popped-out-msg">Terminal popped out to separate window.<br><button onclick="location.reload()" class="btn btn-sm">Reload Embedded Terminal</button></div>'
+      );
+    }
+  });
+
+  // Fullscreen toggle
+  document.getElementById('fullscreenBtn')?.addEventListener('click', () => {
+    const container = document.getElementById('terminalContainer');
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      container.requestFullscreen();
+    }
+  });
+
   // Open new terminal window
   document.getElementById('newTerminalBtn')?.addEventListener('click', () => {
     window.open(TERMINAL_URL, `terminal-${Date.now()}`, 'width=1200,height=800');
@@ -87,23 +118,61 @@ const TERMINAL_URL = "https://dev.tail68ddf4.ts.net";
     z-index: 10;
   }
 
-  .session-selector {
+  .session-buttons {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
 
-  .session-selector .btn-sm {
+  .session-buttons .btn-sm {
+    background: #21262d;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .session-buttons .btn-sm:hover {
+    background: #30363d;
+  }
+
+  .session-buttons .btn-primary {
+    background: #238636;
+    color: white;
+    border: none;
+  }
+
+  .session-buttons .btn-primary:hover {
+    background: #2ea043;
+  }
+
+  .btn-icon {
+    font-size: 1rem;
+  }
+
+  .popped-out-msg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #8b949e;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .popped-out-msg .btn-sm {
     background: #238636;
     color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     padding: 0.5rem 1rem;
-  }
-
-  .session-selector .btn-sm:hover {
-    background: #2ea043;
   }
 
   .tailscale-badge {
