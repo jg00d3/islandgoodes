@@ -8,45 +8,46 @@ const pageTip = "Select: Shift+drag | Copy: Ctrl+C | Paste: Ctrl+Shift+V";
 
 // Terminal server - Tailscale HTTPS with Duo MFA (not accessible from public internet)
 const TERMINAL_URL = "https://dev.tail68ddf4.ts.net";
+const API_URL = "https://dev.tail68ddf4.ts.net/api";
 ---
 
 <AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
   <div id="authCheck"></div>
 
   <div id="terminal-page" style="display: none;">
-    <!-- Session Controls -->
-    <div class="session-controls">
-      <div class="session-buttons">
-        <button id="popOutBtn" class="btn btn-sm" title="Pop out to separate window">
-          <span class="btn-icon">↗</span> Pop Out
-        </button>
-        <button id="fullscreenBtn" class="btn btn-sm" title="Toggle fullscreen">
-          <span class="btn-icon">⛶</span> Fullscreen
-        </button>
-        <button id="newTerminalBtn" class="btn btn-sm btn-primary" title="Open additional terminal">
-          <span class="btn-icon">+</span> New Terminal
-        </button>
-      </div>
-      <div class="tailscale-badge">
-        <span class="ts-icon">🔒</span> Tailscale + Duo MFA
-      </div>
-    </div>
-
-    <div class="terminal-container" id="terminalContainer">
-      <div id="connectPrompt" class="connect-prompt">
-        <div class="connect-content">
-          <div class="connect-icon">🔐</div>
-          <h2>Secure Terminal</h2>
+    <div class="terminal-dashboard">
+      <!-- Header -->
+      <div class="dash-header">
+        <div class="dash-title">
+          <h1>Terminal Sessions</h1>
           <p>Connect to your development server via Tailscale + Duo MFA</p>
-          <button id="connectBtn" class="btn-connect">Connect</button>
+        </div>
+        <div class="dash-actions">
+          <button id="refreshBtn" class="btn btn-sm" title="Refresh sessions">
+            <span class="btn-icon">↻</span> Refresh
+          </button>
+          <button id="newSessionBtn" class="btn btn-sm btn-primary" title="Create new session">
+            <span class="btn-icon">+</span> New Session
+          </button>
         </div>
       </div>
-      <iframe
-        id="terminalFrame"
-        class="terminal-frame"
-        style="display: none;"
-        allow="clipboard-read; clipboard-write"
-      ></iframe>
+
+      <!-- Sessions Grid -->
+      <div class="sessions-container">
+        <div id="sessionsGrid" class="sessions-grid">
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading sessions...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Badge -->
+      <div class="security-footer">
+        <div class="tailscale-badge">
+          <span class="ts-icon">🔒</span> Tailscale VPN + Duo MFA Required
+        </div>
+      </div>
     </div>
   </div>
 
@@ -64,6 +65,7 @@ const TERMINAL_URL = "https://dev.tail68ddf4.ts.net";
 <script is:inline>
   const SESSION_KEY = 'islandgoodes_admin_session';
   const TERMINAL_URL = 'https://dev.tail68ddf4.ts.net';
+  const API_URL = 'https://dev.tail68ddf4.ts.net/api';
 
   function getSession() {
     try {
@@ -76,95 +78,167 @@ const TERMINAL_URL = "https://dev.tail68ddf4.ts.net";
   const session = getSession();
   if (session) {
     document.getElementById('terminal-page').style.display = 'block';
+    loadSessions();
   } else {
     document.getElementById('accessDenied').style.display = 'flex';
   }
 
-  // Connect button - load terminal in iframe
-  document.getElementById('connectBtn')?.addEventListener('click', () => {
-    const iframe = document.getElementById('terminalFrame');
-    const prompt = document.getElementById('connectPrompt');
-    iframe.src = TERMINAL_URL;
-    iframe.style.display = 'block';
-    prompt.style.display = 'none';
-  });
+  async function loadSessions() {
+    const grid = document.getElementById('sessionsGrid');
 
-  // Pop out - open terminal in new window (note: requires new Duo auth)
-  document.getElementById('popOutBtn')?.addEventListener('click', () => {
-    const win = window.open(TERMINAL_URL, `terminal-popout-${Date.now()}`, 'width=1200,height=800');
-    if (win) {
-      // Optionally hide the iframe after pop-out
-      const iframe = document.getElementById('terminalFrame');
-      iframe.style.display = 'none';
-      iframe.insertAdjacentHTML('afterend',
-        '<div class="popped-out-msg">Terminal popped out to separate window.<br><button onclick="location.reload()" class="btn btn-sm">Reload Embedded Terminal</button></div>'
-      );
+    try {
+      const response = await fetch(`${API_URL}/sessions`);
+      const data = await response.json();
+
+      if (data.sessions && data.sessions.length > 0) {
+        grid.innerHTML = data.sessions.map(s => `
+          <div class="session-card ${s.status === 'attached' ? 'attached' : ''}">
+            <div class="session-icon">
+              ${s.status === 'attached' ? '🟢' : '⚫'}
+            </div>
+            <div class="session-info">
+              <h3>${escapeHtml(s.name)}</h3>
+              <p>${s.windows} window${s.windows !== 1 ? 's' : ''} • ${s.status}</p>
+            </div>
+            <button class="btn btn-open" onclick="openSession('${escapeHtml(s.name)}')">
+              Open
+            </button>
+          </div>
+        `).join('');
+      } else {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📺</div>
+            <h3>No Active Sessions</h3>
+            <p>Create a new session to get started</p>
+            <button class="btn btn-primary" onclick="createNewSession()">
+              <span class="btn-icon">+</span> Create Session
+            </button>
+          </div>
+        `;
+      }
+    } catch (error) {
+      grid.innerHTML = `
+        <div class="error-state">
+          <div class="error-icon">⚠️</div>
+          <h3>Cannot Connect to Server</h3>
+          <p>Make sure you're connected to Tailscale VPN</p>
+          <button class="btn btn-sm" onclick="loadSessions()">Try Again</button>
+        </div>
+      `;
     }
-  });
+  }
 
-  // Fullscreen toggle
-  document.getElementById('fullscreenBtn')?.addEventListener('click', () => {
-    const container = document.getElementById('terminalContainer');
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
-    } else {
-      container.requestFullscreen();
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  async function openSession(sessionName) {
+    try {
+      // Tell API which session to connect to
+      await fetch(`${API_URL}/connect/${encodeURIComponent(sessionName)}`, {
+        method: 'POST'
+      });
+      // Open terminal in new window
+      window.open(TERMINAL_URL, `terminal-${sessionName}-${Date.now()}`, 'width=1200,height=800');
+    } catch (error) {
+      alert('Failed to initiate connection. Make sure Tailscale is connected.');
     }
-  });
+  }
 
-  // Open new terminal window
-  document.getElementById('newTerminalBtn')?.addEventListener('click', () => {
-    window.open(TERMINAL_URL, `terminal-${Date.now()}`, 'width=1200,height=800');
-  });
+  async function createNewSession() {
+    const name = prompt('Enter session name (or leave blank for auto-generated):');
+    if (name === null) return; // Cancelled
+
+    const sessionName = name.trim() || `session-${Date.now().toString(36)}`;
+
+    try {
+      await fetch(`${API_URL}/connect/${encodeURIComponent(sessionName)}`, {
+        method: 'POST'
+      });
+      window.open(TERMINAL_URL, `terminal-${sessionName}-${Date.now()}`, 'width=1200,height=800');
+      // Refresh list after a delay
+      setTimeout(loadSessions, 2000);
+    } catch (error) {
+      alert('Failed to create session. Make sure Tailscale is connected.');
+    }
+  }
+
+  // Event listeners
+  document.getElementById('refreshBtn')?.addEventListener('click', loadSessions);
+  document.getElementById('newSessionBtn')?.addEventListener('click', createNewSession);
+
+  // Make functions available globally for onclick handlers
+  window.openSession = openSession;
+  window.createNewSession = createNewSession;
+  window.loadSessions = loadSessions;
 </script>
 
 <style is:global>
-  /* Session controls bar */
-  .session-controls {
-    position: fixed;
-    top: 60px;
-    left: 0;
-    right: 0;
-    height: 44px;
-    background: #161b22;
-    border-bottom: 1px solid #30363d;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 1rem;
-    z-index: 10;
+  .terminal-dashboard {
+    min-height: calc(100vh - 60px);
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+    padding: 2rem;
   }
 
-  .session-buttons {
+  .dash-header {
     display: flex;
-    align-items: center;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .dash-title h1 {
+    color: #fff;
+    font-size: 1.75rem;
+    margin: 0 0 0.25rem 0;
+  }
+
+  .dash-title p {
+    color: #8b949e;
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .dash-actions {
+    display: flex;
     gap: 0.5rem;
   }
 
-  .session-buttons .btn-sm {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+
+  .btn-sm {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
     background: #21262d;
     color: #c9d1d9;
     border: 1px solid #30363d;
-    border-radius: 6px;
-    cursor: pointer;
-    padding: 0.4rem 0.75rem;
-    font-size: 0.85rem;
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
   }
 
-  .session-buttons .btn-sm:hover {
+  .btn-sm:hover {
     background: #30363d;
   }
 
-  .session-buttons .btn-primary {
+  .btn-primary {
     background: #238636;
     color: white;
-    border: none;
   }
 
-  .session-buttons .btn-primary:hover {
+  .btn-primary:hover {
     background: #2ea043;
   }
 
@@ -172,103 +246,129 @@ const TERMINAL_URL = "https://dev.tail68ddf4.ts.net";
     font-size: 1rem;
   }
 
-  .popped-out-msg {
+  .sessions-container {
+    max-width: 900px;
+  }
+
+  .sessions-grid {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: #8b949e;
-    text-align: center;
-    gap: 1rem;
+    gap: 0.75rem;
   }
 
-  .popped-out-msg .btn-sm {
-    background: #238636;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    padding: 0.5rem 1rem;
-  }
-
-  .connect-prompt {
+  .session-card {
     display: flex;
     align-items: center;
-    justify-content: center;
-    height: 100%;
-    background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+    gap: 1rem;
+    background: #21262d;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    transition: all 0.2s;
   }
 
-  .connect-content {
+  .session-card:hover {
+    border-color: #8b949e;
+    background: #282e36;
+  }
+
+  .session-card.attached {
+    border-color: #238636;
+  }
+
+  .session-icon {
+    font-size: 1.25rem;
+  }
+
+  .session-info {
+    flex: 1;
+  }
+
+  .session-info h3 {
+    color: #fff;
+    font-size: 1.1rem;
+    margin: 0 0 0.15rem 0;
+    font-weight: 500;
+  }
+
+  .session-info p {
+    color: #8b949e;
+    margin: 0;
+    font-size: 0.85rem;
+  }
+
+  .btn-open {
+    background: #238636;
+    color: white;
+    padding: 0.5rem 1.25rem;
+    font-weight: 500;
+  }
+
+  .btn-open:hover {
+    background: #2ea043;
+    transform: translateY(-1px);
+  }
+
+  .loading-state,
+  .empty-state,
+  .error-state {
     text-align: center;
-    color: #c9d1d9;
+    padding: 3rem 2rem;
+    color: #8b949e;
   }
 
-  .connect-icon {
-    font-size: 4rem;
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #30363d;
+    border-top-color: #238636;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .empty-icon,
+  .error-icon {
+    font-size: 3rem;
     margin-bottom: 1rem;
   }
 
-  .connect-content h2 {
-    color: #fff;
-    margin-bottom: 0.5rem;
-    font-size: 1.5rem;
+  .empty-state h3,
+  .error-state h3 {
+    color: #c9d1d9;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
   }
 
-  .connect-content p {
-    color: #8b949e;
-    margin-bottom: 1.5rem;
+  .empty-state p,
+  .error-state p {
+    margin: 0 0 1.5rem 0;
   }
 
-  .btn-connect {
-    background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 0.75rem 2rem;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 12px rgba(35, 134, 54, 0.3);
-  }
-
-  .btn-connect:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(35, 134, 54, 0.4);
+  .security-footer {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #21262d;
   }
 
   .tailscale-badge {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     color: #3fb950;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     background: rgba(63, 185, 80, 0.1);
-    padding: 0.25rem 0.75rem;
+    padding: 0.4rem 0.85rem;
     border-radius: 20px;
     border: 1px solid rgba(63, 185, 80, 0.3);
   }
 
   .ts-icon {
     font-size: 0.9rem;
-  }
-
-  /* Terminal page specific styles */
-  .terminal-container {
-    position: fixed;
-    top: 104px; /* AdminLayout header (60px) + session controls (44px) */
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #0d1117;
-  }
-
-  .terminal-frame {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: #0d1117;
   }
 
   .access-denied {
@@ -307,14 +407,5 @@ const TERMINAL_URL = "https://dev.tail68ddf4.ts.net";
     padding: 0.5rem 1rem;
     border-radius: 6px;
     margin-bottom: 1rem;
-  }
-
-  /* Fullscreen styles */
-  .terminal-container:fullscreen {
-    top: 0;
-  }
-
-  .terminal-container:fullscreen .terminal-frame {
-    height: 100vh;
   }
 </style>
