@@ -7,16 +7,22 @@ This documents the secure web terminal setup that allows Claude Code to be acces
 The setup uses:
 - **ttyd** - Terminal emulator that runs in a web browser
 - **tmux** - Terminal multiplexer for persistent sessions
-- **nginx** - Reverse proxy with SSL and access restrictions
-- **Let's Encrypt** - Free SSL certificates via certbot
+- **Tailscale** - Zero-trust VPN for secure access (replaces nginx public proxy)
 
-## Architecture
+## Architecture (Tailscale-Only - Secure)
 
 ```
-[Browser] → [Nginx :443 SSL] → [ttyd :7681 localhost] → [tmux session] → [Claude Code]
-                ↑
-        Only allows requests from islandgoodes.com
+[Browser on Tailscale] → [ttyd :7681 on Tailscale IP] → [bash shell] → [tmux sessions]
+         ↑
+   Must be connected to Tailscale VPN (100.x.x.x network)
+   NOT accessible from public internet
 ```
+
+**Security Model:**
+- Terminal is bound to Tailscale IP only (`100.90.155.64`)
+- No public internet exposure at all
+- Requires Tailscale VPN connection + ttyd basic auth
+- Supports multiple tmux sessions from different browser windows
 
 ## Prerequisites
 

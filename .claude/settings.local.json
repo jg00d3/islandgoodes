@@ -99,7 +99,8 @@
       "Bash(do echo \"=== $commit ===\")",
       "Bash(node --check:*)",
       "Bash(openssl dgst:*)",
-      "Bash(openssl base64:*)"
+      "Bash(openssl base64:*)",
+      "WebFetch(domain:reservationkey.com)"
     ]
   }
 }
