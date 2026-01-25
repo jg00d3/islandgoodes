@@ -7,7 +7,7 @@ const pageTitle = "Secure Terminal";
 const pageTip = "Select: Shift+drag | Copy: Ctrl+C | Paste: Ctrl+Shift+V";
 
 // Terminal server - Tailscale HTTPS with Duo MFA (not accessible from public internet)
-const TERMINAL_BASE = "https://dev.tail68ddf4.ts.net";
+const TERMINAL_URL = "https://dev.tail68ddf4.ts.net";
 ---
 
 <AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
@@ -17,13 +17,7 @@ const TERMINAL_BASE = "https://dev.tail68ddf4.ts.net";
     <!-- Session Controls -->
     <div class="session-controls">
       <div class="session-selector">
-        <label for="sessionSelect">tmux session:</label>
-        <select id="sessionSelect">
-          <option value="">Loading sessions...</option>
-        </select>
-        <button id="connectBtn" class="btn btn-sm btn-primary">Connect</button>
-        <button id="newTerminalBtn" class="btn btn-sm">New Window</button>
-        <button id="refreshSessionsBtn" class="btn btn-sm btn-secondary">Refresh</button>
+        <button id="newTerminalBtn" class="btn btn-sm btn-primary">Open New Terminal Window</button>
       </div>
       <div class="tailscale-badge">
         <span class="ts-icon">🔒</span> Tailscale + Duo MFA
@@ -31,14 +25,10 @@ const TERMINAL_BASE = "https://dev.tail68ddf4.ts.net";
     </div>
 
     <div class="terminal-container" id="terminalContainer">
-      <div id="terminalPlaceholder" class="terminal-placeholder">
-        <p>Select a tmux session and click <strong>Connect</strong></p>
-        <p class="hint">Or click <strong>New Window</strong> to open in a popup</p>
-      </div>
       <iframe
         id="terminalFrame"
+        src={TERMINAL_URL}
         class="terminal-frame"
-        style="display: none;"
         allow="clipboard-read; clipboard-write"
       ></iframe>
     </div>
@@ -57,15 +47,7 @@ const TERMINAL_BASE = "https://dev.tail68ddf4.ts.net";
 
 <script is:inline>
   const SESSION_KEY = 'islandgoodes_admin_session';
-  const TERMINAL_BASE = 'https://dev.tail68ddf4.ts.net';
-  const SESSIONS_API = 'https://dev.tail68ddf4.ts.net/api/sessions';
-
-  function getTerminalUrl(sessionName) {
-    if (sessionName) {
-      return `${TERMINAL_BASE}/?arg=${encodeURIComponent(sessionName)}`;
-    }
-    return TERMINAL_BASE;
-  }
+  const TERMINAL_URL = 'https://dev.tail68ddf4.ts.net';
 
   function getSession() {
     try {
@@ -74,80 +56,17 @@ const TERMINAL_BASE = "https://dev.tail68ddf4.ts.net";
     } catch { return null; }
   }
 
-  // Fetch and populate tmux sessions
-  async function loadSessions() {
-    const select = document.getElementById('sessionSelect');
-    try {
-      const response = await fetch(SESSIONS_API);
-      const data = await response.json();
-
-      select.innerHTML = '<option value="">-- Select Session --</option>';
-      select.innerHTML += '<option value="__new__">+ Create New Session</option>';
-
-      if (data.sessions && data.sessions.length > 0) {
-        data.sessions.forEach(s => {
-          const status = s.status === 'attached' ? ' (attached)' : '';
-          const opt = document.createElement('option');
-          opt.value = s.name;
-          opt.textContent = `${s.name} - ${s.windows} window${s.windows > 1 ? 's' : ''}${status}`;
-          select.appendChild(opt);
-        });
-      }
-    } catch (err) {
-      select.innerHTML = '<option value="">Failed to load sessions</option>';
-      console.error('Failed to load sessions:', err);
-    }
-  }
-
   // Check if admin is logged in
   const session = getSession();
   if (session) {
     document.getElementById('terminal-page').style.display = 'block';
-    loadSessions();
   } else {
     document.getElementById('accessDenied').style.display = 'flex';
   }
 
-  // Connect button - load selected session in iframe
-  document.getElementById('connectBtn')?.addEventListener('click', () => {
-    const sessionName = document.getElementById('sessionSelect').value;
-    if (!sessionName) {
-      alert('Please select a session first');
-      return;
-    }
-
-    const iframe = document.getElementById('terminalFrame');
-    const placeholder = document.getElementById('terminalPlaceholder');
-
-    // Handle "create new" option
-    const url = sessionName === '__new__' ? TERMINAL_BASE : getTerminalUrl(sessionName);
-
-    iframe.src = url;
-    iframe.style.display = 'block';
-    placeholder.style.display = 'none';
-  });
-
-  // Open new terminal window with selected session
+  // Open new terminal window
   document.getElementById('newTerminalBtn')?.addEventListener('click', () => {
-    const sessionName = document.getElementById('sessionSelect').value;
-    const url = sessionName === '__new__' || !sessionName ? TERMINAL_BASE : getTerminalUrl(sessionName);
-    const windowName = sessionName ? `terminal-${sessionName}-${Date.now()}` : `terminal-shell-${Date.now()}`;
-    window.open(url, windowName, 'width=1200,height=800');
-  });
-
-  // Refresh sessions list
-  document.getElementById('refreshSessionsBtn')?.addEventListener('click', () => {
-    loadSessions();
-  });
-
-  // Fullscreen toggle
-  document.getElementById('fullscreenBtn')?.addEventListener('click', () => {
-    const container = document.getElementById('terminalContainer');
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
-    } else {
-      container.requestFullscreen();
-    }
+    window.open(TERMINAL_URL, `terminal-${Date.now()}`, 'width=1200,height=800');
   });
 </script>
 
@@ -174,73 +93,17 @@ const TERMINAL_BASE = "https://dev.tail68ddf4.ts.net";
     gap: 0.75rem;
   }
 
-  .session-selector label {
-    color: #8b949e;
-    font-size: 0.875rem;
-  }
-
-  .session-selector select {
-    background: #0d1117;
-    color: #c9d1d9;
-    border: 1px solid #30363d;
-    border-radius: 6px;
-    padding: 0.375rem 0.75rem;
-    font-size: 0.875rem;
-  }
-
-  .session-selector .btn {
-    padding: 0.375rem 0.75rem;
-    font-size: 0.8rem;
-  }
-
   .session-selector .btn-sm {
-    background: #21262d;
-    color: #c9d1d9;
-    border: 1px solid #30363d;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-
-  .session-selector .btn-sm:hover {
-    background: #30363d;
-  }
-
-  .session-selector .btn-primary {
     background: #238636;
     color: white;
     border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
   }
 
-  .session-selector .btn-primary:hover {
+  .session-selector .btn-sm:hover {
     background: #2ea043;
-  }
-
-  .session-selector .btn-secondary {
-    background: #21262d;
-    border: 1px solid #30363d;
-  }
-
-  .session-selector .btn-secondary:hover {
-    background: #30363d;
-  }
-
-  .terminal-placeholder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: #8b949e;
-    text-align: center;
-  }
-
-  .terminal-placeholder p {
-    margin: 0.5rem 0;
-  }
-
-  .terminal-placeholder .hint {
-    font-size: 0.85rem;
-    color: #6e7681;
   }
 
   .tailscale-badge {
