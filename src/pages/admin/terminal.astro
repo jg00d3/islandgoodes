@@ -7,7 +7,10 @@ const pageTitle = "Secure Terminal";
 const pageTip = "Select: Shift+drag | Copy: Ctrl+C | Paste: Ctrl+Shift+V";
 
 // Terminal server - Tailscale HTTPS with Duo MFA (not accessible from public internet)
-const TERMINAL_URL = "https://dev.tail68ddf4.ts.net";
+// Default session is islandgoodes - passed via ?arg= parameter to ttyd
+const TERMINAL_BASE = "https://dev.tail68ddf4.ts.net";
+const DEFAULT_SESSION = "islandgoodes";
+const TERMINAL_URL = `${TERMINAL_BASE}/?arg=${DEFAULT_SESSION}`;
 ---
 
 <AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
@@ -57,6 +60,13 @@ const TERMINAL_URL = "https://dev.tail68ddf4.ts.net";
   const SESSION_KEY = 'islandgoodes_admin_session';
   const TERMINAL_BASE = 'https://dev.tail68ddf4.ts.net';
 
+  function getTerminalUrl(sessionName) {
+    if (sessionName) {
+      return `${TERMINAL_BASE}/?arg=${encodeURIComponent(sessionName)}`;
+    }
+    return TERMINAL_BASE;
+  }
+
   function getSession() {
     try {
       const stored = sessionStorage.getItem(SESSION_KEY);
@@ -75,23 +85,16 @@ const TERMINAL_URL = "https://dev.tail68ddf4.ts.net";
   // Open new terminal window with selected session
   document.getElementById('newTerminalBtn')?.addEventListener('click', () => {
     const sessionName = document.getElementById('sessionSelect').value;
-    const url = TERMINAL_BASE;
+    const url = getTerminalUrl(sessionName);
     const windowName = sessionName ? `terminal-${sessionName}-${Date.now()}` : `terminal-shell-${Date.now()}`;
-    const newWindow = window.open(url, windowName, 'width=1200,height=800');
-
-    // After window opens, user can manually attach to tmux session
-    if (sessionName && newWindow) {
-      // Store session hint for the new window
-      localStorage.setItem('pending_tmux_session', sessionName);
-    }
+    window.open(url, windowName, 'width=1200,height=800');
   });
 
-  // Session selector changes the iframe
+  // Session selector changes the iframe - reload with new session
   document.getElementById('sessionSelect')?.addEventListener('change', (e) => {
     const sessionName = e.target.value;
     const iframe = document.getElementById('terminalFrame');
-    // Reload the iframe - user will need to manually attach to tmux
-    iframe.src = TERMINAL_BASE;
+    iframe.src = getTerminalUrl(sessionName);
   });
 
   // Refresh available sessions (placeholder - requires server endpoint)
