@@ -48,8 +48,8 @@
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com https://translate.googleapis.com;
       font-src 'self' https://fonts.gstatic.com data:;
       img-src 'self' data: blob: https:;
-      frame-src 'self' https://www.youtube.com https://my.matterport.com https://v2.reservationkey.com https://translate.google.com;
-      connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://*.basemaps.cartocdn.com https://*.netlify.app https://translate.googleapis.com wss:;
+      frame-src 'self' https://www.youtube.com https://my.matterport.com https://v2.reservationkey.com https://translate.google.com https://dev.tail68ddf4.ts.net;
+      connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://*.basemaps.cartocdn.com https://*.netlify.app https://translate.googleapis.com wss: https://dev.tail68ddf4.ts.net wss://dev.tail68ddf4.ts.net;
       media-src 'self' https:;
       object-src 'none';
       base-uri 'self';
