@@ -180,6 +180,73 @@ const foodTrucks = [
   { name: "Manuela Malasada", location: "Hilo area", specialty: "Fresh malasadas made to order" },
   { name: "Highway 130 Corridor", location: "Kea'au to Pahoa", specialty: "Thai, poke, tacos, local grinds, burgers, lumpia - growing food truck scene" }
 ];
+
+const groceryStores = [
+  {
+    name: "KTA Super Stores - Puainako",
+    address: "50 E Puainako St, Hilo, HI 96720",
+    phone: "(808) 959-9111",
+    hours: "Daily 5:30am - 10pm",
+    description: "Local Hawaiian grocery chain since 1916. Excellent poke counter and local products.",
+    distance: "~10 min"
+  },
+  {
+    name: "KTA Super Stores - Downtown",
+    address: "321 Keawe St, Hilo, HI 96720",
+    phone: "(808) 935-3751",
+    hours: "Mon-Sat 7am-8pm, Sun 7am-7pm",
+    description: "Smaller downtown location, great for quick stops near the Farmers Market.",
+    distance: "~7 min"
+  },
+  {
+    name: "Sack N Save",
+    address: "250 Kinoole St, Hilo, HI 96720",
+    phone: "(808) 935-3113",
+    hours: "Daily 6am - 10pm",
+    description: "Budget-friendly grocery with good selection. Part of the Foodland family.",
+    distance: "~8 min"
+  },
+  {
+    name: "Safeway",
+    address: "381 E Maka'ala St, Hilo, HI 96720",
+    phone: "(808) 959-3601",
+    hours: "Daily 5am - 12am",
+    description: "Full-service supermarket with pharmacy. Near Prince Kuhio Plaza.",
+    distance: "~12 min"
+  },
+  {
+    name: "Target",
+    address: "391 E Makaala St, Hilo, HI 96720",
+    phone: "(808) 920-8605",
+    hours: "Daily 7am - 11pm",
+    description: "Groceries plus everything else. Has Starbucks, CVS pharmacy, and fresh grocery section.",
+    distance: "~12 min"
+  },
+  {
+    name: "Walmart",
+    address: "325 E Makaala St, Hilo, HI 96720",
+    phone: "(808) 961-9115",
+    hours: "Daily 6am - 11pm",
+    description: "Best prices on basics and household items. Full grocery section.",
+    distance: "~12 min"
+  },
+  {
+    name: "Cost U Less",
+    address: "715 Kinoole St, Hilo, HI 96720",
+    phone: "(808) 933-3031",
+    hours: "Mon-Fri 8am-7:30pm, Sat 8am-6:30pm, Sun 8am-6pm",
+    description: "Warehouse-style bulk shopping - no membership required! Great for stocking up.",
+    distance: "~10 min"
+  },
+  {
+    name: "Hilo Farmers Market",
+    address: "Corner of Mamo St & Kamehameha Ave, Downtown Hilo",
+    phone: "(808) 933-1000",
+    hours: "Wed & Sat 6am-4pm (200+ vendors), Daily 7am-4pm (20-30 vendors)",
+    description: "Fresh local produce, tropical fruits, prepared foods, and crafts. A must-visit!",
+    distance: "~5 min"
+  }
+];
 ---
 
 <PreviewLayout title={title} description={description}>
@@ -319,6 +386,41 @@ const foodTrucks = [
     </div>
   </section>
 
+  <section class="grocery-section">
+    <div class="container">
+      <div class="section-header center">
+        <span class="section-subtitle">Stock Your Kitchen</span>
+        <h2>Grocery Stores Near Island Goodes</h2>
+        <p class="section-intro">All rooms have kitchenettes or cooking areas. Here's where to shop for groceries, sorted by distance from our property.</p>
+      </div>
+      <div class="grocery-grid">
+        {groceryStores.map(store => (
+          <div class="grocery-card">
+            <div class="grocery-header">
+              <h3>{store.name}</h3>
+              <span class="distance-badge">{store.distance}</span>
+            </div>
+            <p class="grocery-description">{store.description}</p>
+            <div class="grocery-details">
+              <div class="detail-row">
+                <span class="detail-icon">&#x1F4CD;</span>
+                <span>{store.address}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-icon">&#x1F4DE;</span>
+                <span>{store.phone}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-icon">&#x1F552;</span>
+                <span>{store.hours}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <section class="tips-section">
     <div class="container">
       <div class="tips-card">
@@ -407,6 +509,19 @@ const foodTrucks = [
   .food-card p { font-size: 0.9375rem; color: var(--color-text-light); line-height: 1.6; margin-bottom: 0.75rem; }
   .food-where { display: block; font-size: 0.8125rem; color: var(--color-primary); }
 
+  .grocery-section { padding: var(--section-padding) 0; background: var(--color-bg-alt); }
+  .grocery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  .grocery-card { background: #fff; padding: 1.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: var(--transition-base); }
+  .grocery-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.1); }
+  .grocery-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.75rem; }
+  .grocery-header h3 { color: var(--color-text); font-size: 1.125rem; margin: 0; }
+  .distance-badge { background: var(--color-primary); color: #fff; padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+  .grocery-description { font-size: 0.9375rem; color: var(--color-text-light); line-height: 1.6; margin-bottom: 1rem; }
+  .grocery-details { border-top: 1px solid #eee; padding-top: 1rem; }
+  .detail-row { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.875rem; color: var(--color-text-light); margin-bottom: 0.5rem; }
+  .detail-row:last-child { margin-bottom: 0; }
+  .detail-icon { flex-shrink: 0; }
+
   .tips-section { padding: 0 0 var(--section-padding); }
   .tips-card { background: #fff; padding: 3rem; border-radius: 20px; box-shadow: 0 4px 25px rgba(0,0,0,0.06); max-width: 800px; margin: 0 auto; }
   .tips-card h2 { color: var(--color-text); margin-bottom: 1.5rem; text-align: center; }
@@ -428,6 +543,6 @@ const foodTrucks = [
   @media (max-width: 768px) {
     .market-card { grid-template-columns: 1fr; }
     .market-image img { min-height: 250px; }
-    .restaurants-grid, .foods-grid, .poke-grid, .trucks-grid { grid-template-columns: 1fr; }
+    .restaurants-grid, .foods-grid, .poke-grid, .trucks-grid, .grocery-grid { grid-template-columns: 1fr; }
   }
 </style>
