@@ -244,6 +244,16 @@ window.SharedData = {
     return await apiCall('blogContributors', 'set', 'data', contributors);
   },
 
+  // ============== CHAT USAGE ==============
+  async getChatUsage() {
+    return await apiCall('chatUsage', 'get');
+  },
+
+  async saveChatUsage(data) {
+    clearCache('chatUsage');
+    return await apiCall('chatUsage', 'set', 'data', data);
+  },
+
   // Clear all caches
   clearCache
 };

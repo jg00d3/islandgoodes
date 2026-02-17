@@ -47,6 +47,56 @@ const pageTip = "Configure and test the AI chatbot";
       </div>
     </section>
 
+    <!-- Usage Analytics -->
+    <section class="usage-section">
+      <div class="container">
+        <div class="usage-card">
+          <div class="usage-header">
+            <h2>Usage Analytics</h2>
+            <p>Monitor AI chat activity and estimated costs</p>
+          </div>
+
+          <div class="usage-stats" id="usageStats">
+            <div class="stat-card">
+              <div class="stat-value" id="statToday">--</div>
+              <div class="stat-label">Today</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="statWeek">--</div>
+              <div class="stat-label">This Week</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="statMonth">--</div>
+              <div class="stat-label">This Month</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="statCost">--</div>
+              <div class="stat-label">Est. Cost (Month)</div>
+            </div>
+          </div>
+
+          <div class="usage-table-wrapper">
+            <table class="usage-table" id="usageTable">
+              <thead>
+                <tr>
+                  <th>Date/Time</th>
+                  <th>Visitor</th>
+                  <th>Messages</th>
+                  <th>Tokens (In/Out)</th>
+                  <th>Est. Cost</th>
+                </tr>
+              </thead>
+              <tbody id="usageTableBody">
+                <tr>
+                  <td colspan="5" class="empty-state">Loading usage data...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- How It Works -->
     <section class="info-section">
       <div class="container">
@@ -792,6 +842,96 @@ const pageTip = "Configure and test the AI chatbot";
     transform: translateX(24px);
   }
 
+  /* Usage Analytics Section */
+  .usage-section {
+    padding: 2rem;
+  }
+
+  .usage-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  .usage-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .usage-header h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .usage-header p {
+    color: var(--color-text-light);
+  }
+
+  .usage-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: var(--color-bg-alt);
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-label {
+    font-size: 0.8125rem;
+    color: var(--color-text-light);
+    font-weight: 500;
+  }
+
+  .usage-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .usage-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  .usage-table th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    background: var(--color-bg-alt);
+    font-weight: 600;
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-light);
+    border-bottom: 2px solid #e5e5e5;
+  }
+
+  .usage-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .usage-table tbody tr:hover {
+    background: var(--color-bg-alt);
+  }
+
+  .usage-table .empty-state {
+    text-align: center;
+    color: var(--color-text-light);
+    padding: 2rem 1rem;
+    font-style: italic;
+  }
+
   /* Responsive */
   @media (max-width: 768px) {
     .hero-header {
@@ -811,6 +951,10 @@ const pageTip = "Configure and test the AI chatbot";
 
     .training-actions {
       flex-direction: column;
+    }
+
+    .usage-stats {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 
@@ -946,6 +1090,46 @@ const pageTip = "Configure and test the AI chatbot";
   :global([data-theme="dark"]) .pricing-info p,
   :global([data-theme="dark"]) .pricing-info ul {
     color: #6ee7b7;
+  }
+
+  :global([data-theme="dark"]) .usage-card {
+    background: var(--color-bg-alt);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+
+  :global([data-theme="dark"]) .usage-header h2 {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .usage-header p {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .stat-card {
+    background: var(--color-bg);
+  }
+
+  :global([data-theme="dark"]) .stat-label {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .usage-table th {
+    background: var(--color-bg);
+    color: var(--color-text-muted);
+    border-bottom-color: var(--color-border);
+  }
+
+  :global([data-theme="dark"]) .usage-table td {
+    color: var(--color-text);
+    border-bottom-color: var(--color-border);
+  }
+
+  :global([data-theme="dark"]) .usage-table tbody tr:hover {
+    background: var(--color-bg);
+  }
+
+  :global([data-theme="dark"]) .usage-table .empty-state {
+    color: var(--color-text-muted);
   }
 </style>
 
@@ -1269,4 +1453,83 @@ A: You can book directly on our website at islandgoodes.com/book or call us at 8
   }
 
   checkApiStatus();
+
+  // Usage Analytics
+  async function loadUsageData() {
+    const tableBody = document.getElementById('usageTableBody');
+    try {
+      const usage = await window.SharedData.getChatUsage();
+      const entries: any[] = Array.isArray(usage) ? usage : [];
+
+      if (entries.length === 0) {
+        if (tableBody) {
+          tableBody.innerHTML = '<tr><td colspan="5" class="empty-state">No chat activity yet</td></tr>';
+        }
+        document.getElementById('statToday')!.textContent = '0';
+        document.getElementById('statWeek')!.textContent = '0';
+        document.getElementById('statMonth')!.textContent = '0';
+        document.getElementById('statCost')!.textContent = '$0.00';
+        return;
+      }
+
+      const now = new Date();
+      const todayStr = now.toISOString().slice(0, 10);
+      const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+      let todayCount = 0;
+      let weekCount = 0;
+      let monthCount = 0;
+      let monthInputTokens = 0;
+      let monthOutputTokens = 0;
+
+      for (const e of entries) {
+        const ts = new Date(e.timestamp);
+        const dateStr = e.timestamp.slice(0, 10);
+
+        if (dateStr === todayStr) todayCount++;
+        if (ts >= weekAgo) weekCount++;
+        if (ts >= monthStart) {
+          monthCount++;
+          monthInputTokens += e.inputTokens || 0;
+          monthOutputTokens += e.outputTokens || 0;
+        }
+      }
+
+      // Claude 3 Haiku pricing: $0.25/MTok input, $1.25/MTok output
+      const estimatedCost = (monthInputTokens / 1_000_000) * 0.25 + (monthOutputTokens / 1_000_000) * 1.25;
+
+      document.getElementById('statToday')!.textContent = String(todayCount);
+      document.getElementById('statWeek')!.textContent = String(weekCount);
+      document.getElementById('statMonth')!.textContent = String(monthCount);
+      document.getElementById('statCost')!.textContent = '$' + estimatedCost.toFixed(2);
+
+      // Build table rows (newest first)
+      const sorted = [...entries].reverse();
+      if (tableBody) {
+        tableBody.innerHTML = sorted.map(e => {
+          const dt = new Date(e.timestamp);
+          const dateStr = dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+          const timeStr = dt.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+          const inTok = e.inputTokens || 0;
+          const outTok = e.outputTokens || 0;
+          const cost = (inTok / 1_000_000) * 0.25 + (outTok / 1_000_000) * 1.25;
+          return `<tr>
+            <td>${dateStr} ${timeStr}</td>
+            <td>${e.ip || 'unknown'}</td>
+            <td>${e.messageCount || 0}</td>
+            <td>${inTok.toLocaleString()} / ${outTok.toLocaleString()}</td>
+            <td>$${cost.toFixed(4)}</td>
+          </tr>`;
+        }).join('');
+      }
+    } catch (err) {
+      console.error('Failed to load usage data:', err);
+      if (tableBody) {
+        tableBody.innerHTML = '<tr><td colspan="5" class="empty-state">Failed to load usage data</td></tr>';
+      }
+    }
+  }
+
+  loadUsageData();
 </script>

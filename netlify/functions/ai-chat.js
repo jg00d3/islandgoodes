@@ -1,7 +1,10 @@
 // AI Chat Assistant powered by Claude
 // Handles both public guest chat and admin test chat
 
+import { getStore } from '@netlify/blobs';
 import { knowledgeBase } from './knowledge-base.js';
+
+const SITE_ID = '347c1eb9-e6b5-4736-b000-f6908c1f85fc';
 
 // Simple in-memory rate limiting (resets on cold start)
 const rateLimitMap = new Map();
@@ -23,6 +26,62 @@ function checkRateLimit(ip) {
 
   entry.count++;
   return true;
+}
+
+// Daily per-IP rate limiting (in-memory, resets on cold start)
+const dailyLimitMap = new Map();
+const DAILY_LIMIT = 50;
+
+function checkDailyLimit(ip) {
+  const today = new Date().toISOString().slice(0, 10);
+  const entry = dailyLimitMap.get(ip);
+
+  if (!entry || entry.date !== today) {
+    dailyLimitMap.set(ip, { date: today, count: 1 });
+    return true;
+  }
+
+  if (entry.count >= DAILY_LIMIT) {
+    return false;
+  }
+
+  entry.count++;
+  return true;
+}
+
+// Log chat usage to Netlify Blobs (fire-and-forget)
+function logChatUsage(ip, messageCount, usage) {
+  try {
+    const store = getStore({
+      name: 'chat-usage',
+      siteID: SITE_ID,
+      token: process.env.NETLIFY_AUTH_TOKEN
+    });
+
+    // Mask last octet of IP for privacy
+    const maskedIp = ip.replace(/\.\d+$/, '.x');
+
+    const entry = {
+      ip: maskedIp,
+      timestamp: new Date().toISOString(),
+      messageCount,
+      inputTokens: usage?.input_tokens || 0,
+      outputTokens: usage?.output_tokens || 0
+    };
+
+    // Read, append, cap, write — fire-and-forget
+    store.get('data', { type: 'json' }).then(existing => {
+      const log = Array.isArray(existing) ? existing : [];
+      log.push(entry);
+      // Cap at 5000 entries
+      while (log.length > 5000) log.shift();
+      return store.setJSON('data', log);
+    }).catch(err => {
+      console.error('Failed to log chat usage:', err);
+    });
+  } catch (err) {
+    console.error('Failed to init chat usage store:', err);
+  }
 }
 
 export async function handler(event) {
@@ -55,15 +114,22 @@ export async function handler(event) {
     }
 
     // Rate limiting for public requests
-    if (source === 'public') {
-      const clientIp = event.headers['x-forwarded-for']?.split(',')[0]?.trim()
-        || event.headers['client-ip']
-        || 'unknown';
+    const clientIp = event.headers['x-forwarded-for']?.split(',')[0]?.trim()
+      || event.headers['client-ip']
+      || 'unknown';
 
+    if (source === 'public') {
       if (!checkRateLimit(clientIp)) {
         return {
           statusCode: 429,
           body: JSON.stringify({ error: 'Too many requests. Please wait a moment before sending another message.' })
+        };
+      }
+
+      if (!checkDailyLimit(clientIp)) {
+        return {
+          statusCode: 429,
+          body: JSON.stringify({ error: 'You\'ve reached the daily message limit. Please try again tomorrow, or contact us at 808-964-2291.' })
         };
       }
     }
@@ -119,6 +185,11 @@ export async function handler(event) {
 
     const data = await response.json();
     const aiResponse = data.content?.[0]?.text || 'Sorry, I could not generate a response.';
+
+    // Log usage for public requests (fire-and-forget)
+    if (source === 'public') {
+      logChatUsage(clientIp, conversationMessages.length, data.usage);
+    }
 
     return {
       statusCode: 200,
