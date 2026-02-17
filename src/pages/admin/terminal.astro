@@ -331,7 +331,7 @@ const API_URL = "https://dev.tail68ddf4.ts.net";
   function openSession(sessionName) {
     logActivity('terminal:open', 'Opened terminal session', sessionName);
     window.open(
-      TERMINAL_URL + '/?arg=' + encodeURIComponent(sessionName),
+      TERMINAL_URL + '/terminal/?arg=' + encodeURIComponent(sessionName),
       'terminal-' + sessionName + '-' + Date.now(),
       'width=1200,height=800'
     );
