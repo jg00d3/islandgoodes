@@ -108,7 +108,7 @@ export async function handler(event) {
     // Send notification to Island Goodes
     const { data: notifyData, error: notifyError } = await resend.emails.send({
       from: 'Island Goodes Website (No Reply) <noreply@islandgoodes.com>',
-      to: ['sysadmroot@gmail.com'], // Your notification email
+      to: ['sysadmroot@gmail.com', 'goodegarvin@gmail.com'],
       replyTo: email,
       subject: `New Contact Form: ${name}`,
       html: `
