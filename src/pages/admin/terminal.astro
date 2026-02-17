@@ -46,12 +46,12 @@ const API_URL = "https://dev.tail68ddf4.ts.net";
         <div class="stat-card">
           <div class="stat-label">Memory</div>
           <div class="stat-value" id="statMem">-- / -- MB</div>
-          <div class="stat-bar"><div class="stat-bar-fill" id="memBar"></div></div>
+          <div class="stat-bar"><div class="stat-bar-fill" id="memBar" style="width:0"></div></div>
         </div>
         <div class="stat-card">
           <div class="stat-label">Disk</div>
           <div class="stat-value" id="statDisk">-- / -- MB</div>
-          <div class="stat-bar"><div class="stat-bar-fill" id="diskBar"></div></div>
+          <div class="stat-bar"><div class="stat-bar-fill" id="diskBar" style="width:0"></div></div>
         </div>
         <div class="stat-card">
           <div class="stat-label">Uptime</div>
@@ -222,6 +222,8 @@ const API_URL = "https://dev.tail68ddf4.ts.net";
     } catch (error) {
       document.getElementById('healthBadge').textContent = 'Disconnected';
       document.getElementById('healthBadge').className = 'health-badge health-err';
+      document.getElementById('memBar').style.width = '0';
+      document.getElementById('diskBar').style.width = '0';
       grid.innerHTML = '<div class="error-state">' +
         '<div class="error-icon">&#9888;&#65039;</div>' +
         '<h3>Cannot Connect to Server</h3>' +
