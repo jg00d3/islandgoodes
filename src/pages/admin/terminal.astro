@@ -328,13 +328,22 @@ const API_URL = "https://dev.tail68ddf4.ts.net";
 
   // ============== SESSION ACTIONS ==============
 
-  function openSession(sessionName) {
-    logActivity('terminal:open', 'Opened terminal session', sessionName);
-    window.open(
-      TERMINAL_URL + '/terminal/?arg=' + encodeURIComponent(sessionName),
-      'terminal-' + sessionName + '-' + Date.now(),
-      'width=1200,height=800'
-    );
+  async function openSession(sessionName) {
+    try {
+      // Tell the API which session to connect to (writes pending session file)
+      await fetch(API_URL + '/api/tmux-sessions/' + encodeURIComponent(sessionName) + '/connect', {
+        method: 'POST'
+      });
+      logActivity('terminal:open', 'Opened terminal session', sessionName);
+      // Open ttyd window — tmux-connect reads the pending session file
+      window.open(
+        TERMINAL_URL + '/terminal/',
+        'terminal-' + sessionName + '-' + Date.now(),
+        'width=1200,height=800'
+      );
+    } catch (error) {
+      alert('Failed to initiate connection. Make sure Tailscale is connected.');
+    }
   }
 
   function confirmKillSession(sessionName) {
