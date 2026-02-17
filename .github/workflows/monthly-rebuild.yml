@@ -1,0 +1,14 @@
+name: Monthly Site Rebuild
+
+on:
+  schedule:
+    # 1st of every month at 10:00 UTC (midnight HST)
+    - cron: '0 10 1 * *'
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+jobs:
+  trigger-netlify-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Netlify Build
+        run: curl -X POST -d {} "${{ secrets.NETLIFY_BUILD_HOOK }}"
