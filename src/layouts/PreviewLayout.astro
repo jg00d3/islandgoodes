@@ -2684,10 +2684,9 @@ const isActive = (path: string) => {
     font-size: 0.8125rem;
   }
 
-  /* Move share buttons up when chat widget is visible */
-  .ai-chat-widget[style*="display: block"] ~ .share-buttons,
-  .ai-chat-widget:not([style*="display:none"]):not([style*="display: none"]) ~ .share-buttons {
-    bottom: 6rem !important;
+  /* Share buttons shifted up when chat widget is visible (applied via JS) */
+  .share-buttons.chat-visible {
+    bottom: 7rem !important;
   }
 
   /* Dark Mode */
@@ -2801,6 +2800,10 @@ const isActive = (path: string) => {
   const widget = document.getElementById('aiChatWidget');
   if (!widget) return;
   widget.style.display = 'block';
+
+  // Shift share buttons up so they don't overlap the chat bubble
+  var shareEl = document.getElementById('shareButtons');
+  if (shareEl) shareEl.classList.add('chat-visible');
 
   const bubble = document.getElementById('aiChatBubble');
   const panel = document.getElementById('aiChatPanel');
