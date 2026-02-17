@@ -55,6 +55,8 @@ npm run preview  # Preview production build locally
 
 **Analytics:** analytics.js (Google Analytics 4 Data API)
 
+**AI:** ai-chat.js — Dual-path: public guest chat (`source: 'public'`) uses hardcoded property knowledge via `buildPublicSystemPrompt()`, admin test chat uses `training` data from Blobs. Model: `claude-haiku-4-5-20251001`. Supports multi-turn via `messages` array. Rate limited (10 req/min/IP).
+
 ### Edge Function
 
 `admin-auth.js` - Protects `/admin/*` paths, validates session cookies, redirects unauthenticated users to login.
@@ -72,6 +74,12 @@ Blog posts are `.astro` files in `src/pages/blog/`. When adding/removing posts, 
 
 ### Admin Pages
 Use `AdminLayout.astro` and load SharedData via `<script is:inline src="/js/shared-data.js"></script>`.
+
+### Settings Pattern in PreviewLayout
+Feature toggles (`chatEnabled`, `aiChatEnabled`, `shareEnabled`, `languageEnabled`) follow a standard pattern: try `window.SharedData.getSettings()` first, fallback to `localStorage.getItem('islandgoodes_settings')`. When AI chat is enabled, Tawk.to is suppressed to avoid competing widgets.
+
+### PreviewLayout Working Notes
+`PreviewLayout.astro` is ~2400 lines. Read in chunks (100 lines at a time). The file contains HTML structure, all global CSS (starting ~line 454), and multiple `<script is:inline>` blocks for share buttons, newsletter, lightbox, chat widget, language selector, etc.
 
 ### Disabled Pages
 Files prefixed with `_old-` are ignored by Astro. Remove prefix to re-enable.
@@ -105,7 +113,8 @@ Fonts: Playfair Display (headings), Inter (body)
 |---------|---------|
 | ReservationKey | Booking iframe at `/book` |
 | Matterport | 3D tour iframe at `/tour` (ID: zrMG54r6RUx) |
-| Tawk.to | Live chat (toggle-able via admin) |
+| Tawk.to | Live chat (toggle-able via admin, suppressed when AI chat active) |
+| Anthropic Claude | AI chat concierge (toggle-able via admin `aiChatEnabled`) |
 | Google Analytics 4 | Tracking (G-2V4YH9H12C, consent-based) |
 | Google Translate | Translation widget |
 | Open-Meteo | Weather API (free, no key) |
@@ -115,7 +124,7 @@ Fonts: Playfair Display (headings), Inter (body)
 
 ## Security Headers (netlify.toml)
 
-CSP configured for all external scripts/frames. SRI hashes on Chart.js and Leaflet. X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy all set.
+CSP configured for all external scripts/frames. SRI hashes on Chart.js and Leaflet. X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy all set. When adding new external services, update the CSP in `netlify.toml` (script-src, connect-src, frame-src as needed).
 
 ## TypeScript
 
