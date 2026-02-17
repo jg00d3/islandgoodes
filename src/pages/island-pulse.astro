@@ -1,0 +1,350 @@
+---
+import PreviewLayout from '../layouts/PreviewLayout.astro';
+import articles from '../data/island-pulse-data.json';
+
+const title = "Island Pulse: Daily Big Island Hawaii News & Updates";
+const description = "Stay current with daily Big Island Hawaii updates — volcano activity, travel news, local events, and insider tips from Island Goodes in Papaikou near Hilo.";
+
+// Format date for display
+function formatDate(isoDate) {
+  const d = new Date(isoDate);
+  return d.toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'Pacific/Honolulu'
+  });
+}
+
+// Schema.org structured data for the article collection
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": title,
+  "description": description,
+  "url": "https://www.islandgoodes.com/island-pulse",
+  "publisher": {
+    "@type": "LodgingBusiness",
+    "name": "Island Goodes",
+    "url": "https://www.islandgoodes.com"
+  },
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": articles.slice(0, 30).map((article, i) => ({
+      "@type": "ListItem",
+      "position": i + 1,
+      "item": {
+        "@type": "Article",
+        "headline": article.title,
+        "description": article.metaDescription || '',
+        "datePublished": article.date,
+        "author": {
+          "@type": "Organization",
+          "name": "Island Goodes"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Island Goodes",
+          "url": "https://www.islandgoodes.com"
+        }
+      }
+    }))
+  }
+};
+---
+
+<PreviewLayout
+  title={title}
+  description={description}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+
+  <section class="pulse-hero">
+    <div class="pulse-hero-content">
+      <h1>Island Pulse</h1>
+      <p class="pulse-subtitle">Daily Big Island Updates</p>
+      <p class="pulse-tagline">Your daily digest of volcano activity, travel news, local events, and insider tips from Hawaii's Hamakua Coast.</p>
+    </div>
+  </section>
+
+  <main class="pulse-main">
+    <div class="pulse-container">
+      {articles.length === 0 ? (
+        <div class="pulse-empty">
+          <h2>Coming Soon</h2>
+          <p>Island Pulse launches soon with daily updates about life on the Big Island of Hawaii. Check back tomorrow for our first edition!</p>
+          <p>In the meantime, explore our <a href="/blog">travel blog</a> and <a href="/guide">destination guide</a> for everything you need to know about visiting Hilo and the Hamakua Coast.</p>
+        </div>
+      ) : (
+        <div class="pulse-articles">
+          {articles.map((article) => (
+            <article class="pulse-article" id={article.id}>
+              <div class="pulse-date">{formatDate(article.date)}</div>
+              <h2>{article.title}</h2>
+              <div class="pulse-body">
+                {article.body.split('\n\n').map((paragraph) => (
+                  <p>{paragraph}</p>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+
+      <aside class="pulse-cta">
+        <h3>Plan Your Big Island Getaway</h3>
+        <p>Island Goodes is an adults-only oceanview retreat in Papaikou, just minutes from Hilo. Wake up to panoramic ocean views and explore everything the Big Island has to offer.</p>
+        <div class="pulse-cta-links">
+          <a href="/rooms" class="pulse-btn-primary">View Our Rooms</a>
+          <a href="/guide" class="pulse-btn-secondary">Destination Guide</a>
+          <a href="/blog" class="pulse-btn-secondary">Travel Blog</a>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <style>
+    .pulse-hero {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+      color: white;
+      padding: 4rem 1.5rem 3rem;
+      text-align: center;
+    }
+
+    .pulse-hero-content {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .pulse-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      margin: 0 0 0.5rem;
+      color: white;
+    }
+
+    .pulse-subtitle {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--color-secondary);
+      margin: 0 0 1rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .pulse-tagline {
+      font-size: 1.05rem;
+      opacity: 0.9;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .pulse-main {
+      padding: 3rem 1.5rem;
+      background: var(--color-bg-alt);
+      min-height: 50vh;
+    }
+
+    .pulse-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Empty state */
+    .pulse-empty {
+      background: var(--color-bg);
+      border-radius: 12px;
+      padding: 3rem 2rem;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .pulse-empty h2 {
+      font-family: 'Playfair Display', serif;
+      color: var(--color-primary);
+      margin: 0 0 1rem;
+      font-size: 1.8rem;
+    }
+
+    .pulse-empty p {
+      color: var(--color-text-light);
+      line-height: 1.7;
+      margin: 0 0 1rem;
+    }
+
+    .pulse-empty a {
+      color: var(--color-primary);
+      text-decoration: underline;
+    }
+
+    /* Articles */
+    .pulse-articles {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .pulse-article {
+      background: var(--color-bg);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      border-left: 4px solid var(--color-primary);
+    }
+
+    .pulse-date {
+      font-size: 0.85rem;
+      color: var(--color-text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.5rem;
+    }
+
+    .pulse-article h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--color-text);
+      margin: 0 0 1rem;
+      line-height: 1.3;
+    }
+
+    .pulse-body p {
+      color: var(--color-text);
+      line-height: 1.7;
+      margin: 0 0 1rem;
+    }
+
+    .pulse-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* CTA section */
+    .pulse-cta {
+      margin-top: 3rem;
+      background: var(--color-bg);
+      border-radius: 12px;
+      padding: 2.5rem;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .pulse-cta h3 {
+      font-family: 'Playfair Display', serif;
+      color: var(--color-primary);
+      font-size: 1.5rem;
+      margin: 0 0 0.75rem;
+    }
+
+    .pulse-cta p {
+      color: var(--color-text-light);
+      line-height: 1.6;
+      margin: 0 0 1.5rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .pulse-cta-links {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .pulse-btn-primary {
+      display: inline-block;
+      background: var(--color-primary);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .pulse-btn-primary:hover {
+      background: var(--color-primary-dark);
+    }
+
+    .pulse-btn-secondary {
+      display: inline-block;
+      background: transparent;
+      color: var(--color-primary);
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      border: 2px solid var(--color-primary);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .pulse-btn-secondary:hover {
+      background: var(--color-primary);
+      color: white;
+    }
+
+    /* Dark mode */
+    :global([data-theme="dark"]) .pulse-article {
+      background: #1e1e1e;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    :global([data-theme="dark"]) .pulse-article h2 {
+      color: #e0e0e0;
+    }
+
+    :global([data-theme="dark"]) .pulse-body p {
+      color: #ccc;
+    }
+
+    :global([data-theme="dark"]) .pulse-empty {
+      background: #1e1e1e;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    :global([data-theme="dark"]) .pulse-cta {
+      background: #1e1e1e;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    :global([data-theme="dark"]) .pulse-main {
+      background: #121212;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 640px) {
+      .pulse-hero {
+        padding: 3rem 1rem 2rem;
+      }
+
+      .pulse-hero h1 {
+        font-size: 2rem;
+      }
+
+      .pulse-article {
+        padding: 1.5rem;
+      }
+
+      .pulse-article h2 {
+        font-size: 1.25rem;
+      }
+
+      .pulse-cta {
+        padding: 1.5rem;
+      }
+
+      .pulse-cta-links {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .pulse-btn-primary,
+      .pulse-btn-secondary {
+        width: 100%;
+        max-width: 250px;
+        text-align: center;
+      }
+    }
+  </style>
+</PreviewLayout>

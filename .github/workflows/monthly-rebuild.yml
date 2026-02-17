@@ -1,9 +1,9 @@
-name: Monthly Site Rebuild
+name: Daily Site Rebuild
 
 on:
   schedule:
-    # 1st of every month at 10:00 UTC (midnight HST)
-    - cron: '0 10 1 * *'
+    # Daily at 4:00 PM UTC (6:00 AM HST) — rebuilds site with latest Island Pulse content
+    - cron: '0 16 * * *'
   workflow_dispatch: # Allow manual trigger from GitHub UI
 
 jobs:

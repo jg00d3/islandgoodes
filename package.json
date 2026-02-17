@@ -6,13 +6,14 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "node scripts/extract-knowledge-base.mjs && astro build",
+    "build": "node scripts/extract-knowledge-base.mjs && node scripts/build-island-pulse.mjs && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
     "@google-analytics/data": "^5.2.1",
     "@netlify/blobs": "^10.5.0",
+    "@netlify/functions": "^3.0.0",
     "astro": "^5.0.0",
     "bcryptjs": "^3.0.3",
     "resend": "^6.7.0",
