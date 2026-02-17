@@ -27,5 +27,8 @@ pnpm-debug.log*
 CLAUDES PICTURES/
 CLAUDES PICTURES.zip
 
+# Generated knowledge base (build artifact)
+netlify/functions/knowledge-base.js
+
 # Local Netlify folder
 .netlify
