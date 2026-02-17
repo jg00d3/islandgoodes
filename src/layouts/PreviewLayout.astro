@@ -2819,6 +2819,8 @@ const isActive = (path: string) => {
   var conversationHistory = [];
   var isOpen = false;
   var isSending = false;
+  var messageCount = 0;
+  var MESSAGE_LIMIT = 20;
 
   function toggleChat() {
     isOpen = !isOpen;
@@ -2879,8 +2881,9 @@ const isActive = (path: string) => {
   }
 
   async function sendMessage(text) {
-    if (isSending || !text.trim()) return;
+    if (isSending || !text.trim() || messageCount >= MESSAGE_LIMIT) return;
     isSending = true;
+    messageCount++;
 
     // Remove suggestions after first message
     if (suggestionsEl) suggestionsEl.remove();
@@ -2928,6 +2931,14 @@ const isActive = (path: string) => {
     }
 
     isSending = false;
+
+    // Disable input after reaching message limit
+    if (messageCount >= MESSAGE_LIMIT) {
+      inputEl.disabled = true;
+      inputEl.placeholder = 'Chat limit reached';
+      sendBtn.disabled = true;
+      addMessage('assistant', 'You\'ve reached the chat limit for this session. For more help, call us at 808-964-2291 or book at islandgoodes.com/book.');
+    }
   }
 
   // Event listeners
