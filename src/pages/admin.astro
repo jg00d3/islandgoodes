@@ -422,6 +422,23 @@ const pageTip = "Website analytics and admin tools";
               </div>
             </div>
           </div>
+          <div class="stat-card">
+            <div class="stat-period">AI Chat</div>
+            <div class="stat-row">
+              <div class="stat-item">
+                <span class="stat-value" id="aiChatToday">-</span>
+                <span class="stat-label">Today</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="aiChatMonth">-</span>
+                <span class="stat-label">This Month</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="aiChatCost">-</span>
+                <span class="stat-label">Est. Cost</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -887,7 +904,7 @@ const pageTip = "Website analytics and admin tools";
 
   .stats-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
   }
 
@@ -1440,7 +1457,7 @@ const pageTip = "Website analytics and admin tools";
   /* Responsive */
   @media (max-width: 1024px) {
     .stats-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, 1fr);
     }
     .dashboard-grid {
       grid-template-columns: 1fr;
@@ -2273,6 +2290,52 @@ const pageTip = "Website analytics and admin tools";
     setText('monthUsers', data.month?.users);
     setText('monthSessions', data.month?.sessions);
     setText('monthPageViews', data.month?.pageViews);
+
+    // AI Chat stats (loaded separately from Blobs)
+    loadAIChatStats();
+  }
+
+  async function loadAIChatStats() {
+    try {
+      const usage = await window.SharedData.getChatUsage();
+      const entries = Array.isArray(usage) ? usage : [];
+
+      if (entries.length === 0) {
+        setText('aiChatToday', '0');
+        setText('aiChatMonth', '0');
+        setText('aiChatCost', '$0');
+        return;
+      }
+
+      const now = new Date();
+      const todayStr = now.toISOString().slice(0, 10);
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+      let todayCount = 0;
+      let monthCount = 0;
+      let monthIn = 0;
+      let monthOut = 0;
+
+      for (const e of entries) {
+        const ts = new Date(e.timestamp);
+        if (e.timestamp.slice(0, 10) === todayStr) todayCount++;
+        if (ts >= monthStart) {
+          monthCount++;
+          monthIn += e.inputTokens || 0;
+          monthOut += e.outputTokens || 0;
+        }
+      }
+
+      const cost = (monthIn / 1_000_000) * 0.25 + (monthOut / 1_000_000) * 1.25;
+
+      setText('aiChatToday', String(todayCount));
+      setText('aiChatMonth', String(monthCount));
+      setText('aiChatCost', '$' + cost.toFixed(2));
+    } catch {
+      setText('aiChatToday', '0');
+      setText('aiChatMonth', '0');
+      setText('aiChatCost', '$0');
+    }
   }
 
   async function loadTrendData() {
