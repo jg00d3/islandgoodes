@@ -1,5 +1,27 @@
 // AI Chat Assistant powered by Claude
-// Handles both web chat and potential voice integrations
+// Handles both public guest chat and admin test chat
+
+// Simple in-memory rate limiting (resets on cold start)
+const rateLimitMap = new Map();
+const RATE_LIMIT = 10; // requests per window
+const RATE_WINDOW = 60 * 1000; // 1 minute
+
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+
+  if (!entry || now - entry.windowStart > RATE_WINDOW) {
+    rateLimitMap.set(ip, { windowStart: now, count: 1 });
+    return true;
+  }
+
+  if (entry.count >= RATE_LIMIT) {
+    return false;
+  }
+
+  entry.count++;
+  return true;
+}
 
 export async function handler(event) {
   // Only allow POST
@@ -11,7 +33,7 @@ export async function handler(event) {
   }
 
   try {
-    const { message, training, checkOnly } = JSON.parse(event.body);
+    const { message, messages, training, source, checkOnly } = JSON.parse(event.body);
 
     // Check if API is configured
     const apiKey = process.env.ANTHROPIC_API_KEY;
@@ -30,15 +52,43 @@ export async function handler(event) {
       };
     }
 
-    if (!message) {
+    // Rate limiting for public requests
+    if (source === 'public') {
+      const clientIp = event.headers['x-forwarded-for']?.split(',')[0]?.trim()
+        || event.headers['client-ip']
+        || 'unknown';
+
+      if (!checkRateLimit(clientIp)) {
+        return {
+          statusCode: 429,
+          body: JSON.stringify({ error: 'Too many requests. Please wait a moment before sending another message.' })
+        };
+      }
+    }
+
+    // Build conversation messages
+    let conversationMessages;
+
+    if (messages && Array.isArray(messages) && messages.length > 0) {
+      // Multi-turn: use the provided messages array
+      conversationMessages = messages.map(m => ({
+        role: m.role === 'assistant' ? 'assistant' : 'user',
+        content: String(m.content).slice(0, 2000)
+      }));
+    } else if (message) {
+      // Single message (backward compat)
+      conversationMessages = [{ role: 'user', content: String(message).slice(0, 2000) }];
+    } else {
       return {
         statusCode: 400,
         body: JSON.stringify({ error: 'Message is required' })
       };
     }
 
-    // Build the system prompt from training data
-    const systemPrompt = buildSystemPrompt(training || {});
+    // Build system prompt based on source
+    const systemPrompt = source === 'public'
+      ? buildPublicSystemPrompt()
+      : buildSystemPrompt(training || {});
 
     // Call Claude API
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -49,12 +99,10 @@ export async function handler(event) {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-haiku-20240307', // Fast and cost-effective for chat
+        model: 'claude-haiku-4-5-20251001',
         max_tokens: 500,
         system: systemPrompt,
-        messages: [
-          { role: 'user', content: message }
-        ]
+        messages: conversationMessages
       })
     });
 
@@ -85,6 +133,80 @@ export async function handler(event) {
       body: JSON.stringify({ error: 'Internal server error' })
     };
   }
+}
+
+function buildPublicSystemPrompt() {
+  return `You are the friendly virtual concierge for Island Goodes, an adults-only (18+) oceanview vacation rental in Papaikou, Hawaii, just minutes from Hilo.
+
+PERSONALITY & TONE:
+- Warm, welcoming Hawaiian hospitality. Use "Aloha" as a greeting when starting conversations.
+- Keep responses concise — 2-4 sentences is ideal, no more than a short paragraph.
+- Be enthusiastic but honest. Never make up information.
+- If you're unsure about something specific, suggest contacting the hosts.
+
+PROPERTY OVERVIEW:
+- Name: Island Goodes
+- Type: Adults-only (18+) vacation rental — NOT clothing-optional, just no children
+- No breakfast service (despite "B&B" appearance — it's a traditional accommodation)
+- Location: 27-2365 Hawaii Belt Rd, Papaikou, HI 96781 (Big Island, 10 min north of Hilo)
+- Phone: 808-964-2291
+- Website: www.islandgoodes.com
+- Permit: #SPP 13-000151
+- Hosts: Darren & Lyle
+
+ROOMS & RATES:
+1. Hilo Bay Room — $225/night. Ocean-facing with panoramic Hilo Bay views. Premium room.
+2. Orchid Room — $225/night. Tropical garden views with elegant orchid decor.
+3. Mauna Kea Room — $195/night. Mountain views toward Mauna Kea volcano.
+4. Ginger Room — $195/night. Garden-view room with warm ginger-themed decor.
+- Tax rate: 18.72% (Hawaii TAT + GET)
+- All rates are per night, before tax
+- Book at: islandgoodes.com/book or call 808-964-2291
+
+AMENITIES:
+- Free WiFi throughout the property
+- Free on-site parking
+- Hot tub / spa
+- Stunning ocean views from common areas
+- Tropical garden setting on a lush property
+- Shared kitchen and common areas
+- Each room has a private bathroom
+- Air conditioning
+- No smoking on property
+
+LOCATION & NEARBY:
+- 10 minutes north of Hilo on the scenic Hamakua Coast
+- Close to Akaka Falls State Park (15 min drive)
+- Hawaii Tropical Bioreserve & Garden nearby
+- Hilo Farmers Market (open Wed & Sat, 10 min drive)
+- Rainbow Falls (10 min drive)
+- Volcanoes National Park (45 min drive)
+- Mauna Kea Observatory (1.5 hr drive)
+- Zip-lining, waterfall hikes, snorkeling all nearby
+- Hilo International Airport (ITO) is the nearest airport (15 min)
+
+PETS & ANIMALS:
+- Guests cannot bring pets
+- The property has friendly resident animals that guests may encounter
+- Cats and other animals roam the tropical grounds
+
+POLICIES:
+- Adults only — all guests must be 18 or older
+- Check-in: 3:00 PM / Check-out: 11:00 AM
+- No smoking anywhere on property
+- Quiet hours observed
+- For full policies, visit: islandgoodes.com/policies
+
+WHAT TO SAY IF ASKED ABOUT:
+- Availability or specific dates: "I don't have real-time availability — please check islandgoodes.com/book or call 808-964-2291."
+- Cancellation policy: Direct them to the booking page or to call.
+- Things outside your knowledge: Suggest contacting the hosts directly.
+
+CONTACT INFORMATION:
+- Website: www.islandgoodes.com
+- Phone: 808-964-2291
+- Booking: islandgoodes.com/book
+- Address: 27-2365 Hawaii Belt Rd, Papaikou, HI 96781`;
 }
 
 function buildSystemPrompt(training) {
