@@ -165,8 +165,27 @@ async function generateArticle(headlines, volcanoData) {
   const text = data.content?.[0]?.text;
   if (!text) throw new Error('Empty response from Claude');
 
-  // Parse JSON response
-  const article = JSON.parse(text);
+  // Parse JSON response — sanitize control characters inside string values
+  // Claude often puts literal newlines in JSON string values
+  const sanitized = text.replace(/(?<=:\s*")([\s\S]*?)(?="(?:\s*[,}]))/g, (match) =>
+    match.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t')
+  );
+
+  let article;
+  try {
+    article = JSON.parse(sanitized);
+  } catch {
+    // Fallback: extract fields manually with regex
+    const titleMatch = text.match(/"title"\s*:\s*"((?:[^"\\]|\\.)*)"/);
+    const metaMatch = text.match(/"metaDescription"\s*:\s*"((?:[^"\\]|\\.)*)"/);
+    const bodyMatch = text.match(/"body"\s*:\s*"([\s\S]*)"?\s*\}$/);
+    if (!titleMatch || !bodyMatch) throw new Error('Could not parse Claude response as JSON');
+    article = {
+      title: titleMatch[1],
+      metaDescription: metaMatch ? metaMatch[1] : '',
+      body: bodyMatch[1].replace(/\\n/g, '\n').replace(/\\"/g, '"').replace(/"\s*$/, '')
+    };
+  }
 
   if (!article.title || !article.body) {
     throw new Error('Invalid article format from Claude');
