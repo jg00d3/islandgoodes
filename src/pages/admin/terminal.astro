@@ -2,13 +2,12 @@
 import AdminLayout from '../../layouts/AdminLayout.astro';
 
 const title = "Secure Terminal";
-const description = "Web-based terminal access";
+const description = "Web-based terminal access with session management";
 const pageTitle = "Secure Terminal";
 const pageTip = "Select: Shift+drag | Copy: Ctrl+C | Paste: Ctrl+Shift+V";
 
-// Terminal server - Tailscale HTTPS with Duo MFA (not accessible from public internet)
 const TERMINAL_URL = "https://dev.tail68ddf4.ts.net";
-const API_URL = "https://dev.tail68ddf4.ts.net/api";
+const API_URL = "https://dev.tail68ddf4.ts.net";
 ---
 
 <AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
@@ -23,12 +22,44 @@ const API_URL = "https://dev.tail68ddf4.ts.net/api";
           <p>Connect to your development server via Tailscale + Duo MFA</p>
         </div>
         <div class="dash-actions">
+          <span id="healthBadge" class="health-badge" title="API health status">--</span>
           <button id="refreshBtn" class="btn btn-sm" title="Refresh sessions">
-            <span class="btn-icon">↻</span> Refresh
+            <span class="btn-icon">&#8635;</span> Refresh
           </button>
           <button id="newSessionBtn" class="btn btn-sm btn-primary" title="Create new session">
             <span class="btn-icon">+</span> New Session
           </button>
+        </div>
+      </div>
+
+      <!-- Server Stats Panel -->
+      <div id="serverStats" class="server-stats">
+        <div class="stat-card">
+          <div class="stat-label">Host</div>
+          <div class="stat-value" id="statHostname">--</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">CPU</div>
+          <div class="stat-value" id="statCpu">--%</div>
+          <div class="stat-sub" id="statCpuDetail">-- cores</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Memory</div>
+          <div class="stat-value" id="statMem">-- / -- MB</div>
+          <div class="stat-bar"><div class="stat-bar-fill" id="memBar"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Disk</div>
+          <div class="stat-value" id="statDisk">-- / -- MB</div>
+          <div class="stat-bar"><div class="stat-bar-fill" id="diskBar"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Uptime</div>
+          <div class="stat-value" id="statUptime">--</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Load Avg</div>
+          <div class="stat-value" id="statLoad">--</div>
         </div>
       </div>
 
@@ -45,15 +76,87 @@ const API_URL = "https://dev.tail68ddf4.ts.net/api";
       <!-- Security Badge -->
       <div class="security-footer">
         <div class="tailscale-badge">
-          <span class="ts-icon">🔒</span> Tailscale VPN + Duo MFA Required
+          <span class="ts-icon">&#128274;</span> Tailscale VPN + Duo MFA Required
         </div>
+        <span id="autoRefreshLabel" class="auto-refresh-label">Auto-refresh: 5s</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Session Modal -->
+  <div id="newSessionModal" class="modal-overlay" style="display: none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Create New Session</h3>
+        <button class="modal-close" onclick="closeNewSessionModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="sessionName">Session Name</label>
+          <input type="text" id="sessionName" placeholder="my-session" pattern="[a-zA-Z0-9_-]+" />
+          <small>Letters, numbers, hyphens, underscores only</small>
+        </div>
+        <div class="form-group">
+          <label for="sessionDir">Working Directory (optional)</label>
+          <input type="text" id="sessionDir" placeholder="/home/termuser/projects" />
+        </div>
+        <div class="form-group">
+          <label for="sessionCmd">Startup Command (optional)</label>
+          <input type="text" id="sessionCmd" placeholder="npm run dev" />
+        </div>
+        <div class="form-group">
+          <label>Or use a template:</label>
+          <div id="templateBtns" class="template-btns"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm" onclick="closeNewSessionModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitNewSession()">Create Session</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preview Modal -->
+  <div id="previewModal" class="modal-overlay" style="display: none;">
+    <div class="modal modal-wide">
+      <div class="modal-header">
+        <h3>Preview: <span id="previewSessionName"></span></h3>
+        <button class="modal-close" onclick="closePreviewModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <pre id="previewOutput" class="preview-output"></pre>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm" onclick="closePreviewModal()">Close</button>
+        <button class="btn btn-sm" id="previewRefreshBtn">Refresh</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Command Modal -->
+  <div id="commandModal" class="modal-overlay" style="display: none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Run Command: <span id="commandSessionName"></span></h3>
+        <button class="modal-close" onclick="closeCommandModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="commandInput">Command</label>
+          <input type="text" id="commandInput" placeholder="ls -la" />
+          <small>Press Enter or click Send to execute</small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm" onclick="closeCommandModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitCommand()">Send</button>
       </div>
     </div>
   </div>
 
   <div id="accessDenied" class="access-denied" style="display: none;">
     <div class="denied-content">
-      <div class="denied-icon">🔐</div>
+      <div class="denied-icon">&#128272;</div>
       <h2>Admin Access Required</h2>
       <p>You must be logged in as an admin to access the terminal.</p>
       <p class="tailscale-note">Note: Terminal requires Tailscale VPN + Duo MFA approval.</p>
@@ -62,10 +165,14 @@ const API_URL = "https://dev.tail68ddf4.ts.net/api";
   </div>
 </AdminLayout>
 
+<script is:inline src="/js/shared-data.js"></script>
 <script is:inline>
   const SESSION_KEY = 'islandgoodes_admin_session';
   const TERMINAL_URL = 'https://dev.tail68ddf4.ts.net';
-  const API_URL = 'https://dev.tail68ddf4.ts.net/api';
+  const API_URL = 'https://dev.tail68ddf4.ts.net';
+  let refreshInterval = null;
+  let currentCommandSession = null;
+  let currentPreviewSession = null;
 
   function getSession() {
     try {
@@ -79,104 +186,366 @@ const API_URL = "https://dev.tail68ddf4.ts.net/api";
   if (session) {
     document.getElementById('terminal-page').style.display = 'block';
     loadSessions();
+    loadTemplates();
+    startAutoRefresh();
   } else {
     document.getElementById('accessDenied').style.display = 'flex';
   }
+
+  // ============== DATA LOADING ==============
 
   async function loadSessions() {
     const grid = document.getElementById('sessionsGrid');
 
     try {
-      const response = await fetch(`${API_URL}/sessions`);
+      const response = await fetch(API_URL + '/api/tmux-sessions');
+      if (!response.ok) throw new Error('API returned ' + response.status);
       const data = await response.json();
 
+      // Update server stats
+      if (data.server) updateServerStats(data.server);
+
+      // Update health badge
+      document.getElementById('healthBadge').textContent = 'Connected';
+      document.getElementById('healthBadge').className = 'health-badge health-ok';
+
       if (data.sessions && data.sessions.length > 0) {
-        grid.innerHTML = data.sessions.map(s => `
-          <div class="session-card ${s.status === 'attached' ? 'attached' : ''}">
-            <div class="session-icon">
-              ${s.status === 'attached' ? '🟢' : '⚫'}
-            </div>
-            <div class="session-info">
-              <h3>${escapeHtml(s.name)}</h3>
-              <p>${s.windows} window${s.windows !== 1 ? 's' : ''} • ${s.status}</p>
-            </div>
-            <button class="btn btn-open" onclick="openSession('${escapeHtml(s.name)}')">
-              Open
-            </button>
-          </div>
-        `).join('');
+        grid.innerHTML = data.sessions.map(s => renderSessionCard(s)).join('');
       } else {
-        grid.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">📺</div>
-            <h3>No Active Sessions</h3>
-            <p>Create a new session to get started</p>
-            <button class="btn btn-primary" onclick="createNewSession()">
-              <span class="btn-icon">+</span> Create Session
-            </button>
-          </div>
-        `;
+        grid.innerHTML = '<div class="empty-state">' +
+          '<div class="empty-icon">&#128250;</div>' +
+          '<h3>No Active Sessions</h3>' +
+          '<p>Create a new session to get started</p>' +
+          '<button class="btn btn-primary" onclick="openNewSessionModal()">' +
+          '<span class="btn-icon">+</span> Create Session</button></div>';
       }
     } catch (error) {
-      grid.innerHTML = `
-        <div class="error-state">
-          <div class="error-icon">⚠️</div>
-          <h3>Cannot Connect to Server</h3>
-          <p>Make sure you're connected to Tailscale VPN</p>
-          <button class="btn btn-sm" onclick="loadSessions()">Try Again</button>
-        </div>
-      `;
+      document.getElementById('healthBadge').textContent = 'Disconnected';
+      document.getElementById('healthBadge').className = 'health-badge health-err';
+      grid.innerHTML = '<div class="error-state">' +
+        '<div class="error-icon">&#9888;&#65039;</div>' +
+        '<h3>Cannot Connect to Server</h3>' +
+        '<p>Make sure you\'re connected to Tailscale VPN</p>' +
+        '<p class="error-detail">' + escapeHtml(error.message) + '</p>' +
+        '<button class="btn btn-sm" onclick="loadSessions()">Try Again</button></div>';
     }
   }
 
+  function renderSessionCard(s) {
+    const isAttached = s.attached > 0;
+    const statusClass = isAttached ? 'attached' : '';
+    const statusDot = isAttached ? '&#128994;' : '&#9899;';
+    const statusText = isAttached ? 'attached' : 'detached';
+    const created = s.created ? new Date(s.created * 1000).toLocaleString() : 'Unknown';
+    const gitInfo = s.gitBranch ? '<span class="git-branch" title="Git branch">&#9739; ' + escapeHtml(s.gitBranch) + '</span>' : '';
+    const cmds = s.commands && s.commands.length > 0
+      ? '<span class="session-cmds" title="Running commands">' + s.commands.map(c => escapeHtml(c)).join(', ') + '</span>'
+      : '';
+
+    return '<div class="session-card ' + statusClass + '">' +
+      '<div class="session-main">' +
+        '<div class="session-header">' +
+          '<span class="session-status">' + statusDot + '</span>' +
+          '<h3>' + escapeHtml(s.name) + '</h3>' +
+          gitInfo +
+        '</div>' +
+        '<div class="session-meta">' +
+          '<span>' + s.windows + ' win / ' + s.panes + ' pane' + (s.panes !== 1 ? 's' : '') + '</span>' +
+          '<span class="sep">|</span>' +
+          '<span>' + statusText + '</span>' +
+          '<span class="sep">|</span>' +
+          '<span title="Created">' + created + '</span>' +
+        '</div>' +
+        '<div class="session-stats">' +
+          '<span class="stat-chip" title="CPU">CPU ' + (s.cpu || 0) + '%</span>' +
+          '<span class="stat-chip" title="Memory">MEM ' + (s.memory || 0) + '%</span>' +
+          cmds +
+        '</div>' +
+      '</div>' +
+      '<div class="session-actions">' +
+        '<button class="btn btn-open" onclick="openSession(\'' + escapeHtml(s.name) + '\')" title="Open terminal">Open</button>' +
+        '<button class="btn btn-sm btn-icon-only" onclick="showPreview(\'' + escapeHtml(s.name) + '\')" title="Preview output">&#128065;</button>' +
+        '<button class="btn btn-sm btn-icon-only" onclick="showCommandModal(\'' + escapeHtml(s.name) + '\')" title="Run command">&#9654;</button>' +
+        '<button class="btn btn-sm btn-icon-only btn-danger" onclick="confirmKillSession(\'' + escapeHtml(s.name) + '\')" title="Kill session">&#10005;</button>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function updateServerStats(srv) {
+    document.getElementById('statHostname').textContent = srv.hostname || '--';
+    document.getElementById('statCpu').textContent = (srv.cpu != null ? srv.cpu + '%' : '--%');
+    document.getElementById('statCpuDetail').textContent = srv.cpuCores + ' cores';
+
+    if (srv.memory) {
+      document.getElementById('statMem').textContent = srv.memory.used + ' / ' + srv.memory.total + ' MB';
+      const memPct = srv.memory.total > 0 ? Math.round((srv.memory.used / srv.memory.total) * 100) : 0;
+      const memBar = document.getElementById('memBar');
+      memBar.style.width = memPct + '%';
+      memBar.className = 'stat-bar-fill' + (memPct > 80 ? ' bar-warn' : memPct > 60 ? ' bar-mid' : '');
+    }
+
+    if (srv.disk) {
+      document.getElementById('statDisk').textContent = srv.disk.used + ' / ' + srv.disk.total + ' MB (' + srv.disk.percent + '%)';
+      const diskBar = document.getElementById('diskBar');
+      diskBar.style.width = srv.disk.percent + '%';
+      diskBar.className = 'stat-bar-fill' + (srv.disk.percent > 80 ? ' bar-warn' : srv.disk.percent > 60 ? ' bar-mid' : '');
+    }
+
+    if (srv.uptime != null) {
+      const d = Math.floor(srv.uptime / 86400);
+      const h = Math.floor((srv.uptime % 86400) / 3600);
+      const m = Math.floor((srv.uptime % 3600) / 60);
+      document.getElementById('statUptime').textContent = (d > 0 ? d + 'd ' : '') + h + 'h ' + m + 'm';
+    }
+
+    if (srv.loadAvg) {
+      document.getElementById('statLoad').textContent = srv.loadAvg.join(' / ');
+    }
+  }
+
+  async function loadTemplates() {
+    try {
+      const res = await fetch(API_URL + '/api/templates');
+      const data = await res.json();
+      if (data.success && data.templates) {
+        const container = document.getElementById('templateBtns');
+        container.innerHTML = Object.entries(data.templates).map(function(entry) {
+          var id = entry[0], t = entry[1];
+          return '<button class="btn btn-sm template-btn" data-template="' + id + '" title="' + escapeHtml(t.description) + '">' +
+            escapeHtml(t.name) + '</button>';
+        }).join('');
+        container.querySelectorAll('.template-btn').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            container.querySelectorAll('.template-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.toggle('active');
+          });
+        });
+      }
+    } catch {}
+  }
+
+  // ============== SESSION ACTIONS ==============
+
+  function openSession(sessionName) {
+    logActivity('terminal:open', 'Opened terminal session', sessionName);
+    window.open(
+      TERMINAL_URL + '/terminal/?arg=' + encodeURIComponent(sessionName),
+      'terminal-' + sessionName + '-' + Date.now(),
+      'width=1200,height=800'
+    );
+  }
+
+  function confirmKillSession(sessionName) {
+    if (!confirm('Kill session "' + sessionName + '"? This cannot be undone.')) return;
+    killSession(sessionName);
+  }
+
+  async function killSession(sessionName) {
+    try {
+      const res = await fetch(API_URL + '/api/tmux-sessions/' + encodeURIComponent(sessionName), {
+        method: 'DELETE'
+      });
+      const data = await res.json();
+      if (data.success) {
+        logActivity('terminal:kill', 'Killed terminal session', sessionName);
+        loadSessions();
+      } else {
+        alert('Failed to kill session: ' + (data.error || 'Unknown error'));
+      }
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
+  }
+
+  async function showPreview(sessionName) {
+    currentPreviewSession = sessionName;
+    document.getElementById('previewSessionName').textContent = sessionName;
+    document.getElementById('previewOutput').textContent = 'Loading...';
+    document.getElementById('previewModal').style.display = 'flex';
+
+    try {
+      const res = await fetch(API_URL + '/api/tmux-sessions/' + encodeURIComponent(sessionName) + '/preview?lines=80');
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById('previewOutput').textContent = data.lines.join('\n');
+      } else {
+        document.getElementById('previewOutput').textContent = 'Error: ' + (data.error || 'Unknown');
+      }
+    } catch (err) {
+      document.getElementById('previewOutput').textContent = 'Error: ' + err.message;
+    }
+  }
+
+  function closePreviewModal() {
+    document.getElementById('previewModal').style.display = 'none';
+    currentPreviewSession = null;
+  }
+
+  function showCommandModal(sessionName) {
+    currentCommandSession = sessionName;
+    document.getElementById('commandSessionName').textContent = sessionName;
+    document.getElementById('commandInput').value = '';
+    document.getElementById('commandModal').style.display = 'flex';
+    setTimeout(function() { document.getElementById('commandInput').focus(); }, 100);
+  }
+
+  function closeCommandModal() {
+    document.getElementById('commandModal').style.display = 'none';
+    currentCommandSession = null;
+  }
+
+  async function submitCommand() {
+    var command = document.getElementById('commandInput').value.trim();
+    if (!command || !currentCommandSession) return;
+
+    try {
+      var res = await fetch(API_URL + '/api/tmux-sessions/' + encodeURIComponent(currentCommandSession) + '/command', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ command: command })
+      });
+      var data = await res.json();
+      if (data.success) {
+        logActivity('terminal:command', 'Ran command in session', currentCommandSession + ': ' + command);
+        closeCommandModal();
+        loadSessions();
+      } else {
+        alert('Failed: ' + (data.error || 'Unknown error'));
+      }
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
+  }
+
+  // ============== NEW SESSION ==============
+
+  function openNewSessionModal() {
+    document.getElementById('sessionName').value = '';
+    document.getElementById('sessionDir').value = '';
+    document.getElementById('sessionCmd').value = '';
+    document.querySelectorAll('.template-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.getElementById('newSessionModal').style.display = 'flex';
+    setTimeout(function() { document.getElementById('sessionName').focus(); }, 100);
+  }
+
+  function closeNewSessionModal() {
+    document.getElementById('newSessionModal').style.display = 'none';
+  }
+
+  async function submitNewSession() {
+    var name = document.getElementById('sessionName').value.trim();
+    if (!name) { name = 'session-' + Date.now().toString(36); }
+    if (!/^[a-zA-Z0-9_-]+$/.test(name)) {
+      alert('Session name can only contain letters, numbers, hyphens, and underscores.');
+      return;
+    }
+
+    var workingDir = document.getElementById('sessionDir').value.trim() || null;
+    var command = document.getElementById('sessionCmd').value.trim() || null;
+    var activeTemplate = document.querySelector('.template-btn.active');
+    var templateId = activeTemplate ? activeTemplate.dataset.template : null;
+
+    try {
+      var res = await fetch(API_URL + '/api/tmux-sessions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, command: command, workingDir: workingDir })
+      });
+      var data = await res.json();
+      if (data.success) {
+        logActivity('terminal:create', 'Created terminal session', name);
+        // Apply template if selected
+        if (templateId) {
+          await fetch(API_URL + '/api/tmux-sessions/' + encodeURIComponent(name) + '/template', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ templateId: templateId })
+          });
+        }
+        closeNewSessionModal();
+        loadSessions();
+      } else {
+        alert('Failed: ' + (data.error || 'Unknown error'));
+      }
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
+  }
+
+  // ============== AUTO-REFRESH ==============
+
+  function startAutoRefresh() {
+    if (refreshInterval) clearInterval(refreshInterval);
+    refreshInterval = setInterval(loadSessions, 5000);
+  }
+
+  // ============== UTILITIES ==============
+
   function escapeHtml(text) {
-    const div = document.createElement('div');
+    var div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
   }
 
-  async function openSession(sessionName) {
+  async function logActivity(type, action, details) {
     try {
-      // Tell API which session to connect to
-      await fetch(`${API_URL}/connect/${encodeURIComponent(sessionName)}`, {
-        method: 'POST'
-      });
-      // Open terminal in new window
-      window.open(TERMINAL_URL, `terminal-${sessionName}-${Date.now()}`, 'width=1200,height=800');
-    } catch (error) {
-      alert('Failed to initiate connection. Make sure Tailscale is connected.');
-    }
+      if (window.SharedData && window.SharedData.logActivity) {
+        await window.SharedData.logActivity(type, action, details);
+      }
+    } catch {}
   }
 
-  async function createNewSession() {
-    const name = prompt('Enter session name (or leave blank for auto-generated):');
-    if (name === null) return; // Cancelled
+  // ============== EVENT LISTENERS ==============
 
-    const sessionName = name.trim() || `session-${Date.now().toString(36)}`;
+  document.getElementById('refreshBtn').addEventListener('click', loadSessions);
+  document.getElementById('newSessionBtn').addEventListener('click', openNewSessionModal);
 
-    try {
-      await fetch(`${API_URL}/connect/${encodeURIComponent(sessionName)}`, {
-        method: 'POST'
+  document.getElementById('previewRefreshBtn').addEventListener('click', function() {
+    if (currentPreviewSession) showPreview(currentPreviewSession);
+  });
+
+  document.getElementById('commandInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') submitCommand();
+  });
+
+  // Close modals on overlay click
+  document.querySelectorAll('.modal-overlay').forEach(function(el) {
+    el.addEventListener('click', function(e) {
+      if (e.target === el) {
+        el.style.display = 'none';
+        currentCommandSession = null;
+        currentPreviewSession = null;
+      }
+    });
+  });
+
+  // Close modals on Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay').forEach(function(el) {
+        el.style.display = 'none';
       });
-      window.open(TERMINAL_URL, `terminal-${sessionName}-${Date.now()}`, 'width=1200,height=800');
-      // Refresh list after a delay
-      setTimeout(loadSessions, 2000);
-    } catch (error) {
-      alert('Failed to create session. Make sure Tailscale is connected.');
+      currentCommandSession = null;
+      currentPreviewSession = null;
     }
-  }
-
-  // Event listeners
-  document.getElementById('refreshBtn')?.addEventListener('click', loadSessions);
-  document.getElementById('newSessionBtn')?.addEventListener('click', createNewSession);
+  });
 
   // Make functions available globally for onclick handlers
   window.openSession = openSession;
-  window.createNewSession = createNewSession;
+  window.confirmKillSession = confirmKillSession;
+  window.showPreview = showPreview;
+  window.showCommandModal = showCommandModal;
+  window.openNewSessionModal = openNewSessionModal;
+  window.closeNewSessionModal = closeNewSessionModal;
+  window.submitNewSession = submitNewSession;
+  window.closePreviewModal = closePreviewModal;
+  window.closeCommandModal = closeCommandModal;
+  window.submitCommand = submitCommand;
   window.loadSessions = loadSessions;
 </script>
 
 <style is:global>
+  /* ============== DASHBOARD LAYOUT ============== */
   .terminal-dashboard {
     min-height: calc(100vh - 60px);
     background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
@@ -187,7 +556,7 @@ const API_URL = "https://dev.tail68ddf4.ts.net/api";
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     flex-wrap: wrap;
     gap: 1rem;
   }
@@ -206,9 +575,87 @@ const API_URL = "https://dev.tail68ddf4.ts.net/api";
 
   .dash-actions {
     display: flex;
+    align-items: center;
     gap: 0.5rem;
   }
 
+  /* ============== HEALTH BADGE ============== */
+  .health-badge {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 12px;
+    background: #21262d;
+    color: #8b949e;
+    border: 1px solid #30363d;
+  }
+
+  .health-ok {
+    background: rgba(63, 185, 80, 0.15);
+    color: #3fb950;
+    border-color: rgba(63, 185, 80, 0.3);
+  }
+
+  .health-err {
+    background: rgba(248, 81, 73, 0.15);
+    color: #f85149;
+    border-color: rgba(248, 81, 73, 0.3);
+  }
+
+  /* ============== SERVER STATS ============== */
+  .server-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-card {
+    background: #21262d;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+  }
+
+  .stat-label {
+    color: #8b949e;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-value {
+    color: #e6edf3;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+
+  .stat-sub {
+    color: #8b949e;
+    font-size: 0.75rem;
+    margin-top: 0.15rem;
+  }
+
+  .stat-bar {
+    height: 4px;
+    background: #30363d;
+    border-radius: 2px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+  }
+
+  .stat-bar-fill {
+    height: 100%;
+    background: #3fb950;
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  .stat-bar-fill.bar-mid { background: #d29922; }
+  .stat-bar-fill.bar-warn { background: #f85149; }
+
+  /* ============== BUTTONS ============== */
   .btn {
     display: inline-flex;
     align-items: center;
@@ -219,6 +666,7 @@ const API_URL = "https://dev.tail68ddf4.ts.net/api";
     cursor: pointer;
     border: none;
     transition: all 0.2s;
+    white-space: nowrap;
   }
 
   .btn-sm {
@@ -229,25 +677,48 @@ const API_URL = "https://dev.tail68ddf4.ts.net/api";
     border: 1px solid #30363d;
   }
 
-  .btn-sm:hover {
-    background: #30363d;
-  }
+  .btn-sm:hover { background: #30363d; }
 
   .btn-primary {
     background: #238636;
     color: white;
   }
 
-  .btn-primary:hover {
+  .btn-primary:hover { background: #2ea043; }
+
+  .btn-icon { font-size: 1rem; }
+
+  .btn-icon-only {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.95rem;
+    min-width: 32px;
+    justify-content: center;
+  }
+
+  .btn-danger {
+    color: #f85149;
+  }
+
+  .btn-danger:hover {
+    background: rgba(248, 81, 73, 0.2);
+    border-color: rgba(248, 81, 73, 0.4);
+  }
+
+  .btn-open {
+    background: #238636;
+    color: white;
+    padding: 0.5rem 1.25rem;
+    font-weight: 500;
+  }
+
+  .btn-open:hover {
     background: #2ea043;
+    transform: translateY(-1px);
   }
 
-  .btn-icon {
-    font-size: 1rem;
-  }
-
+  /* ============== SESSION CARDS ============== */
   .sessions-container {
-    max-width: 900px;
+    max-width: 1000px;
   }
 
   .sessions-grid {
@@ -276,39 +747,78 @@ const API_URL = "https://dev.tail68ddf4.ts.net/api";
     border-color: #238636;
   }
 
-  .session-icon {
-    font-size: 1.25rem;
-  }
-
-  .session-info {
+  .session-main {
     flex: 1;
+    min-width: 0;
   }
 
-  .session-info h3 {
-    color: #fff;
-    font-size: 1.1rem;
-    margin: 0 0 0.15rem 0;
-    font-weight: 500;
+  .session-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
   }
 
-  .session-info p {
-    color: #8b949e;
-    margin: 0;
+  .session-status {
     font-size: 0.85rem;
   }
 
-  .btn-open {
-    background: #238636;
-    color: white;
-    padding: 0.5rem 1.25rem;
-    font-weight: 500;
+  .session-header h3 {
+    color: #fff;
+    font-size: 1.1rem;
+    margin: 0;
+    font-weight: 600;
   }
 
-  .btn-open:hover {
-    background: #2ea043;
-    transform: translateY(-1px);
+  .git-branch {
+    color: #d2a8ff;
+    font-size: 0.8rem;
+    background: rgba(210, 168, 255, 0.1);
+    padding: 0.1rem 0.5rem;
+    border-radius: 10px;
   }
 
+  .session-meta {
+    color: #8b949e;
+    font-size: 0.8rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .session-meta .sep {
+    margin: 0 0.35rem;
+    opacity: 0.4;
+  }
+
+  .session-stats {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .stat-chip {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    background: #161b22;
+    color: #8b949e;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+
+  .session-cmds {
+    font-size: 0.7rem;
+    color: #58a6ff;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+
+  .session-actions {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  /* ============== STATES ============== */
   .loading-state,
   .empty-state,
   .error-state {
@@ -327,9 +837,7 @@ const API_URL = "https://dev.tail68ddf4.ts.net/api";
     animation: spin 1s linear infinite;
   }
 
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
   .empty-icon,
   .error-icon {
@@ -346,10 +854,20 @@ const API_URL = "https://dev.tail68ddf4.ts.net/api";
 
   .empty-state p,
   .error-state p {
-    margin: 0 0 1.5rem 0;
+    margin: 0 0 1rem 0;
   }
 
+  .error-detail {
+    font-size: 0.8rem;
+    color: #f85149;
+    font-family: monospace;
+  }
+
+  /* ============== FOOTER ============== */
   .security-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-top: 2rem;
     padding-top: 1.5rem;
     border-top: 1px solid #21262d;
@@ -367,10 +885,147 @@ const API_URL = "https://dev.tail68ddf4.ts.net/api";
     border: 1px solid rgba(63, 185, 80, 0.3);
   }
 
-  .ts-icon {
-    font-size: 0.9rem;
+  .ts-icon { font-size: 0.9rem; }
+
+  .auto-refresh-label {
+    color: #8b949e;
+    font-size: 0.8rem;
   }
 
+  /* ============== MODALS ============== */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+  }
+
+  .modal {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-wide {
+    max-width: 700px;
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #21262d;
+  }
+
+  .modal-header h3 {
+    color: #e6edf3;
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    color: #8b949e;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .modal-close:hover { color: #e6edf3; }
+
+  .modal-body {
+    padding: 1.25rem;
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid #21262d;
+  }
+
+  /* ============== FORMS ============== */
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    display: block;
+    color: #c9d1d9;
+    font-size: 0.9rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .form-group input[type="text"] {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    background: #0d1117;
+    color: #e6edf3;
+    font-size: 0.9rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    box-sizing: border-box;
+  }
+
+  .form-group input[type="text"]:focus {
+    outline: none;
+    border-color: #58a6ff;
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15);
+  }
+
+  .form-group small {
+    display: block;
+    color: #8b949e;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  .template-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .template-btn.active {
+    background: #238636;
+    color: white;
+    border-color: #238636;
+  }
+
+  /* ============== PREVIEW ============== */
+  .preview-output {
+    background: #0d1117;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 1rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    max-height: 400px;
+    overflow-y: auto;
+    white-space: pre;
+    margin: 0;
+  }
+
+  /* ============== ACCESS DENIED ============== */
   .access-denied {
     min-height: calc(100vh - 60px);
     display: flex;
@@ -407,5 +1062,14 @@ const API_URL = "https://dev.tail68ddf4.ts.net/api";
     padding: 0.5rem 1rem;
     border-radius: 6px;
     margin-bottom: 1rem;
+  }
+
+  /* ============== RESPONSIVE ============== */
+  @media (max-width: 768px) {
+    .terminal-dashboard { padding: 1rem; }
+    .server-stats { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+    .session-card { flex-direction: column; align-items: stretch; }
+    .session-actions { justify-content: flex-end; }
+    .dash-header { flex-direction: column; }
   }
 </style>
