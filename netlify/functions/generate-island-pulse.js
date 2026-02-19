@@ -1,7 +1,9 @@
 // Island Pulse — Daily AI-generated SEO content about Big Island Hawaii
-// Scheduled function: fetches Hawaii news + volcano data, generates article via Claude,
-// stores in Netlify Blobs, and triggers a site rebuild.
+// Scheduled function: fetches Hawaii news + volcano data + trending search terms,
+// generates a SERP-optimized article via Claude, stores in Netlify Blobs,
+// and triggers a site rebuild.
 
+import { schedule } from '@netlify/functions';
 import { getStore } from '@netlify/blobs';
 
 const SITE_ID = '347c1eb9-e6b5-4736-b000-f6908c1f85fc';
@@ -22,6 +24,17 @@ const TONES = [
     name: 'newsbites',
     instruction: 'Write in a quick news bites style — short, punchy sentences, just the facts. Like a morning briefing.'
   }
+];
+
+// Rotating topic focus to ensure variety (cycles every 7 days)
+const TOPIC_FOCUS = [
+  'volcano and geology updates',
+  'beaches, snorkeling, and ocean activities',
+  'local food, restaurants, and farmers markets',
+  'hiking trails, waterfalls, and nature',
+  'Hawaiian culture, history, and events',
+  'day trips and scenic drives',
+  'practical travel tips and visitor advice'
 ];
 
 function getDayOfYear() {
@@ -82,7 +95,55 @@ async function fetchVolcanoData() {
   }
 }
 
-function buildArticlePrompt(headlines, volcanoData, tone) {
+// Free SERP intelligence — Google Autocomplete API (no key needed)
+async function fetchTrendingSearchTerms() {
+  const queries = [
+    'big island hawaii',
+    'hilo hawaii',
+    'hawaii vacation',
+    'things to do big island'
+  ];
+
+  const allSuggestions = [];
+
+  for (const q of queries) {
+    try {
+      const url = `https://suggestqueries.google.com/complete/search?q=${encodeURIComponent(q)}&client=firefox`;
+      const response = await fetch(url);
+      if (!response.ok) continue;
+
+      const data = await response.json();
+      // Response format: [query, [suggestion1, suggestion2, ...]]
+      if (Array.isArray(data[1])) {
+        allSuggestions.push(...data[1].slice(0, 5));
+      }
+    } catch {
+      // Skip failed queries
+    }
+  }
+
+  // Deduplicate and return
+  return [...new Set(allSuggestions)].slice(0, 15);
+}
+
+// Get previous article titles to avoid repetition
+async function getRecentTitles() {
+  try {
+    const store = getStore({
+      name: STORE_NAME,
+      siteID: SITE_ID,
+      token: process.env.NETLIFY_AUTH_TOKEN
+    });
+
+    const existing = await store.get('articles', { type: 'json' });
+    if (!Array.isArray(existing)) return [];
+    return existing.slice(0, 10).map(a => a.title);
+  } catch {
+    return [];
+  }
+}
+
+function buildArticlePrompt(headlines, volcanoData, trendingTerms, recentTitles, tone, topicFocus) {
   let context = '';
 
   if (headlines.length > 0) {
@@ -93,8 +154,17 @@ function buildArticlePrompt(headlines, volcanoData, tone) {
     context += `Current volcano activity:\n${volcanoData.map(v => `- ${v.name}: Alert Level ${v.alertLevel}, Aviation Color Code ${v.colorCode}`).join('\n')}\n\n`;
   }
 
+  if (trendingTerms.length > 0) {
+    context += `Trending Google search terms (what people are actually searching for — use these as SEO keywords):\n${trendingTerms.map(t => `- "${t}"`).join('\n')}\n\n`;
+  }
+
   if (!context) {
     context = 'No specific news available today. Write about a general Big Island Hawaii travel topic — seasonal activities, local culture, natural beauty, or travel tips.\n\n';
+  }
+
+  let recentTitlesNote = '';
+  if (recentTitles.length > 0) {
+    recentTitlesNote = `\nIMPORTANT — These are recent article titles already published. Your title MUST be completely different — do NOT reuse similar wording:\n${recentTitles.map(t => `- "${t}"`).join('\n')}\n`;
   }
 
   const today = new Date().toLocaleDateString('en-US', {
@@ -108,14 +178,20 @@ function buildArticlePrompt(headlines, volcanoData, tone) {
   return `You are a travel content writer for Island Goodes, an adults-only oceanview vacation rental in Papaikou, Hawaii (near Hilo on the Big Island).
 
 Today is ${today}.
+Today's topic focus: ${topicFocus}
 
 ${tone.instruction}
 
-Based on the following real data, write a short article (250-350 words, 2-4 paragraphs) about what's happening on the Big Island of Hawaii.
+Based on the following real data, write a short article (250-350 words, 2-4 paragraphs) about the Big Island of Hawaii, focusing on today's topic.
 
 ${context}
+SEO STRATEGY:
+- Incorporate the trending search terms naturally into your article where they fit
+- Target long-tail keywords that travelers actually search for
+- The title should match a search query someone might type into Google
+${recentTitlesNote}
 REQUIREMENTS:
-- Create an SEO-friendly title (include "Big Island Hawaii" or similar keywords naturally)
+- Create a unique, SEO-friendly title (include specific keywords from the trending terms)
 - Write a meta description under 160 characters
 - Write 2-4 paragraphs of plain text (no markdown, no bullet points, no headers)
 - Naturally mention Island Goodes as an ideal home base for exploring the Big Island when it fits (don't force it — only if relevant)
@@ -133,14 +209,17 @@ Respond in this exact JSON format:
 Respond with ONLY valid JSON, nothing else.`;
 }
 
-async function generateArticle(headlines, volcanoData) {
+async function generateArticle(headlines, volcanoData, trendingTerms, recentTitles) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) throw new Error('ANTHROPIC_API_KEY not configured');
 
-  const toneIndex = getDayOfYear() % TONES.length;
+  const dayOfYear = getDayOfYear();
+  const toneIndex = dayOfYear % TONES.length;
+  const topicIndex = dayOfYear % TOPIC_FOCUS.length;
   const tone = TONES[toneIndex];
+  const topicFocus = TOPIC_FOCUS[topicIndex];
 
-  const prompt = buildArticlePrompt(headlines, volcanoData, tone);
+  const prompt = buildArticlePrompt(headlines, volcanoData, trendingTerms, recentTitles, tone, topicFocus);
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -197,10 +276,12 @@ async function generateArticle(headlines, volcanoData) {
     metaDescription: article.metaDescription || '',
     body: article.body,
     tone: tone.name,
+    topicFocus,
     date: new Date().toISOString(),
     generatedFrom: {
       headlineCount: headlines.length,
-      hasVolcanoData: !!volcanoData
+      hasVolcanoData: !!volcanoData,
+      trendingTermCount: trendingTerms.length
     }
   };
 }
@@ -252,21 +333,25 @@ async function triggerBuild() {
   }
 }
 
-const handler = async () => {
+// Use schedule() wrapper for reliable Netlify scheduled function invocation
+// Runs daily at 4:00 PM UTC (6:00 AM HST / 11:00 AM EST)
+export const handler = schedule('0 16 * * *', async () => {
   console.log('Island Pulse: Starting daily article generation...');
 
   try {
-    // Fetch data in parallel
-    const [headlines, volcanoData] = await Promise.all([
+    // Fetch all data sources in parallel
+    const [headlines, volcanoData, trendingTerms, recentTitles] = await Promise.all([
       fetchGoogleNewsHeadlines(),
-      fetchVolcanoData()
+      fetchVolcanoData(),
+      fetchTrendingSearchTerms(),
+      getRecentTitles()
     ]);
 
-    console.log(`Fetched ${headlines.length} headlines, volcano data: ${volcanoData ? 'yes' : 'no'}`);
+    console.log(`Fetched: ${headlines.length} headlines, volcano: ${volcanoData ? 'yes' : 'no'}, ${trendingTerms.length} trending terms, ${recentTitles.length} recent titles`);
 
     // Generate article
-    const article = await generateArticle(headlines, volcanoData);
-    console.log(`Generated: "${article.title}" (tone: ${article.tone})`);
+    const article = await generateArticle(headlines, volcanoData, trendingTerms, recentTitles);
+    console.log(`Generated: "${article.title}" (tone: ${article.tone}, topic: ${article.topicFocus})`);
 
     // Store in Blobs
     await storeArticle(article);
@@ -285,10 +370,4 @@ const handler = async () => {
       body: JSON.stringify({ error: err.message })
     };
   }
-};
-
-// Run daily at 4:00 PM UTC (6:00 AM HST)
-export { handler };
-export const config = {
-  schedule: '0 16 * * *'
-};
+});
