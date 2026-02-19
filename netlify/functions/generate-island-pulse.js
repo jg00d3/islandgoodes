@@ -118,7 +118,7 @@ async function fetchTrendingSearchTerms() {
       if (Array.isArray(data[1])) {
         allSuggestions.push(...data[1].slice(0, 5));
       }
-    } catch {
+    } catch (e) {
       // Skip failed queries
     }
   }
@@ -139,7 +139,7 @@ async function getRecentTitles() {
     const existing = await store.get('articles', { type: 'json' });
     if (!Array.isArray(existing)) return [];
     return existing.slice(0, 10).map(a => a.title);
-  } catch {
+  } catch (e) {
     return [];
   }
 }
@@ -254,7 +254,7 @@ async function generateArticle(headlines, volcanoData, trendingTerms, recentTitl
   let article;
   try {
     article = JSON.parse(sanitized);
-  } catch {
+  } catch (e) {
     // Fallback: extract fields manually with regex
     const titleMatch = text.match(/"title"\s*:\s*"((?:[^"\\]|\\.)*)"/);
     const metaMatch = text.match(/"metaDescription"\s*:\s*"((?:[^"\\]|\\.)*)"/);
@@ -299,7 +299,7 @@ async function storeArticle(article) {
   try {
     const existing = await store.get('articles', { type: 'json' });
     if (Array.isArray(existing)) articles = existing;
-  } catch {
+  } catch (e) {
     // First run — empty store
   }
 
