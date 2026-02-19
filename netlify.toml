@@ -9,10 +9,7 @@
 
 [functions]
   node_bundler = "esbuild"
-  external_node_modules = ["@netlify/blobs", "@netlify/functions"]
-
-[functions."generate-island-pulse"]
-  schedule = "0 16 * * *"
+  external_node_modules = ["@netlify/blobs"]
 
 # Edge function to protect admin pages
 [[edge_functions]]

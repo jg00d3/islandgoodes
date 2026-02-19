@@ -245,26 +245,26 @@ async function generateArticle(headlines, volcanoData, trendingTerms, recentTitl
   const text = data.content?.[0]?.text;
   if (!text) throw new Error('Empty response from Claude');
 
-  // Parse JSON response — sanitize control characters inside string values
-  // Claude often puts literal newlines in JSON string values
-  const sanitized = text.replace(/(?<=:\s*")([\s\S]*?)(?="(?:\s*[,}]))/g, (match) =>
-    match.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t')
-  );
-
+  // Parse JSON response — extract fields via regex to handle literal newlines
+  // Claude often puts literal newlines in JSON string values which breaks JSON.parse
   let article;
-  try {
-    article = JSON.parse(sanitized);
-  } catch (e) {
-    // Fallback: extract fields manually with regex
-    const titleMatch = text.match(/"title"\s*:\s*"((?:[^"\\]|\\.)*)"/);
-    const metaMatch = text.match(/"metaDescription"\s*:\s*"((?:[^"\\]|\\.)*)"/);
-    const bodyMatch = text.match(/"body"\s*:\s*"([\s\S]*)"?\s*\}$/);
-    if (!titleMatch || !bodyMatch) throw new Error('Could not parse Claude response as JSON');
+  const titleMatch = text.match(/"title"\s*:\s*"((?:[^"\\]|\\.)*)"/);
+  const metaMatch = text.match(/"metaDescription"\s*:\s*"((?:[^"\\]|\\.)*)"/);
+  const bodyMatch = text.match(/"body"\s*:\s*"([\s\S]*?)"\s*\}$/);
+
+  if (titleMatch && bodyMatch) {
     article = {
-      title: titleMatch[1],
-      metaDescription: metaMatch ? metaMatch[1] : '',
-      body: bodyMatch[1].replace(/\\n/g, '\n').replace(/\\"/g, '"').replace(/"\s*$/, '')
+      title: titleMatch[1].replace(/\\"/g, '"'),
+      metaDescription: metaMatch ? metaMatch[1].replace(/\\"/g, '"') : '',
+      body: bodyMatch[1].replace(/\\n/g, '\n').replace(/\\"/g, '"')
     };
+  } else {
+    // Try direct parse as fallback
+    try {
+      article = JSON.parse(text);
+    } catch (e) {
+      throw new Error('Could not parse Claude response: ' + text.slice(0, 200));
+    }
   }
 
   if (!article.title || !article.body) {
@@ -334,7 +334,7 @@ async function triggerBuild() {
   }
 }
 
-// Schedule configured in netlify.toml — runs daily at 4:00 PM UTC (6:00 AM HST / 11:00 AM EST)
+// Invoked daily by GitHub Actions cron at 4:00 PM UTC (6:00 AM HST / 11:00 AM EST)
 // Also callable via HTTP POST for manual invocation
 export const handler = async () => {
   console.log('Island Pulse: Starting daily article generation...');
