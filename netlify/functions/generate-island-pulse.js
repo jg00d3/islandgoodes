@@ -72,22 +72,24 @@ async function fetchGoogleNewsHeadlines() {
 
 async function fetchVolcanoData() {
   try {
-    const url = 'https://volcanoes.usgs.gov/hans-public/api/volcano/activityStatus/elevated';
+    const url = 'https://volcanoes.usgs.gov/hans-public/api/volcano/getElevatedVolcanoes';
     const response = await fetch(url);
     if (!response.ok) return null;
 
     const data = await response.json();
-    // Filter for Hawaii volcanoes
+    if (!Array.isArray(data)) return null;
+
+    // Filter for Hawaii volcanoes (HVO observatory)
     const hawaiiVolcanoes = data.filter(v =>
-      v.vName && (v.vName.includes('Kilauea') || v.vName.includes('Mauna Loa'))
+      v.volcano_name && (v.volcano_name.includes('Kilauea') || v.volcano_name.includes('Mauna Loa'))
     );
 
     if (hawaiiVolcanoes.length === 0) return null;
 
     return hawaiiVolcanoes.map(v => ({
-      name: v.vName,
-      alertLevel: v.alertLevel || 'unknown',
-      colorCode: v.colorCode || 'unknown'
+      name: v.volcano_name,
+      alertLevel: v.alert_level || 'unknown',
+      colorCode: v.color_code || 'unknown'
     }));
   } catch (err) {
     console.error('Failed to fetch volcano data:', err.message);
