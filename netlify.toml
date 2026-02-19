@@ -9,7 +9,7 @@
 
 [functions]
   node_bundler = "esbuild"
-  external_node_modules = ["@netlify/blobs"]
+  external_node_modules = ["@netlify/blobs", "@netlify/functions"]
 
 # Edge function to protect admin pages
 [[edge_functions]]
