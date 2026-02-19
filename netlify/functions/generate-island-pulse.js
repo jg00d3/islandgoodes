@@ -3,7 +3,6 @@
 // generates a SERP-optimized article via Claude, stores in Netlify Blobs,
 // and triggers a site rebuild.
 
-import { schedule } from '@netlify/functions';
 import { getStore } from '@netlify/blobs';
 
 const SITE_ID = '347c1eb9-e6b5-4736-b000-f6908c1f85fc';
@@ -335,9 +334,9 @@ async function triggerBuild() {
   }
 }
 
-// Use schedule() wrapper for reliable Netlify scheduled function invocation
-// Runs daily at 4:00 PM UTC (6:00 AM HST / 11:00 AM EST)
-export const handler = schedule('0 16 * * *', async () => {
+// Schedule configured in netlify.toml — runs daily at 4:00 PM UTC (6:00 AM HST / 11:00 AM EST)
+// Also callable via HTTP POST for manual invocation
+export const handler = async () => {
   console.log('Island Pulse: Starting daily article generation...');
 
   try {
@@ -372,4 +371,4 @@ export const handler = schedule('0 16 * * *', async () => {
       body: JSON.stringify({ error: err.message })
     };
   }
-});
+};
