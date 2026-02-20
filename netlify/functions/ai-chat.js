@@ -178,7 +178,7 @@ export async function handler(event) {
     console.error('AI Chat error:', err);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Internal server error' })
+      body: JSON.stringify({ error: 'Internal server error', debug: String(err?.message || err).slice(0, 300) })
     };
   }
 }
