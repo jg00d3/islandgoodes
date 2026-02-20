@@ -283,6 +283,13 @@ const pageTip = "Configure and test the AI chatbot";
                 <div class="form-group">
                   <label for="providerKey">API Key</label>
                   <input type="password" id="providerKey" placeholder="Leave blank if not required" />
+                  <span class="field-hint" id="keyHint" style="display:none;">Anthropic providers fall back to the ANTHROPIC_API_KEY env var if left blank.</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="providerContext">Context Window <span class="field-hint-inline">(tokens, optional)</span></label>
+                  <input type="number" id="providerContext" placeholder="e.g. 8192" min="1" />
+                  <span class="field-hint">If set, the system prompt is automatically truncated to fit. Leave blank for models with large context windows (e.g. Claude).</span>
                 </div>
 
                 <div class="form-group">
@@ -1820,9 +1827,11 @@ A: You can book directly on our website at islandgoodes.com/book or call us at 8
     return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
-  // Auto-fill URL when type changes
+  // Auto-fill URL and show key hint when type changes
   providerTypeSelect?.addEventListener('change', () => {
     const idField = document.getElementById('providerId') as HTMLInputElement;
+    const keyHint = document.getElementById('keyHint');
+    if (keyHint) keyHint.style.display = providerTypeSelect.value === 'anthropic' ? 'block' : 'none';
     if (idField?.value) return; // Don't auto-fill when editing
     if (providerTypeSelect.value === 'anthropic') {
       providerUrlInput.value = 'https://api.anthropic.com/v1/messages';
@@ -1856,6 +1865,7 @@ A: You can book directly on our website at islandgoodes.com/book or call us at 8
           </div>
           <div class="provider-meta">
             Model: <code>${escapeAttr(p.model)}</code>
+            ${p.contextWindow ? `&middot; Context: ${p.contextWindow.toLocaleString()} tokens` : ''}
             &middot; Key: ${p.apiKey || 'none'}
           </div>
         </div>
@@ -1971,6 +1981,9 @@ A: You can book directly on our website at islandgoodes.com/book or call us at 8
     (document.getElementById('providerModel') as HTMLInputElement).value = p.model;
     (document.getElementById('providerKey') as HTMLInputElement).value = '';
     (document.getElementById('providerKey') as HTMLInputElement).placeholder = p.apiKey ? `Current: ${p.apiKey}` : 'Leave blank if not required';
+    (document.getElementById('providerContext') as HTMLInputElement).value = p.contextWindow ? String(p.contextWindow) : '';
+    const keyHint = document.getElementById('keyHint');
+    if (keyHint) keyHint.style.display = p.type === 'anthropic' ? 'block' : 'none';
 
     // Populate extra headers
     const container = document.getElementById('extraHeadersContainer')!;
@@ -2061,7 +2074,11 @@ A: You can book directly on our website at islandgoodes.com/book or call us at 8
       }
     });
 
+    const contextVal = (document.getElementById('providerContext') as HTMLInputElement).value;
+    const contextWindow = contextVal ? parseInt(contextVal, 10) : null;
+
     const provider: any = { name, type, url, model, extraHeaders };
+    if (contextWindow && contextWindow > 0) provider.contextWindow = contextWindow;
     if (id) provider.id = id;
 
     // For apiKey: if editing and left blank, keep existing masked value

@@ -108,17 +108,50 @@ export async function callAI(systemPrompt, messages, options = {}) {
 }
 
 /**
+ * Estimate token count from a string (~4 chars per token).
+ */
+function estimateTokens(text) {
+  return Math.ceil((text || '').length / 4);
+}
+
+/**
+ * Truncate the system prompt to fit within a provider's context window.
+ * Leaves room for messages + maxTokens + a small buffer.
+ */
+function fitSystemPrompt(systemPrompt, messages, maxTokens, contextWindow) {
+  if (!contextWindow || !systemPrompt) return systemPrompt;
+
+  const messageTokens = messages.reduce((sum, m) => sum + estimateTokens(m.content), 0);
+  const budget = contextWindow - messageTokens - maxTokens - 100; // 100 token buffer
+
+  if (budget <= 0) return ''; // no room at all
+
+  const systemTokens = estimateTokens(systemPrompt);
+  if (systemTokens <= budget) return systemPrompt; // fits fine
+
+  // Truncate to budget (convert back to chars)
+  const maxChars = budget * 4;
+  const truncated = systemPrompt.slice(0, maxChars);
+  // Try to cut at last paragraph break for cleanliness
+  const lastBreak = truncated.lastIndexOf('\n\n');
+  return (lastBreak > maxChars * 0.5 ? truncated.slice(0, lastBreak) : truncated) + '\n\n[Knowledge base truncated to fit context window]';
+}
+
+/**
  * Call a single provider. Handles both Anthropic and OpenAI-compatible APIs.
  */
 async function callProvider(provider, systemPrompt, messages, maxTokens) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
+  // Truncate system prompt if provider has a context window limit
+  const fittedPrompt = fitSystemPrompt(systemPrompt, messages, maxTokens, provider.contextWindow);
+
   try {
     if (provider.type === 'anthropic') {
-      return await callAnthropic(provider, systemPrompt, messages, maxTokens, controller.signal);
+      return await callAnthropic(provider, fittedPrompt, messages, maxTokens, controller.signal);
     } else {
-      return await callOpenAI(provider, systemPrompt, messages, maxTokens, controller.signal);
+      return await callOpenAI(provider, fittedPrompt, messages, maxTokens, controller.signal);
     }
   } finally {
     clearTimeout(timer);
@@ -129,9 +162,15 @@ async function callProvider(provider, systemPrompt, messages, maxTokens) {
  * Anthropic API adapter
  */
 async function callAnthropic(provider, systemPrompt, messages, maxTokens, signal) {
+  // Fall back to env var if no API key configured on this provider
+  const apiKey = provider.apiKey || process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    throw new Error('No API key configured (set key on provider or ANTHROPIC_API_KEY env var)');
+  }
+
   const headers = {
     'Content-Type': 'application/json',
-    'x-api-key': provider.apiKey,
+    'x-api-key': apiKey,
     'anthropic-version': '2023-06-01',
     ...(provider.extraHeaders || {})
   };
