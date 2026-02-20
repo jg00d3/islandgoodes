@@ -1,8 +1,9 @@
-// AI Chat Assistant powered by Claude
+// AI Chat Assistant — multi-provider with failover
 // Handles both public guest chat and admin test chat
 
 import { getStore } from '@netlify/blobs';
 import { knowledgeBase } from './knowledge-base.js';
+import { callAI } from './ai-provider.js';
 
 const SITE_ID = '347c1eb9-e6b5-4736-b000-f6908c1f85fc';
 
@@ -98,20 +99,14 @@ export async function handler(event) {
   try {
     const { message, messages, training, source, checkOnly } = JSON.parse(event.body);
 
-    // Check if API is configured
-    const apiKey = process.env.ANTHROPIC_API_KEY;
-
     if (checkOnly) {
+      // Check if any provider is available (env var or configured providers)
+      const { getProviderConfig } = await import('./ai-provider.js');
+      const providers = await getProviderConfig();
+      const configured = providers.some(p => p.enabled);
       return {
         statusCode: 200,
-        body: JSON.stringify({ configured: !!apiKey })
-      };
-    }
-
-    if (!apiKey) {
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ error: 'AI Chat is not configured. Please add ANTHROPIC_API_KEY to environment variables.' })
+        body: JSON.stringify({ configured })
       };
     }
 
@@ -160,45 +155,22 @@ export async function handler(event) {
       ? buildPublicSystemPrompt()
       : buildSystemPrompt(training || {});
 
-    // Call Claude API
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 500,
-        system: systemPrompt,
-        messages: conversationMessages
-      })
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Claude API error:', errorData);
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ error: 'Failed to get AI response' })
-      };
-    }
-
-    const data = await response.json();
-    const aiResponse = data.content?.[0]?.text || 'Sorry, I could not generate a response.';
+    // Call AI via provider abstraction (failover across configured providers)
+    const result = await callAI(systemPrompt, conversationMessages, { maxTokens: 500 });
+    const aiResponse = result.text || 'Sorry, I could not generate a response.';
 
     // Log usage for public requests (fire-and-forget)
     if (source === 'public') {
       const lastUserMsg = conversationMessages.filter(m => m.role === 'user').pop()?.content || '';
-      logChatUsage(clientIp, conversationMessages.length, data.usage, lastUserMsg, aiResponse);
+      logChatUsage(clientIp, conversationMessages.length, result.usage, lastUserMsg, aiResponse);
     }
 
     return {
       statusCode: 200,
       body: JSON.stringify({
         response: aiResponse,
-        usage: data.usage
+        usage: result.usage,
+        provider: result.provider
       })
     };
 

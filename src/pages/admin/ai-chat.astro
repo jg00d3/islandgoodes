@@ -230,47 +230,84 @@ const pageTip = "Configure and test the AI chatbot";
       </div>
     </section>
 
-    <!-- API Setup -->
+    <!-- AI Providers -->
     <section class="setup-section">
       <div class="container">
         <div class="setup-card">
-          <h2>API Setup</h2>
-          <p>The AI chat requires an API key to function. This is configured in Netlify.</p>
+          <div class="providers-header">
+            <div>
+              <h2>AI Providers</h2>
+              <p>Configure AI backends with automatic failover. The system tries providers in priority order.</p>
+            </div>
+            <button id="addProviderBtn" class="btn btn-primary">Add Provider</button>
+          </div>
 
-          <div class="setup-status" id="apiStatus">
-            <div class="status-indicator checking">
-              <span class="status-dot"></span>
-              <span>Checking API status...</span>
+          <div id="providerList" class="provider-list">
+            <div class="provider-loading">Loading providers...</div>
+          </div>
+
+          <!-- Add/Edit Provider Modal -->
+          <div id="providerModal" class="provider-modal" style="display:none;">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3 id="modalTitle">Add Provider</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+              </div>
+              <form id="providerForm" class="provider-form">
+                <input type="hidden" id="providerId" />
+
+                <div class="form-group">
+                  <label for="providerName">Provider Name</label>
+                  <input type="text" id="providerName" placeholder="e.g. vLLM (GPU Server)" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="providerType">Type</label>
+                  <select id="providerType" required>
+                    <option value="openai">OpenAI-Compatible (vLLM, OpenAI, Ollama, etc.)</option>
+                    <option value="anthropic">Anthropic (Claude)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="providerUrl">API URL</label>
+                  <input type="url" id="providerUrl" placeholder="https://api.example.com/v1/chat/completions" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="providerModel">Model Name</label>
+                  <input type="text" id="providerModel" placeholder="e.g. gpt-oss-20b" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="providerKey">API Key</label>
+                  <input type="password" id="providerKey" placeholder="Leave blank if not required" />
+                </div>
+
+                <div class="form-group">
+                  <label>Extra Headers <span class="field-hint-inline">(optional, e.g. CF-Access credentials)</span></label>
+                  <div id="extraHeadersContainer">
+                    <div class="extra-header-row">
+                      <input type="text" class="header-key" placeholder="Header name" />
+                      <input type="password" class="header-value" placeholder="Header value" />
+                      <button type="button" class="btn-icon remove-header" title="Remove">&times;</button>
+                    </div>
+                  </div>
+                  <button type="button" id="addHeaderBtn" class="btn btn-outline btn-small">Add Header</button>
+                </div>
+
+                <div class="modal-actions">
+                  <button type="button" class="btn btn-outline" id="cancelProvider">Cancel</button>
+                  <button type="submit" class="btn btn-primary" id="saveProviderBtn">Save Provider</button>
+                </div>
+              </form>
             </div>
           </div>
 
-          <div class="setup-steps">
-            <h3>Setup Instructions</h3>
-            <ol>
-              <li>
-                <strong>Get an API Key</strong>
-                <p>Sign up at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> to get a Claude API key. New accounts get free credits.</p>
-              </li>
-              <li>
-                <strong>Add to Netlify</strong>
-                <p>Go to Netlify → Site Settings → Environment Variables → Add:</p>
-                <code>ANTHROPIC_API_KEY = sk-ant-...</code>
-              </li>
-              <li>
-                <strong>Redeploy</strong>
-                <p>Trigger a new deploy for the environment variable to take effect.</p>
-              </li>
-            </ol>
-          </div>
-
-          <div class="pricing-info">
-            <h3>Pricing</h3>
-            <p>Claude API pricing is usage-based. Typical costs for a vacation rental:</p>
-            <ul>
-              <li><strong>~$0.01-0.03</strong> per conversation</li>
-              <li><strong>~$5-15/month</strong> for moderate traffic</li>
-              <li>Free tier available for testing</li>
-            </ul>
+          <div class="provider-fallback-note">
+            <span class="note-icon">i</span>
+            <span>If no providers are configured, the system falls back to the <code>ANTHROPIC_API_KEY</code> environment variable.</span>
           </div>
         </div>
       </div>
@@ -691,115 +728,334 @@ const pageTip = "Configure and test the AI chatbot";
     margin-bottom: 1.5rem;
   }
 
-  .setup-status {
-    padding: 1rem;
-    background: var(--color-bg-alt);
-    border-radius: 8px;
-    margin-bottom: 2rem;
+  /* Provider Management */
+  .providers-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
   }
 
-  .status-indicator {
+  .providers-header p {
+    color: var(--color-text-light);
+    margin-top: 0.25rem;
+  }
+
+  .provider-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .provider-loading {
+    text-align: center;
+    color: var(--color-text-light);
+    padding: 2rem;
+  }
+
+  .provider-card {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: var(--color-bg-alt);
+    border-radius: 12px;
+    border: 2px solid transparent;
+    transition: border-color 0.2s;
   }
 
-  .status-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #ccc;
+  .provider-card.disabled {
+    opacity: 0.55;
   }
 
-  .status-indicator.checking .status-dot {
-    background: #F59E0B;
-    animation: pulse 1s infinite;
+  .provider-priority {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.125rem;
+    flex-shrink: 0;
   }
 
-  .status-indicator.connected .status-dot {
-    background: #10B981;
+  .priority-num {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    line-height: 1;
   }
 
-  .status-indicator.error .status-dot {
-    background: #EF4444;
+  .priority-arrows {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
   }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
-
-  .setup-steps {
-    margin-bottom: 2rem;
-  }
-
-  .setup-steps h3 {
-    font-size: 1.125rem;
-    margin-bottom: 1rem;
-    font-family: var(--font-body);
-  }
-
-  .setup-steps ol {
-    padding-left: 1.5rem;
-  }
-
-  .setup-steps li {
-    margin-bottom: 1rem;
-    line-height: 1.6;
-  }
-
-  .setup-steps li strong {
-    display: block;
-    margin-bottom: 0.25rem;
-  }
-
-  .setup-steps li p {
-    color: var(--color-text-light);
-    margin: 0;
-    font-size: 0.9375rem;
-  }
-
-  .setup-steps code {
-    display: inline-block;
-    background: #1a1a1a;
-    color: #10B981;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
+  .priority-arrows button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
     font-size: 0.875rem;
-    margin-top: 0.5rem;
+    color: var(--color-text-light);
+    line-height: 1;
   }
 
-  .setup-steps a {
+  .priority-arrows button:hover {
     color: var(--color-primary);
   }
 
-  .pricing-info {
-    padding: 1.5rem;
-    background: #ECFDF5;
-    border-radius: 12px;
-    border-left: 4px solid #10B981;
+  .provider-info {
+    flex: 1;
+    min-width: 0;
   }
 
-  .pricing-info h3 {
+  .provider-name-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .provider-name {
+    font-weight: 600;
     font-size: 1rem;
-    margin-bottom: 0.75rem;
+  }
+
+  .provider-type-badge {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    border-radius: 50px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .provider-type-badge.anthropic {
+    background: #DDD6FE;
+    color: #5B21B6;
+  }
+
+  .provider-type-badge.openai {
+    background: #D1FAE5;
     color: #065F46;
+  }
+
+  .provider-meta {
+    font-size: 0.8125rem;
+    color: var(--color-text-light);
+  }
+
+  .provider-meta code {
+    background: rgba(0,0,0,0.06);
+    padding: 0.125rem 0.375rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+  }
+
+  .provider-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .provider-actions .btn-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid #e5e5e5;
+    background: #fff;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .provider-actions .btn-icon:hover {
+    background: var(--color-bg-alt);
+    border-color: var(--color-primary);
+  }
+
+  .provider-actions .btn-icon.delete:hover {
+    background: #FEE2E2;
+    border-color: #EF4444;
+    color: #EF4444;
+  }
+
+  .test-result {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  .test-result.success {
+    background: #D1FAE5;
+    color: #065F46;
+  }
+
+  .test-result.failure {
+    background: #FEE2E2;
+    color: #991B1B;
+  }
+
+  .test-result.testing {
+    background: #FEF3C7;
+    color: #92400E;
+  }
+
+  /* Provider Modal */
+  .provider-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+  }
+
+  .modal-content {
+    position: relative;
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 540px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-header h3 {
+    font-size: 1.25rem;
+    margin: 0;
     font-family: var(--font-body);
   }
 
-  .pricing-info p {
-    color: #065F46;
-    margin-bottom: 0.75rem;
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--color-text-light);
+    padding: 0.25rem;
+    line-height: 1;
   }
 
-  .pricing-info ul {
-    margin: 0;
-    padding-left: 1.25rem;
-    color: #065F46;
+  .provider-form .form-group {
+    margin-bottom: 1.25rem;
   }
 
-  .pricing-info li {
-    margin-bottom: 0.25rem;
+  .provider-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.375rem;
+    font-size: 0.9375rem;
+  }
+
+  .provider-form input,
+  .provider-form select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--color-bg-alt);
+    border-radius: 10px;
+    font-size: 0.9375rem;
+    font-family: inherit;
+    transition: border-color 0.2s;
+  }
+
+  .provider-form input:focus,
+  .provider-form select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .field-hint-inline {
+    font-weight: 400;
+    font-size: 0.8125rem;
+    color: var(--color-text-light);
+  }
+
+  .extra-header-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .extra-header-row input {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .extra-header-row .remove-header {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid #e5e5e5;
+    background: #fff;
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: var(--color-text-light);
+  }
+
+  .extra-header-row .remove-header:hover {
+    background: #FEE2E2;
+    color: #EF4444;
+    border-color: #EF4444;
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .provider-fallback-note {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: #F0F9FF;
+    border-radius: 8px;
+    color: #0369A1;
+    font-size: 0.9375rem;
+  }
+
+  .provider-fallback-note code {
+    background: rgba(0,0,0,0.08);
+    padding: 0.125rem 0.375rem;
+    border-radius: 4px;
+    font-size: 0.8125rem;
+  }
+
+  .empty-providers {
+    text-align: center;
+    padding: 2rem;
+    color: var(--color-text-light);
   }
 
   /* Toggle Switch */
@@ -1145,31 +1401,67 @@ const pageTip = "Configure and test the AI chatbot";
     color: #a78bfa;
   }
 
-  :global([data-theme="dark"]) .setup-status {
+  :global([data-theme="dark"]) .provider-card {
     background: var(--color-bg);
   }
 
-  :global([data-theme="dark"]) .setup-steps h3 {
+  :global([data-theme="dark"]) .provider-name {
     color: var(--color-text);
   }
 
-  :global([data-theme="dark"]) .setup-steps li {
-    color: var(--color-text);
-  }
-
-  :global([data-theme="dark"]) .setup-steps li p {
+  :global([data-theme="dark"]) .provider-meta {
     color: var(--color-text-muted);
   }
 
-  :global([data-theme="dark"]) .pricing-info {
-    background: rgba(16, 185, 129, 0.1);
-    border-left-color: #10B981;
+  :global([data-theme="dark"]) .provider-meta code {
+    background: rgba(255,255,255,0.08);
   }
 
-  :global([data-theme="dark"]) .pricing-info h3,
-  :global([data-theme="dark"]) .pricing-info p,
-  :global([data-theme="dark"]) .pricing-info ul {
+  :global([data-theme="dark"]) .provider-actions .btn-icon {
+    background: var(--color-bg-alt);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .modal-content {
+    background: var(--color-bg-alt);
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .provider-form input,
+  :global([data-theme="dark"]) .provider-form select {
+    background: var(--color-bg);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .provider-form label {
+    color: var(--color-text);
+  }
+
+  :global([data-theme="dark"]) .extra-header-row .remove-header {
+    background: var(--color-bg);
+    border-color: var(--color-border);
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .provider-type-badge.anthropic {
+    background: rgba(139, 92, 246, 0.2);
+    color: #c4b5fd;
+  }
+
+  :global([data-theme="dark"]) .provider-type-badge.openai {
+    background: rgba(16, 185, 129, 0.15);
     color: #6ee7b7;
+  }
+
+  :global([data-theme="dark"]) .provider-fallback-note {
+    background: rgba(59, 130, 246, 0.15);
+    color: #93c5fd;
+  }
+
+  :global([data-theme="dark"]) .provider-fallback-note code {
+    background: rgba(255,255,255,0.1);
   }
 
   :global([data-theme="dark"]) .usage-card {
@@ -1482,7 +1774,8 @@ A: You can book directly on our website at islandgoodes.com/book or call us at 8
       const data = await response.json();
 
       if (response.ok && data.response) {
-        addMessage(data.response, false);
+        const providerTag = data.provider ? ` [${data.provider}]` : '';
+        addMessage(data.response + providerTag, false);
       } else {
         addMessage(data.error || 'Sorry, I encountered an error. Please try again.', false);
       }
@@ -1515,46 +1808,285 @@ A: You can book directly on our website at islandgoodes.com/book or call us at 8
     });
   });
 
-  // Check API status
-  async function checkApiStatus() {
-    const statusEl = document.getElementById('apiStatus');
-    if (!statusEl) return;
+  // ===== Provider Management =====
+  let providers: any[] = [];
+  const providerListEl = document.getElementById('providerList')!;
+  const providerModal = document.getElementById('providerModal')!;
+  const providerForm = document.getElementById('providerForm')!;
+  const providerTypeSelect = document.getElementById('providerType') as HTMLSelectElement;
+  const providerUrlInput = document.getElementById('providerUrl') as HTMLInputElement;
 
-    try {
-      const response = await fetch('/.netlify/functions/ai-chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: 'test', checkOnly: true })
-      });
+  function escapeAttr(str: string) {
+    return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
 
-      const data = await response.json();
+  // Auto-fill URL when type changes
+  providerTypeSelect?.addEventListener('change', () => {
+    const idField = document.getElementById('providerId') as HTMLInputElement;
+    if (idField?.value) return; // Don't auto-fill when editing
+    if (providerTypeSelect.value === 'anthropic') {
+      providerUrlInput.value = 'https://api.anthropic.com/v1/messages';
+    } else {
+      providerUrlInput.value = '';
+    }
+  });
 
-      if (data.configured) {
-        statusEl.innerHTML = `
-          <div class="status-indicator connected">
-            <span class="status-dot"></span>
-            <span>API Connected - Ready to use</span>
+  function renderProviders() {
+    if (providers.length === 0) {
+      providerListEl.innerHTML = '<div class="empty-providers">No providers configured. AI will use the ANTHROPIC_API_KEY environment variable if set.</div>';
+      return;
+    }
+
+    const sorted = [...providers].sort((a, b) => (a.priority || 99) - (b.priority || 99));
+
+    providerListEl.innerHTML = sorted.map((p, _i) => `
+      <div class="provider-card ${p.enabled ? '' : 'disabled'}" data-id="${escapeAttr(p.id)}">
+        <div class="provider-priority">
+          <span class="priority-num">${p.priority || '?'}</span>
+          <div class="priority-arrows">
+            <button class="move-up" data-id="${escapeAttr(p.id)}" title="Move up">&#9650;</button>
+            <button class="move-down" data-id="${escapeAttr(p.id)}" title="Move down">&#9660;</button>
           </div>
-        `;
-      } else {
-        statusEl.innerHTML = `
-          <div class="status-indicator error">
-            <span class="status-dot"></span>
-            <span>API Not Configured - Follow setup instructions below</span>
-          </div>
-        `;
-      }
-    } catch {
-      statusEl.innerHTML = `
-        <div class="status-indicator error">
-          <span class="status-dot"></span>
-          <span>Could not check API status</span>
         </div>
-      `;
+        <div class="provider-info">
+          <div class="provider-name-row">
+            <span class="provider-name">${escapeAttr(p.name)}</span>
+            <span class="provider-type-badge ${p.type}">${p.type === 'anthropic' ? 'Anthropic' : 'OpenAI'}</span>
+            ${!p.enabled ? '<span class="provider-type-badge" style="background:#FEE2E2;color:#991B1B;">Disabled</span>' : ''}
+          </div>
+          <div class="provider-meta">
+            Model: <code>${escapeAttr(p.model)}</code>
+            &middot; Key: ${p.apiKey || 'none'}
+          </div>
+        </div>
+        <div class="provider-actions">
+          <span class="test-result" id="test-${escapeAttr(p.id)}" style="display:none;"></span>
+          <button class="btn-icon test-provider" data-id="${escapeAttr(p.id)}" title="Test connection">&#9889;</button>
+          <button class="btn-icon toggle-provider" data-id="${escapeAttr(p.id)}" title="${p.enabled ? 'Disable' : 'Enable'}">
+            ${p.enabled ? '&#10003;' : '&#10007;'}
+          </button>
+          <button class="btn-icon edit-provider" data-id="${escapeAttr(p.id)}" title="Edit">&#9998;</button>
+          <button class="btn-icon delete delete-provider" data-id="${escapeAttr(p.id)}" title="Delete">&#128465;</button>
+        </div>
+      </div>
+    `).join('');
+
+    // Bind event listeners
+    providerListEl.querySelectorAll('.move-up').forEach(btn => {
+      btn.addEventListener('click', () => moveProvider((btn as HTMLElement).dataset.id!, -1));
+    });
+    providerListEl.querySelectorAll('.move-down').forEach(btn => {
+      btn.addEventListener('click', () => moveProvider((btn as HTMLElement).dataset.id!, 1));
+    });
+    providerListEl.querySelectorAll('.test-provider').forEach(btn => {
+      btn.addEventListener('click', () => testProvider((btn as HTMLElement).dataset.id!));
+    });
+    providerListEl.querySelectorAll('.toggle-provider').forEach(btn => {
+      btn.addEventListener('click', () => toggleProvider((btn as HTMLElement).dataset.id!));
+    });
+    providerListEl.querySelectorAll('.edit-provider').forEach(btn => {
+      btn.addEventListener('click', () => editProvider((btn as HTMLElement).dataset.id!));
+    });
+    providerListEl.querySelectorAll('.delete-provider').forEach(btn => {
+      btn.addEventListener('click', () => deleteProvider((btn as HTMLElement).dataset.id!));
+    });
+  }
+
+  async function loadProviders() {
+    try {
+      providers = await window.SharedData.getAIProviders();
+      renderProviders();
+    } catch (err) {
+      console.error('Failed to load providers:', err);
+      providerListEl.innerHTML = '<div class="empty-providers">Failed to load providers</div>';
     }
   }
 
-  checkApiStatus();
+  async function moveProvider(id: string, direction: number) {
+    const sorted = [...providers].sort((a, b) => (a.priority || 99) - (b.priority || 99));
+    const idx = sorted.findIndex(p => p.id === id);
+    const newIdx = idx + direction;
+    if (newIdx < 0 || newIdx >= sorted.length) return;
+
+    // Swap
+    [sorted[idx], sorted[newIdx]] = [sorted[newIdx], sorted[idx]];
+
+    const orderedIds = sorted.map(p => p.id);
+    await window.SharedData.reorderAIProviders(orderedIds);
+
+    // Update local priorities
+    sorted.forEach((p, i) => { p.priority = i + 1; });
+    providers = sorted;
+    renderProviders();
+  }
+
+  async function testProvider(id: string) {
+    const p = providers.find(p => p.id === id);
+    if (!p) return;
+
+    const resultEl = document.getElementById(`test-${id}`);
+    if (resultEl) {
+      resultEl.style.display = 'inline-block';
+      resultEl.className = 'test-result testing';
+      resultEl.textContent = 'Testing...';
+    }
+
+    try {
+      const result = await window.SharedData.testAIProvider(p);
+      if (resultEl) {
+        if (result.success) {
+          resultEl.className = 'test-result success';
+          resultEl.textContent = `OK (${result.elapsed}ms)`;
+        } else {
+          resultEl.className = 'test-result failure';
+          resultEl.textContent = result.error?.slice(0, 40) || 'Failed';
+        }
+      }
+    } catch (err) {
+      if (resultEl) {
+        resultEl.className = 'test-result failure';
+        resultEl.textContent = 'Error';
+      }
+    }
+  }
+
+  async function toggleProvider(id: string) {
+    const p = providers.find(p => p.id === id);
+    if (!p) return;
+
+    p.enabled = !p.enabled;
+    await window.SharedData.saveAIProvider({ id: p.id, enabled: p.enabled, name: p.name, type: p.type, url: p.url, model: p.model, apiKey: p.apiKey, extraHeaders: p.extraHeaders });
+    renderProviders();
+  }
+
+  function editProvider(id: string) {
+    const p = providers.find(p => p.id === id);
+    if (!p) return;
+
+    (document.getElementById('modalTitle') as HTMLElement).textContent = 'Edit Provider';
+    (document.getElementById('providerId') as HTMLInputElement).value = p.id;
+    (document.getElementById('providerName') as HTMLInputElement).value = p.name;
+    (document.getElementById('providerType') as HTMLSelectElement).value = p.type;
+    (document.getElementById('providerUrl') as HTMLInputElement).value = p.url;
+    (document.getElementById('providerModel') as HTMLInputElement).value = p.model;
+    (document.getElementById('providerKey') as HTMLInputElement).value = '';
+    (document.getElementById('providerKey') as HTMLInputElement).placeholder = p.apiKey ? `Current: ${p.apiKey}` : 'Leave blank if not required';
+
+    // Populate extra headers
+    const container = document.getElementById('extraHeadersContainer')!;
+    container.innerHTML = '';
+    if (p.extraHeaders && Object.keys(p.extraHeaders).length > 0) {
+      for (const [key, val] of Object.entries(p.extraHeaders)) {
+        addHeaderRow(key, '', `Current: ${val as string}`);
+      }
+    } else {
+      addHeaderRow();
+    }
+
+    providerModal.style.display = 'flex';
+  }
+
+  async function deleteProvider(id: string) {
+    const p = providers.find(p => p.id === id);
+    if (!p) return;
+    if (!confirm(`Delete provider "${p.name}"? This cannot be undone.`)) return;
+
+    await window.SharedData.deleteAIProvider(id);
+    providers = providers.filter(p => p.id !== id);
+    renderProviders();
+  }
+
+  // Modal controls
+  document.getElementById('addProviderBtn')?.addEventListener('click', () => {
+    (document.getElementById('modalTitle') as HTMLElement).textContent = 'Add Provider';
+    providerForm.reset();
+    (document.getElementById('providerId') as HTMLInputElement).value = '';
+    (document.getElementById('providerKey') as HTMLInputElement).placeholder = 'Leave blank if not required';
+    const container = document.getElementById('extraHeadersContainer')!;
+    container.innerHTML = '';
+    addHeaderRow();
+    providerModal.style.display = 'flex';
+  });
+
+  function closeModal() {
+    providerModal.style.display = 'none';
+  }
+
+  document.getElementById('modalClose')?.addEventListener('click', closeModal);
+  document.getElementById('cancelProvider')?.addEventListener('click', closeModal);
+  providerModal.querySelector('.modal-overlay')?.addEventListener('click', closeModal);
+
+  // Extra header rows
+  function addHeaderRow(key = '', value = '', placeholder = 'Header value') {
+    const container = document.getElementById('extraHeadersContainer')!;
+    const row = document.createElement('div');
+    row.className = 'extra-header-row';
+    row.innerHTML = `
+      <input type="text" class="header-key" placeholder="Header name" value="${escapeAttr(key)}" />
+      <input type="password" class="header-value" placeholder="${escapeAttr(placeholder)}" value="${escapeAttr(value)}" />
+      <button type="button" class="btn-icon remove-header" title="Remove">&times;</button>
+    `;
+    row.querySelector('.remove-header')?.addEventListener('click', () => row.remove());
+    container.appendChild(row);
+  }
+
+  document.getElementById('addHeaderBtn')?.addEventListener('click', () => addHeaderRow());
+
+  // Save provider
+  providerForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const id = (document.getElementById('providerId') as HTMLInputElement).value;
+    const name = (document.getElementById('providerName') as HTMLInputElement).value.trim();
+    const type = (document.getElementById('providerType') as HTMLSelectElement).value;
+    const url = (document.getElementById('providerUrl') as HTMLInputElement).value.trim();
+    const model = (document.getElementById('providerModel') as HTMLInputElement).value.trim();
+    const apiKey = (document.getElementById('providerKey') as HTMLInputElement).value;
+
+    // Collect extra headers
+    const extraHeaders: Record<string, string> = {};
+    document.querySelectorAll('#extraHeadersContainer .extra-header-row').forEach(row => {
+      const k = (row.querySelector('.header-key') as HTMLInputElement)?.value.trim();
+      const v = (row.querySelector('.header-value') as HTMLInputElement)?.value;
+      if (k) {
+        // If value is empty and we're editing, keep the masked value (server will resolve it)
+        if (id && !v) {
+          const existing = providers.find(p => p.id === id);
+          if (existing?.extraHeaders?.[k]) {
+            extraHeaders[k] = existing.extraHeaders[k];
+          }
+        } else if (v) {
+          extraHeaders[k] = v;
+        }
+      }
+    });
+
+    const provider: any = { name, type, url, model, extraHeaders };
+    if (id) provider.id = id;
+
+    // For apiKey: if editing and left blank, keep existing masked value
+    if (id && !apiKey) {
+      const existing = providers.find(p => p.id === id);
+      if (existing) provider.apiKey = existing.apiKey;
+    } else {
+      provider.apiKey = apiKey;
+    }
+
+    const saveBtn = document.getElementById('saveProviderBtn') as HTMLButtonElement;
+    if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = 'Saving...'; }
+
+    try {
+      await window.SharedData.saveAIProvider(provider);
+      closeModal();
+      await loadProviders();
+    } catch (err) {
+      alert('Failed to save provider: ' + (err as Error).message);
+    }
+
+    if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Save Provider'; }
+  });
+
+  loadProviders();
 
   // Usage Analytics
   const PAGE_SIZE = 50;

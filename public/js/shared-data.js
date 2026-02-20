@@ -254,6 +254,63 @@ window.SharedData = {
     return await apiCall('chatUsage', 'set', 'data', data);
   },
 
+  // ============== AI PROVIDERS ==============
+  // These use a dedicated function (not data-store) for secure credential handling
+  async getAIProviders() {
+    try {
+      const response = await fetch('/.netlify/functions/ai-provider-config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'list' })
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error('Failed to load AI providers:', error);
+      return [];
+    }
+  },
+
+  async saveAIProvider(provider) {
+    const response = await fetch('/.netlify/functions/ai-provider-config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'save', provider })
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return await response.json();
+  },
+
+  async deleteAIProvider(id) {
+    const response = await fetch('/.netlify/functions/ai-provider-config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'delete', id })
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return await response.json();
+  },
+
+  async testAIProvider(provider) {
+    const response = await fetch('/.netlify/functions/ai-provider-config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'test', provider })
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return await response.json();
+  },
+
+  async reorderAIProviders(orderedIds) {
+    const response = await fetch('/.netlify/functions/ai-provider-config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'reorder', orderedIds })
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return await response.json();
+  },
+
   // Clear all caches
   clearCache
 };
