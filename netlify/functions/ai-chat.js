@@ -157,7 +157,7 @@ export async function handler(event) {
       : buildSystemPrompt(training || {});
 
     // Call AI via provider abstraction (failover across configured providers)
-    const result = await callAI(systemPrompt, conversationMessages, { maxTokens: 500 });
+    const result = await callAI(systemPrompt, conversationMessages, { maxTokens: 750 });
     const aiResponse = result.text || 'Sorry, I could not generate a response.';
 
     // Log usage for public requests (fire-and-forget)
