@@ -81,6 +81,7 @@ const pageTip = "Configure and test the AI chatbot";
                 <tr>
                   <th>Date/Time</th>
                   <th>Visitor</th>
+                  <th>Provider</th>
                   <th>Conversation</th>
                   <th>Tokens (In/Out)</th>
                   <th>Est. Cost</th>
@@ -88,7 +89,7 @@ const pageTip = "Configure and test the AI chatbot";
               </thead>
               <tbody id="usageTableBody">
                 <tr>
-                  <td colspan="5" class="empty-state">Loading usage data...</td>
+                  <td colspan="6" class="empty-state">Loading usage data...</td>
                 </tr>
               </tbody>
             </table>
@@ -1204,6 +1205,11 @@ const pageTip = "Configure and test the AI chatbot";
     max-width: 320px;
   }
 
+  .provider-cell {
+    font-size: 0.8125rem;
+    white-space: nowrap;
+  }
+
   .conversation-question,
   .conversation-answer {
     font-size: 0.8125rem;
@@ -2135,9 +2141,11 @@ A: You can book directly on our website at islandgoodes.com/book or call us at 8
       const cost = (inTok / 1_000_000) * 0.25 + (outTok / 1_000_000) * 1.25;
       const question = e.question ? escapeHtml(e.question) : '';
       const answer = e.answer ? escapeHtml(e.answer) : '';
+      const providerStr = e.provider ? escapeHtml(e.provider) : '--';
       return `<tr>
         <td>${dateStr} ${timeStr}</td>
         <td>${escapeHtml(e.ip || 'unknown')}</td>
+        <td class="provider-cell">${providerStr}</td>
         <td class="conversation-cell">
           ${question ? `<p class="conversation-question"><span class="conversation-label">Q:</span>${question}</p>` : ''}
           ${answer ? `<p class="conversation-answer"><span class="conversation-label">A:</span>${answer}</p>` : `<span style="color:var(--color-text-light)">${e.messageCount || 0} msg</span>`}
@@ -2176,7 +2184,7 @@ A: You can book directly on our website at islandgoodes.com/book or call us at 8
 
       if (entries.length === 0) {
         if (tableBody) {
-          tableBody.innerHTML = '<tr><td colspan="5" class="empty-state">No chat activity yet</td></tr>';
+          tableBody.innerHTML = '<tr><td colspan="6" class="empty-state">No chat activity yet</td></tr>';
         }
         document.getElementById('statToday')!.textContent = '0';
         document.getElementById('statWeek')!.textContent = '0';
@@ -2224,7 +2232,7 @@ A: You can book directly on our website at islandgoodes.com/book or call us at 8
     } catch (err) {
       console.error('Failed to load usage data:', err);
       if (tableBody) {
-        tableBody.innerHTML = '<tr><td colspan="5" class="empty-state">Failed to load usage data</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="6" class="empty-state">Failed to load usage data</td></tr>';
       }
     }
   }
@@ -2239,7 +2247,7 @@ A: You can book directly on our website at islandgoodes.com/book or call us at 8
     document.getElementById('statWeek')!.textContent = '0';
     document.getElementById('statMonth')!.textContent = '0';
     document.getElementById('statCost')!.textContent = '$0.00';
-    document.getElementById('usageTableBody')!.innerHTML = '<tr><td colspan="5" class="empty-state">No chat activity yet</td></tr>';
+    document.getElementById('usageTableBody')!.innerHTML = '<tr><td colspan="6" class="empty-state">No chat activity yet</td></tr>';
     document.getElementById('pagination')!.innerHTML = '';
   });
 

@@ -51,7 +51,7 @@ function checkDailyLimit(ip) {
 }
 
 // Log chat usage to Netlify Blobs (fire-and-forget)
-function logChatUsage(ip, messageCount, usage, lastUserMessage, aiResponse) {
+function logChatUsage(ip, messageCount, usage, lastUserMessage, aiResponse, providerName) {
   try {
     const store = getStore({
       name: 'chat-usage',
@@ -69,7 +69,8 @@ function logChatUsage(ip, messageCount, usage, lastUserMessage, aiResponse) {
       inputTokens: usage?.input_tokens || 0,
       outputTokens: usage?.output_tokens || 0,
       question: String(lastUserMessage || '').slice(0, 500),
-      answer: String(aiResponse || '').slice(0, 500)
+      answer: String(aiResponse || '').slice(0, 500),
+      provider: providerName || 'unknown'
     };
 
     // Read, append, cap, write — fire-and-forget
@@ -162,7 +163,7 @@ export async function handler(event) {
     // Log usage for public requests (fire-and-forget)
     if (source === 'public') {
       const lastUserMsg = conversationMessages.filter(m => m.role === 'user').pop()?.content || '';
-      logChatUsage(clientIp, conversationMessages.length, result.usage, lastUserMsg, aiResponse);
+      logChatUsage(clientIp, conversationMessages.length, result.usage, lastUserMsg, aiResponse, result.provider);
     }
 
     return {
