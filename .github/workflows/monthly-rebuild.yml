@@ -39,3 +39,8 @@ jobs:
         run: |
           RESPONSE=$(curl -s -X POST "https://islandgoodes.com/.netlify/functions/generate-chat-digest")
           echo "Chat Digest Response: $RESPONSE"
+
+      - name: Generate weekly visitor report
+        run: |
+          RESPONSE=$(curl -s -X POST "https://islandgoodes.com/.netlify/functions/generate-weekly-report")
+          echo "Weekly Report Response: $RESPONSE"
