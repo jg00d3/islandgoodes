@@ -1,5 +1,6 @@
 ---
 import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import blogDrafts from '../../data/blog-drafts-data.json';
 
 const title = "Big Island Travel Blog";
 const description = "Travel tips, guides, and insider knowledge for visiting Hilo and the Big Island of Hawaii. Discover volcanoes, waterfalls, beaches, and local favorites.";
@@ -205,7 +206,18 @@ const allPosts = [
 const today = new Date();
 today.setHours(23, 59, 59, 999); // Include posts from today
 
-const posts = allPosts
+// Merge static posts with approved AI-generated posts
+const aiPosts = (blogDrafts || []).map(draft => ({
+  slug: `ai/${draft.slug}`,
+  title: draft.title,
+  excerpt: draft.excerpt || draft.metaDescription || '',
+  date: draft.date.split('T')[0],
+  category: draft.category || 'Local Guide',
+  image: '',
+  isAI: true
+}));
+
+const posts = [...allPosts, ...aiPosts]
   .filter(post => new Date(post.date) <= today)
   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
@@ -243,9 +255,18 @@ const needsBetterPhoto = [
       <div class="blog-grid">
         {posts.map(post => (
           <article class="blog-card">
-            <div class="blog-image">
+            <div class={`blog-image ${!post.image ? 'blog-image-gradient' : ''}`}>
               <a href={`/blog/${post.slug}`} class="blog-image-link">
-                <img src={post.image} alt={post.title} loading="lazy" />
+                {post.image ? (
+                  <img src={post.image} alt={post.title} loading="lazy" />
+                ) : (
+                  <div class="blog-image-placeholder">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.6">
+                      <path d="M12 20h9"/>
+                      <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                    </svg>
+                  </div>
+                )}
               </a>
               <span class="category">{post.category}</span>
               {needsBetterPhoto.includes(post.image) && (
@@ -448,6 +469,19 @@ const needsBetterPhoto = [
 
   .blog-image img[src=""], .blog-image img:not([src]) {
     display: none;
+  }
+
+  .blog-image-gradient {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 50%, #0a3d32 100%);
+  }
+
+  .blog-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.7);
   }
 
   .category {

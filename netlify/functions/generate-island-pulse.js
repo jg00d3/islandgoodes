@@ -5,6 +5,7 @@
 
 import { getStore } from '@netlify/blobs';
 import { callAI } from './ai-provider.js';
+import { fetchGoogleNewsHeadlines, fetchVolcanoData, fetchTrendingSearchTerms } from './data-sources.js';
 
 const SITE_ID = '347c1eb9-e6b5-4736-b000-f6908c1f85fc';
 const STORE_NAME = 'island-pulse';
@@ -42,90 +43,6 @@ function getDayOfYear() {
   const start = new Date(now.getFullYear(), 0, 0);
   const diff = now - start;
   return Math.floor(diff / (1000 * 60 * 60 * 24));
-}
-
-async function fetchGoogleNewsHeadlines() {
-  try {
-    const url = 'https://news.google.com/rss/search?q=Hawaii+Big+Island+travel+tourism&hl=en&gl=US';
-    const response = await fetch(url);
-    if (!response.ok) return [];
-
-    const xml = await response.text();
-
-    // Simple XML parsing for RSS items — extract title and pubDate
-    const items = [];
-    const itemRegex = /<item>([\s\S]*?)<\/item>/g;
-    let match;
-    while ((match = itemRegex.exec(xml)) !== null && items.length < 5) {
-      const titleMatch = match[1].match(/<title><!\[CDATA\[(.*?)\]\]>|<title>(.*?)<\/title>/);
-      const title = titleMatch ? (titleMatch[1] || titleMatch[2]) : null;
-      if (title) {
-        items.push(title);
-      }
-    }
-    return items;
-  } catch (err) {
-    console.error('Failed to fetch Google News:', err.message);
-    return [];
-  }
-}
-
-async function fetchVolcanoData() {
-  try {
-    const url = 'https://volcanoes.usgs.gov/hans-public/api/volcano/getElevatedVolcanoes';
-    const response = await fetch(url);
-    if (!response.ok) return null;
-
-    const data = await response.json();
-    if (!Array.isArray(data)) return null;
-
-    // Filter for Hawaii volcanoes (HVO observatory)
-    const hawaiiVolcanoes = data.filter(v =>
-      v.volcano_name && (v.volcano_name.includes('Kilauea') || v.volcano_name.includes('Mauna Loa'))
-    );
-
-    if (hawaiiVolcanoes.length === 0) return null;
-
-    return hawaiiVolcanoes.map(v => ({
-      name: v.volcano_name,
-      alertLevel: v.alert_level || 'unknown',
-      colorCode: v.color_code || 'unknown'
-    }));
-  } catch (err) {
-    console.error('Failed to fetch volcano data:', err.message);
-    return null;
-  }
-}
-
-// Free SERP intelligence — Google Autocomplete API (no key needed)
-async function fetchTrendingSearchTerms() {
-  const queries = [
-    'big island hawaii',
-    'hilo hawaii',
-    'hawaii vacation',
-    'things to do big island'
-  ];
-
-  const allSuggestions = [];
-
-  for (const q of queries) {
-    try {
-      const url = `https://suggestqueries.google.com/complete/search?q=${encodeURIComponent(q)}&client=firefox`;
-      const response = await fetch(url);
-      if (!response.ok) continue;
-
-      const data = await response.json();
-      // Response format: [query, [suggestion1, suggestion2, ...]]
-      if (Array.isArray(data[1])) {
-        allSuggestions.push(...data[1].slice(0, 5));
-      }
-    } catch (e) {
-      // Skip failed queries
-    }
-  }
-
-  // Deduplicate and return
-  return [...new Set(allSuggestions)].slice(0, 15);
 }
 
 // Get previous article titles to avoid repetition

@@ -21,7 +21,9 @@ const STORES = {
   photoContributors: 'photo-contributors',
   blogContributors: 'blog-contributors',
   planningWorkflow: 'planning-workflow',
-  chatUsage: 'chat-usage'
+  chatUsage: 'chat-usage',
+  blogDrafts: 'blog-drafts',
+  reviewHistory: 'review-history'
 };
 
 // Default admin (only used on first setup - password set via admin-set-password function)
@@ -130,7 +132,8 @@ export async function handler(event, context) {
           if (storeName === 'changeRequests' || storeName === 'activityLog' ||
               storeName === 'roadmap' || storeName === 'pendingAdmins' ||
               storeName === 'deletedImages' || storeName === 'newsletterSubscribers' ||
-              storeName === 'contactInquiries' || storeName === 'chatUsage') {
+              storeName === 'contactInquiries' || storeName === 'chatUsage' ||
+              storeName === 'blogDrafts' || storeName === 'reviewHistory') {
             return { statusCode: 200, headers, body: JSON.stringify([]) };
           }
           if (storeName === 'editedImages' || storeName === 'aiTraining' ||

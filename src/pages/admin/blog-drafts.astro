@@ -1,0 +1,556 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+
+const title = "Blog Drafts";
+const description = "Review and approve AI-generated blog drafts";
+const pageTitle = "AI Blog Drafts";
+const pageTip = "Review, approve, or reject AI-generated blog posts";
+---
+
+<AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
+  <div id="authCheck"></div>
+
+  <div id="dashboard" class="dashboard" style="display: none;">
+    <section class="dashboard-hero">
+      <div class="container">
+        <div class="hero-header">
+          <div>
+            <h1>AI Blog Drafts</h1>
+            <p>Review and approve AI-generated blog posts</p>
+          </div>
+          <button id="generateBtn" class="btn btn-primary" onclick="generateNewDraft()">
+            Generate New Draft
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="drafts-section">
+      <div class="container">
+        <!-- Stats -->
+        <div class="stats-row" id="statsRow">
+          <div class="stat-card">
+            <span class="stat-value" id="statPending">0</span>
+            <span class="stat-label">Pending</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value" id="statApproved">0</span>
+            <span class="stat-label">Approved</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value" id="statRejected">0</span>
+            <span class="stat-label">Rejected</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value" id="statTotal">0</span>
+            <span class="stat-label">Total</span>
+          </div>
+        </div>
+
+        <!-- Filter tabs -->
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-filter="all">All</button>
+          <button class="filter-tab" data-filter="pending">Pending</button>
+          <button class="filter-tab" data-filter="approved">Approved</button>
+          <button class="filter-tab" data-filter="rejected">Rejected</button>
+        </div>
+
+        <!-- Drafts list -->
+        <div id="draftsList" class="drafts-list">
+          <div class="loading">Loading drafts...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rejection reason modal -->
+    <div id="rejectModal" class="modal" style="display: none;">
+      <div class="modal-backdrop" onclick="closeRejectModal()"></div>
+      <div class="modal-content">
+        <h3>Reject Draft</h3>
+        <p>Optionally provide a reason for rejection:</p>
+        <textarea id="rejectionReason" rows="3" placeholder="Reason for rejection (optional)"></textarea>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="closeRejectModal()">Cancel</button>
+          <button class="btn btn-danger" onclick="confirmReject()">Reject Draft</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</AdminLayout>
+
+<script is:inline src="/js/shared-data.js"></script>
+<script is:inline>
+  let allDrafts = [];
+  let currentFilter = 'all';
+  let pendingRejectId = null;
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    // Auth check
+    const session = JSON.parse(sessionStorage.getItem('islandgoodes_admin_session') || 'null');
+    if (!session) {
+      window.location.href = '/admin';
+      return;
+    }
+    document.getElementById('dashboard').style.display = 'block';
+
+    await loadDrafts();
+
+    // Filter tab handlers
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentFilter = tab.dataset.filter;
+        renderDrafts();
+      });
+    });
+  });
+
+  async function loadDrafts() {
+    try {
+      allDrafts = await window.SharedData.getBlogDrafts();
+      if (!Array.isArray(allDrafts)) allDrafts = [];
+      updateStats();
+      renderDrafts();
+    } catch (err) {
+      console.error('Failed to load drafts:', err);
+      document.getElementById('draftsList').innerHTML = '<p class="error">Failed to load drafts. Please try again.</p>';
+    }
+  }
+
+  function updateStats() {
+    document.getElementById('statPending').textContent = allDrafts.filter(d => d.status === 'pending').length;
+    document.getElementById('statApproved').textContent = allDrafts.filter(d => d.status === 'approved').length;
+    document.getElementById('statRejected').textContent = allDrafts.filter(d => d.status === 'rejected').length;
+    document.getElementById('statTotal').textContent = allDrafts.length;
+  }
+
+  function renderDrafts() {
+    const container = document.getElementById('draftsList');
+    const filtered = currentFilter === 'all' ? allDrafts : allDrafts.filter(d => d.status === currentFilter);
+
+    if (filtered.length === 0) {
+      container.innerHTML = '<div class="empty-state">No drafts found. Click "Generate New Draft" to create one.</div>';
+      return;
+    }
+
+    container.innerHTML = filtered.map(draft => {
+      const date = new Date(draft.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      const wordCount = draft.body ? draft.body.split(/\s+/).length : 0;
+      const statusClass = draft.status === 'approved' ? 'status-approved' : draft.status === 'rejected' ? 'status-rejected' : 'status-pending';
+      const statusLabel = draft.status.charAt(0).toUpperCase() + draft.status.slice(1);
+
+      return `
+        <div class="draft-card" data-id="${draft.id}">
+          <div class="draft-header" onclick="toggleDraft('${draft.id}')">
+            <div class="draft-meta">
+              <span class="status-badge ${statusClass}">${statusLabel}</span>
+              <span class="draft-category">${draft.category || 'General'}</span>
+              <span class="draft-date">${date}</span>
+              <span class="draft-words">${wordCount} words</span>
+              <span class="draft-tone">${draft.tone || ''}</span>
+            </div>
+            <h3 class="draft-title">${escapeHtml(draft.title)}</h3>
+            ${draft.excerpt ? `<p class="draft-excerpt">${escapeHtml(draft.excerpt)}</p>` : ''}
+            <svg class="expand-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6,9 12,15 18,9"/>
+            </svg>
+          </div>
+          <div class="draft-body" id="body-${draft.id}" style="display: none;">
+            <div class="draft-content">${renderMarkdown(draft.body || '')}</div>
+            ${draft.rejectionReason ? `<div class="rejection-reason"><strong>Rejection reason:</strong> ${escapeHtml(draft.rejectionReason)}</div>` : ''}
+            ${draft.reviewedAt ? `<p class="reviewed-at">Reviewed: ${new Date(draft.reviewedAt).toLocaleString()}</p>` : ''}
+            ${draft.status === 'pending' ? `
+              <div class="draft-actions">
+                <button class="btn btn-primary" onclick="approveDraft('${draft.id}')">Approve & Publish</button>
+                <button class="btn btn-danger-outline" onclick="openRejectModal('${draft.id}')">Reject</button>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function toggleDraft(id) {
+    const body = document.getElementById('body-' + id);
+    const card = body.closest('.draft-card');
+    const isOpen = body.style.display !== 'none';
+    body.style.display = isOpen ? 'none' : 'block';
+    card.classList.toggle('expanded', !isOpen);
+  }
+
+  async function approveDraft(id) {
+    if (!confirm('Approve this draft? It will be published on the blog after a site rebuild.')) return;
+
+    const btn = event.target;
+    btn.disabled = true;
+    btn.textContent = 'Approving...';
+
+    try {
+      const response = await fetch('/.netlify/functions/blog-draft-action', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'approve', draftId: id })
+      });
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Failed to approve');
+
+      await window.SharedData.logActivity('blog', 'Approved AI blog draft', result.title);
+      await loadDrafts();
+    } catch (err) {
+      console.error('Approve failed:', err);
+      alert('Failed to approve draft: ' + err.message);
+      btn.disabled = false;
+      btn.textContent = 'Approve & Publish';
+    }
+  }
+
+  function openRejectModal(id) {
+    pendingRejectId = id;
+    document.getElementById('rejectionReason').value = '';
+    document.getElementById('rejectModal').style.display = 'flex';
+  }
+
+  function closeRejectModal() {
+    pendingRejectId = null;
+    document.getElementById('rejectModal').style.display = 'none';
+  }
+
+  async function confirmReject() {
+    if (!pendingRejectId) return;
+    const reason = document.getElementById('rejectionReason').value.trim();
+
+    try {
+      const response = await fetch('/.netlify/functions/blog-draft-action', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'reject', draftId: pendingRejectId, rejectionReason: reason })
+      });
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Failed to reject');
+
+      closeRejectModal();
+      await window.SharedData.logActivity('blog', 'Rejected AI blog draft', result.title);
+      await loadDrafts();
+    } catch (err) {
+      console.error('Reject failed:', err);
+      alert('Failed to reject draft: ' + err.message);
+    }
+  }
+
+  async function generateNewDraft() {
+    const btn = document.getElementById('generateBtn');
+    btn.disabled = true;
+    btn.textContent = 'Generating...';
+
+    try {
+      const response = await fetch('/.netlify/functions/generate-blog-draft', { method: 'POST' });
+      const result = await response.json();
+
+      if (!response.ok) throw new Error(result.error || 'Generation failed');
+
+      await window.SharedData.logActivity('blog', 'Manually generated AI blog draft', result.title);
+      await loadDrafts();
+    } catch (err) {
+      console.error('Generation failed:', err);
+      alert('Failed to generate draft: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Generate New Draft';
+    }
+  }
+
+  function renderMarkdown(text) {
+    return text
+      .split('\n\n')
+      .map(p => {
+        p = p.trim();
+        if (!p) return '';
+        if (p.startsWith('## ')) return '<h2>' + escapeHtml(p.replace('## ', '')) + '</h2>';
+        if (p.startsWith('### ')) return '<h3>' + escapeHtml(p.replace('### ', '')) + '</h3>';
+        return '<p>' + escapeHtml(p) + '</p>';
+      })
+      .join('');
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+</script>
+
+<style>
+  .dashboard-hero {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: white;
+    padding: 2rem 0;
+  }
+
+  .hero-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-header h1 { margin: 0; font-size: 1.75rem; }
+  .hero-header p { margin: 0.25rem 0 0; opacity: 0.9; }
+
+  .btn {
+    padding: 0.625rem 1.25rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+  }
+
+  .btn-primary { background: white; color: var(--color-primary); }
+  .btn-primary:hover { background: #f0f0f0; }
+  .btn-secondary { background: #e0e0e0; color: #333; }
+  .btn-danger { background: #dc3545; color: white; }
+  .btn-danger:hover { background: #c82333; }
+  .btn-danger-outline { background: transparent; color: #dc3545; border: 1px solid #dc3545; }
+  .btn-danger-outline:hover { background: #dc3545; color: white; }
+
+  .drafts-section { padding: 2rem 0 4rem; }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  }
+
+  .stat-value {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+
+  .stat-label {
+    font-size: 0.8125rem;
+    color: var(--color-text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .filter-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-tab {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 50px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+
+  .filter-tab.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+
+  .drafts-list { display: flex; flex-direction: column; gap: 1rem; }
+
+  .draft-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+
+  .draft-card.expanded { box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+
+  .draft-header {
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .draft-header:hover { background: #fafafa; }
+
+  .draft-meta {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+    font-size: 0.8125rem;
+  }
+
+  .status-badge {
+    padding: 0.25rem 0.625rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .status-pending { background: #fff3cd; color: #856404; }
+  .status-approved { background: #d4edda; color: #155724; }
+  .status-rejected { background: #f8d7da; color: #721c24; }
+
+  .draft-category { color: var(--color-primary); font-weight: 600; }
+  .draft-date, .draft-words, .draft-tone { color: var(--color-text-light); }
+
+  .draft-title {
+    font-size: 1.125rem;
+    margin: 0;
+    color: var(--color-text);
+    line-height: 1.4;
+  }
+
+  .draft-excerpt {
+    font-size: 0.9375rem;
+    color: var(--color-text-light);
+    margin: 0.375rem 0 0;
+    line-height: 1.5;
+  }
+
+  .expand-icon {
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-light);
+    transition: transform 0.2s;
+  }
+
+  .draft-card.expanded .expand-icon { transform: translateY(-50%) rotate(180deg); }
+
+  .draft-body {
+    padding: 0 1.5rem 1.5rem;
+    border-top: 1px solid #eee;
+  }
+
+  .draft-content {
+    padding: 1rem 0;
+    line-height: 1.8;
+    color: var(--color-text);
+  }
+
+  .draft-content h2 {
+    font-size: 1.25rem;
+    color: var(--color-primary);
+    margin: 1.5rem 0 0.75rem;
+  }
+
+  .draft-content h3 {
+    font-size: 1.125rem;
+    margin: 1.25rem 0 0.5rem;
+  }
+
+  .draft-content p {
+    margin: 0 0 1rem;
+    line-height: 1.8;
+  }
+
+  .rejection-reason {
+    background: #fff3cd;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+  }
+
+  .reviewed-at {
+    font-size: 0.8125rem;
+    color: var(--color-text-light);
+    margin: 0.5rem 0;
+  }
+
+  .draft-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+  }
+
+  .empty-state, .loading {
+    text-align: center;
+    padding: 3rem;
+    color: var(--color-text-light);
+    font-size: 1rem;
+  }
+
+  .error { color: #dc3545; text-align: center; padding: 2rem; }
+
+  /* Modal */
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+  }
+
+  .modal-content {
+    position: relative;
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    max-width: 480px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  }
+
+  .modal-content h3 { margin: 0 0 0.5rem; }
+  .modal-content p { color: var(--color-text-light); margin: 0 0 1rem; }
+
+  .modal-content textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.9375rem;
+    resize: vertical;
+    box-sizing: border-box;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 640px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .draft-actions { flex-direction: column; }
+  }
+</style>

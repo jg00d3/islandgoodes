@@ -1,0 +1,509 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+
+const title = "Review Responder";
+const description = "AI-powered review response generator for guest reviews";
+const pageTitle = "Review Responder";
+const pageTip = "Paste a guest review and get an AI-drafted reply";
+---
+
+<AdminLayout title={title} description={description} pageTitle={pageTitle} pageTip={pageTip}>
+  <div id="authCheck"></div>
+
+  <div id="dashboard" class="dashboard" style="display: none;">
+    <section class="dashboard-hero">
+      <div class="container">
+        <div class="hero-header">
+          <div>
+            <h1>Review Responder</h1>
+            <p>AI-drafted replies to guest reviews</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="responder-section">
+      <div class="container">
+        <div class="responder-layout">
+          <!-- Input Side -->
+          <div class="input-card">
+            <h2>Guest Review</h2>
+            <div class="form-group">
+              <label for="reviewText">Paste the review</label>
+              <textarea id="reviewText" rows="6" placeholder="Paste the guest's review here..."></textarea>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="reviewSource">Source</label>
+                <select id="reviewSource">
+                  <option value="Google">Google</option>
+                  <option value="TripAdvisor">TripAdvisor</option>
+                  <option value="Airbnb">Airbnb</option>
+                  <option value="VRBO">VRBO</option>
+                  <option value="Booking.com">Booking.com</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="starRating">Rating</label>
+                <div class="star-rating" id="starRatingWidget">
+                  <button type="button" class="star active" data-value="1">&#9733;</button>
+                  <button type="button" class="star active" data-value="2">&#9733;</button>
+                  <button type="button" class="star active" data-value="3">&#9733;</button>
+                  <button type="button" class="star active" data-value="4">&#9733;</button>
+                  <button type="button" class="star active" data-value="5">&#9733;</button>
+                </div>
+                <input type="hidden" id="starRating" value="5" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="guestName">Guest name (optional)</label>
+              <input type="text" id="guestName" placeholder="e.g., Sarah" />
+            </div>
+            <button id="generateBtn" class="btn btn-primary btn-large" onclick="generateReply()">
+              Generate Reply
+            </button>
+          </div>
+
+          <!-- Output Side -->
+          <div class="output-card" id="outputCard" style="display: none;">
+            <div class="output-header">
+              <h2>Drafted Reply</h2>
+              <span class="provider-tag" id="providerTag"></span>
+            </div>
+            <textarea id="replyText" rows="8" class="reply-textarea"></textarea>
+            <div class="output-actions">
+              <button class="btn btn-primary" onclick="copyReply()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                Copy
+              </button>
+              <button class="btn btn-secondary" onclick="generateReply()">Regenerate</button>
+              <button class="btn btn-secondary" onclick="saveToHistory()">Save to History</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- History -->
+        <div class="history-section" id="historySection">
+          <div class="history-header">
+            <h2>Response History</h2>
+            <button class="btn btn-text" onclick="toggleHistory()">
+              <span id="historyToggle">Show</span>
+            </button>
+          </div>
+          <div id="historyList" class="history-list" style="display: none;"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</AdminLayout>
+
+<script is:inline src="/js/shared-data.js"></script>
+<script is:inline>
+  let currentRating = 5;
+  let historyVisible = false;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Auth check
+    const session = JSON.parse(sessionStorage.getItem('islandgoodes_admin_session') || 'null');
+    if (!session) {
+      window.location.href = '/admin';
+      return;
+    }
+    document.getElementById('dashboard').style.display = 'block';
+
+    // Star rating widget
+    document.querySelectorAll('.star').forEach(star => {
+      star.addEventListener('click', () => {
+        currentRating = parseInt(star.dataset.value);
+        document.getElementById('starRating').value = currentRating;
+        updateStars();
+      });
+    });
+
+    loadHistory();
+  });
+
+  function updateStars() {
+    document.querySelectorAll('.star').forEach(star => {
+      const val = parseInt(star.dataset.value);
+      star.classList.toggle('active', val <= currentRating);
+    });
+  }
+
+  async function generateReply() {
+    const reviewText = document.getElementById('reviewText').value.trim();
+    if (!reviewText) {
+      alert('Please paste a review first.');
+      return;
+    }
+
+    const btn = document.getElementById('generateBtn');
+    btn.disabled = true;
+    btn.textContent = 'Generating...';
+
+    try {
+      const response = await fetch('/.netlify/functions/generate-review-reply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          reviewText,
+          source: document.getElementById('reviewSource').value,
+          starRating: currentRating,
+          guestName: document.getElementById('guestName').value.trim()
+        })
+      });
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Generation failed');
+
+      document.getElementById('replyText').value = result.reply;
+      document.getElementById('providerTag').textContent = result.provider || '';
+      document.getElementById('outputCard').style.display = 'block';
+
+      // Scroll to output
+      document.getElementById('outputCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } catch (err) {
+      console.error('Generation failed:', err);
+      alert('Failed to generate reply: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Generate Reply';
+    }
+  }
+
+  async function copyReply() {
+    const text = document.getElementById('replyText').value;
+    try {
+      await navigator.clipboard.writeText(text);
+      const btn = event.target.closest('button');
+      const original = btn.innerHTML;
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg> Copied!';
+      setTimeout(() => { btn.innerHTML = original; }, 2000);
+    } catch (err) {
+      // Fallback
+      const ta = document.getElementById('replyText');
+      ta.select();
+      document.execCommand('copy');
+    }
+  }
+
+  async function saveToHistory() {
+    try {
+      const history = await window.SharedData.getReviewHistory() || [];
+      history.unshift({
+        id: Date.now().toString(36),
+        reviewText: document.getElementById('reviewText').value.trim(),
+        source: document.getElementById('reviewSource').value,
+        starRating: currentRating,
+        guestName: document.getElementById('guestName').value.trim(),
+        reply: document.getElementById('replyText').value,
+        timestamp: new Date().toISOString()
+      });
+
+      // Keep last 100
+      while (history.length > 100) history.pop();
+
+      await window.SharedData.saveReviewHistory(history);
+      await window.SharedData.logActivity('reviews', 'Saved review response', document.getElementById('reviewSource').value + ' ' + currentRating + '-star');
+
+      const btn = event.target;
+      btn.textContent = 'Saved!';
+      setTimeout(() => { btn.textContent = 'Save to History'; }, 2000);
+
+      await loadHistory();
+    } catch (err) {
+      console.error('Failed to save:', err);
+      alert('Failed to save to history.');
+    }
+  }
+
+  async function loadHistory() {
+    try {
+      const history = await window.SharedData.getReviewHistory();
+      if (!Array.isArray(history) || history.length === 0) {
+        document.getElementById('historySection').style.display = 'none';
+        return;
+      }
+
+      document.getElementById('historySection').style.display = 'block';
+
+      const container = document.getElementById('historyList');
+      container.innerHTML = history.slice(0, 20).map(item => {
+        const date = new Date(item.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const stars = '&#9733;'.repeat(item.starRating) + '&#9734;'.repeat(5 - item.starRating);
+        return `
+          <div class="history-item">
+            <div class="history-meta">
+              <span class="history-source">${escapeHtml(item.source)}</span>
+              <span class="history-stars">${stars}</span>
+              ${item.guestName ? `<span class="history-guest">${escapeHtml(item.guestName)}</span>` : ''}
+              <span class="history-date">${date}</span>
+            </div>
+            <p class="history-review">"${escapeHtml(item.reviewText.slice(0, 150))}${item.reviewText.length > 150 ? '...' : ''}"</p>
+            <p class="history-reply">${escapeHtml(item.reply.slice(0, 200))}${item.reply.length > 200 ? '...' : ''}</p>
+            <button class="btn btn-text btn-small" onclick="loadFromHistory('${item.id}')">Load</button>
+          </div>
+        `;
+      }).join('');
+    } catch (err) {
+      console.error('Failed to load history:', err);
+    }
+  }
+
+  async function loadFromHistory(id) {
+    try {
+      const history = await window.SharedData.getReviewHistory();
+      const item = history.find(h => h.id === id);
+      if (!item) return;
+
+      document.getElementById('reviewText').value = item.reviewText;
+      document.getElementById('reviewSource').value = item.source;
+      currentRating = item.starRating;
+      document.getElementById('starRating').value = currentRating;
+      updateStars();
+      document.getElementById('guestName').value = item.guestName || '';
+      document.getElementById('replyText').value = item.reply;
+      document.getElementById('outputCard').style.display = 'block';
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      console.error('Failed to load from history:', err);
+    }
+  }
+
+  function toggleHistory() {
+    historyVisible = !historyVisible;
+    document.getElementById('historyList').style.display = historyVisible ? 'block' : 'none';
+    document.getElementById('historyToggle').textContent = historyVisible ? 'Hide' : 'Show';
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  }
+</script>
+
+<style>
+  .dashboard-hero {
+    background: linear-gradient(135deg, #b8963e 0%, #8a6d2b 100%);
+    color: white;
+    padding: 2rem 0;
+  }
+
+  .hero-header h1 { margin: 0; font-size: 1.75rem; }
+  .hero-header p { margin: 0.25rem 0 0; opacity: 0.9; }
+
+  .responder-section { padding: 2rem 0 4rem; }
+
+  .responder-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .input-card, .output-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+  }
+
+  .input-card h2, .output-card h2 {
+    font-size: 1.25rem;
+    margin: 0 0 1.5rem;
+    color: var(--color-text);
+  }
+
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--color-text);
+    margin-bottom: 0.375rem;
+  }
+
+  .form-group textarea,
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.9375rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+  }
+
+  .form-group textarea:focus,
+  .form-group input:focus,
+  .form-group select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .star-rating {
+    display: flex;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+  }
+
+  .star {
+    background: none;
+    border: none;
+    font-size: 1.75rem;
+    cursor: pointer;
+    color: #ddd;
+    padding: 0;
+    line-height: 1;
+    transition: color 0.15s;
+  }
+
+  .star.active { color: #f59e0b; }
+  .star:hover { color: #f59e0b; }
+
+  .btn {
+    padding: 0.625rem 1.25rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .btn-primary { background: var(--color-primary); color: white; }
+  .btn-primary:hover { background: var(--color-primary-dark); }
+  .btn-secondary { background: #f0f0f0; color: #333; }
+  .btn-secondary:hover { background: #e0e0e0; }
+  .btn-text { background: none; color: var(--color-primary); padding: 0.375rem 0.75rem; }
+  .btn-text:hover { background: #f0f0f0; }
+  .btn-large { padding: 0.875rem 2rem; font-size: 1rem; width: 100%; }
+  .btn-small { font-size: 0.8125rem; padding: 0.25rem 0.625rem; }
+
+  .output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .output-header h2 { margin: 0; }
+
+  .provider-tag {
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+    background: #f0f0f0;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .reply-textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    resize: vertical;
+    box-sizing: border-box;
+  }
+
+  .reply-textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .output-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .output-actions .btn { display: flex; align-items: center; gap: 0.375rem; }
+
+  /* History */
+  .history-section {
+    margin-top: 3rem;
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+  }
+
+  .history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .history-header h2 {
+    font-size: 1.125rem;
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  .history-list { margin-top: 1rem; }
+
+  .history-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .history-item:last-child { border-bottom: none; }
+
+  .history-meta {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 0.8125rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .history-source {
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  .history-stars { color: #f59e0b; }
+  .history-guest, .history-date { color: var(--color-text-light); }
+
+  .history-review {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    margin: 0.25rem 0;
+    font-style: italic;
+  }
+
+  .history-reply {
+    font-size: 0.875rem;
+    color: var(--color-text);
+    margin: 0.25rem 0 0.5rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 768px) {
+    .responder-layout { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>

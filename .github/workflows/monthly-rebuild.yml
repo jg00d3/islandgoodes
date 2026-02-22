@@ -1,12 +1,15 @@
-name: Daily Island Pulse
+name: Daily Island Pulse & Weekly AI Jobs
 
 on:
   schedule:
     # Daily at 4:00 PM UTC (6:00 AM HST / 11:00 AM EST)
     - cron: '0 16 * * *'
+    # Weekly on Mondays at 5:00 PM UTC (7:00 AM HST / 12:00 PM EST)
+    - cron: '0 17 * * 1'
   workflow_dispatch: # Allow manual trigger from GitHub UI
 
 jobs:
+  # Daily: Generate Island Pulse article
   generate-and-build:
     runs-on: ubuntu-latest
     steps:
@@ -21,3 +24,18 @@ jobs:
 
       - name: Trigger Netlify Build
         run: curl -X POST -d {} "${{ secrets.NETLIFY_BUILD_HOOK }}"
+
+  # Weekly (Mondays): Generate AI blog draft + chat digest
+  weekly-ai-jobs:
+    if: github.event.schedule == '0 17 * * 1' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate AI blog draft
+        run: |
+          RESPONSE=$(curl -s -X POST "https://islandgoodes.com/.netlify/functions/generate-blog-draft")
+          echo "Blog Draft Response: $RESPONSE"
+
+      - name: Generate chat insights digest
+        run: |
+          RESPONSE=$(curl -s -X POST "https://islandgoodes.com/.netlify/functions/generate-chat-digest")
+          echo "Chat Digest Response: $RESPONSE"

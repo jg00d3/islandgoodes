@@ -254,6 +254,26 @@ window.SharedData = {
     return await apiCall('chatUsage', 'set', 'data', data);
   },
 
+  // ============== BLOG DRAFTS ==============
+  async getBlogDrafts() {
+    return await apiCall('blogDrafts', 'get');
+  },
+
+  async saveBlogDrafts(drafts) {
+    clearCache('blogDrafts');
+    return await apiCall('blogDrafts', 'set', 'data', drafts);
+  },
+
+  // ============== REVIEW HISTORY ==============
+  async getReviewHistory() {
+    return await apiCall('reviewHistory', 'get');
+  },
+
+  async saveReviewHistory(history) {
+    clearCache('reviewHistory');
+    return await apiCall('reviewHistory', 'set', 'data', history);
+  },
+
   // ============== AI PROVIDERS ==============
   // These use a dedicated function (not data-store) for secure credential handling
   async getAIProviders() {
