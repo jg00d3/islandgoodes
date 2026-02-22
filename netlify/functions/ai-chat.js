@@ -50,8 +50,8 @@ function checkDailyLimit(ip) {
   return true;
 }
 
-// Log chat usage to Netlify Blobs (fire-and-forget)
-function logChatUsage(ip, messageCount, usage, lastUserMessage, aiResponse, providerName) {
+// Log chat usage to Netlify Blobs (must be awaited before handler returns)
+async function logChatUsage(ip, messageCount, usage, lastUserMessage, aiResponse, providerName) {
   try {
     const store = getStore({
       name: 'chat-usage',
@@ -73,18 +73,14 @@ function logChatUsage(ip, messageCount, usage, lastUserMessage, aiResponse, prov
       provider: providerName || 'unknown'
     };
 
-    // Read, append, cap, write — fire-and-forget
-    store.get('data', { type: 'json' }).then(existing => {
-      const log = Array.isArray(existing) ? existing : [];
-      log.push(entry);
-      // Cap at 5000 entries
-      while (log.length > 5000) log.shift();
-      return store.setJSON('data', log);
-    }).catch(err => {
-      console.error('Failed to log chat usage:', err);
-    });
+    const existing = await store.get('data', { type: 'json' });
+    const log = Array.isArray(existing) ? existing : [];
+    log.push(entry);
+    // Cap at 5000 entries
+    while (log.length > 5000) log.shift();
+    await store.setJSON('data', log);
   } catch (err) {
-    console.error('Failed to init chat usage store:', err);
+    console.error('Failed to log chat usage:', err);
   }
 }
 
@@ -160,10 +156,10 @@ export async function handler(event) {
     const result = await callAI(systemPrompt, conversationMessages, { maxTokens: 750 });
     const aiResponse = result.text || 'Sorry, I could not generate a response.';
 
-    // Log usage for public requests (fire-and-forget)
+    // Log usage for public requests (await to ensure it completes before function exits)
     if (source === 'public') {
       const lastUserMsg = conversationMessages.filter(m => m.role === 'user').pop()?.content || '';
-      logChatUsage(clientIp, conversationMessages.length, result.usage, lastUserMsg, aiResponse, result.provider);
+      await logChatUsage(clientIp, conversationMessages.length, result.usage, lastUserMsg, aiResponse, result.provider);
     }
 
     return {
