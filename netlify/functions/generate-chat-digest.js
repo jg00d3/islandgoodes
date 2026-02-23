@@ -234,7 +234,15 @@ export const handler = async () => {
     const prompt = buildDigestPrompt(weekLogs);
     if (prompt) {
       try {
-        const result = await callAI(null, [{ role: 'user', content: prompt }], { maxTokens: 1024 });
+        const result = await callAI(null, [{ role: 'user', content: prompt }], {
+          maxTokens: 1024,
+          validateResponse: (text) => {
+            if (!text) throw new Error('Empty response');
+            const trimmed = text.replace(/^```(?:json)?\s*\n?/i, '').replace(/\n?```\s*$/, '').trim();
+            if (!trimmed.endsWith('}')) throw new Error('Response appears truncated');
+            JSON.parse(trimmed); // must be valid JSON
+          }
+        });
         let text = result.text || '';
         text = text.replace(/^```(?:json)?\s*\n?/i, '').replace(/\n?```\s*$/, '');
         insights = JSON.parse(text);

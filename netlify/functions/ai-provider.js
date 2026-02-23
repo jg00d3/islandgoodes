@@ -76,10 +76,14 @@ export function clearProviderCache() {
  * @param {Array<{role: string, content: string}>} messages - Conversation messages
  * @param {object} options
  * @param {number} [options.maxTokens=500] - Max tokens to generate
+ * @param {function} [options.validateResponse] - Optional validator function.
+ *   Receives the response text and should throw an error if the response is
+ *   invalid (e.g. truncated JSON). When validation fails, the provider is
+ *   treated as failed and the next provider in priority order is tried.
  * @returns {Promise<{text: string, usage: object|null, provider: string}>}
  */
 export async function callAI(systemPrompt, messages, options = {}) {
-  const { maxTokens = 500 } = options;
+  const { maxTokens = 500, validateResponse } = options;
   const providers = await getProviderConfig();
 
   // Sort by priority (lowest first), filter to enabled
@@ -96,6 +100,12 @@ export async function callAI(systemPrompt, messages, options = {}) {
   for (const provider of active) {
     try {
       const result = await callProvider(provider, systemPrompt, messages, maxTokens);
+
+      // If caller provided a validator, run it — treat failure as provider error
+      if (validateResponse) {
+        validateResponse(result.text);
+      }
+
       return { ...result, provider: provider.name };
     } catch (err) {
       const msg = `${provider.name}: ${err.message}`;
