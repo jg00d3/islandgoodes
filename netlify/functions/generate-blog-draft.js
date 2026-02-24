@@ -1,6 +1,6 @@
-// Weekly AI Blog Draft Generator
-// Generates ~800-1200 word blog posts, stores as pending drafts in Blobs,
-// sends notification emails for admin review/approval.
+// Weekly AI Blog Post Generator
+// Generates ~800-1200 word blog posts, auto-publishes (status: approved),
+// triggers site rebuild, and sends "published" notification emails.
 
 import { getStore } from '@netlify/blobs';
 import { Resend } from 'resend';
@@ -193,7 +193,7 @@ async function generateDraft(headlines, volcanoData, trendingTerms, recentTitles
     category,
     body: article.body,
     date: new Date().toISOString(),
-    status: 'pending',
+    status: 'approved',
     tone: tone.name,
     generatedFrom: {
       headlineCount: headlines.length,
@@ -231,9 +231,10 @@ async function sendNotificationEmail(draft) {
   }
 
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const adminUrl = 'https://islandgoodes.com/admin/blog-drafts';
+  const postUrl = `https://islandgoodes.com/blog/ai/${draft.slug}`;
+  const wordCount = draft.body.split(/\s+/).length;
 
-  // Convert markdown ## headings to HTML for email preview
+  // Convert markdown ## headings to HTML for email preview (first 3 paragraphs)
   const previewBody = draft.body
     .split('\n\n')
     .slice(0, 3)
@@ -247,20 +248,21 @@ async function sendNotificationEmail(draft) {
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
       <div style="text-align: center; margin-bottom: 30px;">
         <h1 style="color: #1b6b5a; margin: 0;">Island Goodes</h1>
-        <p style="color: #666; margin: 5px 0;">New Blog Draft Ready for Review</p>
+        <p style="color: #666; margin: 5px 0;">New Blog Post Published</p>
       </div>
-      <div style="background: #f7f5f2; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+      <div style="background: #e8f5e9; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
         <h2 style="color: #2d3436; margin: 0 0 8px;">${draft.title}</h2>
         <p style="color: #636e72; margin: 0 0 4px; font-size: 14px;">Category: ${draft.category} | Tone: ${draft.tone}</p>
-        <p style="color: #636e72; margin: 0; font-size: 14px;">${draft.body.split(/\s+/).length} words</p>
+        <p style="color: #636e72; margin: 0; font-size: 14px;">${wordCount} words</p>
+        <p style="color: #2e7d32; font-weight: bold; margin: 8px 0 0;">Published — a site rebuild has been triggered.</p>
       </div>
       <div style="margin-bottom: 24px;">
         <h3 style="color: #2d3436; margin: 0 0 12px;">Preview:</h3>
         ${previewBody}
-        <p style="color: #999; font-style: italic;">... (click below to read the full draft)</p>
+        <p style="color: #999; font-style: italic;">... (click below to read the full post)</p>
       </div>
       <div style="text-align: center; margin: 32px 0;">
-        <a href="${adminUrl}" style="background: #1b6b5a; color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">Review & Approve Draft</a>
+        <a href="${postUrl}" style="background: #1b6b5a; color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">View on Site</a>
       </div>
       <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
       <p style="color: #999; font-size: 12px; text-align: center;">
@@ -274,7 +276,7 @@ async function sendNotificationEmail(draft) {
       await resend.emails.send({
         from: 'Island Goodes (No Reply) <noreply@islandgoodes.com>',
         to: [email],
-        subject: `New Blog Draft: ${draft.title}`,
+        subject: `New Blog Post Published: ${draft.title}`,
         html
       });
     } catch (err) {
@@ -300,11 +302,23 @@ export const handler = async () => {
     console.log(`Generated: "${draft.title}" (tone: ${draft.tone}, category: ${draft.category}, ${draft.body.split(/\s+/).length} words)`);
 
     await storeDraft(draft);
+
+    // Trigger site rebuild so the post goes live
+    const hookUrl = process.env.NETLIFY_BUILD_HOOK;
+    if (hookUrl) {
+      // Brief delay to ensure Blobs data is consistent
+      await new Promise(r => setTimeout(r, 3000));
+      await fetch(hookUrl, { method: 'POST', body: '{}' });
+      console.log('Build triggered for published blog post');
+    } else {
+      console.warn('NETLIFY_BUILD_HOOK not set — skipping build trigger');
+    }
+
     await sendNotificationEmail(draft);
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true, title: draft.title, id: draft.id })
+      body: JSON.stringify({ success: true, title: draft.title, id: draft.id, slug: draft.slug })
     };
   } catch (err) {
     console.error('Blog draft generation failed:', err);
