@@ -6,7 +6,7 @@ import { getStore } from '@netlify/blobs';
 
 const SITE_ID = '347c1eb9-e6b5-4736-b000-f6908c1f85fc';
 const STORE_NAME = 'ai-providers';
-const TIMEOUT_MS = 10_000; // 10 seconds per provider attempt
+const DEFAULT_TIMEOUT_MS = 30_000; // 30 seconds per provider attempt
 
 // Simple in-memory cache (per cold start)
 let providerCache = null;
@@ -83,7 +83,7 @@ export function clearProviderCache() {
  * @returns {Promise<{text: string, usage: object|null, provider: string}>}
  */
 export async function callAI(systemPrompt, messages, options = {}) {
-  const { maxTokens = 500, validateResponse } = options;
+  const { maxTokens = 500, validateResponse, timeoutMs = DEFAULT_TIMEOUT_MS } = options;
   const providers = await getProviderConfig();
 
   // Sort by priority (lowest first), filter to enabled
@@ -99,7 +99,7 @@ export async function callAI(systemPrompt, messages, options = {}) {
 
   for (const provider of active) {
     try {
-      const result = await callProvider(provider, systemPrompt, messages, maxTokens);
+      const result = await callProvider(provider, systemPrompt, messages, maxTokens, timeoutMs);
 
       // If caller provided a validator, run it — treat failure as provider error
       if (validateResponse) {
@@ -150,9 +150,9 @@ function fitSystemPrompt(systemPrompt, messages, maxTokens, contextWindow) {
 /**
  * Call a single provider. Handles both Anthropic and OpenAI-compatible APIs.
  */
-async function callProvider(provider, systemPrompt, messages, maxTokens) {
+async function callProvider(provider, systemPrompt, messages, maxTokens, timeoutMs) {
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
 
   // Truncate system prompt if provider has a context window limit
   const fittedPrompt = fitSystemPrompt(systemPrompt, messages, maxTokens, provider.contextWindow);

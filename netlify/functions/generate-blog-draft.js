@@ -143,6 +143,7 @@ async function generateDraft(headlines, volcanoData, trendingTerms, recentTitles
 
   const result = await callAI(null, [{ role: 'user', content: prompt }], {
     maxTokens: 2048,
+    timeoutMs: 60_000, // 60s — blog posts are 800-1200 words
     validateResponse: (text) => {
       if (!text) throw new Error('Empty response');
       if (!text.includes('"title"')) throw new Error('Response missing title field');
