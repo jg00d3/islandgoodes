@@ -4,8 +4,11 @@
 // and triggers a site rebuild.
 
 import { getStore } from '@netlify/blobs';
+import { Resend } from 'resend';
 import { callAI } from './ai-provider.js';
 import { fetchGoogleNewsHeadlines, fetchVolcanoData, fetchTrendingSearchTerms } from './data-sources.js';
+
+const NOTIFY_EMAILS = ['sysadmroot@gmail.com', 'goodegarvin@gmail.com'];
 
 const SITE_ID = '347c1eb9-e6b5-4736-b000-f6908c1f85fc';
 const STORE_NAME = 'island-pulse';
@@ -244,6 +247,51 @@ async function triggerBuild() {
   }
 }
 
+async function sendNotificationEmail(article) {
+  if (!process.env.RESEND_API_KEY) return;
+
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const date = new Date(article.date).toLocaleDateString('en-US', {
+    weekday: 'long', month: 'short', day: 'numeric', year: 'numeric', timeZone: 'Pacific/Honolulu'
+  });
+  const previewBody = article.body.split('\n\n').slice(0, 2).join('\n\n');
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <h1 style="color: #1b6b5a; margin: 0;">Island Goodes</h1>
+        <p style="color: #666; margin: 5px 0;">New Island Pulse Article</p>
+        <p style="color: #999; font-size: 13px;">${date}</p>
+      </div>
+      <div style="background: #f7f5f2; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+        <h2 style="color: #1b6b5a; margin: 0 0 8px;">${article.title}</h2>
+        <p style="color: #999; font-size: 13px; margin: 0 0 16px;">Tone: ${article.tone} · Topic: ${article.topicFocus}</p>
+        <p style="color: #555; line-height: 1.7; white-space: pre-line;">${previewBody}</p>
+      </div>
+      <div style="text-align: center; margin: 24px 0;">
+        <a href="https://islandgoodes.com/island-pulse" style="background: #1b6b5a; color: white; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: bold;">View on Site</a>
+      </div>
+      <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+      <p style="color: #999; font-size: 12px; text-align: center;">
+        Island Goodes | 27-2365 Hawaii Belt Rd, Papaikou, HI 96781<br>
+        <a href="https://www.islandgoodes.com" style="color: #1b6b5a;">www.islandgoodes.com</a>
+      </p>
+    </div>`;
+
+  for (const email of NOTIFY_EMAILS) {
+    try {
+      await resend.emails.send({
+        from: 'Island Goodes (No Reply) <noreply@islandgoodes.com>',
+        to: [email],
+        subject: `Island Pulse: ${article.title}`,
+        html
+      });
+    } catch (err) {
+      console.error(`Failed to send notification to ${email}:`, err.message);
+    }
+  }
+}
+
 // Invoked daily by GitHub Actions cron at 4:00 PM UTC (6:00 AM HST / 11:00 AM EST)
 // Also callable via HTTP POST for manual invocation
 export const handler = async () => {
@@ -266,6 +314,9 @@ export const handler = async () => {
 
     // Store in Blobs
     await storeArticle(article);
+
+    // Notify property managers
+    await sendNotificationEmail(article);
 
     // Trigger rebuild
     await triggerBuild();
