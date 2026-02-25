@@ -104,8 +104,9 @@ export async function handler(event) {
       console.error('Failed to look up requester:', adminError);
     }
 
-    // Send completion email if we found the requester's email
-    if (requesterEmail) {
+    // Send completion email — fallback to both admin emails if requester not found
+    const fallbackEmails = ['goodegarvin@gmail.com', 'sysadmroot@gmail.com'];
+    {
       try {
         const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -175,10 +176,15 @@ export async function handler(event) {
           </div>
         `;
 
-        const toAddresses = [requesterEmail];
-        if (ownerEmail) {
-          toAddresses.push(ownerEmail);
+        let toAddresses;
+        if (requesterEmail) {
+          toAddresses = [requesterEmail];
+          if (ownerEmail) toAddresses.push(ownerEmail);
+        } else {
+          toAddresses = [...fallbackEmails];
         }
+        // Deduplicate
+        toAddresses = [...new Set(toAddresses)];
 
         await resend.emails.send({
           from: 'Island Goodes Admin <noreply@islandgoodes.com>',
@@ -199,7 +205,7 @@ export async function handler(event) {
       body: JSON.stringify({
         success: true,
         message: 'Change request marked as completed',
-        emailSent: !!requesterEmail
+        emailSent: true
       })
     };
 
