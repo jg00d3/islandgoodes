@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.islandgoodes.com/sitemap.xml
+Sitemap: https://islandgoodes.com/sitemap.xml
