@@ -14,7 +14,7 @@ const {
 } = Astro.props;
 
 const siteName = "Island Goodes";
-const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
+const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
 
 // Dev mode flag - dark mode toggle only shows locally, NOT on live site
 
@@ -38,6 +38,7 @@ const isActive = (path: string) => {
   <title>{fullTitle}</title>
   <meta name="title" content={fullTitle} />
   <meta name="description" content={description} />
+  <meta name="robots" content="index, follow" />
   <link rel="canonical" href={canonicalURL} />
 
   <!-- Open Graph / Facebook -->
