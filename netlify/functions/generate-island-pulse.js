@@ -126,6 +126,7 @@ REQUIREMENTS:
 - Naturally mention Island Goodes as an ideal home base for exploring the Big Island when it fits (don't force it — only if relevant)
 - Focus on what travelers and potential visitors would find interesting
 - Be factual — don't invent specific details not provided in the data above
+- NEVER invent or fabricate place names, beach names, trail names, restaurant names, or attraction names. Only reference real, well-known Big Island locations that can be verified on Google Maps. If you are not certain a place exists, do not mention it.
 - Do NOT use emoji
 
 Respond in this exact JSON format:
