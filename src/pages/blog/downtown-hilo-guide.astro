@@ -3,15 +3,44 @@ import PreviewLayout from '../../layouts/PreviewLayout.astro';
 import RelatedPosts from '../../components/RelatedPosts.astro';
 
 const title = "A Local's Guide to Downtown Hilo";
+const publishDate = "2025-05-01";
+const image = "/images/blog/hilo-town.webp";
 const relatedPosts = [
   { slug: "hilo-farmers-market", title: "Hilo Farmers Market Guide", image: "/images/blog/farmers-market.webp", category: "Food" },
   { slug: "best-poke-hilo", title: "Best Poke in Hilo", image: "/images/blog/poke-bowl.webp", category: "Food" },
   { slug: "uncle-roberts-night-market", title: "Uncle Robert's Night Market", image: "/images/blog/night-market.webp", category: "Food" }
 ];
 const description = "Farmers markets, historic buildings, local restaurants, and hidden gems in Hawaii's most authentic town.";
+
+const blogPostSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": title,
+  "description": description,
+  "image": `https://islandgoodes.com${image}`,
+  "datePublished": publishDate,
+  "dateModified": publishDate,
+  "author": {
+    "@type": "Organization",
+    "name": "Island Goodes"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Island Goodes",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://islandgoodes.com/images/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://islandgoodes.com/blog/downtown-hilo-guide"
+  }
+};
 ---
 
-<PreviewLayout title={title} description={description}>
+<PreviewLayout title={title} description={description} image={image}>
+  <script type="application/ld+json" set:html={JSON.stringify(blogPostSchema)} />
   <article class="blog-post">
     <header class="post-header">
       <div class="post-header-bg">

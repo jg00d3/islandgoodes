@@ -5,6 +5,33 @@ import RelatedPosts from '../../components/RelatedPosts.astro';
 const title = "Hidden Swimming Holes Near Hilo: A Local's Guide | Island Goodes";
 const description = "Discover secret swimming holes and freshwater pools near Hilo, Hawaii. Cool off in waterfalls, rivers, and natural pools along the Hamakua Coast.";
 const publishDate = "2025-10-25";
+const image = "/images/blog/swimming-hole.webp";
+
+const blogPostSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": title,
+  "description": description,
+  "image": `https://islandgoodes.com${image}`,
+  "datePublished": publishDate,
+  "dateModified": publishDate,
+  "author": {
+    "@type": "Organization",
+    "name": "Island Goodes"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Island Goodes",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://islandgoodes.com/images/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://islandgoodes.com/blog/swimming-holes-hilo"
+  }
+};
 
 const relatedPosts = [
   { slug: "hamakua-coast-waterfalls", title: "Chasing Waterfalls on the Hamakua Coast", image: "/images/blog/waterfalls.webp", category: "Nature" },
@@ -13,7 +40,8 @@ const relatedPosts = [
 ];
 ---
 
-<PreviewLayout title={title} description={description}>
+<PreviewLayout title={title} description={description} image={image}>
+  <script type="application/ld+json" set:html={JSON.stringify(blogPostSchema)} />
   <article class="blog-post">
     <header class="post-header">
       <div class="post-header-bg">

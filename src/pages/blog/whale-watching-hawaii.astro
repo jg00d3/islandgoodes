@@ -7,6 +7,33 @@ const description = "Humpback whales visit Hawaii from December through April. L
 const publishDate = "2025-12-01";
 const category = "Nature";
 const image = "/images/blog/whale-watching.webp";
+
+const blogPostSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": title,
+  "description": description,
+  "image": `https://islandgoodes.com${image}`,
+  "datePublished": publishDate,
+  "dateModified": publishDate,
+  "author": {
+    "@type": "Organization",
+    "name": "Island Goodes"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Island Goodes",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://islandgoodes.com/images/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://islandgoodes.com/blog/whale-watching-hawaii"
+  }
+};
+
 const relatedPosts = [
   { slug: "snorkeling-big-island", title: "Best Snorkeling Spots on the Big Island", image: "/images/blog/snorkeling.webp", category: "Activities" },
   { slug: "black-sand-beaches", title: "Black Sand Beaches of the Big Island", image: "/images/blog/black-sand.webp", category: "Beaches" },
@@ -14,7 +41,8 @@ const relatedPosts = [
 ];
 ---
 
-<PreviewLayout title={title} description={description}>
+<PreviewLayout title={title} description={description} image={image}>
+  <script type="application/ld+json" set:html={JSON.stringify(blogPostSchema)} />
   <article class="blog-post">
     <header class="post-header">
       <div class="post-header-bg">

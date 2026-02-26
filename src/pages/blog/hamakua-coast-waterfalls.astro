@@ -4,6 +4,34 @@ import RelatedPosts from '../../components/RelatedPosts.astro';
 
 const title = "The Best Waterfalls on the Hamakua Coast";
 const description = "From Rainbow Falls to Akaka Falls, discover the stunning waterfalls along one of Hawaii's most scenic drives.";
+const publishDate = "2025-06-01";
+const image = "/images/blog/waterfalls.webp";
+
+const blogPostSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": title,
+  "description": description,
+  "image": `https://islandgoodes.com${image}`,
+  "datePublished": publishDate,
+  "dateModified": publishDate,
+  "author": {
+    "@type": "Organization",
+    "name": "Island Goodes"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Island Goodes",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://islandgoodes.com/images/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://islandgoodes.com/blog/hamakua-coast-waterfalls"
+  }
+};
 
 const relatedPosts = [
   { slug: "swimming-holes-hilo", title: "Hidden Swimming Holes Near Hilo", image: "/images/blog/swimming-hole.webp", category: "Nature" },
@@ -12,7 +40,8 @@ const relatedPosts = [
 ];
 ---
 
-<PreviewLayout title={title} description={description}>
+<PreviewLayout title={title} description={description} image={image}>
+  <script type="application/ld+json" set:html={JSON.stringify(blogPostSchema)} />
   <article class="blog-post">
     <header class="post-header">
       <div class="post-header-bg">

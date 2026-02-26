@@ -24,6 +24,48 @@ const isActive = (path: string) => {
   if (path === '/') return currentPath === '/';
   return currentPath.startsWith(path);
 };
+
+// BreadcrumbList schema generation
+const segmentLabels: Record<string, string> = {
+  rooms: "Rooms",
+  blog: "Blog",
+  guide: "Guide",
+  contact: "Contact",
+  reviews: "Reviews",
+  gallery: "Gallery",
+  tour: "Virtual Tour",
+  property: "Property",
+  pets: "Pet Policy",
+  policies: "Policies",
+  book: "Book",
+  compare: "Compare Rooms",
+  contribute: "Contribute",
+};
+
+const pathSegments = currentPath.replace(/^\/|\/$/g, '').split('/').filter(Boolean);
+const breadcrumbSchema = pathSegments.length > 0 ? {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://islandgoodes.com/"
+    },
+    ...pathSegments.map((segment, index) => {
+      const path = '/' + pathSegments.slice(0, index + 1).join('/');
+      const isLast = index === pathSegments.length - 1;
+      const name = isLast ? title : (segmentLabels[segment] || segment.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '));
+      return {
+        "@type": "ListItem",
+        "position": index + 2,
+        "name": name,
+        "item": `https://islandgoodes.com${path}`
+      };
+    })
+  ]
+} : null;
 ---
 
 <!DOCTYPE html>
@@ -131,6 +173,7 @@ const isActive = (path: string) => {
       "reviewCount": "245"
     }
   })} />
+  {breadcrumbSchema && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />}
 </head>
 <body>
   <!-- SKIP LINK FOR ACCESSIBILITY -->

@@ -10,9 +10,37 @@ const relatedPosts = [
 ];
 const description = "Experience authentic Hawaiian culture at Uncle Robert's Wednesday Night Market in Kalapana. Live music, awa bar, local food, and the spirit of Puna.";
 const publishDate = "2025-11-20";
+const image = "/images/blog/uncle-roberts.webp";
+
+const blogPostSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": title,
+  "description": description,
+  "image": `https://islandgoodes.com${image}`,
+  "datePublished": publishDate,
+  "dateModified": publishDate,
+  "author": {
+    "@type": "Organization",
+    "name": "Island Goodes"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Island Goodes",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://islandgoodes.com/images/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://islandgoodes.com/blog/uncle-roberts-night-market"
+  }
+};
 ---
 
-<PreviewLayout title={title} description={description}>
+<PreviewLayout title={title} description={description} image={image}>
+  <script type="application/ld+json" set:html={JSON.stringify(blogPostSchema)} />
   <article class="blog-post">
     <header class="post-header">
       <div class="post-header-bg">

@@ -5,6 +5,33 @@ import RelatedPosts from '../../components/RelatedPosts.astro';
 const title = "Best Poke in Hilo: A Local's Guide to Fresh Fish | Island Goodes";
 const description = "Discover where locals go for the freshest poke bowls in Hilo, Hawaii. From historic fish markets to hidden gems, find the best raw fish on the Big Island.";
 const publishDate = "2025-12-15";
+const image = "/images/blog/poke-bowl.webp";
+
+const blogPostSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": title,
+  "description": description,
+  "image": `https://islandgoodes.com${image}`,
+  "datePublished": publishDate,
+  "dateModified": publishDate,
+  "author": {
+    "@type": "Organization",
+    "name": "Island Goodes"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Island Goodes",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://islandgoodes.com/images/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://islandgoodes.com/blog/best-poke-hilo"
+  }
+};
 
 const relatedPosts = [
   { slug: "hilo-farmers-market", title: "Hilo Farmers Market Guide", image: "/images/blog/farmers-market.webp", category: "Food" },
@@ -13,7 +40,8 @@ const relatedPosts = [
 ];
 ---
 
-<PreviewLayout title={title} description={description}>
+<PreviewLayout title={title} description={description} image={image}>
+  <script type="application/ld+json" set:html={JSON.stringify(blogPostSchema)} />
   <article class="blog-post">
     <header class="post-header">
       <div class="post-header-bg">

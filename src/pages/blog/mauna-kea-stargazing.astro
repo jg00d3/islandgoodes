@@ -4,6 +4,34 @@ import RelatedPosts from '../../components/RelatedPosts.astro';
 
 const title = "Stargazing on Mauna Kea: What to Know Before You Go";
 const description = "Guide to Mauna Kea stargazing on Hawaii's Big Island. Best times to visit, what to bring, and tips for the 13,800 ft summit experience.";
+const publishDate = "2025-11-01";
+const image = "/images/blog/mauna-kea.webp";
+
+const blogPostSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": title,
+  "description": description,
+  "image": `https://islandgoodes.com${image}`,
+  "datePublished": publishDate,
+  "dateModified": publishDate,
+  "author": {
+    "@type": "Organization",
+    "name": "Island Goodes"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Island Goodes",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://islandgoodes.com/images/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://islandgoodes.com/blog/mauna-kea-stargazing"
+  }
+};
 
 const relatedPosts = [
   { slug: "hawaii-volcanoes-national-park", title: "Hawaii Volcanoes National Park Guide", image: "/images/blog/volcanoes.webp", category: "Attractions" },
@@ -12,7 +40,8 @@ const relatedPosts = [
 ];
 ---
 
-<PreviewLayout title={title} description={description}>
+<PreviewLayout title={title} description={description} image={image}>
+  <script type="application/ld+json" set:html={JSON.stringify(blogPostSchema)} />
   <article class="blog-post">
     <header class="post-header">
       <div class="post-header-bg">

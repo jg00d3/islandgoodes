@@ -112,6 +112,13 @@ SEO STRATEGY:
 - Target long-tail keywords that travelers actually search for
 - The title should match a search query someone might type into Google
 ${recentTitlesNote}
+GEOGRAPHIC CONSTRAINT — THIS IS CRITICAL:
+- Write ONLY about the Big Island of Hawaii (Hawaii Island).
+- Island Goodes is located on the Big Island near Hilo. All content must be relevant to Big Island visitors.
+- Do NOT write about other Hawaiian islands (Oahu, Maui, Kauai, Lanai, Molokai). Do NOT mention Waikiki, Honolulu, North Shore Oahu, Napali Coast, Hana Highway, Lahaina, or any other locations that are not on the Big Island.
+- If news headlines reference other islands, ignore those headlines and focus on Big Island topics.
+- Big Island locations include: Hilo, Kona, Kailua-Kona, Waikoloa, Kohala Coast, Hamakua Coast, Puna, Ka'u, Volcano, Mauna Kea, Mauna Loa, Kilauea, Papaikou, Pepe'ekeo, Akaka Falls, Rainbow Falls, Hawaii Volcanoes National Park, Waipi'o Valley, Pololu Valley, South Point (Ka Lae), and other Big Island destinations.
+
 REQUIREMENTS:
 - Create a unique, SEO-friendly title (include specific keywords from the trending terms)
 - Write a meta description under 160 characters
