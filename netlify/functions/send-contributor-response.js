@@ -38,7 +38,7 @@ export async function handler(event) {
               27-2365 Hawaii Belt Rd, Papaikou, HI 96781
             </p>
             <p style="margin: 0;">
-              <a href="https://www.islandgoodes.com" style="color: #1b6b5a; text-decoration: none; font-size: 13px;">www.islandgoodes.com</a>
+              <a href="https://islandgoodes.com" style="color: #1b6b5a; text-decoration: none; font-size: 13px;">islandgoodes.com</a>
               <span style="color: #ccc; margin: 0 10px;">|</span>
               <a href="tel:+18083157873" style="color: #1b6b5a; text-decoration: none; font-size: 13px;">(808) 315-7873</a>
             </p>

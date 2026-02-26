@@ -73,7 +73,7 @@ export async function handler(event) {
         </div>
 
         <p style="color: #666; font-size: 14px;">
-          <a href="https://www.islandgoodes.com/admin/change-requests" style="color: #1b6b5a;">View all change requests →</a>
+          <a href="https://islandgoodes.com/admin/change-requests" style="color: #1b6b5a;">View all change requests →</a>
         </p>
 
         <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">

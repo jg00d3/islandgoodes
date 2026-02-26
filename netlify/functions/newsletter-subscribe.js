@@ -116,7 +116,7 @@ export async function handler(event) {
 
           <div style="background: linear-gradient(135deg, #1b6b5a 0%, #2d8a76 100%); padding: 25px; border-radius: 12px; text-align: center; margin: 30px 0;">
             <p style="color: #fff; margin: 0 0 15px 0; font-size: 18px;">Ready to book your Hawaiian getaway?</p>
-            <a href="https://www.islandgoodes.com/book" style="display: inline-block; background: #c5a572; color: #1a1a1a; padding: 12px 30px; border-radius: 50px; text-decoration: none; font-weight: bold;">Check Availability</a>
+            <a href="https://islandgoodes.com/book" style="display: inline-block; background: #c5a572; color: #1a1a1a; padding: 12px 30px; border-radius: 50px; text-decoration: none; font-weight: bold;">Check Availability</a>
           </div>
 
           <p style="color: #555; line-height: 1.7;">
@@ -135,7 +135,7 @@ export async function handler(event) {
           <p style="color: #999; font-size: 12px; text-align: center;">
             Island Goodes | 27-2365 Hawaii Belt Rd, Papaikou, HI 96781<br>
             <a href="tel:+18089642291" style="color: #1b6b5a;">808-964-2291</a> |
-            <a href="https://www.islandgoodes.com" style="color: #1b6b5a;">www.islandgoodes.com</a>
+            <a href="https://islandgoodes.com" style="color: #1b6b5a;">islandgoodes.com</a>
           </p>
         </div>
       `

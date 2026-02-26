@@ -28,7 +28,7 @@ export async function handler(event) {
           <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
           <p style="color: #999; font-size: 12px; text-align: center;">
             Island Goodes | 27-2365 Hawaii Belt Rd, Papaikou, HI 96781<br>
-            <a href="https://www.islandgoodes.com" style="color: #1b6b5a;">www.islandgoodes.com</a>
+            <a href="https://islandgoodes.com" style="color: #1b6b5a;">islandgoodes.com</a>
           </p>
         </div>
       `

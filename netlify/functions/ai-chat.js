@@ -234,7 +234,7 @@ IMPORTANT GUIDELINES:
 
   prompt += `
 CONTACT INFORMATION:
-- Website: www.islandgoodes.com
+- Website: islandgoodes.com
 - Phone: 808-964-2291
 - Booking: islandgoodes.com/book
 - Address: 27-2365 Hawaii Belt Rd, Papaikou, HI 96781
