@@ -22,15 +22,16 @@ jobs:
   #     - name: Trigger Netlify Build
   #       run: curl -X POST -d {} "${{ secrets.NETLIFY_BUILD_HOOK }}"
 
-  # Weekly (Mondays): Generate AI blog draft + chat digest
+  # Weekly (Mondays): AI blog draft + chat digest + weekly report
+  # Blog drafts DISABLED — hallucination/accuracy issues
   weekly-ai-jobs:
     if: github.event.schedule == '0 17 * * 1' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
-      - name: Generate AI blog draft
-        run: |
-          RESPONSE=$(curl -s -X POST "https://islandgoodes.com/.netlify/functions/generate-blog-draft")
-          echo "Blog Draft Response: $RESPONSE"
+      # - name: Generate AI blog draft — DISABLED
+      #   run: |
+      #     RESPONSE=$(curl -s -X POST "https://islandgoodes.com/.netlify/functions/generate-blog-draft")
+      #     echo "Blog Draft Response: $RESPONSE"
 
       - name: Generate chat insights digest
         run: |
