@@ -18,7 +18,7 @@ export async function handler(event) {
       return { statusCode: 404, body: JSON.stringify({ error: 'No drafts found' }) };
     }
 
-    const target = "Discover the Big Island's Natural Wonders";
+    const target = "Discover the Big Island";
     const before = drafts.length;
     const removed = drafts.filter(d => d.title && d.title.includes(target));
     drafts = drafts.filter(d => !(d.title && d.title.includes(target)));
