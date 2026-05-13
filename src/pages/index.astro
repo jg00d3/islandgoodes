@@ -15,6 +15,7 @@ const description = "Adults-only oceanview accommodation near Hilo, Hawaii. Priv
 
     <!-- Weather & Time Widget -->
     <div class="weather-widget" id="weatherWidget">
+      <button class="weather-dismiss" id="weatherDismiss" aria-label="Dismiss weather widget">&times;</button>
       <div class="weather-time" id="localTime">--:--</div>
       <div class="weather-location">Hilo, Hawaii</div>
       <div class="weather-info">
@@ -91,6 +92,19 @@ const description = "Adults-only oceanview accommodation near Hilo, Hawaii. Priv
           </div>
           <h3>Prime Location</h3>
           <p>Minutes to Hilo, close to volcanoes and waterfalls</p>
+        </div>
+        <div class="feature-card feature-card-highlight">
+          <div class="feature-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2v8l4-2"/>
+              <path d="M12 10l-4-2"/>
+              <path d="M12 10v8"/>
+              <path d="M8 18h8"/>
+              <path d="M9 21h6"/>
+            </svg>
+          </div>
+          <h3>Air Conditioning</h3>
+          <p>All rooms feature AC, ceiling fans, and floor fans for your comfort</p>
         </div>
       </div>
     </div>
@@ -419,6 +433,36 @@ const description = "Adults-only oceanview accommodation near Hilo, Hawaii. Priv
     text-align: center;
     z-index: 10;
     border: 1px solid rgba(255,255,255,0.15);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    cursor: grab;
+    touch-action: pan-y;
+  }
+
+  .weather-widget.swiping {
+    transition: none;
+  }
+
+  .weather-widget.dismissing {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .weather-dismiss {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.4rem;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.5);
+    font-size: 1rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.2s;
+  }
+
+  .weather-dismiss:hover {
+    color: #fff;
   }
 
   .weather-time {
@@ -623,6 +667,15 @@ const description = "Adults-only oceanview accommodation near Hilo, Hawaii. Priv
   .feature-card p {
     color: var(--color-text-light);
     font-size: 0.9375rem;
+  }
+
+  .feature-card-highlight {
+    border: 2px solid var(--color-primary);
+    background: var(--color-primary-subtle, #e8f5f1);
+  }
+
+  .feature-card-highlight h3 {
+    color: var(--color-primary);
   }
 
   /* ROOMS */
@@ -1098,4 +1151,75 @@ const description = "Adults-only oceanview accommodation near Hilo, Hawaii. Priv
 
   // Update weather every 30 minutes
   setInterval(fetchWeather, 1800000);
+
+  // Weather widget dismiss (swipe or close button)
+  (function() {
+    const widget = document.getElementById('weatherWidget');
+    if (!widget) return;
+
+    // Check if previously dismissed this session
+    if (sessionStorage.getItem('weatherDismissed')) {
+      widget.remove();
+      return;
+    }
+
+    function dismissWidget(direction) {
+      const translateX = direction === 'left' ? '-120%' : '120%';
+      widget.classList.remove('swiping');
+      widget.classList.add('dismissing');
+      widget.style.transform = `translateX(${translateX})`;
+      sessionStorage.setItem('weatherDismissed', '1');
+      setTimeout(() => widget.remove(), 300);
+    }
+
+    // Close button
+    const dismissBtn = document.getElementById('weatherDismiss');
+    if (dismissBtn) {
+      dismissBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dismissWidget('right');
+      });
+    }
+
+    // Touch swipe
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let isSwiping = false;
+
+    widget.addEventListener('touchstart', function(e) {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      currentX = 0;
+      isSwiping = false;
+    }, { passive: true });
+
+    widget.addEventListener('touchmove', function(e) {
+      const dx = e.touches[0].clientX - startX;
+      const dy = e.touches[0].clientY - startY;
+
+      // Only swipe if horizontal movement > vertical
+      if (!isSwiping && Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+        isSwiping = true;
+        widget.classList.add('swiping');
+      }
+
+      if (isSwiping) {
+        currentX = dx;
+        widget.style.transform = `translateX(${dx}px)`;
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    widget.addEventListener('touchend', function() {
+      if (!isSwiping) return;
+      // Dismiss if swiped more than 60px
+      if (Math.abs(currentX) > 60) {
+        dismissWidget(currentX < 0 ? 'left' : 'right');
+      } else {
+        widget.classList.remove('swiping');
+        widget.style.transform = '';
+      }
+    }, { passive: true });
+  })();
 </script>
