@@ -9,7 +9,7 @@ Island Goodes is an Astro 5.x static website for an adults-only (18+) oceanview 
 **Key Business Rules:**
 - Adults only - no children under 18
 - No breakfast service (not a traditional B&B)
-- Four rooms: Hilo Bay ($225), Mauna Kea ($195), Ginger ($195), Orchid ($225)
+- Four rooms: Hilo Bay ($225), Mauna Kea ($195), Ginger ($195), Bamboo ($325). Orchid is on hold: page at `src/pages/rooms/_old-orchid.astro`, images kept, `/rooms/orchid` temporarily redirects to Bamboo
 - Tax rate: 18.72%
 - Phone: 808-964-2291
 - Address: 27-2365 Hawaii Belt Rd, Papaikou, HI 96781

@@ -1,0 +1,1047 @@
+---
+import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import RelatedContent from '../../components/RelatedContent.astro';
+
+const title = "Bamboo Room - Oceanview Suite with Gourmet Kitchen";
+
+const nearbyAttractions = [
+  { slug: "hilo-farmers-market", title: "Hilo Farmers Market Guide", image: "/images/blog/farmers-market.webp", category: "Local Guide" },
+  { slug: "swimming-holes-hilo", title: "Hidden Swimming Holes Near Hilo", image: "/images/blog/swimming-hole.webp", category: "Nature" },
+  { slug: "hamakua-coast-waterfalls", title: "Waterfalls on the Hamakua Coast", image: "/images/blog/waterfalls.webp", category: "Nature" }
+];
+const description = "750 sq ft oceanview suite with a gourmet kitchen, large living room, Sleep Number King bed and private lanai. Views of the Pacific and Hilo Bay. Adults-only near Hilo, Hawaii.";
+
+const images = [
+  { src: "/images/rooms/bamboo/bed.webp", alt: "Sleep Number King bed in the Bamboo Room" },
+  { src: "/images/rooms/bamboo/bed2.webp", alt: "Bedroom with shoji screen" },
+  { src: "/images/rooms/bamboo/armoire.webp", alt: "Large armoire and dresser" },
+  { src: "/images/rooms/bamboo/living.webp", alt: "Large living room" },
+  { src: "/images/rooms/bamboo/living2.webp", alt: "Living room with 65-inch smart TV" },
+  { src: "/images/rooms/bamboo/living3.webp", alt: "Living room with sofa and windows" },
+  { src: "/images/rooms/bamboo/dining.webp", alt: "Living and dining area" },
+  { src: "/images/rooms/bamboo/kitchen.webp", alt: "Gourmet kitchen with large island" },
+  { src: "/images/rooms/bamboo/kitchen2.webp", alt: "Kitchen island with gas stovetop" },
+  { src: "/images/rooms/bamboo/kitchen3.webp", alt: "Granite countertops and custom mango cabinets" },
+  { src: "/images/rooms/bamboo/kitchen4.webp", alt: "Kitchen with double oven" },
+  { src: "/images/rooms/bamboo/kitchen5.webp", alt: "Kitchen with full-size refrigerator and island seating" },
+  { src: "/images/rooms/bamboo/lanai.webp", alt: "Private front lanai and double-door entry" },
+  { src: "/images/rooms/bamboo/entry.webp", alt: "Front entry lanai" },
+  { src: "/images/rooms/bamboo/bathroom.webp", alt: "Bathroom with granite counter" },
+  { src: "/images/rooms/bamboo/bathroom2.webp", alt: "Private bathroom with tile floors" },
+  { src: "/images/rooms/bamboo/bathroom3.webp", alt: "Bathroom detail" },
+  { src: "/images/rooms/bamboo/shower.webp", alt: "Walk-in shower" },
+];
+
+const amenities = [
+  "750 square feet",
+  "Ocean and Hilo Bay views",
+  "Gourmet kitchen",
+  "Large island with gas stovetop",
+  "Granite countertops",
+  "Custom mango cabinets with pots and pans",
+  "Two sinks",
+  "Full-size refrigerator/freezer",
+  "R/O water dispenser",
+  "Dishwasher",
+  "Double electric oven with convection",
+  "Microwave",
+  "Hot water maker",
+  "Coffee press",
+  "Toaster",
+  "Silverware, plates, cups, wine glasses, wine decorker",
+  "Dining table with 4 chairs",
+  "Ground floor (no steps)",
+  "Double-door private entry",
+  "Private bathroom",
+  "Private front lanai with two chairs, small table and BBQ",
+  "Sleep Number King bed behind a shoji screen",
+  "Two nightstands, dresser and large armoire",
+  "Large living room",
+  "65\" Smart HDTV - stream Netflix/Amazon using your own account",
+  "Free fiber-optic high-speed internet",
+  "Large split-system air conditioning with remote",
+  "Three adjustable ceiling fans",
+  "Floor fan",
+  "Free on-site parking near unit",
+  "Free laundry area on-site",
+  "Maximum occupancy: 2 adults",
+  "3-night minimum stay"
+];
+
+const bathroomAmenities = [
+  "Private in-unit bathroom",
+  "4' walk-in shower",
+  "Toilet bidet",
+  "Tile floors",
+  "Granite countertop",
+  "Hair dryer",
+  "Towels"
+];
+---
+
+<PreviewLayout title={title} description={description} image={images[0].src}>
+  <section class="room-hero">
+    <div class="room-hero-bg">
+      <img src="/images/rooms/bamboo/living3.webp" alt="Living room in the Bamboo Room" />
+    </div>
+    <div class="room-hero-overlay"></div>
+    <div class="room-hero-content">
+      <nav class="breadcrumb">
+        <a href="/">Home</a> / <a href="/rooms">Rooms</a> / Bamboo Room
+      </nav>
+      <span class="room-badge">Largest Room</span>
+      <h1>Bamboo Room</h1>
+      <p class="tagline">Premium Oceanview Suite with Gourmet Kitchen</p>
+    </div>
+  </section>
+
+  <section class="room-content">
+    <div class="container">
+      <div class="room-grid">
+        <div class="room-gallery">
+          <div class="main-image">
+            <img src={images[0].src} alt={images[0].alt} id="featured-image" />
+          </div>
+          <div class="thumbnail-grid">
+            {images.map((img, index) => (
+              <button class="thumbnail" data-index={index} data-src={img.src} data-alt={img.alt}>
+                <img src={img.src} alt={img.alt} loading="lazy" />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div class="room-details">
+          <div class="quick-info">
+            <div class="info-item">
+              <span class="info-label">Size</span>
+              <span class="info-value">750 sq ft</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">View</span>
+              <span class="info-value">Ocean</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Bed</span>
+              <span class="info-value">Sleep Number King</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Kitchen</span>
+              <span class="info-value">Gourmet Kitchen</span>
+            </div>
+          </div>
+
+          <div class="price-card">
+            <div class="price-header">
+              <span class="price-label">From</span>
+              <span class="price-amount">$325 USD</span>
+              <span class="price-period">/night</span>
+            </div>
+            <p class="price-note">Plus 18.72% Hawaii tax. 3-night minimum stay.</p>
+            <a href="/book" class="btn btn-primary btn-large btn-block">Book This Room</a>
+            <p class="call-option">Or call: <a href="tel:+18089642291">808-964-2291</a></p>
+          </div>
+
+          <div class="description">
+            <h2>About This Room</h2>
+            <p>
+              At 750 square feet, the Bamboo Room is our largest unit, with a double-door private entry, a large
+              living room, and awesome views of the Pacific Ocean and Hilo Bay. From January to April, watch for
+              humpback whales jumping and splashing as they migrate.
+            </p>
+            <p>
+              The huge gourmet kitchen has granite countertops, custom mango cabinets, a large island with a gas
+              stovetop, a double convection oven, a dishwasher, and a full-size refrigerator/freezer, with a dining
+              table for four.
+            </p>
+            <p>
+              A shoji screen sets off the bedroom, with a Sleep Number King bed, two nightstands, a dresser, and a large armoire.
+              Trade winds, screened windows, three ceiling fans, and split-system air conditioning keep the room
+              comfortable.
+            </p>
+          </div>
+
+          <div class="highlights">
+            <h3>Room Highlights</h3>
+            <div class="highlights-grid">
+              <div class="highlight-item">
+                <span class="highlight-icon">🍳</span>
+                <div>
+                  <strong>Gourmet Kitchen</strong>
+                  <p>Large island, gas stovetop, double oven, and dishwasher</p>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <span class="highlight-icon">📐</span>
+                <div>
+                  <strong>Our Largest Room</strong>
+                  <p>750 square feet with a large living room</p>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <span class="highlight-icon">🌊</span>
+                <div>
+                  <strong>Ocean Views</strong>
+                  <p>Views of the Pacific Ocean and Hilo Bay</p>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <span class="highlight-icon">🔥</span>
+                <div>
+                  <strong>Private Lanai</strong>
+                  <p>Front lanai with two chairs, small table, and BBQ</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="amenities">
+            <h3>Room Amenities</h3>
+            <ul class="amenities-grid">
+              {amenities.map((amenity) => (
+                <li>{amenity}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="amenities bathroom-amenities">
+            <h3>Bathroom Amenities</h3>
+            <ul class="amenities-grid">
+              {bathroomAmenities.map((amenity) => (
+                <li>{amenity}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Explore the Area -->
+  <RelatedContent items={nearbyAttractions} />
+
+  <section class="other-rooms">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-subtitle">Explore More</span>
+        <h2>Other Rooms</h2>
+      </div>
+      <div class="rooms-grid">
+        <a href="/rooms/hilo-bay" class="room-card">
+          <img src="/images/rooms/hilo-bay/bed.webp" alt="Hilo Bay Room with panoramic ocean views at Island Goodes" loading="lazy" />
+          <div class="room-card-content">
+            <h3>Hilo Bay Room</h3>
+            <p>488 sq ft premier oceanview</p>
+          </div>
+        </a>
+        <a href="/rooms/mauna-kea" class="room-card">
+          <img src="/images/rooms/mauna-kea/bed.webp" alt="Mauna Kea Room with mountain views at Island Goodes" loading="lazy" />
+          <div class="room-card-content">
+            <h3>Mauna Kea Room</h3>
+            <p>527 sq ft mountain views</p>
+          </div>
+        </a>
+        <a href="/rooms/ginger" class="room-card">
+          <img src="/images/rooms/ginger/room.webp" alt="Ginger Room garden retreat at Island Goodes" loading="lazy" />
+          <div class="room-card-content">
+            <h3>Ginger Room</h3>
+            <p>400 sq ft garden retreat</p>
+          </div>
+        </a>
+      </div>
+      <div class="compare-cta">
+        <a href="/rooms/compare" class="btn btn-outline">Compare All Rooms</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox with Slideshow -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose">&times;</button>
+    <button class="lightbox-prev" id="lightboxPrev">&#10094;</button>
+    <button class="lightbox-next" id="lightboxNext">&#10095;</button>
+    <div class="lightbox-controls">
+      <button class="slideshow-btn" id="slideshowToggle" title="Play slideshow">
+        <svg class="play-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="5 3 19 12 5 21 5 3"/>
+        </svg>
+        <svg class="pause-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+          <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
+        </svg>
+      </button>
+      <select class="speed-select" id="speedSelect" title="Slideshow speed">
+        <option value="5000">Slow</option>
+        <option value="3000" selected>Medium</option>
+        <option value="1500">Fast</option>
+      </select>
+    </div>
+    <div class="lightbox-content">
+      <img src="" alt="" id="lightboxImg" />
+      <p class="lightbox-caption" id="lightboxCaption"></p>
+      <p class="lightbox-counter" id="lightboxCounter"></p>
+    </div>
+  </div>
+</PreviewLayout>
+
+<style>
+  .room-hero {
+    position: relative;
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    padding: 10rem 2rem 4rem;
+  }
+
+  .room-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .room-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .room-hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%);
+  }
+
+  .room-hero-content {
+    max-width: 800px;
+  }
+
+  .room-badge {
+    display: inline-block;
+    background: var(--color-secondary);
+    color: #1a1a1a;
+    padding: 0.375rem 1rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+
+  .room-hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .tagline {
+    font-size: 1.25rem;
+    opacity: 0.9;
+  }
+
+  .room-content {
+    padding: var(--section-padding) 0;
+  }
+
+  .room-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+
+  .main-image {
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    scroll-margin-top: 100px;
+  }
+
+  .main-image img {
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .main-image img:hover {
+    opacity: 0.9;
+  }
+
+  .thumbnail-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+  }
+
+  .thumbnail {
+    border: none;
+    padding: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: var(--transition-base);
+  }
+
+  .thumbnail:hover, .thumbnail.active {
+    opacity: 1;
+  }
+
+  .thumbnail img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+
+  .thumbnail.deleted {
+    display: none !important;
+  }
+
+  .quick-info {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--color-bg-alt);
+    border-radius: 12px;
+  }
+
+  .info-item {
+    text-align: center;
+  }
+
+  .info-label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-light);
+    margin-bottom: 0.25rem;
+  }
+
+  .info-value {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .price-card {
+    background: var(--gradient-primary);
+    color: #fff;
+    padding: 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+  }
+
+  .price-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .price-label { font-size: 1rem; }
+  .price-amount { font-size: 3rem; font-weight: 700; font-family: var(--font-heading); }
+  .price-period { font-size: 1rem; opacity: 0.8; }
+  .price-note { font-size: 0.875rem; opacity: 0.8; margin-bottom: 1.5rem; }
+
+  .btn-block { display: block; width: 100%; text-align: center; }
+
+  .call-option { text-align: center; margin-top: 1rem; font-size: 0.9375rem; }
+  .call-option a { color: var(--color-secondary-light); }
+
+  .description { margin-bottom: 2rem; }
+  .description h2 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--color-text); }
+  .description p { color: var(--color-text-light); line-height: 1.8; margin-bottom: 1rem; }
+
+  .highlights { background: var(--color-bg-alt); padding: 2rem; border-radius: 16px; margin-bottom: 2rem; }
+  .highlights h3 { font-size: 1.25rem; margin-bottom: 1.5rem; }
+  .highlights-grid { display: grid; gap: 1.5rem; }
+  .highlight-item { display: flex; gap: 1rem; }
+  .highlight-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .highlight-item strong { display: block; color: var(--color-text); margin-bottom: 0.25rem; }
+  .highlight-item p { font-size: 0.9375rem; color: var(--color-text-light); margin: 0; }
+
+  .amenities { margin-bottom: 2rem; }
+  .amenities h3 { font-size: 1.25rem; margin-bottom: 1rem; }
+  .bathroom-amenities { margin-top: 2.5rem; }
+  .amenities-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; list-style: none; }
+  .amenities-grid li { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9375rem; color: var(--color-text-light); }
+  .amenities-grid li::before { content: "✓"; color: var(--color-primary); font-weight: 600; }
+
+  .other-rooms { padding: var(--section-padding) 0; background: var(--color-bg-alt); }
+  .rooms-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .room-card { background: #fff; border-radius: 16px; overflow: hidden; transition: var(--transition-base); }
+  .room-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(0,0,0,0.1); }
+  .room-card img { width: 100%; aspect-ratio: 16/10; object-fit: cover; }
+  .room-card-content { padding: 1.25rem; }
+  .room-card-content h3 { font-size: 1.125rem; margin-bottom: 0.25rem; }
+  .room-card-content p { font-size: 0.875rem; color: var(--color-text-light); }
+
+  .compare-cta { text-align: center; margin-top: 2rem; }
+  .btn-outline { display: inline-block; background: transparent; border: 2px solid var(--color-primary); color: var(--color-primary); padding: 0.875rem 2rem; border-radius: 50px; font-weight: 600; transition: all 0.3s; }
+  .btn-outline:hover { background: var(--color-primary); color: #fff; }
+
+  @media (max-width: 1024px) {
+    .room-grid, .rooms-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    .quick-info { grid-template-columns: repeat(2, 1fr); }
+    .thumbnail-grid { grid-template-columns: repeat(3, 1fr); }
+    .amenities-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Lightbox with Slideshow */
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox.active {
+    display: flex;
+  }
+
+  .lightbox-content {
+    max-width: 90vw;
+    max-height: 90vh;
+    text-align: center;
+    padding-bottom: 5rem; /* Space for controls bar */
+  }
+
+  .lightbox-content img {
+    max-width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+
+  .lightbox-caption {
+    color: #1f2937;
+    margin-top: 0.75rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+
+  .lightbox-counter {
+    color: rgba(0,0,0,0.5);
+    font-size: 0.8125rem;
+    margin-top: 0.25rem;
+    margin-bottom: 3.5rem; /* Space above slideshow controls */
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    color: #374151;
+    font-size: 3rem;
+    cursor: pointer;
+    z-index: 10001;
+    line-height: 1;
+  }
+
+  .lightbox-close:hover {
+    color: var(--color-primary);
+  }
+
+  .lightbox-prev,
+  .lightbox-next {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--color-primary);
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.3s;
+    z-index: 10001;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+
+  .lightbox-prev:hover,
+  .lightbox-next:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .lightbox-prev { left: 20px; }
+  .lightbox-next { right: 20px; }
+
+  .lightbox-controls {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    z-index: 10001;
+    backdrop-filter: blur(10px);
+  }
+
+  .slideshow-btn {
+    background: var(--color-primary);
+    border: none;
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s, transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .slideshow-btn:hover {
+    background: var(--color-primary-dark);
+    transform: scale(1.1);
+  }
+
+  .slideshow-btn.playing {
+    background: var(--color-secondary);
+    color: #1a1a1a;
+  }
+
+  .slideshow-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .speed-select {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    padding-right: 1.75rem;
+  }
+
+  .speed-select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .speed-select option {
+    background: #333;
+    color: #fff;
+  }
+
+  @media (max-width: 768px) {
+    .lightbox-prev,
+    .lightbox-next {
+      padding: 0.5rem;
+      font-size: 1.5rem;
+    }
+
+    .lightbox-controls {
+      bottom: 1rem;
+      padding: 0.5rem 1rem;
+    }
+
+    .slideshow-btn {
+      width: 40px;
+      height: 40px;
+    }
+  }
+</style>
+
+<style is:global>
+  [data-theme="dark"] .lightbox { background: rgba(0, 0, 0, 0.95) !important; }
+  [data-theme="dark"] .lightbox-caption { color: #fff !important; }
+  [data-theme="dark"] .lightbox-counter { color: rgba(255, 255, 255, 0.7) !important; }
+  [data-theme="dark"] .lightbox-close { color: #fff !important; }
+  [data-theme="dark"] .lightbox-close:hover { color: var(--color-secondary) !important; }
+  [data-theme="dark"] .lightbox-controls { background: rgba(0, 0, 0, 0.6) !important; }
+</style>
+
+<script>
+  // ============================================
+  // SIMPLE LIGHTBOX WITH EDITED IMAGE SUPPORT
+  // ============================================
+
+  // Get DOM elements
+  const featuredImage = document.getElementById('featured-image') as HTMLImageElement;
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg') as HTMLImageElement;
+  const lightboxCaption = document.getElementById('lightboxCaption');
+  const lightboxCounter = document.getElementById('lightboxCounter');
+  const lightboxClose = document.getElementById('lightboxClose');
+  const lightboxPrev = document.getElementById('lightboxPrev');
+  const lightboxNext = document.getElementById('lightboxNext');
+  const slideshowToggle = document.getElementById('slideshowToggle');
+  const speedSelect = document.getElementById('speedSelect') as HTMLSelectElement;
+  const playIcon = slideshowToggle?.querySelector('.play-icon') as HTMLElement;
+  const pauseIcon = slideshowToggle?.querySelector('.pause-icon') as HTMLElement;
+
+  // Build image array directly from thumbnails in DOM order
+  const allThumbnails = Array.from(document.querySelectorAll('.thumbnail-grid .thumbnail')) as HTMLElement[];
+  const imageData = allThumbnails.map((thumb, i) => ({
+    src: thumb.getAttribute('data-src') || '',
+    alt: thumb.getAttribute('data-alt') || '',
+    index: i
+  }));
+
+  let currentIndex = 0;
+  const totalImages = imageData.length;
+  let slideshowInterval: number | null = null;
+  let isPlaying = false;
+
+  // Set first thumbnail as active
+  if (allThumbnails.length > 0) {
+    allThumbnails[0].classList.add('active');
+  }
+
+  // Wait for SharedData to load, then apply edited/deleted images
+  function waitForSharedData(callback: () => void, maxWait = 5000) {
+    const start = Date.now();
+    const check = () => {
+      if (typeof window !== 'undefined' && (window as any).SharedData) {
+        callback();
+      } else if (Date.now() - start < maxWait) {
+        setTimeout(check, 100);
+      }
+    };
+    check();
+  }
+
+  // Global storage for edited images and deleted paths
+  let editedImagesCache: Record<string, {dataUrl: string}> = {};
+  let deletedPathsCache: string[] = [];
+  let sharedDataLoaded = false;
+  let visibleIndices: number[] = []; // Track which images are visible (not deleted)
+
+  waitForSharedData(async () => {
+    try {
+      const SharedData = (window as any).SharedData;
+
+      // Load deleted images and hide them
+      const deletedImages = await SharedData.getDeletedImages() || [];
+      deletedPathsCache = Array.isArray(deletedImages)
+        ? deletedImages.map((d: any) => d.path || d)
+        : [];
+
+      // Load edited images (rotated, cropped)
+      editedImagesCache = await SharedData.getEditedImages() || {};
+      sharedDataLoaded = true;
+
+      // Process each thumbnail and build visible indices
+      visibleIndices = [];
+      allThumbnails.forEach((thumb, index) => {
+        const originalSrc = thumb.getAttribute('data-src');
+
+        // Hide deleted images
+        if (originalSrc && deletedPathsCache.includes(originalSrc)) {
+          thumb.style.display = 'none';
+          thumb.classList.add('deleted');
+          return;
+        }
+
+        // Track visible images
+        visibleIndices.push(index);
+
+        // Apply edited images
+        if (originalSrc && editedImagesCache[originalSrc]) {
+          const editedSrc = editedImagesCache[originalSrc].dataUrl;
+          const img = thumb.querySelector('img') as HTMLImageElement;
+          if (img) img.src = editedSrc;
+          imageData[index].src = editedSrc;
+          thumb.setAttribute('data-edited', editedSrc);
+        }
+      });
+
+      // Update featured image with first visible image
+      const firstVisible = allThumbnails.find(t => !t.classList.contains('deleted'));
+      if (firstVisible && featuredImage) {
+        const editedSrc = firstVisible.getAttribute('data-edited');
+        const originalSrc = firstVisible.getAttribute('data-src');
+        featuredImage.src = editedSrc || originalSrc || '';
+      }
+    } catch (e) {
+      console.log('Could not load image data:', e);
+    }
+  });
+
+  // Get the image source (checks edited images cache)
+  function getImageSrc(index: number): string {
+    const thumb = allThumbnails[index];
+    const originalSrc = thumb?.getAttribute('data-src') || imageData[index].src;
+
+    // Check cache for edited version
+    if (editedImagesCache[originalSrc]) {
+      return editedImagesCache[originalSrc].dataUrl;
+    }
+    // Check data-edited attribute
+    const editedAttr = thumb?.getAttribute('data-edited');
+    if (editedAttr) return editedAttr;
+
+    return originalSrc;
+  }
+
+  // Get visible images count for counter
+  function getVisibleCount(): number {
+    if (visibleIndices.length > 0) return visibleIndices.length;
+    return totalImages; // Fallback before SharedData loads
+  }
+
+  // Get position in visible array
+  function getVisiblePosition(index: number): number {
+    if (visibleIndices.length === 0) return index + 1;
+    const pos = visibleIndices.indexOf(index);
+    return pos >= 0 ? pos + 1 : index + 1;
+  }
+
+  function showImage(index: number) {
+    // Skip deleted images
+    const thumb = allThumbnails[index];
+    if (thumb?.classList.contains('deleted')) {
+      // Find next visible image
+      const nextVisible = visibleIndices.find(i => i > index) || visibleIndices[0];
+      if (nextVisible !== undefined && nextVisible !== index) {
+        showImage(nextVisible);
+        return;
+      }
+    }
+
+    if (index < 0 || index >= totalImages) return;
+    currentIndex = index;
+
+    const src = getImageSrc(index);
+    const alt = imageData[index].alt;
+
+    if (lightboxImg) {
+      lightboxImg.src = src;
+      lightboxImg.alt = alt;
+    }
+    if (lightboxCaption) {
+      lightboxCaption.textContent = alt;
+    }
+    if (lightboxCounter) {
+      lightboxCounter.textContent = `${getVisiblePosition(index)} / ${getVisibleCount()}`;
+    }
+  }
+
+  // Wait for SharedData to be available (max 3 seconds)
+  async function ensureSharedDataLoaded(): Promise<void> {
+    if (sharedDataLoaded) return;
+
+    // Wait for SharedData to become available
+    const maxWait = 3000;
+    const start = Date.now();
+    while (typeof (window as any).SharedData === 'undefined' && Date.now() - start < maxWait) {
+      await new Promise(r => setTimeout(r, 50));
+    }
+
+    if (typeof (window as any).SharedData === 'undefined') return;
+
+    try {
+      const SharedData = (window as any).SharedData;
+      const deletedImages = await SharedData.getDeletedImages() || [];
+      deletedPathsCache = Array.isArray(deletedImages)
+        ? deletedImages.map((d: any) => d.path || d)
+        : [];
+      editedImagesCache = await SharedData.getEditedImages() || {};
+      sharedDataLoaded = true;
+
+      // Rebuild visible indices and update thumbnails
+      visibleIndices = [];
+      allThumbnails.forEach((thumb, i) => {
+        const originalSrc = thumb.getAttribute('data-src');
+        if (originalSrc && deletedPathsCache.includes(originalSrc)) {
+          thumb.style.display = 'none';
+          thumb.classList.add('deleted');
+          return;
+        }
+        visibleIndices.push(i);
+
+        // Apply edited images to thumbnails
+        if (originalSrc && editedImagesCache[originalSrc]) {
+          const editedSrc = editedImagesCache[originalSrc].dataUrl;
+          const img = thumb.querySelector('img') as HTMLImageElement;
+          if (img) img.src = editedSrc;
+          imageData[i].src = editedSrc;
+          thumb.setAttribute('data-edited', editedSrc);
+        }
+      });
+    } catch (e) {
+      console.log('Could not load SharedData:', e);
+    }
+  }
+
+  async function openLightbox(index: number) {
+    // Ensure SharedData is loaded before showing images
+    await ensureSharedDataLoaded();
+
+    showImage(index);
+    lightbox?.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox?.classList.remove('active');
+    document.body.style.overflow = '';
+    stopSlideshow();
+  }
+
+  function showPrevImage() {
+    if (visibleIndices.length > 0) {
+      const currentPos = visibleIndices.indexOf(currentIndex);
+      const newPos = (currentPos - 1 + visibleIndices.length) % visibleIndices.length;
+      currentIndex = visibleIndices[newPos];
+    } else {
+      currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+    }
+    showImage(currentIndex);
+  }
+
+  function showNextImage() {
+    if (visibleIndices.length > 0) {
+      const currentPos = visibleIndices.indexOf(currentIndex);
+      const newPos = (currentPos + 1) % visibleIndices.length;
+      currentIndex = visibleIndices[newPos];
+    } else {
+      currentIndex = (currentIndex + 1) % totalImages;
+    }
+    showImage(currentIndex);
+  }
+
+  function startSlideshow() {
+    if (isPlaying) return;
+    isPlaying = true;
+    slideshowToggle?.classList.add('playing');
+    if (playIcon) playIcon.style.display = 'none';
+    if (pauseIcon) pauseIcon.style.display = 'block';
+    const speed = parseInt(speedSelect?.value || '3000');
+    slideshowInterval = window.setInterval(showNextImage, speed);
+  }
+
+  function stopSlideshow() {
+    if (!isPlaying) return;
+    isPlaying = false;
+    slideshowToggle?.classList.remove('playing');
+    if (playIcon) playIcon.style.display = 'block';
+    if (pauseIcon) pauseIcon.style.display = 'none';
+    if (slideshowInterval) {
+      clearInterval(slideshowInterval);
+      slideshowInterval = null;
+    }
+  }
+
+  function toggleSlideshow() {
+    if (isPlaying) {
+      stopSlideshow();
+    } else {
+      startSlideshow();
+    }
+  }
+
+  // Slideshow button click handler
+  slideshowToggle?.addEventListener('click', toggleSlideshow);
+
+  // Speed change - restart slideshow with new speed if playing
+  speedSelect?.addEventListener('change', () => {
+    if (isPlaying) {
+      stopSlideshow();
+      startSlideshow();
+    }
+  });
+
+  // Thumbnail click handler - use forEach index directly
+  allThumbnails.forEach((thumb, index) => {
+    thumb.addEventListener('click', () => {
+      const src = thumb.getAttribute('data-src') || '';
+      const alt = thumb.getAttribute('data-alt') || '';
+
+      // Update featured image
+      if (featuredImage) {
+        featuredImage.src = src;
+        featuredImage.alt = alt;
+      }
+
+      // Update active state
+      allThumbnails.forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+
+      // Open lightbox at THIS index
+      openLightbox(index);
+    });
+  });
+
+  // Lightbox controls
+  lightboxClose?.addEventListener('click', closeLightbox);
+  lightboxPrev?.addEventListener('click', showPrevImage);
+  lightboxNext?.addEventListener('click', showNextImage);
+
+  // Check if slideshow is enabled in admin settings (with localStorage fallback)
+  const SETTINGS_STORAGE_KEY = 'islandgoodes_settings';
+  (async function() {
+    let settings: any = {};
+
+    // Try API first
+    try {
+      const response = await fetch('/.netlify/functions/data-store', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ store: 'settings', action: 'get', key: 'data' })
+      });
+      if (response.ok) settings = await response.json();
+    } catch (e) {}
+
+    // Fallback to localStorage
+    if (!settings || Object.keys(settings).length === 0) {
+      try {
+        const local = localStorage.getItem(SETTINGS_STORAGE_KEY);
+        if (local) settings = JSON.parse(local);
+      } catch (e) {}
+    }
+
+    // Hide controls if slideshow not enabled
+    if (!settings?.slideshowEnabled) {
+      const controls = document.querySelector('.lightbox-controls');
+      if (controls) (controls as HTMLElement).style.display = 'none';
+    }
+  })();
+
+  // Close on background click
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox?.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') showPrevImage();
+    if (e.key === 'ArrowRight') showNextImage();
+    if (e.key === ' ') { e.preventDefault(); toggleSlideshow(); }
+  });
+</script>

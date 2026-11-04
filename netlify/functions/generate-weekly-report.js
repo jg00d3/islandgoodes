@@ -11,7 +11,8 @@ const ROOM_PATHS = {
   '/rooms/hilo-bay': 'Hilo Bay',
   '/rooms/mauna-kea': 'Mauna Kea',
   '/rooms/ginger': 'Ginger',
-  '/rooms/orchid': 'Orchid'
+  '/rooms/orchid': 'Orchid',
+  '/rooms/bamboo': 'Bamboo'
 };
 
 function initGA4Client() {
