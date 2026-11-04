@@ -1,4 +1,5 @@
 import { getStore } from "@netlify/blobs";
+import { getAdminSession } from "./lib/admin-auth.js";
 
 // Netlify Blobs configuration
 const SITE_ID = "347c1eb9-e6b5-4736-b000-f6908c1f85fc";
@@ -33,8 +34,6 @@ const DEFAULT_ADMIN = {
   fullName: 'Jeremiah Goode',
   email: 'sysadmroot@gmail.com',
   twoFAEmail: 'sysadmroot@gmail.com',
-  // Password hash stored server-side only, never sent to client
-  passwordHash: 'SXNsYW5kR29vZGVzMjAyNiE=',
   role: 'owner',
   created: '2026-01-01T00:00:00.000Z'
 };
@@ -65,13 +64,29 @@ const DEFAULT_SETTINGS = {
   aiChatEnabled: false
 };
 
-// CORS headers
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'Content-Type': 'application/json'
-};
+const headers = { 'Content-Type': 'application/json' };
+
+// Public pages read these. Every other read, and every write, needs an admin session.
+const PUBLIC_READ_STORES = new Set(['settings', 'deletedImages', 'editedImages', 'imageOrder']);
+
+const PASSWORD_FIELDS = ['passwordHash', 'passwordHashBcrypt'];
+
+// Clients never see or set password hashes, so keep the stored ones when saving admins.
+async function preparedAdmins(store, incoming) {
+  if (!Array.isArray(incoming) || incoming.length === 0) {
+    throw Object.assign(new Error('Admin list cannot be empty'), { statusCode: 400 });
+  }
+  const existing = await store.get('data', { type: 'json' }) || [];
+  return incoming.map(admin => {
+    const clean = { ...admin };
+    PASSWORD_FIELDS.forEach(field => delete clean[field]);
+    const stored = existing.find(a => a.id === admin.id || a.email?.toLowerCase() === admin.email?.toLowerCase());
+    PASSWORD_FIELDS.forEach(field => {
+      if (stored?.[field]) clean[field] = stored[field];
+    });
+    return clean;
+  });
+}
 
 export async function handler(event, context) {
   // Handle preflight
@@ -87,6 +102,14 @@ export async function handler(event, context) {
         statusCode: 400,
         headers,
         body: JSON.stringify({ error: 'Invalid store name' })
+      };
+    }
+
+    if (!(action === 'get' && PUBLIC_READ_STORES.has(storeName)) && !(await getAdminSession(event))) {
+      return {
+        statusCode: 401,
+        headers,
+        body: JSON.stringify({ error: 'Authentication required' })
       };
     }
 
@@ -151,18 +174,20 @@ export async function handler(event, context) {
       }
 
       case 'set': {
-        console.log(`SET: store=${storeName}, key=${key || 'data'}, data=`, JSON.stringify(data));
         try {
-          await store.setJSON(key || 'data', data);
-          console.log(`SET success for ${storeName}`);
+          const value = storeName === 'admins' ? await preparedAdmins(store, data) : data;
+          await store.setJSON(key || 'data', value);
           return { statusCode: 200, headers, body: JSON.stringify({ success: true }) };
         } catch (setError) {
-          console.error(`SET failed for ${storeName}:`, setError);
-          return { statusCode: 500, headers, body: JSON.stringify({ error: 'Failed to save', details: setError.message }) };
+          console.error(`SET failed for ${storeName}:`, setError.message);
+          return { statusCode: setError.statusCode || 500, headers, body: JSON.stringify({ error: setError.statusCode ? setError.message : 'Failed to save' }) };
         }
       }
 
       case 'delete': {
+        if (storeName === 'admins') {
+          return { statusCode: 400, headers, body: JSON.stringify({ error: 'Admin list cannot be deleted' }) };
+        }
         await store.delete(key || 'data');
         return { statusCode: 200, headers, body: JSON.stringify({ success: true }) };
       }
@@ -176,15 +201,10 @@ export async function handler(event, context) {
     }
   } catch (error) {
     console.error('Data store error:', error);
-    console.error('Error stack:', error.stack);
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({
-        error: 'Internal server error',
-        details: error.message,
-        stack: error.stack
-      })
+      body: JSON.stringify({ error: 'Internal server error' })
     };
   }
 }

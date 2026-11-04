@@ -31,7 +31,7 @@ export async function handler(event) {
 
     const session = await sessionStore.get(sessionToken, { type: 'json' });
 
-    if (!session) {
+    if (!session || session.v !== 2) {
       return {
         statusCode: 200,
         headers: { 'Content-Type': 'application/json' },

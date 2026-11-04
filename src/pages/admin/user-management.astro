@@ -1329,7 +1329,6 @@ const pageTip = "Add, edit, and remove admin accounts";
       fullName: 'Jeremiah Goode',
       email: 'sysadmroot@gmail.com',
       twoFAEmail: 'sysadmroot@gmail.com',
-      passwordHash: 'SXNsYW5kR29vZGVzMjAyNiE=',
       role: 'owner',
       created: '2026-01-01T00:00:00.000Z'
     };
@@ -1378,12 +1377,6 @@ const pageTip = "Add, edit, and remove admin accounts";
       return;
     }
 
-    // Verify current password
-    if (atob(currentAdmin.passwordHash) !== currentPassword) {
-      if (errorEl) errorEl.textContent = 'Current password is incorrect';
-      return;
-    }
-
     // Validate new password
     if (newPassword.length < 8) {
       if (errorEl) errorEl.textContent = 'New password must be at least 8 characters';
@@ -1400,9 +1393,17 @@ const pageTip = "Add, edit, and remove admin accounts";
       return;
     }
 
-    // Update password
-    currentAdmin.passwordHash = btoa(newPassword);
-    await saveAdmins(admins);
+    // The server checks the current password and stores a secure hash
+    const response = await fetch('/.netlify/functions/admin-set-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: currentAdmin.email, currentPassword, newPassword })
+    });
+    if (!response.ok) {
+      const result = await response.json().catch(() => ({}));
+      if (errorEl) errorEl.textContent = result.error || 'Failed to update password';
+      return;
+    }
 
     await logActivity('user', 'Password changed', session.fullName || session.username);
 

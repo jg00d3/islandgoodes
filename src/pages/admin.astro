@@ -1646,6 +1646,8 @@ const pageTip = "Website analytics and admin tools";
   const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
 
   // 2FA via Resend (Netlify Functions)
+  let loginTicket = '';
+  let loginRequires2FA = true;
   const SEND_2FA_URL = '/.netlify/functions/send-2fa';
   const VERIFY_2FA_URL = '/.netlify/functions/verify-2fa';
 
@@ -1743,7 +1745,7 @@ const pageTip = "Website analytics and admin tools";
       const response = await fetch(SEND_2FA_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
+        body: JSON.stringify({ loginTicket })
       });
 
       const data = await response.json();
@@ -1765,7 +1767,12 @@ const pageTip = "Website analytics and admin tools";
       const response = await fetch(VERIFY_2FA_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, code, token })
+        body: JSON.stringify({
+          loginTicket,
+          code,
+          token,
+          rememberDevice: (document.getElementById('rememberDevice') as HTMLInputElement)?.checked === true
+        })
       });
 
       const data = await response.json();
@@ -1836,6 +1843,8 @@ const pageTip = "Website analytics and admin tools";
 
       // Store authenticated admin (no password hash included)
       currentAdmin = result.admin;
+      loginTicket = result.loginTicket || '';
+      loginRequires2FA = result.requires2FA !== false;
     } catch (err) {
       console.error('Login error:', err);
       if (loginError) loginError.textContent = 'Login failed. Please try again.';
@@ -1849,27 +1858,8 @@ const pageTip = "Website analytics and admin tools";
     // Admin authenticated - store for step 2
     const admin = currentAdmin;
 
-    // Check if 2FA is required
-    const settings = await getSecuritySettings();
-    if (settings.require2FA) {
-      // Check if this device is already trusted (2FA verified within 7 days)
-      if (isDeviceTrusted(admin.email)) {
-        console.log('[2FA] Device is trusted, skipping 2FA');
-        // Create server-side session for trusted device
-        try {
-          await fetch('/.netlify/functions/admin-create-session', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: admin.email, trustedDevice: true })
-          });
-        } catch (e) {
-          console.log('Failed to create server session, continuing anyway');
-        }
-        setSession(admin);
-        showDashboard();
-        return;
-      }
-
+    // The server decided whether 2FA is needed (it also checks trusted devices)
+    if (loginRequires2FA) {
       // Show loading state
       if (submitBtn) {
         submitBtn.disabled = true;
@@ -1900,7 +1890,7 @@ const pageTip = "Website analytics and admin tools";
       // Focus first code input
       (document.querySelector('.code-input') as HTMLInputElement)?.focus();
     } else {
-      // Skip 2FA
+      // Server already created the session cookie
       setSession(admin);
       showDashboard();
     }

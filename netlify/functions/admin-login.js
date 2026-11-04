@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { getStore } from '@netlify/blobs';
+import { blobStore, createAdminSession, isTrustedDevice, issueLoginTicket } from './lib/admin-auth.js';
 
 const SITE_ID = "347c1eb9-e6b5-4736-b000-f6908c1f85fc";
 
@@ -84,12 +85,26 @@ export async function handler(event) {
       createdAt: admin.createdAt
     };
 
+    // The server decides whether 2FA is needed. Missing or unreadable settings keep it on.
+    const security = await blobStore('security-settings').get('data', { type: 'json' }).catch(() => null);
+    const requires2FA = security?.require2FA !== false && !isTrustedDevice(event, admin.email);
+
+    if (requires2FA) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          success: true,
+          admin: safeAdmin,
+          requires2FA: true,
+          loginTicket: issueLoginTicket(admin.email)
+        })
+      };
+    }
+
     return {
       statusCode: 200,
-      body: JSON.stringify({
-        success: true,
-        admin: safeAdmin
-      })
+      headers: { 'Set-Cookie': await createAdminSession(admin.email), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ success: true, admin: safeAdmin, requires2FA: false })
     };
 
   } catch (err) {

@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { getStore } from '@netlify/blobs';
+import { getAdminSession } from './lib/admin-auth.js';
 
 const SITE_ID = "347c1eb9-e6b5-4736-b000-f6908c1f85fc";
 
@@ -13,7 +14,15 @@ export async function handler(event) {
   }
 
   try {
-    const { email, newPassword, currentAdminEmail } = JSON.parse(event.body);
+    const session = await getAdminSession(event);
+    if (!session) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({ error: 'Authentication required' })
+      };
+    }
+
+    const { email, newPassword, currentPassword } = JSON.parse(event.body);
 
     if (!email || !newPassword) {
       return {
@@ -49,6 +58,23 @@ export async function handler(event) {
       };
     }
 
+    // Changing your own password needs the current one. Only the owner can reset someone else's.
+    const target = admins[adminIndex];
+    const requester = admins.find(a => a.email?.toLowerCase() === session.email);
+    if (!requester) {
+      return { statusCode: 403, body: JSON.stringify({ error: 'Not allowed' }) };
+    }
+    if (target.email.toLowerCase() === session.email) {
+      const currentValid = target.passwordHashBcrypt
+        ? await bcrypt.compare(String(currentPassword || ''), target.passwordHashBcrypt)
+        : Boolean(target.passwordHash) && Buffer.from(target.passwordHash, 'base64').toString('utf-8') === currentPassword;
+      if (!currentValid) {
+        return { statusCode: 401, body: JSON.stringify({ error: 'Current password is incorrect' }) };
+      }
+    } else if (requester.role !== 'owner') {
+      return { statusCode: 403, body: JSON.stringify({ error: 'Not allowed' }) };
+    }
+
     // Hash the new password with bcrypt
     const bcryptHash = await bcrypt.hash(newPassword, 12);
 
@@ -59,7 +85,7 @@ export async function handler(event) {
     // Save
     await store.setJSON('data', admins);
 
-    console.log(`Password updated for admin: ${email} by ${currentAdminEmail || 'system'}`);
+    console.log(`Password updated for admin: ${email} by ${session.email}`);
 
     return {
       statusCode: 200,

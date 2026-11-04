@@ -1,16 +1,7 @@
+import crypto from 'crypto';
 import { Resend } from 'resend';
+import { issueCodeToken, readLoginTicket } from './lib/admin-auth.js';
 
-// Simple hash function for verification token
-function createToken(code, email, timestamp, secret) {
-  const data = `${code}:${email}:${timestamp}:${secret}`;
-  let hash = 0;
-  for (let i = 0; i < data.length; i++) {
-    const char = data.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash;
-  }
-  return Math.abs(hash).toString(36);
-}
 
 export async function handler(event) {
   // Only allow POST
@@ -22,22 +13,21 @@ export async function handler(event) {
   }
 
   try {
-    const { email } = JSON.parse(event.body);
+    const { loginTicket } = JSON.parse(event.body || '{}');
+    const email = readLoginTicket(loginTicket);
 
     if (!email) {
       return {
-        statusCode: 400,
-        body: JSON.stringify({ error: 'Email is required' })
+        statusCode: 401,
+        body: JSON.stringify({ error: 'Login expired. Please sign in again.' })
       };
     }
 
     // Generate 6-digit code
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-    const timestamp = Date.now();
-    const secret = process.env.RESEND_API_KEY.slice(-10); // Use part of API key as secret
+    const code = crypto.randomInt(100000, 1000000).toString();
 
-    // Create verification token
-    const token = createToken(code, email, timestamp, secret);
+    // Signed token: proves which code was sent without storing or exposing it
+    const token = issueCodeToken(loginTicket, code);
 
     // Initialize Resend
     const resend = new Resend(process.env.RESEND_API_KEY);
@@ -73,7 +63,7 @@ export async function handler(event) {
       statusCode: 200,
       body: JSON.stringify({
         success: true,
-        token: `${token}:${timestamp}`,
+        token,
         message: 'Verification code sent'
       })
     };

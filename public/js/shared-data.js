@@ -28,6 +28,11 @@ async function apiCall(store, action, key = 'data', data = null) {
       body: JSON.stringify({ store, action, key, data })
     });
 
+    if (response.status === 401 && sessionStorage.getItem('islandgoodes_admin_session')) {
+      sessionStorage.removeItem('islandgoodes_admin_session');
+      window.location.href = '/admin';
+    }
+
     if (!response.ok) {
       throw new Error(`API error: ${response.status}`);
     }
