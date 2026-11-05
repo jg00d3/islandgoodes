@@ -2,6 +2,7 @@
 // Generates ~800-1200 word blog posts, auto-publishes (status: approved),
 // triggers site rebuild, and sends "published" notification emails.
 
+import { requireAdminOrJob } from './lib/admin-auth.js';
 import { getStore } from '@netlify/blobs';
 import { Resend } from 'resend';
 import { callAI } from './ai-provider.js';
@@ -366,7 +367,10 @@ async function sendNotificationEmail(draft) {
   }
 }
 
-export const handler = async () => {
+export const handler = async (event) => {
+  const denied = await requireAdminOrJob(event);
+  if (denied) return denied;
+
   console.log('Blog Draft Generator: Starting weekly generation...');
 
   try {

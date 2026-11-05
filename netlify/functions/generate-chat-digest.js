@@ -2,6 +2,7 @@
 // Reads chat-usage logs from Blobs, aggregates stats, calls AI for summary,
 // sends formatted HTML email digest to property managers.
 
+import { requireAdminOrJob } from './lib/admin-auth.js';
 import { getStore } from '@netlify/blobs';
 import { Resend } from 'resend';
 import { callAI } from './ai-provider.js';
@@ -210,7 +211,10 @@ async function sendNoActivityEmail() {
   }
 }
 
-export const handler = async () => {
+export const handler = async (event) => {
+  const denied = await requireAdminOrJob(event);
+  if (denied) return denied;
+
   console.log('Chat Digest: Starting weekly digest generation...');
 
   try {

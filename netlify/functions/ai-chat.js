@@ -1,6 +1,7 @@
 // AI Chat Assistant — multi-provider with failover
 // Handles both public guest chat and admin test chat
 
+import { requireAdmin } from './lib/admin-auth.js';
 import { getStore } from '@netlify/blobs';
 import { knowledgeBase } from './knowledge-base.js';
 import { callAI } from './ai-provider.js';
@@ -105,6 +106,12 @@ export async function handler(event) {
         statusCode: 200,
         body: JSON.stringify({ configured })
       };
+    }
+
+    // The test chat accepts a custom prompt, so only logged-in admins may use it
+    if (source !== 'public') {
+      const denied = await requireAdmin(event);
+      if (denied) return denied;
     }
 
     // Rate limiting for public requests

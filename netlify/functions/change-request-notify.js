@@ -1,3 +1,4 @@
+import { requireAdmin } from './lib/admin-auth.js';
 import { Resend } from 'resend';
 import { getStore } from '@netlify/blobs';
 
@@ -5,6 +6,9 @@ const SITE_ID = "347c1eb9-e6b5-4736-b000-f6908c1f85fc";
 const ADMIN_EMAIL = 'sysadmroot@gmail.com';
 
 export async function handler(event) {
+  const denied = await requireAdmin(event);
+  if (denied) return denied;
+
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: JSON.stringify({ error: 'Method not allowed' }) };
   }

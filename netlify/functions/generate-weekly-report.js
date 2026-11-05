@@ -2,6 +2,7 @@
 // compares to the prior week, and sends a formatted HTML email digest
 // with booking interest, top pages, traffic sources, devices, and daily trend.
 
+import { requireAdminOrJob } from './lib/admin-auth.js';
 import { BetaAnalyticsDataClient } from '@google-analytics/data';
 import { Resend } from 'resend';
 
@@ -413,7 +414,10 @@ async function sendNotConfiguredEmail() {
   }
 }
 
-export const handler = async () => {
+export const handler = async (event) => {
+  const denied = await requireAdminOrJob(event);
+  if (denied) return denied;
+
   console.log('Weekly Report: Starting weekly visitor stats generation...');
 
   // Check for GA4 credentials

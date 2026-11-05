@@ -1,10 +1,12 @@
-const { BetaAnalyticsDataClient } = require('@google-analytics/data');
+import { requireAdmin } from './lib/admin-auth.js';
+import { BetaAnalyticsDataClient } from '@google-analytics/data';
 
-exports.handler = async (event) => {
+export const handler = async (event) => {
+  const denied = await requireAdmin(event);
+  if (denied) return denied;
+
   // CORS headers
   const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
     'Content-Type': 'application/json'
   };
 

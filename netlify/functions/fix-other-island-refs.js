@@ -10,6 +10,7 @@
 //
 // Safe to delete after running.
 
+import { requireAdmin } from './lib/admin-auth.js';
 import { getStore } from '@netlify/blobs';
 import { callAI } from './ai-provider.js';
 
@@ -104,6 +105,9 @@ async function processStore(storeName, dataKey, labelName) {
 }
 
 export async function handler(event) {
+  const denied = await requireAdmin(event);
+  if (denied) return denied;
+
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: JSON.stringify({ error: 'Method not allowed' }) };
   }

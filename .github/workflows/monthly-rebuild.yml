@@ -29,15 +29,15 @@ jobs:
     steps:
       - name: Generate AI blog draft (pending — requires human approval)
         run: |
-          RESPONSE=$(curl -s -X POST "https://islandgoodes.com/.netlify/functions/generate-blog-draft")
+          RESPONSE=$(curl -s -X POST -H "x-job-token: ${{ secrets.JOBS_TOKEN }}" "https://islandgoodes.com/.netlify/functions/generate-blog-draft")
           echo "Blog Draft Response: $RESPONSE"
 
       - name: Generate chat insights digest
         run: |
-          RESPONSE=$(curl -s -X POST "https://islandgoodes.com/.netlify/functions/generate-chat-digest")
+          RESPONSE=$(curl -s -X POST -H "x-job-token: ${{ secrets.JOBS_TOKEN }}" "https://islandgoodes.com/.netlify/functions/generate-chat-digest")
           echo "Chat Digest Response: $RESPONSE"
 
       - name: Generate weekly visitor report
         run: |
-          RESPONSE=$(curl -s -X POST "https://islandgoodes.com/.netlify/functions/generate-weekly-report")
+          RESPONSE=$(curl -s -X POST -H "x-job-token: ${{ secrets.JOBS_TOKEN }}" "https://islandgoodes.com/.netlify/functions/generate-weekly-report")
           echo "Weekly Report Response: $RESPONSE"

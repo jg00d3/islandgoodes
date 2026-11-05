@@ -1,6 +1,7 @@
 // AI Provider Config — Admin CRUD for provider management
 // Credentials stored server-side in Netlify Blobs, never sent to browser unmasked.
 
+import { requireAdmin } from './lib/admin-auth.js';
 import { getStore } from '@netlify/blobs';
 import { clearProviderCache } from './ai-provider.js';
 
@@ -52,6 +53,9 @@ async function saveProviders(providers) {
 }
 
 export async function handler(event) {
+  const denied = await requireAdmin(event);
+  if (denied) return denied;
+
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: JSON.stringify({ error: 'Method not allowed' }) };
   }

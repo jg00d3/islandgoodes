@@ -1,9 +1,13 @@
 // One-off: Send email to Garvin explaining the AI blog changes
 // Usage: curl -X POST https://islandgoodes.com/.netlify/functions/send-blog-update-email
 
+import { requireAdmin } from './lib/admin-auth.js';
 import { Resend } from 'resend';
 
 export async function handler(event) {
+  const denied = await requireAdmin(event);
+  if (denied) return denied;
+
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: JSON.stringify({ error: 'Method not allowed' }) };
   }

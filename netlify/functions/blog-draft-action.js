@@ -2,6 +2,7 @@
 // On approve: updates status, triggers Netlify rebuild so the post goes live
 // On reject: updates status with rejection reason
 
+import { requireAdmin } from './lib/admin-auth.js';
 import { getStore } from '@netlify/blobs';
 import { Resend } from 'resend';
 
@@ -10,13 +11,13 @@ const STORE_NAME = 'blog-drafts';
 const NOTIFY_EMAILS = ['sysadmroot@gmail.com', 'goodegarvin@gmail.com'];
 
 const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Content-Type': 'application/json'
 };
 
 export async function handler(event) {
+  const denied = await requireAdmin(event);
+  if (denied) return denied;
+
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers };
   }

@@ -3,6 +3,7 @@
 // generates a SERP-optimized article via Claude, stores in Netlify Blobs,
 // and triggers a site rebuild.
 
+import { requireAdminOrJob } from './lib/admin-auth.js';
 import { getStore } from '@netlify/blobs';
 import { Resend } from 'resend';
 import { callAI } from './ai-provider.js';
@@ -302,7 +303,10 @@ async function sendNotificationEmail(article) {
 
 // Invoked daily by GitHub Actions cron at 4:00 PM UTC (6:00 AM HST / 11:00 AM EST)
 // Also callable via HTTP POST for manual invocation
-export const handler = async () => {
+export const handler = async (event) => {
+  const denied = await requireAdminOrJob(event);
+  if (denied) return denied;
+
   console.log('Island Pulse: Starting daily article generation...');
 
   try {

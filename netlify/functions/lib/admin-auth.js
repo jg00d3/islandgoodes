@@ -8,6 +8,8 @@ const SITE_ID = '347c1eb9-e6b5-4736-b000-f6908c1f85fc';
 const SESSION_VERSION = 2; // Sessions from before this version are rejected
 const SESSION_DURATION = 7 * 24 * 60 * 60 * 1000;
 const TICKET_DURATION = 10 * 60 * 1000;
+// SHA-256 of the JOBS_TOKEN GitHub secret used by the weekly workflow. The token itself is not in this repo.
+const JOBS_TOKEN_SHA256 = 'ca00dd5b28c1326a9a0965942f993666fa9f9f318909ed1dd17852fcf2dd1823';
 
 export function blobStore(name) {
   return getStore({ name, siteID: SITE_ID, token: process.env.NETLIFY_AUTH_TOKEN });
@@ -126,4 +128,29 @@ export async function getAdminSession(event) {
     console.error('Session check failed:', error.message);
     return null;
   }
+}
+
+function loginRequired() {
+  return {
+    statusCode: 401,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ error: 'Login required' })
+  };
+}
+
+// Returns a 401 response when the request has no admin session, or null when it may continue.
+export async function requireAdmin(event) {
+  return (await getAdminSession(event)) ? null : loginRequired();
+}
+
+function hasJobToken(event) {
+  const token = event.headers?.['x-job-token'] || event.headers?.['X-Job-Token'];
+  if (!token) return false;
+  const actual = crypto.createHash('sha256').update(String(token)).digest();
+  return crypto.timingSafeEqual(actual, Buffer.from(JOBS_TOKEN_SHA256, 'hex'));
+}
+
+// Same as requireAdmin, but also accepts the scheduled GitHub workflow.
+export async function requireAdminOrJob(event) {
+  return hasJobToken(event) ? null : requireAdmin(event);
 }

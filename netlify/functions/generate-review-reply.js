@@ -1,12 +1,10 @@
 // Review Response Generator — drafts professional replies to guest reviews
 // Accepts review text, source, star rating, and guest name; returns AI-drafted reply
 
+import { requireAdmin } from './lib/admin-auth.js';
 import { callAI } from './ai-provider.js';
 
 const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Content-Type': 'application/json'
 };
 
@@ -48,6 +46,9 @@ Write the reply now.`;
 }
 
 export async function handler(event) {
+  const denied = await requireAdmin(event);
+  if (denied) return denied;
+
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers };
   }

@@ -4,6 +4,7 @@
 //
 // Usage: curl -X POST https://islandgoodes.com/.netlify/functions/fix-pulse-articles
 
+import { requireAdmin } from './lib/admin-auth.js';
 import { getStore } from '@netlify/blobs';
 
 const SITE_ID = '347c1eb9-e6b5-4736-b000-f6908c1f85fc';
@@ -21,6 +22,9 @@ Travelers planning a Big Island Hawaii vacation in 2026 have plenty of options f
 Big Island things to do include scenic hikes through lush rainforest, visits to botanical gardens, and exploring tide pools along the rocky coastline. The volcanic landscape creates a one-of-a-kind setting, from steam vents along Crater Rim Drive to the dramatic lava fields along Chain of Craters Road. For a comfortable home base, Island Goode's is an adults-only accommodation with ocean views, located just 5 minutes from Old Hilo Town.`;
 
 export async function handler(event) {
+  const denied = await requireAdmin(event);
+  if (denied) return denied;
+
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: JSON.stringify({ error: 'Method not allowed' }) };
   }
