@@ -10,6 +10,11 @@ export default async function handler(request, context) {
     return context.next();
   }
 
+  // Invited admins are not logged in yet. admin-activate checks the signed invite.
+  if (path === '/admin/activate' || path === '/admin/activate/') {
+    return context.next();
+  }
+
   // Allow static assets
   if (path.includes('/_astro/') || path.includes('/favicon')) {
     return context.next();

@@ -1229,29 +1229,13 @@ const pageTip = "Add, edit, and remove admin accounts";
       return;
     }
 
-    // Generate invitation data encoded in URL (valid for 7 days)
-    const session = getSession();
-    const expires = Date.now() + (7 * 24 * 60 * 60 * 1000); // 7 days
-    const invitedBy = session?.fullName || session?.username || 'Admin';
-
-    // Encode invitation data in the URL (no localStorage needed)
-    const inviteData = btoa(JSON.stringify({
-      email: email,
-      expires: expires,
-      invitedBy: invitedBy
-    }));
-
-    await logActivity('user', 'Admin invitation sent', email);
-
     // Show loading state
     if (submitBtn) {
       submitBtn.disabled = true;
       submitBtn.textContent = 'Sending...';
     }
 
-    // Send invitation email with encoded data
-    const activationUrl = `${window.location.origin}/admin/activate?invite=${inviteData}`;
-    const sent = await sendInvitationEmail(email, activationUrl);
+    const sent = await sendInvitationEmail(email);
 
     if (submitBtn) {
       submitBtn.disabled = false;
@@ -1262,9 +1246,10 @@ const pageTip = "Add, edit, and remove admin accounts";
     (document.getElementById('addAdminForm') as HTMLFormElement)?.reset();
 
     if (sent) {
+      await logActivity('user', 'Admin invitation sent', email);
       if (addSuccess) addSuccess.textContent = `Invitation sent to ${email}! They have 7 days to complete registration.`;
     } else {
-      if (addSuccess) addSuccess.textContent = `Invitation created. Activation link: ${activationUrl}`;
+      if (addError) addError.textContent = `Could not send the invitation to ${email}. Please try again.`;
     }
 
     setTimeout(() => {
@@ -1421,14 +1406,14 @@ const pageTip = "Add, edit, and remove admin accounts";
   // INVITATION EMAIL (when inviting new admin)
   // Uses Resend via Netlify Function
   // ============================================
-  async function sendInvitationEmail(email: string, activationUrl: string): Promise<boolean> {
+  async function sendInvitationEmail(email: string): Promise<boolean> {
     console.log(`[INVITATION EMAIL] Sending to ${email}`);
 
     try {
       const response = await fetch('/.netlify/functions/send-invitation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, activationUrl })
+        body: JSON.stringify({ email })
       });
 
       const data = await response.json();

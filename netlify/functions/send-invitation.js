@@ -1,10 +1,7 @@
-import { requireAdmin } from './lib/admin-auth.js';
+import { blobStore, getAdminSession, issueInviteToken } from './lib/admin-auth.js';
 import { Resend } from 'resend';
 
 export async function handler(event) {
-  const denied = await requireAdmin(event);
-  if (denied) return denied;
-
   // Only allow POST
   if (event.httpMethod !== 'POST') {
     return {
@@ -13,15 +10,30 @@ export async function handler(event) {
     };
   }
 
-  try {
-    const { email, activationUrl } = JSON.parse(event.body);
+  const session = await getAdminSession(event);
+  if (!session) {
+    return { statusCode: 401, body: JSON.stringify({ error: 'Login required' }) };
+  }
 
-    if (!email || !activationUrl) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ error: 'Email and activation URL are required' })
-      };
+  try {
+    const admins = (await blobStore('admins').get('data', { type: 'json' })) || [];
+    const inviter = admins.find(a => a.email?.toLowerCase() === session.email);
+    if (inviter?.role !== 'owner' && inviter?.role !== 'superadmin') {
+      return { statusCode: 403, body: JSON.stringify({ error: 'Only super admins can invite new users' }) };
     }
+
+    const { email: rawEmail } = JSON.parse(event.body);
+    const email = String(rawEmail || '').trim().toLowerCase();
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return { statusCode: 400, body: JSON.stringify({ error: 'A valid email is required' }) };
+    }
+    if (admins.some(a => a.email?.toLowerCase() === email)) {
+      return { statusCode: 409, body: JSON.stringify({ error: 'This email is already an admin' }) };
+    }
+
+    const invite = issueInviteToken(email, inviter.fullName || inviter.username || 'Admin');
+    const activationUrl = `${process.env.URL || 'https://islandgoodes.com'}/admin/activate?invite=${invite}`;
 
     // Initialize Resend
     const resend = new Resend(process.env.RESEND_API_KEY);

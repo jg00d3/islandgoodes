@@ -8,6 +8,7 @@ const SITE_ID = '347c1eb9-e6b5-4736-b000-f6908c1f85fc';
 const SESSION_VERSION = 2; // Sessions from before this version are rejected
 const SESSION_DURATION = 7 * 24 * 60 * 60 * 1000;
 const TICKET_DURATION = 10 * 60 * 1000;
+const INVITE_DURATION = 7 * 24 * 60 * 60 * 1000;
 // SHA-256 of the JOBS_TOKEN GitHub secret used by the weekly workflow. The token itself is not in this repo.
 const JOBS_TOKEN_SHA256 = 'ca00dd5b28c1326a9a0965942f993666fa9f9f318909ed1dd17852fcf2dd1823';
 
@@ -84,6 +85,14 @@ export function codeTokenId(token) {
   return crypto.createHash('sha256').update(String(token)).digest('hex');
 }
 
+export function issueInviteToken(email, invitedBy) {
+  return encodeSigned('admin-invite', { email: email.toLowerCase(), invitedBy, exp: Date.now() + INVITE_DURATION });
+}
+
+export function readInviteToken(token) {
+  return decodeSigned('admin-invite', token);
+}
+
 export function trustedDeviceCookie(email) {
   const exp = Date.now() + SESSION_DURATION;
   const value = encodeSigned('trusted-device', { email: email.toLowerCase(), exp });
@@ -117,7 +126,10 @@ export async function readSessionToken(token) {
     await store.delete(token);
     return null;
   }
-  return session;
+  // A session ends as soon as its admin is removed
+  const admins = await blobStore('admins').get('data', { type: 'json' });
+  const isAdmin = Array.isArray(admins) && admins.some(a => a.email?.toLowerCase() === session.email);
+  return isAdmin ? session : null;
 }
 
 // Returns the session for this request, or null. Any failure counts as not logged in.

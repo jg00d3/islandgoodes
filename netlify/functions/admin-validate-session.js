@@ -1,6 +1,4 @@
-import { getStore } from '@netlify/blobs';
-
-const SITE_ID = "347c1eb9-e6b5-4736-b000-f6908c1f85fc";
+import { readSessionToken } from './lib/admin-auth.js';
 
 export async function handler(event) {
   // Only allow POST
@@ -22,31 +20,13 @@ export async function handler(event) {
       };
     }
 
-    // Get session from Netlify Blobs
-    const sessionStore = getStore({
-      name: 'admin-sessions',
-      siteID: SITE_ID,
-      token: process.env.NETLIFY_AUTH_TOKEN
-    });
+    const session = await readSessionToken(sessionToken);
 
-    const session = await sessionStore.get(sessionToken, { type: 'json' });
-
-    if (!session || session.v !== 2) {
+    if (!session) {
       return {
         statusCode: 200,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ valid: false, reason: 'Session not found' })
-      };
-    }
-
-    // Check if session expired
-    if (Date.now() > session.expiresAt) {
-      // Clean up expired session
-      await sessionStore.delete(sessionToken);
-      return {
-        statusCode: 200,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ valid: false, reason: 'Session expired' })
       };
     }
 

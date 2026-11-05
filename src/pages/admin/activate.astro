@@ -204,132 +204,74 @@ const pageTip = "Complete your admin account setup";
   }
 </style>
 
-<script is:inline src="/js/shared-data.js"></script>
 <script>
-  // Get invite data from URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const inviteParam = urlParams.get('invite');
+  const ACTIVATE_URL = '/.netlify/functions/admin-activate';
+  const invite = new URLSearchParams(window.location.search).get('invite');
 
   const invalidToken = document.getElementById('invalidToken');
   const setupForm = document.getElementById('setupForm');
   const successStep = document.getElementById('successStep');
   const formError = document.getElementById('formError');
 
-  // Decode invitation from URL
-  interface InviteData {
-    email: string;
-    expires: number;
-    invitedBy: string;
-  }
-
-  let inviteData: InviteData | null = null;
-
-  function decodeInvite(encoded: string): InviteData | null {
-    try {
-      const decoded = JSON.parse(atob(encoded));
-      if (decoded.email && decoded.expires && decoded.expires > Date.now()) {
-        return decoded;
-      }
-      return null;
-    } catch {
-      return null;
+  function showInvalid(message: string) {
+    if (setupForm) setupForm.style.display = 'none';
+    if (invalidToken) {
+      invalidToken.style.display = 'block';
+      invalidToken.querySelector('p')!.textContent = message;
     }
   }
 
-  // Validate invitation on load (async IIFE)
-  (async function initActivation() {
-    if (!inviteParam) {
-      if (setupForm) setupForm.style.display = 'none';
-      if (invalidToken) invalidToken.style.display = 'block';
-    } else {
-      inviteData = decodeInvite(inviteParam);
+  async function sendActivation(body: object) {
+    const response = await fetch(ACTIVATE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ invite, ...body })
+    });
+    return { ok: response.ok, data: await response.json() };
+  }
 
-      if (!inviteData) {
-        if (setupForm) setupForm.style.display = 'none';
-        if (invalidToken) invalidToken.style.display = 'block';
-      } else {
-        // Check if email already registered
-        const admins = await window.SharedData.getAdmins();
-        if (admins.some((a: any) => a.email.toLowerCase() === inviteData!.email.toLowerCase())) {
-          if (setupForm) setupForm.style.display = 'none';
-          if (invalidToken) {
-            invalidToken.style.display = 'block';
-            invalidToken.querySelector('h1')!.textContent = 'Already Registered';
-            invalidToken.querySelector('p')!.textContent = 'This email is already registered as an admin. Please log in instead.';
-          }
-        } else {
-          // Pre-fill the email
-          const loginEmailInput = document.getElementById('loginEmail') as HTMLInputElement;
-          if (loginEmailInput) loginEmailInput.value = inviteData.email;
-        }
+  // Ask the server whether this invitation can still be used
+  (async function initActivation() {
+    if (!invite) {
+      showInvalid('This invitation link is invalid or has expired.');
+      return;
+    }
+    try {
+      const { ok, data } = await sendActivation({ checkOnly: true });
+      if (!ok) {
+        showInvalid(data.error);
+        return;
       }
+      (document.getElementById('loginEmail') as HTMLInputElement).value = data.email;
+    } catch {
+      showInvalid('Could not check this invitation. Please try again.');
     }
   })();
 
-  // Handle form submission
   document.getElementById('activateForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
-
     if (formError) formError.textContent = '';
 
-    if (!inviteData) {
-      if (formError) formError.textContent = 'Invalid or expired activation link';
-      return;
-    }
-
-    const fullName = (document.getElementById('fullName') as HTMLInputElement)?.value.trim();
-    const loginEmail = inviteData.email;
-    const twoFAEmail = (document.getElementById('twoFAEmail') as HTMLInputElement)?.value.trim() || loginEmail;
-    const password = (document.getElementById('password') as HTMLInputElement)?.value;
-    const confirmPassword = (document.getElementById('confirmPassword') as HTMLInputElement)?.value;
-
-    // Validation
-    if (!fullName) {
-      if (formError) formError.textContent = 'Please enter your full name';
-      return;
-    }
-
-    if (password.length < 8) {
-      if (formError) formError.textContent = 'Password must be at least 8 characters';
-      return;
-    }
+    const fullName = (document.getElementById('fullName') as HTMLInputElement).value.trim();
+    const twoFAEmail = (document.getElementById('twoFAEmail') as HTMLInputElement).value.trim();
+    const password = (document.getElementById('password') as HTMLInputElement).value;
+    const confirmPassword = (document.getElementById('confirmPassword') as HTMLInputElement).value;
 
     if (password !== confirmPassword) {
       if (formError) formError.textContent = 'Passwords do not match';
       return;
     }
 
-    // Validate 2FA email if provided
-    if (twoFAEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(twoFAEmail)) {
-      if (formError) formError.textContent = 'Please enter a valid 2FA email address';
-      return;
+    try {
+      const { ok, data } = await sendActivation({ fullName, twoFAEmail, password });
+      if (!ok) {
+        if (formError) formError.textContent = data.error;
+        return;
+      }
+      if (setupForm) setupForm.style.display = 'none';
+      if (successStep) successStep.style.display = 'block';
+    } catch {
+      if (formError) formError.textContent = 'Could not activate this account. Please try again.';
     }
-
-    // Check if email already exists in admins
-    const admins = await window.SharedData.getAdmins();
-    if (admins.some((a: any) => a.email.toLowerCase() === loginEmail.toLowerCase())) {
-      if (formError) formError.textContent = 'An account with this email already exists';
-      return;
-    }
-
-    // Create the admin account
-    const newAdmin = {
-      id: Date.now(),
-      username: loginEmail.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, ''),
-      fullName: fullName,
-      email: loginEmail,
-      twoFAEmail: twoFAEmail,
-      passwordHash: btoa(password),
-      role: 'admin',
-      created: new Date().toISOString(),
-      invitedBy: inviteData.invitedBy
-    };
-
-    admins.push(newAdmin);
-    await window.SharedData.saveAdmins(admins);
-
-    // Show success
-    if (setupForm) setupForm.style.display = 'none';
-    if (successStep) successStep.style.display = 'block';
   });
 </script>
