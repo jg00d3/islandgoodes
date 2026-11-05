@@ -27,6 +27,8 @@ const pageTip = "Website analytics and admin tools";
           <button type="submit" class="btn btn-primary">Continue</button>
         </form>
         <p id="loginError" class="error-message"></p>
+        <button type="button" id="forgotPassword" class="forgot-link">Forgot password?</button>
+        <p id="forgotMessage" class="forgot-message" aria-live="polite"></p>
       </div>
 
       <!-- Step 2: Email 2FA -->
@@ -846,6 +848,23 @@ const pageTip = "Website analytics and admin tools";
     text-decoration: none;
     opacity: 0.7;
     margin-top: 1rem;
+  }
+
+  .forgot-link {
+    background: none;
+    border: none;
+    color: var(--color-primary);
+    cursor: pointer;
+    font-size: 0.875rem;
+    margin-top: 0.75rem;
+    padding: 0.25rem;
+    text-decoration: underline;
+  }
+
+  .forgot-message {
+    color: var(--color-text-light);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
   }
 
   .error-message {
@@ -1808,6 +1827,34 @@ const pageTip = "Website analytics and admin tools";
   // Otherwise stay on login page (loginGate visible by default)
 
   // Step 1: Email/Password login (server-side verification)
+  document.getElementById('forgotPassword')?.addEventListener('click', async (e) => {
+    const button = e.currentTarget as HTMLButtonElement;
+    const message = document.getElementById('forgotMessage');
+    const email = (document.getElementById('loginEmail') as HTMLInputElement).value.trim();
+    if (!message) return;
+
+    if (!email) {
+      message.textContent = 'Enter your email above, then click Forgot password again.';
+      return;
+    }
+
+    button.disabled = true;
+    message.textContent = 'Sending...';
+    try {
+      const response = await fetch('/.netlify/functions/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      if (!response.ok) throw new Error('Request failed');
+      message.textContent = 'If that email belongs to an admin, a reset link is on its way. It expires in 1 hour.';
+    } catch {
+      message.textContent = 'Something went wrong. Please try again.';
+    } finally {
+      button.disabled = false;
+    }
+  });
+
   loginForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = (document.getElementById('loginEmail') as HTMLInputElement)?.value.toLowerCase().trim();

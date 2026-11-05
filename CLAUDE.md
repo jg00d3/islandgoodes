@@ -45,7 +45,7 @@ npm run preview  # Preview production build locally
 
 ### Netlify Functions (20)
 
-**Authentication:** admin-login, admin-logout, admin-validate-session, admin-set-password, admin-activate, send-password-reset, admin-reset-password, send-2fa, verify-2fa
+**Authentication:** admin-login, admin-logout, admin-validate-session, admin-set-password, admin-activate, send-password-reset, forgot-password, admin-reset-password, send-2fa, verify-2fa
 
 **Access rule:** Every function is admin-only unless it is a public form or guest chat. Start admin-only handlers with `requireAdmin(event)` from `lib/admin-auth.js`. Scheduled jobs use `requireAdminOrJob(event)`, and the GitHub workflow sends the `JOBS_TOKEN` secret in the `x-job-token` header.
 
