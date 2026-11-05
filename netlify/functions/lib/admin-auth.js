@@ -9,6 +9,7 @@ const SESSION_VERSION = 2; // Sessions from before this version are rejected
 const SESSION_DURATION = 7 * 24 * 60 * 60 * 1000;
 const TICKET_DURATION = 10 * 60 * 1000;
 const INVITE_DURATION = 7 * 24 * 60 * 60 * 1000;
+const PASSWORD_RESET_DURATION = 60 * 60 * 1000;
 // SHA-256 of the JOBS_TOKEN GitHub secret used by the weekly workflow. The token itself is not in this repo.
 const JOBS_TOKEN_SHA256 = 'ca00dd5b28c1326a9a0965942f993666fa9f9f318909ed1dd17852fcf2dd1823';
 
@@ -91,6 +92,27 @@ export function issueInviteToken(email, invitedBy) {
 
 export function readInviteToken(token) {
   return decodeSigned('admin-invite', token);
+}
+
+// The token is tied to the current password, so it stops working once the password changes.
+function passwordFingerprint(admin) {
+  return crypto.createHash('sha256').update(String(admin.passwordHashBcrypt || admin.passwordHash || '')).digest('hex');
+}
+
+export function issuePasswordResetToken(admin) {
+  return encodeSigned('password-reset', {
+    email: admin.email.toLowerCase(),
+    password: passwordFingerprint(admin),
+    exp: Date.now() + PASSWORD_RESET_DURATION
+  });
+}
+
+export function readPasswordResetEmail(token) {
+  return decodeSigned('password-reset', token)?.email || null;
+}
+
+export function passwordResetTokenMatches(token, admin) {
+  return decodeSigned('password-reset', token)?.password === passwordFingerprint(admin);
 }
 
 export function trustedDeviceCookie(email) {

@@ -10,8 +10,8 @@ export default async function handler(request, context) {
     return context.next();
   }
 
-  // Invited admins are not logged in yet. admin-activate checks the signed invite.
-  if (path === '/admin/activate' || path === '/admin/activate/') {
+  // Invited admins and password resets have no session. Their functions check the signed link.
+  if (['/admin/activate', '/admin/activate/', '/admin/reset-password', '/admin/reset-password/'].includes(path)) {
     return context.next();
   }
 

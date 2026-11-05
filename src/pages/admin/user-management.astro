@@ -1137,14 +1137,26 @@ const pageTip = "Add, edit, and remove admin accounts";
       return;
     }
 
+    const editError = document.getElementById('editAdminError');
     const editSuccess = document.getElementById('editAdminSuccess');
+    if (editError) editError.textContent = '';
+    if (editSuccess) editSuccess.textContent = '';
 
-    // In production this would send an email via API
-    // For local testing, just show a success message
-    await logActivity('user', 'Password reset requested', `${admin.fullName} (${admin.email})`);
-
-    if (editSuccess) {
-      editSuccess.textContent = `Password reset link would be sent to ${admin.email}`;
+    try {
+      const response = await fetch('/.netlify/functions/send-password-reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: admin.email })
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        if (editError) editError.textContent = data.error || 'Could not send the reset email';
+        return;
+      }
+      await logActivity('user', 'Password reset email sent', `${admin.fullName} (${admin.email})`);
+      if (editSuccess) editSuccess.textContent = `Password reset link sent to ${admin.email}. It expires in 1 hour.`;
+    } catch {
+      if (editError) editError.textContent = 'Could not send the reset email';
     }
   });
 
