@@ -68,11 +68,6 @@ const pageTip = "Add, edit, and remove admin accounts";
             <!-- Dynamically populated -->
           </div>
 
-          <div class="reset-section">
-            <button id="resetAdmins" class="btn btn-outline btn-small">Reset to Default Admin</button>
-            <span class="reset-note">Removes all admins and resets to just Jeremiah (superadmin)</span>
-          </div>
-
           <div class="add-admin-form">
             <h3>Invite New Admin</h3>
             <p class="invite-desc">Enter their email address. They'll receive an invitation link to set up their own account.</p>
@@ -178,6 +173,7 @@ const pageTip = "Add, edit, and remove admin accounts";
           <select id="editRole">
             <option value="admin">Admin</option>
             <option value="superadmin">Super Admin</option>
+            <option value="owner">Owner</option>
           </select>
         </div>
         <div class="modal-actions">
@@ -401,21 +397,6 @@ const pageTip = "Add, edit, and remove admin accounts";
     font-weight: 700;
     font-size: 1.1rem;
     flex-shrink: 0;
-  }
-
-  .reset-section {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    background: #FEF3C7;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
-  }
-
-  .reset-note {
-    font-size: 0.8125rem;
-    color: #92400E;
   }
 
   .btn-small {
@@ -945,10 +926,11 @@ const pageTip = "Add, edit, and remove admin accounts";
     const currentSession = getSession();
 
     container.innerHTML = admins.map((admin: any) => {
-      const roleLabel = admin.role === 'superadmin' ? 'Super Admin' : 'Admin';
+      const isTopRole = admin.role === 'owner' || admin.role === 'superadmin';
+      const roleLabel = admin.role === 'owner' ? 'Owner' : admin.role === 'superadmin' ? 'Super Admin' : 'Admin';
       const isCurrentUser = admin.id === currentSession?.id || admin.username === currentSession?.username;
-      // Can delete any non-superadmin user (even yourself, though that's risky)
-      const canDelete = canManageUsers && admin.role !== 'superadmin';
+      // Owner and super admin accounts cannot be deleted
+      const canDelete = canManageUsers && !isTopRole;
 
       return `
         <div class="admin-item ${isCurrentUser ? 'current-user' : ''}">
@@ -958,7 +940,7 @@ const pageTip = "Add, edit, and remove admin accounts";
               <strong>${admin.fullName || admin.username}</strong>
               <span>${admin.email}</span>
             </div>
-            <span class="admin-badge ${admin.role === 'superadmin' ? 'superadmin' : ''}">${roleLabel}</span>
+            <span class="admin-badge ${isTopRole ? 'superadmin' : ''}">${roleLabel}</span>
             ${isCurrentUser ? '<span class="you-badge">You</span>' : ''}
           </div>
           <div class="admin-actions">
@@ -1026,8 +1008,8 @@ const pageTip = "Add, edit, and remove admin accounts";
       return;
     }
 
-    if (adminToRemove.role === 'superadmin') {
-      alert('Cannot delete the super admin account.');
+    if (adminToRemove.role === 'owner' || adminToRemove.role === 'superadmin') {
+      alert('Owner and super admin accounts cannot be deleted.');
       return;
     }
 
@@ -1299,35 +1281,6 @@ const pageTip = "Add, edit, and remove admin accounts";
   document.getElementById('logout')?.addEventListener('click', () => {
     sessionStorage.removeItem(SESSION_KEY);
     location.reload();
-  });
-
-  // Reset admins to default
-  document.getElementById('resetAdmins')?.addEventListener('click', async () => {
-    if (!confirm('This will remove ALL admin accounts and reset to just the default superadmin (Jeremiah Goode).\n\nYou will be logged out. Continue?')) {
-      return;
-    }
-
-    // Default admin for reset
-    const DEFAULT_ADMIN = {
-      id: 1,
-      username: 'jgoode',
-      fullName: 'Jeremiah Goode',
-      email: 'sysadmroot@gmail.com',
-      twoFAEmail: 'sysadmroot@gmail.com',
-      role: 'owner',
-      created: '2026-01-01T00:00:00.000Z'
-    };
-
-    // Re-initialize with just the default admin
-    await saveAdmins([DEFAULT_ADMIN]);
-
-    // Log the action
-    await logActivity('user', 'Admin accounts reset to default', 'All accounts removed');
-
-    // Clear session and redirect to login
-    sessionStorage.removeItem(SESSION_KEY);
-    alert('Admin accounts have been reset. You will now be redirected to login.');
-    window.location.href = '/admin';
   });
 
   // ============================================
